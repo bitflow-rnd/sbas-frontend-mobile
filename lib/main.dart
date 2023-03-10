@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sbas/config/bitflow_theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 
@@ -10,10 +12,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: '스마트병정배정시스템',
+      theme: BitflowTheme.get(),
+      debugShowCheckedModeBanner: false,
       home: Container(),
     );
   }

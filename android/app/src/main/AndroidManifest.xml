@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sbas">
+    package="com.bitflow.sbas">
    <application
-        android:label="sbas"
+        android:label="스마트병상배정시스템"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
