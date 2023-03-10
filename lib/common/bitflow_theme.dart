@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sbas/config/palette.dart';
+import 'package:sbas/constants/palette.dart';
 
 class Bitflow {
   static ThemeData getTheme() {
@@ -11,5 +11,9 @@ class Bitflow {
       ),
       primarySwatch: Colors.blue,
     );
+  }
+
+  static ThemeData getDarkTheme() {
+    return ThemeData();
   }
 }
