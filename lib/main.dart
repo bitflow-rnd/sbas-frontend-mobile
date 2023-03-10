@@ -27,7 +27,7 @@ class App extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: '스마트병상배정시스템',
       /*
-        TODO remove this line if you are using a theme.
+        TODO: remove this line if you are using a theme.
 
         themeMode: ThemeMode.system,
       */
