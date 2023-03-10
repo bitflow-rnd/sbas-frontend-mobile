@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sbas/config/palette.dart';
 
-class BitflowTheme {
-  static ThemeData get() {
+class Bitflow {
+  static ThemeData getTheme() {
     return ThemeData(
       textTheme: const TextTheme(
         bodyMedium: TextStyle(

@@ -12,8 +12,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '스마트병정배정시스템',
-      theme: BitflowTheme.get(),
+      title: '스마트병상배정시스템',
+      theme: Bitflow.getTheme(),
       debugShowCheckedModeBanner: false,
       home: Container(),
     );
