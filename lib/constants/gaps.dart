@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Gap {
+class Gaps {
   /*
     Vertical Gaps
   */

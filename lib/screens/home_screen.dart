@@ -8,6 +8,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
         title: const Text(
           'LOGO',
         ),
@@ -27,6 +28,7 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: Container(
+        color: Colors.amber,
         child: Column(
           children: [
             const Text(
