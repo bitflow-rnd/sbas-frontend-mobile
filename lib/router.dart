@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sbas/screens/home_screen.dart';
+import 'package:sbas/common/main_navigation_screen.dart';
 
 final routerProvider = Provider(
   (ref) => GoRouter(
+    initialLocation: '/home',
     routes: [
       ShellRoute(
         builder: (context, state, child) {
@@ -14,9 +15,14 @@ final routerProvider = Provider(
         },
         routes: [
           GoRoute(
-            name: HomeScreen.routeName,
-            path: HomeScreen.routeUrl,
-            builder: (context, state) => const HomeScreen(),
+            name: MainNavigationScreen.routeName,
+            path: '/:tab(home|assign|lookup|message)',
+            builder: (context, state) {
+              final tab = state.params['tab']!;
+              return MainNavigationScreen(
+                tab: tab,
+              );
+            },
           ),
         ],
       )
