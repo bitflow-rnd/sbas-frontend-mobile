@@ -103,7 +103,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 text: 'DM',
                 isSelected: _selectedIndex == 3,
                 icon: FontAwesomeIcons.house,
-                selectedIcon: FontAwesomeIcons.house,
+                selectedIcon: FontAwesomeIcons.message,
                 onTap: () => _onTap(3),
                 selectedIndex: _selectedIndex,
               ),
