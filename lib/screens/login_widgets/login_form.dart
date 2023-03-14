@@ -1,38 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/presenters/login_view_model.dart';
 import 'package:sbas/screens/login_screen.dart';
 
-class LoginForm extends StatefulWidget {
+class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final ls = context.findAncestorStateOfType<LogInScreenState>()!;
     return Column(
       children: [
         TextFormField(
+          keyboardType: ref.read(loginProvider.notifier).isFirebaseAuth()
+              ? TextInputType.emailAddress
+              : TextInputType.text,
           inputFormatters: [
             FilteringTextInputFormatter.allow(
-              RegExp(r'[a-z|0-9]'),
+              RegExp(ref.read(loginProvider.notifier).isFirebaseAuth()
+                  ? r'[a-z|0-9|@.]'
+                  : r'[a-z|0-9]'),
             ),
             FilteringTextInputFormatter.singleLineFormatter,
           ],
           controller: fieldId,
-          maxLength: 15,
+          maxLength:
+              ref.read(loginProvider.notifier).isFirebaseAuth() ? 32 : 15,
           validator: (value) {
             return null;
           },
           onChanged: (value) => setState(() => ls.formData['id'] = value),
           decoration: InputDecoration(
+            fillColor: Colors.grey[250],
+            filled: true,
             prefixIcon: const Icon(
-              Icons.account_circle,
+              Icons.account_circle_rounded,
               color: Colors.black,
             ),
             suffixIcon: IconButton(
@@ -48,6 +58,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
+                style: BorderStyle.none,
                 color: Palette.textColor1,
               ),
               borderRadius: BorderRadius.all(
@@ -56,13 +67,16 @@ class _LoginFormState extends State<LoginForm> {
             ),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
+                style: BorderStyle.none,
                 color: Palette.textColor1,
               ),
               borderRadius: BorderRadius.all(
                 Radius.circular(10),
               ),
             ),
-            hintText: '아이디',
+            hintText: ref.read(loginProvider.notifier).isFirebaseAuth()
+                ? '이메일'
+                : '아이디',
             hintStyle: const TextStyle(
               fontSize: 14,
               color: Palette.textColor1,
@@ -89,6 +103,8 @@ class _LoginFormState extends State<LoginForm> {
           },
           onChanged: (value) => setState(() => ls.formData['password'] = value),
           decoration: InputDecoration(
+            fillColor: Colors.grey[250],
+            filled: true,
             prefixIcon: const Icon(
               Icons.lock_rounded,
               color: Colors.black,
@@ -121,6 +137,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
+                style: BorderStyle.none,
                 color: Palette.textColor1,
               ),
               borderRadius: BorderRadius.all(
@@ -129,6 +146,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
+                style: BorderStyle.none,
                 color: Palette.textColor1,
               ),
               borderRadius: BorderRadius.all(

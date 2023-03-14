@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/screens/login_widgets/login_form.dart';
 
-class LogInScreen extends StatefulWidget {
+class LogInScreen extends ConsumerStatefulWidget {
   @override
-  State<LogInScreen> createState() => LogInScreenState();
+  ConsumerState<LogInScreen> createState() => LogInScreenState();
 
   const LogInScreen({super.key});
 
@@ -11,16 +12,18 @@ class LogInScreen extends StatefulWidget {
   static String routeUrl = '/login';
 }
 
-class LogInScreenState extends State<LogInScreen> {
+class LogInScreenState extends ConsumerState<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
           '로그인',
           style: TextStyle(
             fontSize: 20,
+            color: Colors.black,
           ),
         ),
       ),
@@ -28,14 +31,21 @@ class LogInScreenState extends State<LogInScreen> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 30,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 36),
             child: Column(
               children: [
-                const Icon(
-                  Icons.login,
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 12,
+                  ),
+                  height: 175,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'assets/logo.png',
+                      ),
+                    ),
+                  ),
                 ),
                 const LoginForm(),
                 Container(
@@ -62,28 +72,33 @@ class LogInScreenState extends State<LogInScreen> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        '아이디 찾기',
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            '아이디 찾기',
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            '비밀번호 재설정',
+                          ),
+                        ),
+                      ],
                     ),
                     TextButton(
                       onPressed: () {},
                       child: const Text(
-                        '비밀번호 재설정',
+                        '사용자 등록 요청',
                       ),
                     ),
                   ],
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    '사용자 등록 요청',
-                  ),
                 ),
               ],
             ),

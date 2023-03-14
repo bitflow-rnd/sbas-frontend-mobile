@@ -6,6 +6,8 @@ class LoginRepo {
 
   bool get isLoggedIn => user != null;
 
+  bool get isFirebaseAuth => false;
+
   User? get user => _firebaseAuth.currentUser;
 
   Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
