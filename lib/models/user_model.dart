@@ -1,10 +1,10 @@
 class UserModel {
   String? id;
-  String? pw;
+  String? password;
 
   UserModel({
     this.id,
-    this.pw,
+    this.password,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -12,7 +12,7 @@ class UserModel {
       id = json["id"];
     }
     if (json["pw"] is String) {
-      pw = json["pw"];
+      password = json["pw"];
     }
   }
 
@@ -20,7 +20,7 @@ class UserModel {
     final Map<String, dynamic> data = <String, dynamic>{};
 
     data["id"] = id;
-    data["pw"] = pw;
+    data["pw"] = password;
 
     return data;
   }
