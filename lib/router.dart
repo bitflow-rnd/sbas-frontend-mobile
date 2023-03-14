@@ -27,7 +27,7 @@ final routerProvider = Provider(
           GoRoute(
             name: LogInScreen.routeName,
             path: LogInScreen.routeUrl,
-            builder: (context, state) => const LogInScreen(),
+            builder: (context, state) => LogInScreen(),
           ),
           GoRoute(
             name: MainNavigationScreen.routeName,
