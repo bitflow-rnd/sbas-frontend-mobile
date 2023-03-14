@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "805543879819",
+    "project_id": "bitflow-sbas",
+    "storage_bucket": "bitflow-sbas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805543879819:android:1189977701537f3aa9e08e",
+        "android_client_info": {
+          "package_name": "com.bitflow.sbas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805543879819-s47rlbbik4cr2c7fq7hoflt5ju16fib3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALLT_DC_0-6mnAFq8WfWrx4rgVtxEYtFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805543879819-s47rlbbik4cr2c7fq7hoflt5ju16fib3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

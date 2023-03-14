@@ -1,8 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginRepo {
-  bool get isLoggedIn => false;
-  authStateChanges() {}
+  final _firebaseAuth = FirebaseAuth.instance;
+
+  bool get isLoggedIn => user != null;
+
+  User? get user => _firebaseAuth.currentUser;
+
+  Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
+
+  Future<UserCredential> emailSignUp(
+    String email,
+    String password,
+  ) async =>
+      _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+  emailSignIn(
+    String email,
+    String password,
+  ) async =>
+      _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 }
 
 final authRepo = Provider((ref) => LoginRepo());

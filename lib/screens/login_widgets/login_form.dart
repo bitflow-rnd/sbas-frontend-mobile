@@ -19,7 +19,9 @@ class _LoginFormState extends State<LoginForm> {
       children: [
         TextFormField(
           inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'[a-z|0-9]')),
+            FilteringTextInputFormatter.allow(
+              RegExp(r'[a-z|0-9]'),
+            ),
             FilteringTextInputFormatter.singleLineFormatter,
           ],
           controller: fieldId,
@@ -68,17 +70,21 @@ class _LoginFormState extends State<LoginForm> {
             contentPadding: const EdgeInsets.all(10),
           ),
         ),
-        Gaps.v8,
+        Gaps.v16,
         TextFormField(
           inputFormatters: [
             FilteringTextInputFormatter.allow(
-                RegExp(r'[a-z|0-9|~!@#$%^&*()_-]')),
+              RegExp(r'[a-z|0-9|~!@#$%^&*()_-]'),
+            ),
             FilteringTextInputFormatter.singleLineFormatter,
           ],
           maxLength: 15,
           controller: fieldPassword,
           obscureText: !isVisibility,
           validator: (value) {
+            if (value == null || value.length < 9) {
+              return '비밀번호를 8자 이상 입력하세요';
+            }
             return null;
           },
           onChanged: (value) => setState(() => ls.formData['password'] = value),

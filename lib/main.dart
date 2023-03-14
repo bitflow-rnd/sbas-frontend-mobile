@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
@@ -13,6 +14,12 @@ Future main() async {
   await dotenv.load(
     fileName: '.env',
   );
+  await Firebase.initializeApp();
+  /*
+    TODO: make login function
+
+    temporarily create a login to the Firebase
+  */
   runApp(
     const ProviderScope(
       overrides: [],
