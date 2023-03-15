@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sbas/util.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final preferences = await SharedPreferences.getInstance();
+  prefs = await SharedPreferences.getInstance();
 
   await dotenv.load(
     fileName: '.env',

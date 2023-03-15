@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/screens/login_widgets/login_form.dart';
+import 'package:sbas/screens/login_widgets/login_form_widget.dart';
+import 'package:sbas/screens/login_widgets/submit_button_widget.dart';
 
 class LogInScreen extends ConsumerStatefulWidget {
   @override
@@ -60,18 +61,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text(
-                      '로그인',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                const SubmitButton(),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -108,5 +98,12 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
     );
   }
 
+  void tryValidation() {
+    if (formKey.currentState?.validate() ?? false) {
+      formKey.currentState?.save();
+    }
+  }
+
+  final formKey = GlobalKey<FormState>();
   final Map<String, String> formData = {};
 }

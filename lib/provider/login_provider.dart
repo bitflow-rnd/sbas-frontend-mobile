@@ -1,1 +1,32 @@
-class LoginProvider {}
+import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
+import 'package:http/retry.dart';
+import 'package:sbas/provider/api_provider.dart';
+
+class LoginProvider {
+  Future<Map<String, dynamic>?> postSignIn(Map<String, dynamic> map) async {
+    final client = RetryClient(Client());
+    try {
+      final res = await client.post(
+        Uri.parse('$_baseUrl/v1/test/login'),
+        headers: json,
+        body: toJson(map),
+      );
+      if (res.statusCode == 200) {
+        return fromJson(res.body);
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    return null;
+  }
+
+  final String _baseUrl = dotenv.env['BASE_URL']!;
+}
