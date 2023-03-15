@@ -1,7 +1,11 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
 
-class ApiProvider {
-  static final String _baseUrl = dotenv.env['BASE_URL']!;
+final json = {'Content-Type': 'application/json'};
 
-  static String loginUrl = '$_baseUrl/v1/test/login';
+String toJson(Map<String, dynamic> map) {
+  return jsonEncode(map);
+}
+
+Map<String, dynamic> fromJson(String body) {
+  return jsonDecode(body);
 }
