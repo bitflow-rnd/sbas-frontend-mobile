@@ -7,11 +7,37 @@ import 'package:sbas/provider/api_provider.dart';
 class LoginProvider {
   Future<Map<String, dynamic>?> postSignIn(Map<String, dynamic> map) async {
     final client = RetryClient(Client());
+
     try {
       final res = await client.post(
         Uri.parse('$_baseUrl/v1/test/login'),
         headers: json,
         body: toJson(map),
+      );
+      if (res.statusCode == 200) {
+        return fromJson(res.body);
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getUser(String authToken) async {
+    final client = RetryClient(Client());
+
+    try {
+      final res = await client.get(
+        Uri.parse('$_baseUrl/v1/test/user'),
+        headers: {
+          'Authorization': 'Bearer $authToken',
+        },
       );
       if (res.statusCode == 200) {
         return fromJson(res.body);

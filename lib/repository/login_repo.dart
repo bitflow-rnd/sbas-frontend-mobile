@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/models/auth_token_model.dart';
+import 'package:sbas/models/jwt_model.dart';
 import 'package:sbas/models/user_model.dart';
 import 'package:sbas/provider/login_provider.dart';
 import 'package:sbas/util.dart';
@@ -9,7 +11,23 @@ class LoginRepo {
   final _firebaseAuth = FirebaseAuth.instance;
   final _auth = LoginProvider();
 
-  bool get isLoggedIn => (prefs.getString('auth_token') ?? '').isNotEmpty;
+  Future<bool> get isLoggedIn async {
+    final authToken = prefs.getString('auth_token');
+
+    if (authToken != null && authToken.isNotEmpty) {
+      final map = await _auth.getUser(authToken);
+
+      if (map != null) {
+        final jwt = JwtModel.fromJson(map);
+
+        if (kDebugMode) {
+          print(jwt.toJson());
+        }
+        return (jwt.token?.name ?? '').isNotEmpty;
+      }
+    }
+    return false;
+  }
 
   bool get isFirebaseAuth => false;
 

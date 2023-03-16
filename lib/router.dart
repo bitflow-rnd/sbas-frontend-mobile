@@ -7,8 +7,8 @@ import 'package:sbas/screens/login_screen.dart';
 final routerProvider = Provider(
   (ref) => GoRouter(
     initialLocation: '/home',
-    redirect: (context, state) {
-      final isLoggedIn = ref.read(authRepo).isLoggedIn;
+    redirect: (context, state) async {
+      final isLoggedIn = await ref.read(authRepo).isLoggedIn;
 
       if (!isLoggedIn) {
         return LogInScreen.routeUrl;
