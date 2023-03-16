@@ -26,7 +26,7 @@ class HomeDashbord extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 blurRadius: 5,
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.black.withOpacity(0.25),
               ),
             ],
             borderRadius: BorderRadius.circular(15),

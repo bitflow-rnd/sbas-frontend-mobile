@@ -22,11 +22,14 @@ class _SubmitButtonState extends ConsumerState<SubmitButton> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
+          padding: const EdgeInsets.symmetric(
+            vertical: 16,
+          ),
         ),
         child: const Text(
           '로그인',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
         ),
       ),
