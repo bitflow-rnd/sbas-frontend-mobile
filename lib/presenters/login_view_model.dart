@@ -33,7 +33,7 @@ class LoginViewModel extends AsyncNotifier<void> {
         if (kDebugMode) {
           print(state.error);
         }
-        showFirebaseErrorSnack(context, state.error);
+        showErrorSnack(context, state.error);
       } else {
         context.go('/home');
       }
