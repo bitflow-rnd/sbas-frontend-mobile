@@ -69,14 +69,14 @@ class HomeScreen extends ConsumerWidget {
                       flex: 1,
                       child: Row(
                         children: const [
-                          HomeDashBord(
+                          HomeDashbord(
                             title: '요청',
                             edge: EdgeInsets.only(
                               right: 6,
                               bottom: 6,
                             ),
                           ),
-                          HomeDashBord(
+                          HomeDashbord(
                             title: '승인',
                             edge: EdgeInsets.only(
                               left: 6,
@@ -90,14 +90,14 @@ class HomeScreen extends ConsumerWidget {
                       flex: 1,
                       child: Row(
                         children: const [
-                          HomeDashBord(
+                          HomeDashbord(
                             title: '이송',
                             edge: EdgeInsets.only(
                               top: 6,
                               right: 6,
                             ),
                           ),
-                          HomeDashBord(
+                          HomeDashbord(
                             title: '입원',
                             edge: EdgeInsets.only(
                               top: 6,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/screens/find_id_screen.dart';
 import 'package:sbas/screens/login_widgets/login_form_widget.dart';
 import 'package:sbas/screens/login_widgets/submit_button_widget.dart';
 
@@ -65,11 +67,12 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Gaps.v12,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () => findId(context),
                           child: const Text(
                             '아이디 찾기',
                           ),
@@ -97,6 +100,13 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
       ),
     );
   }
+
+  void findId(BuildContext context) => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const FindIdScreen(),
+        ),
+      );
 
   void tryValidation() {
     if (formKey.currentState?.validate() ?? false) {

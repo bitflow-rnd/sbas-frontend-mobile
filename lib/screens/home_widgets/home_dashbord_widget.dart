@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class HomeDashBord extends StatelessWidget {
-  const HomeDashBord({
+class HomeDashbord extends StatelessWidget {
+  const HomeDashbord({
     super.key,
     required this.title,
     required this.edge,
@@ -12,7 +12,9 @@ class HomeDashBord extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 1,
-      child: GestureDetector(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        splashColor: Colors.grey.shade300,
         onTap: () {
           if (kDebugMode) {
             print(title);
@@ -24,7 +26,7 @@ class HomeDashBord extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 blurRadius: 5,
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.black.withOpacity(0.25),
               ),
             ],
             borderRadius: BorderRadius.circular(15),
