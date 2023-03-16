@@ -19,11 +19,14 @@ class LoginRepo {
 
       if (map != null) {
         final jwt = JwtModel.fromJson(map);
+        final name = jwt.token?.name ?? '';
 
         if (kDebugMode) {
           print(jwt.toJson());
         }
-        return (jwt.token?.name ?? '').isNotEmpty;
+        if (name.isNotEmpty) {
+          return await prefs.setString('id', name);
+        }
       }
     }
     return false;
