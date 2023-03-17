@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Bitflow {
   static ThemeData getTheme() {
@@ -26,7 +27,11 @@ class Bitflow {
     return ThemeData();
   }
 
-  static AppBar getAppBar(String text) => AppBar(
+  static AppBar getAppBar(
+    String text,
+    bool automaticallyImplyLeading,
+  ) =>
+      AppBar(
         title: Text(
           text,
           style: const TextStyle(
@@ -36,8 +41,17 @@ class Bitflow {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        leading: const BackButton(
-          color: Colors.black,
+        leading: automaticallyImplyLeading
+            ? const BackButton(
+                color: Colors.black,
+              )
+            : null,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
         ),
+        automaticallyImplyLeading: automaticallyImplyLeading,
+        elevation: 0,
       );
 }

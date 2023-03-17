@@ -13,28 +13,26 @@ class SubmitButton extends ConsumerStatefulWidget {
 
 class _SubmitButtonState extends ConsumerState<SubmitButton> {
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: ref.watch(loginProvider).isLoading ? null : _onSubmit,
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+  Widget build(BuildContext context) => SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: ref.watch(loginProvider).isLoading ? null : _onSubmit,
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            padding: const EdgeInsets.symmetric(
+              vertical: 16,
+            ),
           ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 16,
+          child: const Text(
+            '로그인',
+            style: TextStyle(
+              fontSize: 20,
+            ),
           ),
         ),
-        child: const Text(
-          '로그인',
-          style: TextStyle(
-            fontSize: 20,
-          ),
-        ),
-      ),
-    );
-  }
+      );
 
   void _onSubmit() {
     final ls = context.findAncestorStateOfType<LogInScreenState>()!;

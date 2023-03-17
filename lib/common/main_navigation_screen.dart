@@ -76,7 +76,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               NavTab(
-                text: 'Home',
+                text: '홈',
                 isSelected: _selectedIndex == 0,
                 icon: FontAwesomeIcons.house,
                 selectedIcon: FontAwesomeIcons.house,
@@ -84,7 +84,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 selectedIndex: _selectedIndex,
               ),
               NavTab(
-                text: 'Assign',
+                text: '병상배정',
                 isSelected: _selectedIndex == 1,
                 icon: FontAwesomeIcons.house,
                 selectedIcon: FontAwesomeIcons.house,
@@ -92,7 +92,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 selectedIndex: _selectedIndex,
               ),
               NavTab(
-                text: 'Lookup',
+                text: '환자조회',
                 isSelected: _selectedIndex == 2,
                 icon: FontAwesomeIcons.house,
                 selectedIcon: FontAwesomeIcons.house,
@@ -100,7 +100,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 selectedIndex: _selectedIndex,
               ),
               NavTab(
-                text: 'DM',
+                text: '연락처/DM',
                 isSelected: _selectedIndex == 3,
                 icon: FontAwesomeIcons.house,
                 selectedIcon: FontAwesomeIcons.message,
