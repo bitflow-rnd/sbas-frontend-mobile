@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/screens/find_id_screen.dart';
 import 'package:sbas/screens/login_widgets/login_form_widget.dart';
@@ -19,16 +20,9 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: const Text(
-          '로그인',
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.black,
-          ),
-        ),
+      appBar: Bitflow.getAppBar(
+        '로그인',
+        false,
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
