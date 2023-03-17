@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/screens/find_id_screen.dart';
 import 'package:sbas/screens/login_widgets/login_form_widget.dart';
 import 'package:sbas/screens/login_widgets/submit_button_widget.dart';
+import 'package:sbas/util.dart';
 
 class LogInScreen extends ConsumerStatefulWidget {
   @override
@@ -72,7 +72,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () => setPassword(context),
                           child: const Text(
                             '비밀번호 재설정',
                           ),
@@ -94,13 +94,6 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
       ),
     );
   }
-
-  void findId(BuildContext context) => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const FindIdScreen(),
-        ),
-      );
 
   void tryValidation() {
     if (formKey.currentState?.validate() ?? false) {

@@ -98,14 +98,18 @@ class _AuthPhoneState extends State<AuthPhone> {
                             horizontal: 8,
                           ),
                           child: ElevatedButton(
-                            onPressed: authNumber.length == 6 ? null : () {},
+                            onPressed: remainingTime == 0
+                                ? () {
+                                    startTimer();
+                                  }
+                                : null,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.all(
                                 16,
                               ),
                             ),
                             child: const Text(
-                              '인증번호 발송',
+                              '인증번호 재발송',
                               style: TextStyle(
                                 fontSize: 18,
                               ),
@@ -167,14 +171,7 @@ class _AuthPhoneState extends State<AuthPhone> {
       );
   @override
   void initState() {
-    authNumber = '';
-    remainingTime = kDebugMode ? 15 : validTime;
-    timer = Timer.periodic(
-      const Duration(
-        seconds: 1,
-      ),
-      onTick,
-    );
+    startTimer();
     super.initState();
   }
 
@@ -184,11 +181,22 @@ class _AuthPhoneState extends State<AuthPhone> {
     super.dispose();
   }
 
+  void startTimer() {
+    authNumber = '';
+    remainingTime = kDebugMode ? 15 : validTime;
+    timer = Timer.periodic(
+      const Duration(
+        seconds: 1,
+      ),
+      onTick,
+    );
+  }
+
   void onTick(Timer timer) => setState(() {
-        if (remainingTime == 0) {
-          Navigator.pop(context);
-        } else {
+        if (remainingTime > 0) {
           remainingTime--;
+        } else {
+          timer.cancel();
         }
       });
 
