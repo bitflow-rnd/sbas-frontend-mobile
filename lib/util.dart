@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sbas/screens/find_id_screen.dart';
+import 'package:sbas/screens/set_password_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void showErrorSnack(
@@ -33,6 +35,18 @@ void showErrorSnack(
     );
   }
 }
+
+void findId(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const FindIdScreen(),
+      ),
+    );
+Future setPassword(BuildContext context) async => await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const SetPasswordScreen(),
+    ));
 
 String format(int remainingTime) =>
     Duration(seconds: remainingTime).toString().substring(2, 7);

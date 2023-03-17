@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/screens/find_id_screen.dart';
+import 'package:sbas/util.dart';
 
 class FindId extends StatelessWidget {
   const FindId({super.key});
@@ -53,7 +54,13 @@ class FindId extends StatelessWidget {
             ),
             Gaps.h6,
             TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                await setPassword(context);
+
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
               child: const Text(
                 '비밀번호 재설정',
               ),
