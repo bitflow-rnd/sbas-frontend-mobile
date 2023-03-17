@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/util.dart';
 
@@ -140,30 +141,13 @@ class _AuthPhoneState extends State<AuthPhone> {
                   width: double.infinity,
                 ),
               ),
-              ElevatedButton(
-                onPressed: authNumber.length == 6
+              BottomSubmitBtn(
+                text: '확인',
+                func: () => authNumber.length == 6
                     ? () {
                         Navigator.pop(context, 'lemon');
                       }
                     : null,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                  ),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.zero,
-                    ),
-                  ),
-                ),
-                child: const Center(
-                  child: Text(
-                    '확인',
-                    style: TextStyle(
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
               ),
             ],
           ),
