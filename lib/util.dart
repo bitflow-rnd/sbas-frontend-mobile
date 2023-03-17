@@ -34,4 +34,7 @@ void showErrorSnack(
   }
 }
 
+String format(int remainingTime) =>
+    Duration(seconds: remainingTime).toString().substring(2, 7);
+
 late SharedPreferences prefs;

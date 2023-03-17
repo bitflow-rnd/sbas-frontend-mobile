@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/util.dart';
 
 class AuthPhone extends StatefulWidget {
   const AuthPhone({super.key});
@@ -117,7 +119,7 @@ class _AuthPhoneState extends State<AuthPhone> {
                         vertical: 4,
                       ),
                       child: Text(
-                        '유효시간 ${format()}',
+                        '유효시간 ${format(remainingTime)}',
                         style: const TextStyle(
                           color: Colors.red,
                           fontSize: 16,
@@ -135,7 +137,11 @@ class _AuthPhoneState extends State<AuthPhone> {
                 ),
               ),
               ElevatedButton(
-                onPressed: authNumber.length == 6 ? () {} : null,
+                onPressed: authNumber.length == 6
+                    ? () {
+                        Navigator.pop(context, 'lemon');
+                      }
+                    : null,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     vertical: 16,
@@ -162,7 +168,7 @@ class _AuthPhoneState extends State<AuthPhone> {
   @override
   void initState() {
     authNumber = '';
-    remainingTime = validTime;
+    remainingTime = kDebugMode ? 15 : validTime;
     timer = Timer.periodic(
       const Duration(
         seconds: 1,
@@ -186,15 +192,9 @@ class _AuthPhoneState extends State<AuthPhone> {
         }
       });
 
-  String format() {
-    final duration = Duration(seconds: remainingTime);
-
-    return duration.toString().substring(2, 7);
-  }
-
-  static const validTime = 180;
-
   late Timer timer;
   late String authNumber;
   late int remainingTime;
+
+  static const validTime = 180;
 }

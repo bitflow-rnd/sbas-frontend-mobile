@@ -2,13 +2,15 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/screens/authenticate_phone_screen.dart';
+import 'package:sbas/screens/find_id_screen.dart';
 
 class FindId extends StatelessWidget {
   const FindId({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final fs = context.findAncestorStateOfType<FindIdScreenState>()!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -24,7 +26,7 @@ class FindId extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () => authenticate(context),
+            onPressed: fs.authenticate,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(
                 vertical: 16,
@@ -59,15 +61,6 @@ class FindId extends StatelessWidget {
           ],
         )
       ],
-    );
-  }
-
-  void authenticate(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const AuthPhone(),
-      ),
     );
   }
 }
