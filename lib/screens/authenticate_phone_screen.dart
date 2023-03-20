@@ -21,6 +21,7 @@ class _AuthPhoneState extends State<AuthPhone> {
         appBar: Bitflow.getAppBar(
           '휴대폰 본인인증',
           false,
+          0,
         ),
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),

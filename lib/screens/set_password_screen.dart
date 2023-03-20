@@ -18,6 +18,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
       appBar: Bitflow.getAppBar(
         '비밀번호 재설정',
         false,
+        0,
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
