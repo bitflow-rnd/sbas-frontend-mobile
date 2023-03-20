@@ -30,6 +30,7 @@ class Bitflow {
   static AppBar getAppBar(
     String text,
     bool automaticallyImplyLeading,
+    double elevation,
   ) =>
       AppBar(
         title: Text(
@@ -52,6 +53,6 @@ class Bitflow {
           statusBarIconBrightness: Brightness.dark,
         ),
         automaticallyImplyLeading: automaticallyImplyLeading,
-        elevation: 0,
+        elevation: elevation,
       );
 }

@@ -20,6 +20,7 @@ class FindIdScreenState extends ConsumerState<FindIdScreen> {
       appBar: Bitflow.getAppBar(
         '아이디 찾기',
         id.isEmpty,
+        0,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(

@@ -53,7 +53,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 1,
-            child: const AssignBedScreen(),
+            child: AssignBedScreen(
+              automaticallyImplyLeading: false,
+            ),
           ),
           Offstage(
             offstage: _selectedIndex != 2,

@@ -23,6 +23,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
       appBar: Bitflow.getAppBar(
         '로그인',
         false,
+        0,
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
