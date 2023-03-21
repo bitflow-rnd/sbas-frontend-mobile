@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/screens/home_widgets/home_dashbord_widget.dart';
+import 'package:sbas/features/dashboard/views/widgets/dashbord_widget.dart';
 import 'package:sbas/util.dart';
 
-class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+class DashboardScreen extends ConsumerWidget {
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,14 +69,14 @@ class HomeScreen extends ConsumerWidget {
                       flex: 1,
                       child: Row(
                         children: const [
-                          HomeDashbord(
+                          Dashbord(
                             title: '요청',
                             edge: EdgeInsets.only(
                               right: 6,
                               bottom: 6,
                             ),
                           ),
-                          HomeDashbord(
+                          Dashbord(
                             title: '승인',
                             edge: EdgeInsets.only(
                               left: 6,
@@ -90,14 +90,14 @@ class HomeScreen extends ConsumerWidget {
                       flex: 1,
                       child: Row(
                         children: const [
-                          HomeDashbord(
+                          Dashbord(
                             title: '이송',
                             edge: EdgeInsets.only(
                               top: 6,
                               right: 6,
                             ),
                           ),
-                          HomeDashbord(
+                          Dashbord(
                             title: '입원',
                             edge: EdgeInsets.only(
                               top: 6,

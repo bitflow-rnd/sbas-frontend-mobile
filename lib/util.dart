@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sbas/screens/find_id_screen.dart';
-import 'package:sbas/screens/set_password_screen.dart';
+import 'package:sbas/features/authentication/views/screens/find_id_screen.dart';
+import 'package:sbas/features/authentication/views/screens/set_password_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void showErrorSnack(
@@ -50,5 +52,11 @@ Future setPassword(BuildContext context) async => await Navigator.push(
 
 String format(int remainingTime) =>
     Duration(seconds: remainingTime).toString().substring(2, 7);
+
+String toJson(Map<String, dynamic> map) => jsonEncode(map);
+
+Map<String, dynamic> fromJson(String body) => jsonDecode(body);
+
+const json = {'Content-Type': 'application/json'};
 
 late SharedPreferences prefs;

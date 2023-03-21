@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class HomeDashbord extends StatelessWidget {
-  const HomeDashbord({
+class Dashbord extends StatelessWidget {
+  const Dashbord({
     super.key,
     required this.title,
     required this.edge,
