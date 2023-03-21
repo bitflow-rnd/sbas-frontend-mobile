@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sbas/models/user_model.dart';
-import 'package:sbas/repository/login_repo.dart';
+import 'package:sbas/features/authentication/models/user_model.dart';
+import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/util.dart';
 
-class LoginViewModel extends AsyncNotifier<void> {
+class LoginBloc extends AsyncNotifier<void> {
   late final LoginRepo _repository;
 
   @override
@@ -39,8 +39,17 @@ class LoginViewModel extends AsyncNotifier<void> {
       }
     }
   }
+
+  String getFindId() {
+    const id = 'lemon';
+
+    if (kDebugMode) {
+      print(id);
+    }
+    return id;
+  }
 }
 
-final loginProvider = AsyncNotifierProvider<LoginViewModel, void>(
-  () => LoginViewModel(),
+final loginProvider = AsyncNotifierProvider<LoginBloc, void>(
+  () => LoginBloc(),
 );

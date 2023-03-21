@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/presenters/login_view_model.dart';
-import 'package:sbas/screens/login_screen.dart';
+import 'package:sbas/features/authentication/blocs/login_bloc.dart';
+import 'package:sbas/features/authentication/views/screens/login_screen.dart';
 
 class SubmitButton extends ConsumerStatefulWidget {
   const SubmitButton({super.key});

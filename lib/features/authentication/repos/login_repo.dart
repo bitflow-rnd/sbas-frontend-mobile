@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/models/auth_token_model.dart';
-import 'package:sbas/models/jwt_model.dart';
-import 'package:sbas/models/user_model.dart';
-import 'package:sbas/provider/login_provider.dart';
+import 'package:sbas/features/authentication/models/auth_token_model.dart';
+import 'package:sbas/features/authentication/models/jwt_model.dart';
+import 'package:sbas/features/authentication/models/user_model.dart';
+import 'package:sbas/features/authentication/providers/login_provider.dart';
 import 'package:sbas/util.dart';
 
 class LoginRepo {

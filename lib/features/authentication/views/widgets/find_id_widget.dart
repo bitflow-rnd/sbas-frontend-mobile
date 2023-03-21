@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/screens/find_id_screen.dart';
+import 'package:sbas/features/authentication/views/screens/find_id_screen.dart';
 import 'package:sbas/util.dart';
 
 class FindId extends StatelessWidget {

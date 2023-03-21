@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sbas/common/widgets/nav_tab.dart';
-import 'package:sbas/screens/assign_bed_screen.dart';
-import 'package:sbas/screens/direct_message_screen.dart';
-import 'package:sbas/screens/home_screen.dart';
-import 'package:sbas/screens/patient_lookup.dart';
+import 'package:sbas/features/assign/views/screens/assign_bed_screen.dart';
+import 'package:sbas/features/messages/views/screens/direct_message_screen.dart';
+import 'package:sbas/features/dashboard/views/screens/dashboard_screen.dart';
+import 'package:sbas/features/lookup/views/screens/patient_lookup.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   static const String routeName = 'mainNavigation';
@@ -49,11 +49,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         children: [
           Offstage(
             offstage: _selectedIndex != 0,
-            child: const HomeScreen(),
+            child: const DashboardScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 1,
-            child: AssignBedScreen(
+            child: const AssignBedScreen(
               automaticallyImplyLeading: false,
             ),
           ),

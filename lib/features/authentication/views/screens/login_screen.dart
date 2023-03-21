@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/screens/login_widgets/login_form_widget.dart';
-import 'package:sbas/screens/login_widgets/submit_button_widget.dart';
+import 'package:sbas/features/authentication/views/widgets/login_form_widget.dart';
+import 'package:sbas/features/authentication/views/widgets/submit_button_widget.dart';
 import 'package:sbas/util.dart';
 
 class LogInScreen extends ConsumerStatefulWidget {

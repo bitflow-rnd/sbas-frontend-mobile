@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
-import 'package:sbas/provider/api_provider.dart';
+import 'package:sbas/util.dart';
 
 class LoginProvider {
   Future<Map<String, dynamic>?> postSignIn(Map<String, dynamic> map) async {
