@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/authentication/views/screens/user_reg_req_screen.dart';
 import 'package:sbas/features/authentication/views/widgets/login_form_widget.dart';
 import 'package:sbas/features/authentication/views/widgets/submit_button_widget.dart';
 import 'package:sbas/util.dart';
@@ -40,7 +41,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
-                        'assets/logo.png',
+                        'assets/login_logo.png',
                       ),
                     ),
                   ),
@@ -59,34 +60,35 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                   ),
                 ),
                 const SubmitButton(),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Gaps.v24,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Gaps.v12,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        TextButton(
-                          onPressed: () => findId(context),
-                          child: const Text(
-                            '아이디 찾기',
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () => setPassword(context),
-                          child: const Text(
-                            '비밀번호 재설정',
-                          ),
-                        ),
-                      ],
+                    TextButton(
+                      onPressed: () => findId(context),
+                      child: const Text(
+                        '아이디 찾기',
+                      ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () => setPassword(context),
                       child: const Text(
-                        '사용자 등록 요청',
+                        '비밀번호 재설정',
                       ),
                     ),
                   ],
+                ),
+                Gaps.v48,
+                TextButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UserRegisterRequestScreen(),
+                    ),
+                  ),
+                  child: const Text(
+                    '사용자 등록 요청',
+                  ),
                 ),
               ],
             ),
