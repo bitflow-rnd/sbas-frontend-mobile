@@ -53,8 +53,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 1,
-            child: AssignBedScreen(
-              automaticallyImplyLeading: false,
+            child: const AssignBedScreen(
+              automaticallyImplyLeading: true,
             ),
           ),
           Offstage(
@@ -90,7 +90,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 isSelected: _selectedIndex == 1,
                 icon: FontAwesomeIcons.house,
                 selectedIcon: FontAwesomeIcons.house,
-                onTap: () => _onTap(1),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AssignBedScreen(
+                      automaticallyImplyLeading: false,
+                    ),
+                  ),
+                ),
                 selectedIndex: _selectedIndex,
               ),
               NavTab(

@@ -26,14 +26,9 @@ class _TopNavItemState extends State<TopNavItem> {
         0,
       ),
       child: InkWell(
-        onTap: () {
-          tn.setState(
-            () => tn.x = widget.x,
-          );
-          setState(
-            () => color = tn.x == widget.x ? Colors.black : Colors.grey,
-          );
-        },
+        onTap: () => tn.setState(
+          () => tn.x = widget.x,
+        ),
         child: Container(
           width: tn.width * 0.2,
           color: Colors.transparent,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/assign/views/widgets/card_item_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_navbar_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_search_widget.dart';
 
@@ -81,7 +83,25 @@ class AssignBedScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-            )
+            ),
+            const CardItem(
+              patientAge: '88',
+              patientName: '김*준',
+              patientSex: '남',
+              symbol: '병상요청',
+              color: Colors.green,
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                width: double.infinity,
+                color: Colors.transparent,
+              ),
+            ),
+            BottomSubmitBtn(
+              func: () => null,
+              text: '병상요청',
+            ),
           ],
         ),
       ),
