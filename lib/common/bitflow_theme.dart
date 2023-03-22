@@ -36,7 +36,7 @@ class Bitflow {
         title: Text(
           text,
           style: const TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             color: Colors.black,
           ),
         ),
