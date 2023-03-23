@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/features/authentication/views/screens/authenticate_phone_screen.dart';
-import 'package:sbas/features/authentication/views/widgets/find_id_result_widget.dart';
-import 'package:sbas/features/authentication/views/widgets/find_id_widget.dart';
+import 'package:sbas/features/authentication/views/authenticate_phone_screen.dart';
+import 'package:sbas/features/authentication/views/find_id_widgets/find_id_result_widget.dart';
+import 'package:sbas/features/authentication/views/find_id_widgets/find_id_widget.dart';
 
 class FindIdScreen extends ConsumerStatefulWidget {
   const FindIdScreen({super.key});

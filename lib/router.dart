@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sbas/common/main_navigation_screen.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
-import 'package:sbas/features/authentication/views/screens/login_screen.dart';
+import 'package:sbas/features/authentication/views/login_screen.dart';
 
 final routerProvider = Provider(
   (ref) => GoRouter(

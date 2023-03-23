@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
-import 'package:sbas/features/authentication/views/widgets/top_nav_req_item_widget.dart';
+import 'package:sbas/features/authentication/views/user_reg_widgets/top_nav_req_item_widget.dart';
 
 class TopNavbarRequest extends ConsumerWidget {
   const TopNavbarRequest({

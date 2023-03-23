@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/authentication/views/widgets/pw_input_widget.dart';
+import 'package:sbas/features/authentication/views/set_pw_widgets/pw_input_widget.dart';
 
 class SetPasswordScreen extends StatefulWidget {
   const SetPasswordScreen({super.key});
@@ -57,9 +57,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   width: double.infinity,
                 ),
               ),
-              BottomSubmitBtn(
+              const BottomSubmitBtn(
                 text: '비밀번호 변경',
-                func: () => null,
+                func: null,
               ),
             ],
           ),
