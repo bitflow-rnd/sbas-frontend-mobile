@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
 import 'package:sbas/router.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sbas/util.dart';
@@ -22,9 +23,12 @@ Future main() async {
     temporarily create a login to the Firebase
   */
   runApp(
-    const ProviderScope(
-      overrides: [],
-      child: App(),
+    ProviderScope(
+      observers: [
+        UserRegBloc(),
+      ],
+      overrides: const [],
+      child: const App(),
     ),
   );
 }

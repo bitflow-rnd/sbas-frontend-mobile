@@ -83,7 +83,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const UserRegisterRequestScreen(),
+                      builder: (context) => UserRegisterRequestScreen(),
                     ),
                   ),
                   child: const Text(

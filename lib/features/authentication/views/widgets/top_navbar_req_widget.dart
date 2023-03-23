@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:sbas/features/authentication/views/screens/user_reg_req_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
 import 'package:sbas/features/authentication/views/widgets/top_nav_req_item_widget.dart';
 
-class TopNavbarRequest extends StatefulWidget {
+class TopNavbarRequest extends ConsumerWidget {
   const TopNavbarRequest({
     super.key,
   });
 
   @override
-  State<TopNavbarRequest> createState() => TopNavbarRequestState();
-}
-
-class TopNavbarRequestState extends State<TopNavbarRequest> {
-  @override
-  Widget build(BuildContext context) {
-    final us =
-        context.findAncestorStateOfType<UserRegisterRequestScreenState>()!;
-
-    x = us.x;
-    width = MediaQuery.of(context).size.width - 64;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final width = MediaQuery.of(context).size.width - 32;
+    final x = ref.watch(regIndexProvider);
 
     return Stack(
       children: [
@@ -38,7 +31,7 @@ class TopNavbarRequestState extends State<TopNavbarRequest> {
         AnimatedAlign(
           heightFactor: 14,
           alignment: Alignment(
-            us.x,
+            x,
             0,
           ),
           duration: const Duration(
@@ -73,6 +66,4 @@ class TopNavbarRequestState extends State<TopNavbarRequest> {
       ],
     );
   }
-
-  late double x, width;
 }
