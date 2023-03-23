@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/authentication/views/screens/user_reg_req_screen.dart';
-import 'package:sbas/features/authentication/views/widgets/login_form_widget.dart';
-import 'package:sbas/features/authentication/views/widgets/submit_button_widget.dart';
+import 'package:sbas/features/authentication/views/login_widgets/login_form_widget.dart';
+import 'package:sbas/features/authentication/views/login_widgets/submit_button_widget.dart';
+import 'package:sbas/features/authentication/views/user_reg_req_screen.dart';
 import 'package:sbas/util.dart';
 
 class LogInScreen extends ConsumerStatefulWidget {
@@ -83,7 +83,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UserRegisterRequestScreen(),
+                      builder: (context) => const UserRegisterRequestScreen(),
                     ),
                   ),
                   child: const Text(

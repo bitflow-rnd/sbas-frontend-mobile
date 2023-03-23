@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sbas/features/authentication/views/screens/find_id_screen.dart';
-import 'package:sbas/features/authentication/views/screens/set_password_screen.dart';
+import 'package:sbas/features/authentication/views/find_id_screen.dart';
+import 'package:sbas/features/authentication/views/set_password_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void showErrorSnack(

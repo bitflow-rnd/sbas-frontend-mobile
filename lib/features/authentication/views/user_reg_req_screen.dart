@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
-import 'package:sbas/features/authentication/views/widgets/top_navbar_req_widget.dart';
-import 'package:sbas/features/authentication/views/widgets/self_auth_widget.dart';
+import 'package:sbas/features/authentication/views/user_reg_widgets/self_auth_widget.dart';
+import 'package:sbas/features/authentication/views/user_reg_widgets/top_navbar_req_widget.dart';
 
 class UserRegisterRequestScreen extends ConsumerStatefulWidget {
   const UserRegisterRequestScreen({
