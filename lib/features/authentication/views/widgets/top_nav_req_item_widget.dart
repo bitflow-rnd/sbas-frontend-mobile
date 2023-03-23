@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/authentication/views/widgets/top_navbar_req_widget.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
 
-class TopNavRequestItem extends StatefulWidget {
+class TopNavRequestItem extends ConsumerWidget {
   const TopNavRequestItem({
     super.key,
     required this.x,
@@ -14,19 +15,15 @@ class TopNavRequestItem extends StatefulWidget {
   final String text;
 
   @override
-  State<TopNavRequestItem> createState() => _TopNavRequestItemState();
-}
-
-class _TopNavRequestItemState extends State<TopNavRequestItem> {
-  @override
-  Widget build(BuildContext context) {
-    final tn = context.findAncestorStateOfType<TopNavbarRequestState>()!;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final width = MediaQuery.of(context).size.width - 32;
+    final position = ref.watch(regIndexProvider);
 
     return Align(
       heightFactor: 1,
-      alignment: Alignment(widget.x, 0),
+      alignment: Alignment(x, 0),
       child: SizedBox(
-        width: tn.width * 0.3,
+        width: width * 0.3,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -36,10 +33,10 @@ class _TopNavRequestItemState extends State<TopNavRequestItem> {
               ),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: tn.x == widget.x ? Colors.blue : Colors.grey,
+                color: position == x ? Colors.blue : Colors.grey,
               ),
               child: Text(
-                widget.index.toString(),
+                index.toString(),
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -47,10 +44,10 @@ class _TopNavRequestItemState extends State<TopNavRequestItem> {
             ),
             Gaps.h2,
             Text(
-              widget.text,
+              text,
               style: TextStyle(
                 fontSize: 16,
-                color: tn.x == widget.x ? Colors.black : Colors.grey,
+                color: x == position ? Colors.black : Colors.grey,
               ),
             ),
           ],

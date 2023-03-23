@@ -10,11 +10,15 @@ class RegInput extends StatefulWidget {
     required this.isRequired,
     required this.maxLength,
     required this.keyboardType,
+    this.validator,
+    required this.onSaved,
   });
   final String hintText, title;
   final bool isRequired;
   final int maxLength;
   final TextInputType keyboardType;
+  final String? Function(String?)? validator;
+  final void Function(String?)? onSaved;
 
   @override
   State<RegInput> createState() => _RegInputState();
@@ -51,32 +55,14 @@ class _RegInputState extends State<RegInput> {
             ),
             FilteringTextInputFormatter.singleLineFormatter,
           ],
+          onSaved: widget.onSaved,
           maxLength: widget.maxLength,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return '아이디를 입력하세요.';
-            }
-            return null;
-          },
+          validator: widget.validator,
+          controller: editingController,
           decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                style: BorderStyle.solid,
-                color: Colors.grey.shade300,
-              ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                style: BorderStyle.solid,
-                color: Colors.grey.shade300,
-              ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
+            enabledBorder: _outlineInputBorder,
+            focusedBorder: _outlineInputBorder,
+            errorBorder: _outlineInputBorder,
             hintText: widget.hintText,
             hintStyle: TextStyle(
               fontSize: 16,
@@ -88,7 +74,20 @@ class _RegInputState extends State<RegInput> {
             ),
           ),
         ),
+        Gaps.v16,
       ],
     );
   }
+
+  InputBorder get _outlineInputBorder => OutlineInputBorder(
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          color: Colors.grey.shade300,
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
+      );
+
+  final editingController = TextEditingController();
 }

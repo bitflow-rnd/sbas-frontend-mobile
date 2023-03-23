@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
-import 'package:sbas/features/authentication/views/widgets/reg_input_widget.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
 import 'package:sbas/features/authentication/views/widgets/top_navbar_req_widget.dart';
+import 'package:sbas/features/authentication/views/widgets/self_auth_widget.dart';
 
 class UserRegisterRequestScreen extends ConsumerStatefulWidget {
   const UserRegisterRequestScreen({
     super.key,
   });
+
   @override
   ConsumerState<UserRegisterRequestScreen> createState() =>
       UserRegisterRequestScreenState();
@@ -19,6 +21,7 @@ class UserRegisterRequestScreenState
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final index = ref.watch(regIndexProvider);
 
     return Scaffold(
       appBar: Bitflow.getAppBar(
@@ -44,49 +47,12 @@ class UserRegisterRequestScreenState
                 vertical: 96,
               ),
               child: Form(
+                key: formKey,
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(
                     vertical: 8,
                   ),
-                  child: Column(
-                    children: const [
-                      RegInput(
-                        hintText: '사용하실 아이디를 입력하세요.',
-                        title: '아이디',
-                        isRequired: true,
-                        maxLength: 15,
-                        keyboardType: TextInputType.text,
-                      ),
-                      RegInput(
-                        hintText: '본인 이름을 입력하세요.',
-                        title: '이름',
-                        isRequired: true,
-                        maxLength: 7,
-                        keyboardType: TextInputType.name,
-                      ),
-                      RegInput(
-                        hintText: '본인 생년월일 8자리를 입력하세요.',
-                        title: '생년월일',
-                        isRequired: true,
-                        maxLength: 8,
-                        keyboardType: TextInputType.number,
-                      ),
-                      RegInput(
-                        hintText: '휴대전화번호 11자리를 입력하세요.',
-                        title: '휴대전화번호',
-                        isRequired: false,
-                        maxLength: 11,
-                        keyboardType: TextInputType.phone,
-                      ),
-                      RegInput(
-                        hintText: '인증번호 6자리를 입력하세요.',
-                        title: '인증번호',
-                        isRequired: false,
-                        maxLength: 6,
-                        keyboardType: TextInputType.number,
-                      ),
-                    ],
-                  ),
+                  child: _getRegIndex(index),
                 ),
               ),
             ),
@@ -97,16 +63,28 @@ class UserRegisterRequestScreenState
                 children: [
                   SizedBox(
                     width: width * 0.5,
-                    child: const BottomSubmitBtn(
-                      func: null,
+                    child: BottomSubmitBtn(
+                      func: index < 0
+                          ? null
+                          : () {
+                              if (_tryValidation()) {
+                                ref.read(regIndexProvider.notifier).state--;
+                              }
+                            },
                       text: '이전',
                     ),
                   ),
                   SizedBox(
                     width: width * 0.5,
                     child: BottomSubmitBtn(
-                      func: () {},
-                      text: '다음',
+                      func: index > 1
+                          ? null
+                          : () {
+                              if (_tryValidation()) {
+                                ref.read(regIndexProvider.notifier).state++;
+                              }
+                            },
+                      text: index == 1 ? '등록요청' : '다음',
                     ),
                   ),
                 ],
@@ -118,5 +96,21 @@ class UserRegisterRequestScreenState
     );
   }
 
-  double x = -1;
+  Widget _getRegIndex(double index) {
+    if (index == -1) {
+      return const SelfAuth();
+    }
+    return const Placeholder();
+  }
+
+  bool _tryValidation() {
+    bool isValid = formKey.currentState?.validate() ?? false;
+
+    if (isValid) {
+      formKey.currentState?.save();
+    }
+    return isValid;
+  }
+
+  final formKey = GlobalKey<FormState>();
 }
