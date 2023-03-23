@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sbas/features/authentication/views/screens/user_reg_req_screen.dart';
 import 'package:sbas/features/authentication/views/widgets/top_nav_req_item_widget.dart';
 
 class TopNavbarRequest extends StatefulWidget {
-  const TopNavbarRequest({super.key});
+  const TopNavbarRequest({
+    super.key,
+  });
 
   @override
   State<TopNavbarRequest> createState() => TopNavbarRequestState();
@@ -11,21 +14,38 @@ class TopNavbarRequest extends StatefulWidget {
 class TopNavbarRequestState extends State<TopNavbarRequest> {
   @override
   Widget build(BuildContext context) {
+    final us =
+        context.findAncestorStateOfType<UserRegisterRequestScreenState>()!;
+
+    x = us.x;
     width = MediaQuery.of(context).size.width - 64;
 
     return Stack(
       children: [
+        Align(
+          heightFactor: 14,
+          child: Container(
+            width: width,
+            height: 4,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                30,
+              ),
+              color: Colors.grey.shade300,
+            ),
+          ),
+        ),
         AnimatedAlign(
           heightFactor: 14,
-          alignment: const Alignment(
-            0,
+          alignment: Alignment(
+            us.x,
             0,
           ),
           duration: const Duration(
             milliseconds: 500,
           ),
           child: Container(
-            width: width,
+            width: width * 0.3,
             height: 4,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
@@ -54,5 +74,5 @@ class TopNavbarRequestState extends State<TopNavbarRequest> {
     );
   }
 
-  late double width;
+  late double x, width;
 }

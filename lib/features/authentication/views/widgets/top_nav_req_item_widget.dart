@@ -23,6 +23,7 @@ class _TopNavRequestItemState extends State<TopNavRequestItem> {
     final tn = context.findAncestorStateOfType<TopNavbarRequestState>()!;
 
     return Align(
+      heightFactor: 1,
       alignment: Alignment(widget.x, 0),
       child: SizedBox(
         width: tn.width * 0.3,
@@ -31,25 +32,25 @@ class _TopNavRequestItemState extends State<TopNavRequestItem> {
           children: [
             Container(
               padding: const EdgeInsets.all(
-                4,
+                5,
               ),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.transparent,
-                border: Border.all(
-                  color: Colors.black,
-                  style: BorderStyle.solid,
-                ),
+                color: tn.x == widget.x ? Colors.blue : Colors.grey,
               ),
               child: Text(
                 widget.index.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
             Gaps.h2,
             Text(
               widget.text,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
+                color: tn.x == widget.x ? Colors.black : Colors.grey,
               ),
             ),
           ],

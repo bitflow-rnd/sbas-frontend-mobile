@@ -10,7 +10,7 @@ class BottomSubmitBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: func(),
+      onPressed: func,
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(
           vertical: 16,
@@ -32,6 +32,6 @@ class BottomSubmitBtn extends StatelessWidget {
     );
   }
 
-  final Function func;
+  final void Function()? func;
   final String text;
 }
