@@ -98,8 +98,8 @@ class AssignBedScreen extends ConsumerWidget {
                 color: Colors.transparent,
               ),
             ),
-            BottomSubmitBtn(
-              func: () => null,
+            const BottomSubmitBtn(
+              onPressed: null,
               text: '병상요청',
             ),
           ],

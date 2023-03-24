@@ -12,8 +12,11 @@ class RegInput extends StatefulWidget {
     required this.keyboardType,
     this.validator,
     required this.onSaved,
+    required this.regExp,
+    required this.text,
   });
-  final String hintText, title;
+  final String hintText, title, regExp;
+  final String? text;
   final bool isRequired;
   final int maxLength;
   final TextInputType keyboardType;
@@ -51,7 +54,7 @@ class _RegInputState extends State<RegInput> {
           keyboardType: widget.keyboardType,
           inputFormatters: [
             FilteringTextInputFormatter.allow(
-              RegExp(r'[a-z|0-9]'),
+              RegExp(widget.regExp),
             ),
             FilteringTextInputFormatter.singleLineFormatter,
           ],
@@ -73,6 +76,7 @@ class _RegInputState extends State<RegInput> {
               horizontal: 22,
             ),
           ),
+          autovalidateMode: AutovalidateMode.always,
         ),
         Gaps.v16,
       ],
@@ -89,5 +93,7 @@ class _RegInputState extends State<RegInput> {
         ),
       );
 
-  final editingController = TextEditingController();
+  late final editingController = TextEditingController(
+    text: widget.text,
+  );
 }

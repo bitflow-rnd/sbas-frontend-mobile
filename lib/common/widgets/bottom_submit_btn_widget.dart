@@ -4,13 +4,15 @@ class BottomSubmitBtn extends StatelessWidget {
   const BottomSubmitBtn({
     super.key,
     required this.text,
-    required this.func,
+    required this.onPressed,
   });
+  final String text;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: func,
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(
           vertical: 16,
@@ -31,7 +33,4 @@ class BottomSubmitBtn extends StatelessWidget {
       ),
     );
   }
-
-  final void Function()? func;
-  final String text;
 }
