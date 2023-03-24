@@ -34,12 +34,18 @@ class SelfAuth extends ConsumerWidget {
           maxLength: 7,
           keyboardType: TextInputType.name,
           validator: (value) {
-            if (value == null || value.length < 2) {
+            if (value == null ||
+                value.length < 2 ||
+                RegExp(
+                      r'[\uac00-\ud7af]',
+                      unicode: true,
+                    ).allMatches(value).length !=
+                    value.length) {
               return '본인 이름을 정확히 입력하세요.';
             }
             return null;
           },
-          regExp: r'[가-힝|ㄱ-ㅎ|ㅏ-ㅣ]',
+          regExp: r'[가-힝|ㄱ-ㅎ|ㆍ|ᆢ]',
           onSaved: (newValue) =>
               ref.read(userRegProvider.notifier).state.userNm = newValue,
           text: ref.watch(userRegProvider).userNm,

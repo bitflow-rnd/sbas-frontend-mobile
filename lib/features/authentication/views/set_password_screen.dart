@@ -59,7 +59,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
               ),
               const BottomSubmitBtn(
                 text: '비밀번호 변경',
-                func: null,
+                onPressed: null,
               ),
             ],
           ),

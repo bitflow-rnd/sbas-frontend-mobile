@@ -144,7 +144,7 @@ class _AuthPhoneState extends State<AuthPhone> {
               ),
               BottomSubmitBtn(
                 text: '확인',
-                func: () => authNumber.length == 6
+                onPressed: authNumber.length == 6
                     ? () {
                         Navigator.pop(context, 'lemon');
                       }
