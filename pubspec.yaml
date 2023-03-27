@@ -65,7 +65,11 @@ dependencies:
 
   kakao_flutter_sdk: ^1.4.0
 
+  mobile_number: ^2.1.1
+
   modal_progress_hud_nsn: ^0.3.0
+
+  phone_number: ^1.0.0
 
   shared_preferences: ^2.0.18
   
