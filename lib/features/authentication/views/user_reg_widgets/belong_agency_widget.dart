@@ -5,13 +5,21 @@ import 'package:sbas/features/authentication/blocs/belong_agency_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_detail_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_proof_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_region_widget.dart';
+import 'package:sbas/features/authentication/views/user_reg_widgets/patient_type_widget.dart';
 
 class BelongAgency extends ConsumerStatefulWidget {
-  const BelongAgency({
+  BelongAgency({
+    required this.patientTypes,
     required this.titles,
     super.key,
   });
-  final List<String> titles;
+  final List<bool> isSelectedTypes = [
+    false,
+    false,
+    false,
+    false,
+  ];
+  final List<String> titles, patientTypes;
 
   @override
   ConsumerState<BelongAgency> createState() => _BelongAgencyState();
@@ -88,6 +96,28 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
         _getTitle(
           widget.titles[3],
           false,
+        ),
+        SizedBox(
+          height: 128,
+          child: GridView.builder(
+            padding: const EdgeInsets.symmetric(
+              vertical: 12,
+            ),
+            itemCount: widget.patientTypes.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 16,
+              childAspectRatio: 2.15 / 1,
+            ),
+            itemBuilder: (context, index) => PatientType(
+              title: widget.patientTypes[index],
+              onChanged: (value) =>
+                  setState(() => widget.isSelectedTypes[index] = !value),
+              isSelected: widget.isSelectedTypes[index],
+            ),
+            physics: const NeverScrollableScrollPhysics(),
+          ),
         ),
       ],
     );
