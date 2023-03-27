@@ -4,7 +4,9 @@ import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/reg_input_widget.dart';
 
 class SelfAuth extends ConsumerWidget {
-  const SelfAuth({super.key});
+  const SelfAuth({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
