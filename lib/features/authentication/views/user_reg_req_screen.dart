@@ -100,12 +100,18 @@ class UserRegisterRequestScreenState
 
   Widget _getRegIndex(double index) {
     if (index == 1) {
-      return const BelongAgency(
-        titles: [
+      return BelongAgency(
+        titles: const [
           '담당지역',
           '소속기관',
           '소속 증명 정보',
           '담당 환자 유형',
+        ],
+        patientTypes: const [
+          '투석',
+          '임산부',
+          '신생아',
+          '응급',
         ],
       );
     }
