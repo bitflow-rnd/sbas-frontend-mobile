@@ -40,6 +40,26 @@ class UserRegModel {
     this.statClas,
     this.btDt,
   });
+  UserRegModel.empty()
+      : id = '',
+        pw = '',
+        userNm = '',
+        userCi = '',
+        pushKey = '',
+        gndr = '',
+        telno = '',
+        jobCd = '',
+        ocpCd = '',
+        ptTypeCd = '',
+        instTypeCd = '',
+        instId = '',
+        instNm = '',
+        dutyDstr1Cd = '',
+        dutyDstr2Cd = '',
+        dutyAddr = '',
+        attcId = '',
+        statClas = '',
+        btDt = '';
 
   UserRegModel.fromJson(Map<String, dynamic> json) {
     if (json["id"] is String) {

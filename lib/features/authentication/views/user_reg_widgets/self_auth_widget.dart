@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
+import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/reg_input_widget.dart';
 
 class SelfAuth extends ConsumerWidget {
   const SelfAuth({
+    required this.model,
     super.key,
   });
-
+  final UserRegModel model;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -25,9 +26,38 @@ class SelfAuth extends ConsumerWidget {
             return null;
           },
           regExp: r'[a-z|0-9]',
-          onSaved: (newValue) =>
-              ref.read(userRegProvider.notifier).state.id = newValue,
-          text: ref.watch(userRegProvider).id,
+          onSaved: (newValue) => model.id = newValue,
+          text: model.id,
+        ),
+        RegInput(
+          hintText: '사용하실 비밀번호를 입력하세요.',
+          title: '비밀번호',
+          isRequired: true,
+          maxLength: 15,
+          keyboardType: TextInputType.visiblePassword,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '비밀번호를 입력하세요.';
+            } else if (value.length < 8) {
+              return '8자 이상 입력하세요.';
+            } else if (!value.contains(
+              RegExp(r'[a-z]'),
+            )) {
+              return '영문자를 입력해주세요.';
+            } else if (!value.contains(
+              RegExp(r'[0-9]'),
+            )) {
+              return '숫자를 입력해주세요.';
+            } else if (!value.contains(
+              RegExp(r'[~!@#$%^&*()_-]'),
+            )) {
+              return '특수문자를 입력해주세요.';
+            }
+            return null;
+          },
+          regExp: r'[a-z|0-9|~!@#$%^&*()_-]',
+          onSaved: (newValue) => model.pw = newValue,
+          text: model.pw,
         ),
         RegInput(
           hintText: '본인 이름을 입력하세요.',
@@ -48,9 +78,8 @@ class SelfAuth extends ConsumerWidget {
             return null;
           },
           regExp: r'[가-힝|ㄱ-ㅎ|ㆍ|ᆢ]',
-          onSaved: (newValue) =>
-              ref.read(userRegProvider.notifier).state.userNm = newValue,
-          text: ref.watch(userRegProvider).userNm,
+          onSaved: (newValue) => model.userNm = newValue,
+          text: model.userNm,
         ),
         RegInput(
           hintText: '본인 생년월일 8자리를 입력하세요.',
@@ -65,9 +94,8 @@ class SelfAuth extends ConsumerWidget {
             }
             return null;
           },
-          onSaved: (newValue) =>
-              ref.read(userRegProvider.notifier).state.btDt = newValue,
-          text: ref.watch(userRegProvider).btDt,
+          onSaved: (newValue) => model.btDt = newValue,
+          text: model.btDt,
         ),
         RegInput(
           hintText: '휴대전화번호 11자리를 입력하세요.',
@@ -82,9 +110,8 @@ class SelfAuth extends ConsumerWidget {
             }
             return null;
           },
-          onSaved: (newValue) =>
-              ref.read(userRegProvider.notifier).state.telno = newValue,
-          text: ref.watch(userRegProvider).telno,
+          onSaved: (newValue) => model.telno = newValue,
+          text: model.telno,
         ),
         RegInput(
           hintText: '인증번호 6자리를 입력하세요.',
@@ -99,9 +126,8 @@ class SelfAuth extends ConsumerWidget {
             }
             return null;
           },
-          onSaved: (newValue) =>
-              ref.read(userRegProvider.notifier).state.userCi = newValue,
-          text: ref.watch(userRegProvider).userCi,
+          onSaved: (newValue) => model.userCi = newValue,
+          text: model.userCi,
         ),
       ],
     );
