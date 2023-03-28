@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
+import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/affiliation_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/auth_group_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/detail_auth_widget.dart';
 
 class JobRole extends ConsumerStatefulWidget {
   const JobRole({
+    required this.model,
     required this.detailAuthTitles,
     required this.detailAuthSubTitles,
     required this.authGroupSubTitles,
@@ -26,6 +27,8 @@ class JobRole extends ConsumerStatefulWidget {
       detailAuthTitles,
       detailAuthSubTitles;
 
+  final UserRegModel model;
+
   @override
   ConsumerState<JobRole> createState() => _JobRoleState();
 }
@@ -33,9 +36,9 @@ class JobRole extends ConsumerStatefulWidget {
 class _JobRoleState extends ConsumerState<JobRole> {
   @override
   Widget build(BuildContext context) {
-    final ocpCd = ref.watch(userRegProvider).ocpCd;
-    final jobCd = ref.watch(userRegProvider).jobCd;
-    final attcId = ref.watch(userRegProvider).attcId;
+    final ocpCd = widget.model.ocpCd;
+    final jobCd = widget.model.jobCd;
+    final attcId = widget.model.attcId;
 
     if (attcId != null && attcId.isNotEmpty) {
       detailAuthSelectedIndex = widget.detailAuthTitles.indexOf(attcId);
@@ -70,7 +73,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                 onChanged: (value) => setState(
                   () {
                     affiliationSelectedIndex = value ?? 0;
-                    ref.read(userRegProvider).ocpCd =
+                    widget.model.ocpCd =
                         widget.affiliationType[affiliationSelectedIndex];
                   },
                 ),
@@ -97,8 +100,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                 subTitle: widget.authGroupSubTitles[index],
                 onChanged: (value) => setState(() {
                   authGroupSelectedIndex = value ?? 0;
-                  ref.read(userRegProvider).jobCd =
-                      widget.authGroupTitles[index];
+                  widget.model.jobCd = widget.authGroupTitles[index];
                 }),
               ),
               padding: const EdgeInsets.symmetric(
@@ -129,7 +131,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                 onChanged: (value) => setState(
                   () {
                     detailAuthSelectedIndex = value ?? 0;
-                    ref.read(userRegProvider).attcId =
+                    widget.model.attcId =
                         widget.detailAuthTitles[detailAuthSelectedIndex];
                   },
                 ),

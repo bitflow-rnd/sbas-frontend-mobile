@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_number/mobile_number.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
+import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
+import 'package:telephony/telephony.dart';
 
 class RegInput extends ConsumerStatefulWidget {
   const RegInput({
@@ -97,7 +98,39 @@ class _RegInputState extends ConsumerState<RegInput> {
       });
       initMobileNumberState();
     }
+    if (TextInputType.number == widget.keyboardType && widget.maxLength == 6) {
+      initPlatformState();
+    }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> initPlatformState() async {
+    final bool? result = await telephony.requestPhoneAndSmsPermissions;
+
+    if (result != null && result) {
+      telephony.listenIncomingSms(
+        onNewMessage: (message) {
+          if (message.body != null && message.body!.isNotEmpty) {
+            editingController.text = message.body!.splitMapJoin(
+              RegExp(r'\d{6}'),
+              onMatch: (m) => '${m[0]}',
+              onNonMatch: (n) => '',
+            );
+            setState(
+              () => isReadOnly = true,
+            );
+          }
+        },
+        listenInBackground: false,
+      );
+    }
+
+    if (!mounted) return;
   }
 
   Future<void> initMobileNumberState() async {
@@ -110,23 +143,23 @@ class _RegInputState extends ConsumerState<RegInput> {
       final mobileNumber = await MobileNumber.mobileNumber ?? '';
       final simCard = await MobileNumber.getSimCards ?? [];
 
-      setState(() {
-        for (var element in simCard) {
-          if (mobileNumber.endsWith(element.number ?? ' ')) {
-            final prefix = element.countryPhonePrefix;
+      for (var element in simCard) {
+        if (mobileNumber.endsWith(element.number ?? ' ')) {
+          final prefix = element.countryPhonePrefix;
 
-            if (prefix != null && prefix.isNotEmpty) {
-              final phoneNumber = element.number?.replaceAll('+$prefix', '0');
+          if (prefix != null && prefix.isNotEmpty) {
+            final phoneNumber = element.number?.replaceAll('+$prefix', '0');
 
-              if (phoneNumber != null && phoneNumber.isNotEmpty) {
-                ref.read(userRegProvider.notifier).state.telno = phoneNumber;
-                editingController.text = phoneNumber;
-                isReadOnly = true;
-              }
+            if (phoneNumber != null && phoneNumber.isNotEmpty) {
+              editingController.text = phoneNumber;
+              setState(
+                () => isReadOnly = true,
+              );
+              await ref.read(userRegReqProvider).sendAuthMessage(phoneNumber);
             }
           }
         }
-      });
+      }
     } on PlatformException catch (e) {
       debugPrint("Failed to get mobile number because of '${e.message}'");
     }
@@ -141,9 +174,10 @@ class _RegInputState extends ConsumerState<RegInput> {
           Radius.circular(10),
         ),
       );
-
   late final editingController = TextEditingController(
     text: widget.text,
   );
+  final telephony = Telephony.instance;
+
   bool isReadOnly = false;
 }
