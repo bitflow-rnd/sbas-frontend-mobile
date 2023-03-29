@@ -9,17 +9,11 @@ class UserRegProvider {
     final client = RetryClient(Client());
 
     try {
-      final res = await client.post(
+      await client.post(
         Uri.parse('$_baseUrl/smssend'),
         headers: json,
         body: toJson(map),
       );
-      if (kDebugMode) {
-        print({
-          'code': res.statusCode,
-          'body': res.body,
-        });
-      }
     } catch (exception) {
       if (kDebugMode) {
         print({

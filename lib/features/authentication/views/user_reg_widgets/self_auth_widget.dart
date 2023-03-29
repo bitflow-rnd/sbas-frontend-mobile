@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
+import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/reg_input_widget.dart';
 
 class SelfAuth extends ConsumerWidget {
   const SelfAuth({
-    required this.model,
     super.key,
   });
-  final UserRegModel model;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final model = ref.watch(regUserProvider);
+
     return Column(
       children: [
         RegInput(

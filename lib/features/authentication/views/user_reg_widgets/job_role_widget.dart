@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
+import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/affiliation_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/auth_group_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/detail_auth_widget.dart';
 
 class JobRole extends ConsumerStatefulWidget {
   const JobRole({
-    required this.model,
     required this.detailAuthTitles,
     required this.detailAuthSubTitles,
     required this.authGroupSubTitles,
@@ -15,11 +14,9 @@ class JobRole extends ConsumerStatefulWidget {
     required this.authGroupDisabledImages,
     required this.authGroupTitles,
     required this.title,
-    required this.affiliationType,
     super.key,
   });
   final List<String> title,
-      affiliationType,
       authGroupSelectedImages,
       authGroupDisabledImages,
       authGroupTitles,
@@ -27,123 +24,11 @@ class JobRole extends ConsumerStatefulWidget {
       detailAuthTitles,
       detailAuthSubTitles;
 
-  final UserRegModel model;
-
   @override
   ConsumerState<JobRole> createState() => _JobRoleState();
 }
 
 class _JobRoleState extends ConsumerState<JobRole> {
-  @override
-  Widget build(BuildContext context) {
-    final ocpCd = widget.model.ocpCd;
-    final jobCd = widget.model.jobCd;
-    final attcId = widget.model.attcId;
-
-    if (attcId != null && attcId.isNotEmpty) {
-      detailAuthSelectedIndex = widget.detailAuthTitles.indexOf(attcId);
-    }
-    if (jobCd != null && jobCd.isNotEmpty) {
-      authGroupSelectedIndex = widget.authGroupTitles.indexOf(jobCd);
-    }
-    if (ocpCd != null && ocpCd.isNotEmpty) {
-      affiliationSelectedIndex = widget.affiliationType.indexOf(ocpCd);
-    }
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _getTitie(0),
-          SizedBox(
-            height: 128,
-            child: GridView.builder(
-              padding: const EdgeInsets.symmetric(
-                vertical: 12,
-              ),
-              itemCount: widget.affiliationType.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 16,
-                childAspectRatio: 3 / 1,
-              ),
-              itemBuilder: (context, index) => Affiliation(
-                title: widget.affiliationType[index],
-                index: index,
-                selectedIndex: affiliationSelectedIndex,
-                onChanged: (value) => setState(
-                  () {
-                    affiliationSelectedIndex = value ?? 0;
-                    widget.model.ocpCd =
-                        widget.affiliationType[affiliationSelectedIndex];
-                  },
-                ),
-              ),
-              physics: const NeverScrollableScrollPhysics(),
-            ),
-          ),
-          _getTitie(1),
-          SizedBox(
-            height: 128 * 3 + 22,
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-              ),
-              itemCount: widget.authGroupTitles.length,
-              itemBuilder: (context, index) => AuthorizationGroup(
-                selectedIndex: authGroupSelectedIndex,
-                index: index,
-                disabledImage: widget.authGroupDisabledImages[index],
-                selectedImage: widget.authGroupSelectedImages[index],
-                title: widget.authGroupTitles[index],
-                subTitle: widget.authGroupSubTitles[index],
-                onChanged: (value) => setState(() {
-                  authGroupSelectedIndex = value ?? 0;
-                  widget.model.jobCd = widget.authGroupTitles[index];
-                }),
-              ),
-              padding: const EdgeInsets.symmetric(
-                vertical: 12,
-              ),
-              physics: const NeverScrollableScrollPhysics(),
-            ),
-          ),
-          _getTitie(2),
-          SizedBox(
-            height: 128,
-            child: GridView.builder(
-              padding: const EdgeInsets.symmetric(
-                vertical: 12,
-              ),
-              itemCount: widget.detailAuthTitles.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 16,
-                childAspectRatio: 8.75 / 1,
-              ),
-              itemBuilder: (context, index) => DetailAuthorization(
-                title: widget.detailAuthTitles[index],
-                subTitle: widget.detailAuthSubTitles[index],
-                index: index,
-                selectedIndex: detailAuthSelectedIndex,
-                onChanged: (value) => setState(
-                  () {
-                    detailAuthSelectedIndex = value ?? 0;
-                    widget.model.attcId =
-                        widget.detailAuthTitles[detailAuthSelectedIndex];
-                  },
-                ),
-              ),
-              physics: const NeverScrollableScrollPhysics(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _getTitie(int index) => Row(
         children: [
           Text(
@@ -164,4 +49,138 @@ class _JobRoleState extends ConsumerState<JobRole> {
   int affiliationSelectedIndex = -1,
       authGroupSelectedIndex = -1,
       detailAuthSelectedIndex = -1;
+
+  @override
+  Widget build(BuildContext context) {
+    final model = ref.watch(regUserProvider);
+
+    final ocpCd = model.ocpCd;
+    final jobCd = model.jobCd;
+    final attcId = model.attcId;
+
+    if (attcId != null && attcId.isNotEmpty) {
+      detailAuthSelectedIndex = widget.detailAuthTitles.indexOf(attcId);
+    }
+    if (jobCd != null && jobCd.isNotEmpty) {
+      authGroupSelectedIndex = widget.authGroupTitles.indexOf(jobCd);
+    }
+    return ref.watch(jobRoleProvider).when(
+          loading: () => const Center(
+            child: CircularProgressIndicator.adaptive(
+              valueColor: AlwaysStoppedAnimation(
+                Colors.lightBlueAccent,
+              ),
+            ),
+          ),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              error.toString(),
+              style: const TextStyle(
+                color: Colors.lightBlueAccent,
+              ),
+            ),
+          ),
+          data: (data) {
+            if (ocpCd != null && ocpCd.isNotEmpty) {
+              affiliationSelectedIndex =
+                  data.indexWhere((element) => element.cdNm == ocpCd);
+            }
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  _getTitie(0),
+                  SizedBox(
+                    height: 128,
+                    child: GridView.builder(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                      ),
+                      itemCount: data.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 16,
+                        childAspectRatio: 3 / 1,
+                      ),
+                      itemBuilder: (context, index) => Affiliation(
+                        title: data[index].cdNm ?? '',
+                        index: index,
+                        selectedIndex: affiliationSelectedIndex,
+                        onChanged: (value) => setState(
+                          () {
+                            affiliationSelectedIndex = value ?? 0;
+                            model.ocpCd = data[affiliationSelectedIndex].cdNm;
+                          },
+                        ),
+                      ),
+                      physics: const NeverScrollableScrollPhysics(),
+                    ),
+                  ),
+                  _getTitie(1),
+                  SizedBox(
+                    height: 128 * 3 + 22,
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                      ),
+                      itemCount: widget.authGroupTitles.length,
+                      itemBuilder: (context, index) => AuthorizationGroup(
+                        selectedIndex: authGroupSelectedIndex,
+                        index: index,
+                        disabledImage: widget.authGroupDisabledImages[index],
+                        selectedImage: widget.authGroupSelectedImages[index],
+                        title: widget.authGroupTitles[index],
+                        subTitle: widget.authGroupSubTitles[index],
+                        onChanged: (value) => setState(() {
+                          authGroupSelectedIndex = value ?? 0;
+                          model.jobCd = widget.authGroupTitles[index];
+                        }),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                      ),
+                      physics: const NeverScrollableScrollPhysics(),
+                    ),
+                  ),
+                  _getTitie(2),
+                  SizedBox(
+                    height: 128,
+                    child: GridView.builder(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                      ),
+                      itemCount: widget.detailAuthTitles.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 16,
+                        childAspectRatio: 8.75 / 1,
+                      ),
+                      itemBuilder: (context, index) => DetailAuthorization(
+                        title: widget.detailAuthTitles[index],
+                        subTitle: widget.detailAuthSubTitles[index],
+                        index: index,
+                        selectedIndex: detailAuthSelectedIndex,
+                        onChanged: (value) => setState(
+                          () {
+                            detailAuthSelectedIndex = value ?? 0;
+                            model.attcId = widget
+                                .detailAuthTitles[detailAuthSelectedIndex];
+                          },
+                        ),
+                      ),
+                      physics: const NeverScrollableScrollPhysics(),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+  }
 }

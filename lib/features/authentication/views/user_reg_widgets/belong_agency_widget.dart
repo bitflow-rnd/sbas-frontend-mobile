@@ -9,17 +9,11 @@ import 'package:sbas/features/authentication/views/user_reg_widgets/patient_type
 
 class BelongAgency extends ConsumerStatefulWidget {
   BelongAgency({
-    required this.patientTypes,
     required this.titles,
     super.key,
   });
-  final List<bool> isSelectedTypes = [
-    false,
-    false,
-    false,
-    false,
-  ];
-  final List<String> titles, patientTypes;
+  final Map<String, bool> mapSelectedTypes = {};
+  final List<String> titles;
 
   @override
   ConsumerState<BelongAgency> createState() => _BelongAgencyState();
@@ -28,99 +22,108 @@ class BelongAgency extends ConsumerStatefulWidget {
 class _BelongAgencyState extends ConsumerState<BelongAgency> {
   @override
   Widget build(BuildContext context) {
-    final watch = ref.watch(belongAgencyProvider);
+    return ref.watch(belongAgencyProvider).when(
+          loading: () => const Center(
+            child: CircularProgressIndicator.adaptive(
+              valueColor: AlwaysStoppedAnimation(
+                Colors.lightBlueAccent,
+              ),
+            ),
+          ),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              error.toString(),
+              style: const TextStyle(
+                color: Colors.lightBlueAccent,
+              ),
+            ),
+          ),
+          data: (data) {
+            for (var e in data) {
+              String id = e.id?.cdId ?? '';
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _getTitle(
-          widget.titles[0],
-          true,
-        ),
-        watch.when(
-          loading: () => const Center(
-            child: CircularProgressIndicator.adaptive(),
-          ),
-          error: (error, stackTrace) => Center(
-            child: Text(
-              error.toString(),
-            ),
-          ),
-          data: (data) => Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8,
-            ),
-            child: AgencyRegion(
-              agencyModel: data,
-              inputDecoration: _inputDecoration,
-            ),
-          ),
-        ),
-        Gaps.v16,
-        _getTitle(
-          widget.titles[1],
-          true,
-        ),
-        watch.when(
-          loading: () => const Center(
-            child: CircularProgressIndicator.adaptive(),
-          ),
-          error: (error, stackTrace) => Center(
-            child: Text(
-              error.toString(),
-            ),
-          ),
-          data: (data) => Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8,
-            ),
-            child: AgencyDetail(
-              agencyModel: data,
-              inputBorder: _inputBorder,
-              inputDecoration: _inputDecoration,
-            ),
-          ),
-        ),
-        Gaps.v16,
-        _getTitle(
-          widget.titles[2],
-          false,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 8,
-          ),
-          child: AgencyProof(),
-        ),
-        Gaps.v16,
-        _getTitle(
-          widget.titles[3],
-          false,
-        ),
-        SizedBox(
-          height: 128,
-          child: GridView.builder(
-            padding: const EdgeInsets.symmetric(
-              vertical: 12,
-            ),
-            itemCount: widget.patientTypes.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 16,
-              childAspectRatio: 2.15 / 1,
-            ),
-            itemBuilder: (context, index) => PatientType(
-              title: widget.patientTypes[index],
-              onChanged: (value) =>
-                  setState(() => widget.isSelectedTypes[index] = !value),
-              isSelected: widget.isSelectedTypes[index],
-            ),
-            physics: const NeverScrollableScrollPhysics(),
-          ),
-        ),
-      ],
-    );
+              if (id.isNotEmpty) {
+                widget.mapSelectedTypes[id] = false;
+              }
+            }
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _getTitle(
+                  widget.titles[0],
+                  true,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                  ),
+                  child: AgencyRegion(
+                    inputDecoration: _inputDecoration,
+                  ),
+                ),
+                Gaps.v16,
+                _getTitle(
+                  widget.titles[1],
+                  true,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                  ),
+                  child: AgencyDetail(
+                    inputBorder: _inputBorder,
+                    inputDecoration: _inputDecoration,
+                  ),
+                ),
+                Gaps.v16,
+                _getTitle(
+                  widget.titles[2],
+                  false,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                  ),
+                  child: AgencyProof(),
+                ),
+                Gaps.v16,
+                _getTitle(
+                  widget.titles[3],
+                  false,
+                ),
+                SizedBox(
+                  height: 128,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                    ),
+                    itemCount: data.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 16,
+                      childAspectRatio: 2.15 / 1,
+                    ),
+                    itemBuilder: (context, index) {
+                      String id = data[index].id?.cdId ?? '';
+
+                      PatientType(
+                        title: data[index].cdNm ?? '',
+                        onChanged: (value) => setState(
+                            () => widget.mapSelectedTypes[id] = !value),
+                        isSelected: widget.mapSelectedTypes[id] ?? false,
+                      );
+                      return null;
+                    },
+                    physics: const NeverScrollableScrollPhysics(),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
   }
 
   InputBorder get _inputBorder => OutlineInputBorder(
