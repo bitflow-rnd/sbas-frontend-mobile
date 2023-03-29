@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/authentication/blocs/user_reg_req_bloc.dart';
+import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 
 class TopNavRequestItem extends ConsumerWidget {
   const TopNavRequestItem({
