@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/widgets/progress_indicator.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/affiliation_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/auth_group_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/detail_auth_widget.dart';
@@ -54,24 +56,18 @@ class _JobRoleState extends ConsumerState<JobRole> {
   Widget build(BuildContext context) {
     final model = ref.watch(regUserProvider);
 
-    final ocpCd = model.ocpCd;
+    final instTypeCd = model.instTypeCd;
     final jobCd = model.jobCd;
-    final attcId = model.attcId;
+    final ocpCd = model.ocpCd;
 
-    if (attcId != null && attcId.isNotEmpty) {
-      detailAuthSelectedIndex = widget.detailAuthTitles.indexOf(attcId);
+    if (ocpCd != null && ocpCd.isNotEmpty) {
+      detailAuthSelectedIndex = widget.detailAuthTitles.indexOf(ocpCd);
     }
     if (jobCd != null && jobCd.isNotEmpty) {
       authGroupSelectedIndex = widget.authGroupTitles.indexOf(jobCd);
     }
     return ref.watch(jobRoleProvider).when(
-          loading: () => const Center(
-            child: CircularProgressIndicator.adaptive(
-              valueColor: AlwaysStoppedAnimation(
-                Colors.lightBlueAccent,
-              ),
-            ),
-          ),
+          loading: () => const SBASProgressIndicator(),
           error: (error, stackTrace) => Center(
             child: Text(
               error.toString(),
@@ -81,9 +77,9 @@ class _JobRoleState extends ConsumerState<JobRole> {
             ),
           ),
           data: (data) {
-            if (ocpCd != null && ocpCd.isNotEmpty) {
+            if (instTypeCd != null && instTypeCd.isNotEmpty) {
               affiliationSelectedIndex =
-                  data.indexWhere((element) => element.cdNm == ocpCd);
+                  data.indexWhere((element) => element.id?.cdId == instTypeCd);
             }
             return SingleChildScrollView(
               child: Column(
@@ -110,7 +106,9 @@ class _JobRoleState extends ConsumerState<JobRole> {
                         onChanged: (value) => setState(
                           () {
                             affiliationSelectedIndex = value ?? 0;
-                            model.ocpCd = data[affiliationSelectedIndex].cdNm;
+
+                            model.instTypeCd =
+                                data[affiliationSelectedIndex].id?.cdId;
                           },
                         ),
                       ),
@@ -137,6 +135,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                         subTitle: widget.authGroupSubTitles[index],
                         onChanged: (value) => setState(() {
                           authGroupSelectedIndex = value ?? 0;
+
                           model.jobCd = widget.authGroupTitles[index];
                         }),
                       ),
@@ -169,7 +168,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
                         onChanged: (value) => setState(
                           () {
                             detailAuthSelectedIndex = value ?? 0;
-                            model.attcId = widget
+
+                            model.ocpCd = widget
                                 .detailAuthTitles[detailAuthSelectedIndex];
                           },
                         ),

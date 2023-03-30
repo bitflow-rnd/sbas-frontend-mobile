@@ -15,6 +15,9 @@ class AgencyRegionBloc extends AsyncNotifier<List<BaseCodeModel>> {
   }
 
   Future<void> addCounty() async {
+    list.removeWhere((e) =>
+        e.id != null && e.id?.cdGrpId != null && e.id!.cdGrpId!.length > 4);
+
     final region = ref.read(selectedRegionProvider);
 
     list.addAll(await _userRegRequestRepository
@@ -35,7 +38,4 @@ final selectedRegionProvider =
     StateProvider<BaseCodeModel>((ref) => BaseCodeModel());
 
 final selectedCountyProvider =
-    StateProvider<BaseCodeModel>((ref) => BaseCodeModel());
-
-final selectedAgencyProvider =
     StateProvider<BaseCodeModel>((ref) => BaseCodeModel());

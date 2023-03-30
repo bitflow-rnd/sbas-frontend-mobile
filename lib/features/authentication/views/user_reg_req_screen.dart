@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
+import 'package:sbas/common/widgets/progress_indicator.dart';
+import 'package:sbas/features/authentication/blocs/belong_agency_bloc.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/belong_agency_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/job_role_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/self_auth_widget.dart';
@@ -24,6 +28,7 @@ class UserRegisterRequestScreenState
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final index = ref.watch(regIndexProvider);
+    final signUp = ref.watch(signUpProvider);
 
     return Scaffold(
       appBar: Bitflow.getAppBar(
@@ -31,72 +36,85 @@ class UserRegisterRequestScreenState
         true,
         1,
       ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 24,
-                horizontal: 32,
+      body: ModalProgressHUD(
+        inAsyncCall: signUp.isLoading,
+        progressIndicator: const SBASProgressIndicator(),
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 24,
+                  horizontal: 32,
+                ),
+                child: TopNavbarRequest(),
               ),
-              child: TopNavbarRequest(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 96,
-              ),
-              child: Form(
-                key: formKey,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                  ),
-                  child: _getRegIndex(
-                    index,
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 96,
+                ),
+                child: Form(
+                  key: formKey,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                    ),
+                    child: _getRegIndex(
+                      index,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: width * 0.5,
-                    child: BottomSubmitBtn(
-                      onPressed: index < 0
-                          ? null
-                          : () {
-                              if (_tryValidation()) {
-                                ref.read(regIndexProvider.notifier).state--;
-                              }
-                            },
-                      text: '이전',
+              Positioned(
+                bottom: 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: width * 0.5,
+                      child: BottomSubmitBtn(
+                        onPressed: index < 0
+                            ? null
+                            : () {
+                                if (_tryValidation()) {
+                                  ref.read(regIndexProvider.notifier).state--;
+                                }
+                              },
+                        text: '이전',
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: width * 0.5,
-                    child: BottomSubmitBtn(
-                      onPressed: _tryAuthValidation(
-                        index,
-                      )
-                          ? null
-                          : () {
-                              if (_tryValidation()) {
-                                ref.read(regIndexProvider.notifier).state++;
-                              }
-                            },
-                      text: index == 1 ? '등록요청' : '다음',
+                    SizedBox(
+                      width: width * 0.5,
+                      child: BottomSubmitBtn(
+                        onPressed: _tryAuthValidation(
+                          index,
+                        )
+                            ? null
+                            : () {
+                                if (_tryValidation()) {
+                                  final index =
+                                      ref.read(regIndexProvider.notifier);
+
+                                  if (index.state < 1) {
+                                    index.state++;
+                                  } else {
+                                    ref
+                                        .read(signUpProvider.notifier)
+                                        .signUp(context);
+                                  }
+                                }
+                              },
+                        text: index == 1 ? '등록요청' : '다음',
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -104,8 +122,8 @@ class UserRegisterRequestScreenState
 
   Widget _getRegIndex(double index) {
     if (index == 1) {
-      return BelongAgency(
-        titles: const [
+      return const BelongAgency(
+        titles: [
           '담당지역',
           '소속기관',
           '소속 증명 정보',
@@ -170,17 +188,31 @@ class UserRegisterRequestScreenState
   }
 
   bool _tryAuthValidation(double index) {
-    if (index == 0) {
-      final model = ref.watch(regUserProvider);
+    final model = ref.watch(regUserProvider);
 
-      return model.attcId == null ||
+    if (index == 0) {
+      return model.instTypeCd == null ||
           model.jobCd == null ||
           model.ocpCd == null ||
-          model.attcId!.isEmpty ||
+          model.instTypeCd!.isEmpty ||
           model.jobCd!.isEmpty ||
           model.ocpCd!.isEmpty;
     }
-    return index > 1;
+    if (index == 1.0) {
+      var isApproved = model.dutyDstr1Cd == null ||
+          model.dutyDstr2Cd == null ||
+          model.instId == null ||
+          model.instNm == null ||
+          model.dutyDstr1Cd!.isEmpty ||
+          model.dutyDstr2Cd!.isEmpty ||
+          model.instId!.isEmpty ||
+          model.instNm!.isEmpty;
+
+      isApproved = !ref.watch(isCheckedProvider).containsValue(true);
+
+      return isApproved;
+    }
+    return index != -1.0;
   }
 
   final formKey = GlobalKey<FormState>();

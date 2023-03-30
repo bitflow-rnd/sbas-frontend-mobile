@@ -16,7 +16,6 @@ class UserRegModel {
   String? dutyDstr2Cd;
   String? dutyAddr;
   String? attcId;
-  String? statClas;
   String? btDt;
 
   UserRegModel({
@@ -37,7 +36,6 @@ class UserRegModel {
     this.dutyDstr2Cd,
     this.dutyAddr,
     this.attcId,
-    this.statClas,
     this.btDt,
   });
   UserRegModel.empty()
@@ -58,7 +56,6 @@ class UserRegModel {
         dutyDstr2Cd = '',
         dutyAddr = '',
         attcId = '',
-        statClas = '',
         btDt = '';
 
   UserRegModel.fromJson(Map<String, dynamic> json) {
@@ -113,9 +110,6 @@ class UserRegModel {
     if (json["attcId"] is String) {
       attcId = json["attcId"];
     }
-    if (json["statClas"] is String) {
-      statClas = json["statClas"];
-    }
     if (json["btDt"] is String) {
       btDt = json["btDt"];
     }
@@ -141,7 +135,6 @@ class UserRegModel {
     data["dutyDstr2Cd"] = dutyDstr2Cd;
     data["dutyAddr"] = dutyAddr;
     data["attcId"] = attcId;
-    data["statClas"] = statClas;
     data["btDt"] = btDt;
 
     return data;

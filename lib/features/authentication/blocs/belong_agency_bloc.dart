@@ -9,7 +9,17 @@ class BelongAgencyBloc extends AsyncNotifier<List<BaseCodeModel>> {
   FutureOr<List<BaseCodeModel>> build() async {
     _userRegRequestRepository = ref.read(userRegReqProvider);
 
-    return await _userRegRequestRepository.getBaseCode('PTTP');
+    final list = await _userRegRequestRepository.getBaseCode('PTTP');
+
+    for (var e in list) {
+      final map = ref.read(isCheckedProvider);
+
+      if (e.id == null || e.id?.cdId == null || e.id!.cdId!.isEmpty) {
+        continue;
+      }
+      map[e.id!.cdId!] = false;
+    }
+    return list;
   }
 
   late final UserRegRequestRepository _userRegRequestRepository;
@@ -19,3 +29,5 @@ final belongAgencyProvider =
     AsyncNotifierProvider<BelongAgencyBloc, List<BaseCodeModel>>(
   () => BelongAgencyBloc(),
 );
+
+final isCheckedProvider = StateProvider<Map<String, bool>>((ref) => {});
