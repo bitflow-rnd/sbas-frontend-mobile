@@ -25,5 +25,28 @@ class UserRegProvider {
     }
   }
 
+  Future<void> reqUserReg(Map<String, dynamic> map) async {
+    final client = RetryClient(Client());
+
+    try {
+      final res = await client.post(
+        Uri.parse('$_baseUrl/requserreg'),
+        headers: json,
+        body: toJson(map),
+      );
+      if (kDebugMode) {
+        print(res.statusCode);
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+  }
+
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/user';
 }

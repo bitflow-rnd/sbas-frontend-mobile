@@ -152,10 +152,13 @@ class _RegInputState extends ConsumerState<RegInput> {
 
             if (phoneNumber != null && phoneNumber.isNotEmpty) {
               editingController.text = phoneNumber;
-              setState(
-                () => isReadOnly = true,
-              );
-              await ref.read(userRegReqProvider).sendAuthMessage(phoneNumber);
+
+              if (mounted) {
+                setState(
+                  () => isReadOnly = true,
+                );
+                await ref.read(userRegReqProvider).sendAuthMessage(phoneNumber);
+              }
             }
           }
         }

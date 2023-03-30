@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/widgets/progress_indicator.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 
 class AgencyRegion extends ConsumerStatefulWidget {
@@ -17,13 +19,7 @@ class AgencyRegion extends ConsumerStatefulWidget {
 class _AgencyRegionState extends ConsumerState<AgencyRegion> {
   @override
   Widget build(BuildContext context) => ref.watch(agencyRegionProvider).when(
-        loading: () => const Center(
-          child: CircularProgressIndicator.adaptive(
-            valueColor: AlwaysStoppedAnimation(
-              Colors.lightBlueAccent,
-            ),
-          ),
-        ),
+        loading: () => const SBASProgressIndicator(),
         error: (error, stackTrace) => Center(
           child: Text(
             error.toString(),
@@ -83,6 +79,8 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                           final selectedModel =
                               data.firstWhere((e) => value == e.cdNm);
 
+                          ref.read(selectedCountyProvider).cdNm = null;
+
                           model.cdGrpNm = selectedModel.cdGrpNm;
                           model.cdNm = selectedModel.cdNm;
                           model.cdSeq = selectedModel.cdSeq;
@@ -93,9 +91,6 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                           model.rmk = selectedModel.rmk;
                           model.updtDttm = selectedModel.updtDttm;
                           model.updtUserId = selectedModel.updtUserId;
-
-                          region =
-                              '${selectedModel.id?.cdGrpId}${selectedModel.id?.cdId}';
 
                           ref.read(agencyRegionProvider.notifier).addCounty();
                         },
@@ -135,8 +130,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                           .where((e) =>
                               e.id != null &&
                               e.id?.cdGrpId != null &&
-                              e.id!.cdGrpId!.length > 4 &&
-                              region == e.id?.cdGrpId)
+                              e.id!.cdGrpId!.length > 4)
                           .map(
                             (e) => DropdownMenuItem(
                               alignment: Alignment.center,
@@ -168,6 +162,10 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                           model.rmk = selectedModel.rmk;
                           model.updtDttm = selectedModel.updtDttm;
                           model.updtUserId = selectedModel.updtUserId;
+
+                          ref
+                              .read(agencyDetailProvider.notifier)
+                              .selectAgency();
                         },
                       ),
                     ),
@@ -178,5 +176,4 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
           ],
         ),
       );
-  String region = '';
 }

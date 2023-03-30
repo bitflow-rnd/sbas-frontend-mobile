@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/widgets/progress_indicator.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
+import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 
 class AgencyDetail extends ConsumerStatefulWidget {
   const AgencyDetail({
@@ -18,14 +20,8 @@ class AgencyDetail extends ConsumerStatefulWidget {
 
 class _AgencyDetailState extends ConsumerState<AgencyDetail> {
   @override
-  Widget build(BuildContext context) => ref.watch(agencyRegionProvider).when(
-        loading: () => const Center(
-          child: CircularProgressIndicator.adaptive(
-            valueColor: AlwaysStoppedAnimation(
-              Colors.lightBlueAccent,
-            ),
-          ),
-        ),
+  Widget build(BuildContext context) => ref.watch(agencyDetailProvider).when(
+        loading: () => const SBASProgressIndicator(),
         error: (error, stackTrace) => Center(
           child: Text(
             error.toString(),
@@ -60,38 +56,56 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
                       ),
                       isDense: true,
                       isExpanded: true,
-                      value: ref.watch(selectedRegionProvider).cdNm,
+                      value: ref.watch(selectedAgencyProvider).id,
                       items: data
                           .map(
                             (e) => DropdownMenuItem(
                               alignment: Alignment.center,
-                              value: e.cdNm,
+                              value: e.id,
                               child: SizedBox(
                                 width: 150,
                                 child: Text(
-                                  e.cdNm ?? '',
+                                  e.instNm ?? '',
                                   textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
                           )
                           .toList(),
-                      onChanged: (value) => setState(() {
-                        final model = ref.read(selectedRegionProvider);
-                        final selectedModel =
-                            data.firstWhere((e) => value == e.cdNm);
+                      onChanged: (value) => setState(
+                        () {
+                          final model = ref.read(selectedAgencyProvider);
+                          final selectedModel =
+                              data.firstWhere((e) => e.id == value);
 
-                        model.cdGrpNm = selectedModel.cdGrpNm;
-                        model.cdNm = selectedModel.cdNm;
-                        model.cdSeq = selectedModel.cdSeq;
-                        model.cdVal = selectedModel.cdVal;
-                        model.id = selectedModel.id;
-                        model.rgstDttm = selectedModel.rgstDttm;
-                        model.rgstUserId = selectedModel.rgstUserId;
-                        model.rmk = selectedModel.rmk;
-                        model.updtDttm = selectedModel.updtDttm;
-                        model.updtUserId = selectedModel.updtUserId;
-                      }),
+                          model.rgstUserId = selectedModel.rgstUserId;
+                          model.rgstDttm = selectedModel.rgstDttm;
+                          model.updtUserId = selectedModel.updtUserId;
+                          model.updtDttm = selectedModel.updtDttm;
+                          model.id = selectedModel.id;
+                          model.instTypeCd = selectedModel.instTypeCd;
+                          model.instNm = selectedModel.instNm;
+                          model.dstrCd1 = selectedModel.dstrCd1;
+                          model.dstrCd2 = selectedModel.dstrCd2;
+                          model.chrgId = selectedModel.chrgId;
+                          model.chrgNm = selectedModel.chrgNm;
+                          model.chrgTelno = selectedModel.chrgTelno;
+                          model.baseAddr = selectedModel.baseAddr;
+                          model.lat = selectedModel.lat;
+                          model.lon = selectedModel.lon;
+                          model.rmk = selectedModel.rmk;
+                          model.attcId = selectedModel.attcId;
+
+                          final user = ref.watch(regUserProvider);
+
+                          user.instId = selectedModel.id;
+                          user.instNm = selectedModel.instNm;
+                          user.instTypeCd = selectedModel.instTypeCd;
+                          user.dutyAddr = selectedModel.baseAddr;
+                          user.dutyDstr1Cd = selectedModel.dstrCd1;
+                          user.dutyDstr2Cd = selectedModel.dstrCd2;
+                        },
+                      ),
                     ),
                   ),
                 ),

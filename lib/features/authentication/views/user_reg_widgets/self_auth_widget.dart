@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/reg_input_widget.dart';
 
 class SelfAuth extends ConsumerWidget {
@@ -89,12 +90,26 @@ class SelfAuth extends ConsumerWidget {
           keyboardType: TextInputType.number,
           regExp: r'[0-9]',
           validator: (value) {
-            if (value == null || value.length != 8) {
+            if (value == null ||
+                value.length != 8 ||
+                DateFormat('yyyyMMdd')
+                        .format(
+                          DateTime.now().subtract(
+                            const Duration(
+                              days: 20 * 365,
+                            ),
+                          ),
+                        )
+                        .compareTo(value) <
+                    0) {
               return '본인 생년월일을 정확히 입력하세요.';
             }
             return null;
           },
-          onSaved: (newValue) => model.btDt = newValue,
+          onSaved: (newValue) {
+            model.btDt = newValue;
+            model.gndr = 'M';
+          },
           text: model.btDt,
         ),
         RegInput(
@@ -126,7 +141,10 @@ class SelfAuth extends ConsumerWidget {
             }
             return null;
           },
-          onSaved: (newValue) => model.userCi = newValue,
+          onSaved: (newValue) {
+            model.pushKey = newValue;
+            model.userCi = newValue;
+          },
           text: model.userCi,
         ),
       ],

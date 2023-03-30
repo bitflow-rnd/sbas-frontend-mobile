@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/widgets/progress_indicator.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/belong_agency_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_detail_widget.dart';
@@ -8,11 +9,10 @@ import 'package:sbas/features/authentication/views/user_reg_widgets/agency_regio
 import 'package:sbas/features/authentication/views/user_reg_widgets/patient_type_widget.dart';
 
 class BelongAgency extends ConsumerStatefulWidget {
-  BelongAgency({
+  const BelongAgency({
     required this.titles,
     super.key,
   });
-  final Map<String, bool> mapSelectedTypes = {};
   final List<String> titles;
 
   @override
@@ -21,80 +21,64 @@ class BelongAgency extends ConsumerStatefulWidget {
 
 class _BelongAgencyState extends ConsumerState<BelongAgency> {
   @override
-  Widget build(BuildContext context) {
-    return ref.watch(belongAgencyProvider).when(
-          loading: () => const Center(
-            child: CircularProgressIndicator.adaptive(
-              valueColor: AlwaysStoppedAnimation(
-                Colors.lightBlueAccent,
-              ),
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _getTitle(
+            widget.titles[0],
+            true,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+            ),
+            child: AgencyRegion(
+              inputDecoration: _inputDecoration,
             ),
           ),
-          error: (error, stackTrace) => Center(
-            child: Text(
-              error.toString(),
-              style: const TextStyle(
-                color: Colors.lightBlueAccent,
-              ),
+          Gaps.v16,
+          _getTitle(
+            widget.titles[1],
+            true,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+            ),
+            child: AgencyDetail(
+              inputBorder: _inputBorder,
+              inputDecoration: _inputDecoration,
             ),
           ),
-          data: (data) {
-            for (var e in data) {
-              String id = e.id?.cdId ?? '';
-
-              if (id.isNotEmpty) {
-                widget.mapSelectedTypes[id] = false;
-              }
-            }
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _getTitle(
-                  widget.titles[0],
-                  true,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
+          Gaps.v16,
+          _getTitle(
+            widget.titles[2],
+            false,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+            ),
+            child: AgencyProof(),
+          ),
+          Gaps.v16,
+          _getTitle(
+            widget.titles[3],
+            false,
+          ),
+          SizedBox(
+            height: 128,
+            child: ref.watch(belongAgencyProvider).when(
+                  loading: () => const SBASProgressIndicator(),
+                  error: (error, stackTrace) => Center(
+                    child: Text(
+                      error.toString(),
+                      style: const TextStyle(
+                        color: Colors.lightBlueAccent,
+                      ),
+                    ),
                   ),
-                  child: AgencyRegion(
-                    inputDecoration: _inputDecoration,
-                  ),
-                ),
-                Gaps.v16,
-                _getTitle(
-                  widget.titles[1],
-                  true,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                  ),
-                  child: AgencyDetail(
-                    inputBorder: _inputBorder,
-                    inputDecoration: _inputDecoration,
-                  ),
-                ),
-                Gaps.v16,
-                _getTitle(
-                  widget.titles[2],
-                  false,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                  ),
-                  child: AgencyProof(),
-                ),
-                Gaps.v16,
-                _getTitle(
-                  widget.titles[3],
-                  false,
-                ),
-                SizedBox(
-                  height: 128,
-                  child: GridView.builder(
+                  data: (data) => GridView.builder(
                     padding: const EdgeInsets.symmetric(
                       vertical: 12,
                     ),
@@ -107,24 +91,21 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
                       childAspectRatio: 2.15 / 1,
                     ),
                     itemBuilder: (context, index) {
-                      String id = data[index].id?.cdId ?? '';
+                      final id = data[index].id!.cdId!;
 
-                      PatientType(
+                      return PatientType(
+                        id: id,
                         title: data[index].cdNm ?? '',
                         onChanged: (value) => setState(
-                            () => widget.mapSelectedTypes[id] = !value),
-                        isSelected: widget.mapSelectedTypes[id] ?? false,
+                            () => ref.read(isCheckedProvider)[id] = !value),
                       );
-                      return null;
                     },
                     physics: const NeverScrollableScrollPhysics(),
                   ),
                 ),
-              ],
-            );
-          },
-        );
-  }
+          ),
+        ],
+      );
 
   InputBorder get _inputBorder => OutlineInputBorder(
         borderSide: BorderSide(

@@ -13,7 +13,6 @@ final routerProvider = Provider(
       if (!isLoggedIn) {
         return LogInScreen.routeUrl;
       }
-
       return null;
     },
     routes: [
