@@ -25,7 +25,7 @@ class UserRegProvider {
     }
   }
 
-  Future<void> reqUserReg(Map<String, dynamic> map) async {
+  Future<int> reqUserReg(Map<String, dynamic> map) async {
     final client = RetryClient(Client());
 
     try {
@@ -34,9 +34,7 @@ class UserRegProvider {
         headers: json,
         body: toJson(map),
       );
-      if (kDebugMode) {
-        print(res.statusCode);
-      }
+      return res.statusCode;
     } catch (exception) {
       if (kDebugMode) {
         print({
@@ -46,6 +44,7 @@ class UserRegProvider {
     } finally {
       client.close();
     }
+    return 0;
   }
 
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/user';

@@ -101,7 +101,9 @@ class SelfAuth extends ConsumerWidget {
                           ),
                         )
                         .compareTo(value) <
-                    0) {
+                    0 ||
+                !RegExp(r'^(19|20)\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$')
+                    .hasMatch(value)) {
               return '본인 생년월일을 정확히 입력하세요.';
             }
             return null;

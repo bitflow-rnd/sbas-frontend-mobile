@@ -16,11 +16,11 @@ class UserRegRequestRepository {
     });
   }
 
-  Future<void> reqUserReg(UserRegModel model) async {
+  Future<int> reqUserReg(UserRegModel model) async {
     final bytes = utf8.encode(model.pw ?? '');
     model.pw = sha512.convert(bytes).toString();
 
-    await _userRegProvider.reqUserReg(model.toJson());
+    return await _userRegProvider.reqUserReg(model.toJson());
   }
 
   Future<List<BaseCodeModel>> getBaseCode(String route) async =>

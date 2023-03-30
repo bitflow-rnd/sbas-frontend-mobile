@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/common/widgets/progress_indicator.dart';
+import 'package:sbas/common/widgets/field_error_widget.dart';
+import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/affiliation_widget.dart';
@@ -60,12 +61,6 @@ class _JobRoleState extends ConsumerState<JobRole> {
     final jobCd = model.jobCd;
     final ocpCd = model.ocpCd;
 
-    if (ocpCd != null && ocpCd.isNotEmpty) {
-      detailAuthSelectedIndex = widget.detailAuthTitles.indexOf(ocpCd);
-    }
-    if (jobCd != null && jobCd.isNotEmpty) {
-      authGroupSelectedIndex = widget.authGroupTitles.indexOf(jobCd);
-    }
     return ref.watch(jobRoleProvider).when(
           loading: () => const SBASProgressIndicator(),
           error: (error, stackTrace) => Center(
@@ -77,42 +72,65 @@ class _JobRoleState extends ConsumerState<JobRole> {
             ),
           ),
           data: (data) {
+            if (ocpCd != null && ocpCd.isNotEmpty) {
+              detailAuthSelectedIndex = widget.detailAuthTitles.indexOf(ocpCd);
+            }
+            if (jobCd != null && jobCd.isNotEmpty) {
+              authGroupSelectedIndex = widget.authGroupTitles.indexOf(jobCd);
+            }
             if (instTypeCd != null && instTypeCd.isNotEmpty) {
               affiliationSelectedIndex =
                   data.indexWhere((element) => element.id?.cdId == instTypeCd);
             }
+            validator(value) => value == null ? '소속기관 유형을 선택해주세요.' : null;
+
             return SingleChildScrollView(
               child: Column(
                 children: [
                   _getTitie(0),
-                  SizedBox(
-                    height: 128,
-                    child: GridView.builder(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                      ),
-                      itemCount: data.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 16,
-                        childAspectRatio: 3 / 1,
-                      ),
-                      itemBuilder: (context, index) => Affiliation(
-                        title: data[index].cdNm ?? '',
-                        index: index,
-                        selectedIndex: affiliationSelectedIndex,
-                        onChanged: (value) => setState(
-                          () {
-                            affiliationSelectedIndex = value ?? 0;
+                  FormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: validator,
+                    builder: (field) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 128,
+                          child: GridView.builder(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                            ),
+                            itemCount: data.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              mainAxisSpacing: 12,
+                              crossAxisSpacing: 16,
+                              childAspectRatio: 3 / 1,
+                            ),
+                            itemBuilder: (context, index) => Affiliation(
+                              title: data[index].cdNm ?? '',
+                              index: index,
+                              selectedIndex: affiliationSelectedIndex,
+                              onChanged: (value) => setState(
+                                () {
+                                  affiliationSelectedIndex = value ?? 0;
 
-                            model.instTypeCd =
-                                data[affiliationSelectedIndex].id?.cdId;
-                          },
+                                  model.instTypeCd =
+                                      data[affiliationSelectedIndex].id?.cdId;
+
+                                  validator.call(model.instTypeCd);
+                                },
+                              ),
+                            ),
+                            physics: const NeverScrollableScrollPhysics(),
+                          ),
                         ),
-                      ),
-                      physics: const NeverScrollableScrollPhysics(),
+                        if (field.hasError)
+                          FieldErrorText(
+                            field: field,
+                          )
+                      ],
                     ),
                   ),
                   _getTitie(1),

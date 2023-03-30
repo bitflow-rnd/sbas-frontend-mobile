@@ -17,10 +17,10 @@ class UserRegBloc extends AsyncNotifier {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final user = ref.read(regUserProvider);
-      await _signUpRepository.reqUserReg(user);
+      return await _signUpRepository.reqUserReg(user);
     });
     if (state.hasError) {}
-    if (context.mounted) {
+    if (state.hasValue && state.value == 200 && context.mounted) {
       context.pop();
       context.goNamed(LogInScreen.routeName);
     }
@@ -32,6 +32,6 @@ class UserRegBloc extends AsyncNotifier {
 final signUpProvider = AsyncNotifierProvider<UserRegBloc, void>(
   () => UserRegBloc(),
 );
-final regUserProvider = StateProvider(
+final regUserProvider = StateProvider.autoDispose<UserRegModel>(
   (ref) => UserRegModel.empty(),
 );
