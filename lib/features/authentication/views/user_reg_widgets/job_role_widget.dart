@@ -82,15 +82,15 @@ class _JobRoleState extends ConsumerState<JobRole> {
               affiliationSelectedIndex =
                   data.indexWhere((element) => element.id?.cdId == instTypeCd);
             }
-            validator(value) => value == null ? '소속기관 유형을 선택해주세요.' : null;
-
             return SingleChildScrollView(
               child: Column(
                 children: [
                   _getTitie(0),
                   FormField(
+                    initialValue: instTypeCd,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: validator,
+                    validator: (value) =>
+                        value == null ? '소속기관 유형을 선택해주세요.' : null,
                     builder: (field) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -119,7 +119,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                                   model.instTypeCd =
                                       data[affiliationSelectedIndex].id?.cdId;
 
-                                  validator.call(model.instTypeCd);
+                                  field.didChange(model.instTypeCd);
                                 },
                               ),
                             ),
@@ -134,65 +134,103 @@ class _JobRoleState extends ConsumerState<JobRole> {
                     ),
                   ),
                   _getTitie(1),
-                  SizedBox(
-                    height: 128 * 3 + 22,
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                      ),
-                      itemCount: widget.authGroupTitles.length,
-                      itemBuilder: (context, index) => AuthorizationGroup(
-                        selectedIndex: authGroupSelectedIndex,
-                        index: index,
-                        disabledImage: widget.authGroupDisabledImages[index],
-                        selectedImage: widget.authGroupSelectedImages[index],
-                        title: widget.authGroupTitles[index],
-                        subTitle: widget.authGroupSubTitles[index],
-                        onChanged: (value) => setState(() {
-                          authGroupSelectedIndex = value ?? 0;
+                  FormField(
+                    initialValue: jobCd,
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (value) =>
+                        value == null ? '권한그룹을 선택해주세요.' : null,
+                    builder: (field) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 128 * 3 + 22,
+                          child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16,
+                            ),
+                            itemCount: widget.authGroupTitles.length,
+                            itemBuilder: (context, index) => AuthorizationGroup(
+                              selectedIndex: authGroupSelectedIndex,
+                              index: index,
+                              disabledImage:
+                                  widget.authGroupDisabledImages[index],
+                              selectedImage:
+                                  widget.authGroupSelectedImages[index],
+                              title: widget.authGroupTitles[index],
+                              subTitle: widget.authGroupSubTitles[index],
+                              onChanged: (value) => setState(
+                                () {
+                                  authGroupSelectedIndex = value ?? 0;
 
-                          model.jobCd = widget.authGroupTitles[index];
-                        }),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                      ),
-                      physics: const NeverScrollableScrollPhysics(),
+                                  model.jobCd = widget.authGroupTitles[index];
+
+                                  field.didChange(model.jobCd);
+                                },
+                              ),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                            ),
+                            physics: const NeverScrollableScrollPhysics(),
+                          ),
+                        ),
+                        if (field.hasError)
+                          FieldErrorText(
+                            field: field,
+                          )
+                      ],
                     ),
                   ),
                   _getTitie(2),
-                  SizedBox(
-                    height: 128,
-                    child: GridView.builder(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                      ),
-                      itemCount: widget.detailAuthTitles.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 16,
-                        childAspectRatio: 8.75 / 1,
-                      ),
-                      itemBuilder: (context, index) => DetailAuthorization(
-                        title: widget.detailAuthTitles[index],
-                        subTitle: widget.detailAuthSubTitles[index],
-                        index: index,
-                        selectedIndex: detailAuthSelectedIndex,
-                        onChanged: (value) => setState(
-                          () {
-                            detailAuthSelectedIndex = value ?? 0;
+                  FormField(
+                    initialValue: ocpCd,
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (value) => value == null ? '권한을 선택해주세요.' : null,
+                    builder: (field) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 128,
+                          child: GridView.builder(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                            ),
+                            itemCount: widget.detailAuthTitles.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 1,
+                              mainAxisSpacing: 12,
+                              crossAxisSpacing: 16,
+                              childAspectRatio: 8.75 / 1,
+                            ),
+                            itemBuilder: (context, index) =>
+                                DetailAuthorization(
+                              title: widget.detailAuthTitles[index],
+                              subTitle: widget.detailAuthSubTitles[index],
+                              index: index,
+                              selectedIndex: detailAuthSelectedIndex,
+                              onChanged: (value) => setState(
+                                () {
+                                  detailAuthSelectedIndex = value ?? 0;
 
-                            model.ocpCd = widget
-                                .detailAuthTitles[detailAuthSelectedIndex];
-                          },
+                                  model.ocpCd = widget.detailAuthTitles[
+                                      detailAuthSelectedIndex];
+
+                                  field.didChange(model.ocpCd);
+                                },
+                              ),
+                            ),
+                            physics: const NeverScrollableScrollPhysics(),
+                          ),
                         ),
-                      ),
-                      physics: const NeverScrollableScrollPhysics(),
+                        if (field.hasError)
+                          FieldErrorText(
+                            field: field,
+                          )
+                      ],
                     ),
                   ),
                 ],
