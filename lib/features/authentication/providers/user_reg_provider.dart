@@ -47,5 +47,30 @@ class UserRegProvider {
     return 0;
   }
 
+  Future<Map<String, dynamic>> confirm(Map<String, dynamic> map) async {
+    final client = RetryClient(Client());
+
+    try {
+      final res = await client.post(
+        Uri.parse('$_baseUrl/confirmsms'),
+        headers: json,
+        body: toJson(map),
+      );
+      return {
+        'statusCode': res.statusCode,
+        'message': fromJson(res.body)['message'],
+      };
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    return {};
+  }
+
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/user';
 }

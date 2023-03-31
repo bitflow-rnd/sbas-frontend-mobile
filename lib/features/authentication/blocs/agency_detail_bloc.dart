@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
@@ -16,15 +17,25 @@ class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
     return list;
   }
 
-  Future<void> selectAgency() async {
+  exchangeTheAgency() async {
     list.clear();
 
-    final agency = ref.read(selectedCountyProvider);
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final agency = ref.read(selectedCountyProvider);
 
-    final user = ref.read(regUserProvider);
+      final user = ref.read(regUserProvider);
 
-    list.addAll(await _infoInstRepository.getOrganCode(
-        user.instTypeCd ?? '', agency.id?.cdId ?? ','));
+      list.addAll(await _infoInstRepository.getOrganCode(
+          user.instTypeCd ?? '', agency.id?.cdId ?? ','));
+
+      return list;
+    });
+    if (state.hasError) {
+      if (kDebugMode) {
+        print(state.error);
+      }
+    }
   }
 
   late final List<InfoInstModel> list;

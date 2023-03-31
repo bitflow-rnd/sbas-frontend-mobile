@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sbas/common/widgets/field_error_widget.dart';
+import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/authentication/blocs/agency_proof_bloc.dart';
 
 class AgencyProof extends ConsumerStatefulWidget {
   AgencyProof({
@@ -17,73 +20,96 @@ class AgencyProof extends ConsumerStatefulWidget {
 class _AgencyProofState extends ConsumerState<AgencyProof> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        final image = await widget.picker.pickImage(
-          source: isCameraImage ? ImageSource.camera : ImageSource.gallery,
-          requestFullMetadata: false,
-        );
-        if (image != null) {
-          setState(() => _pickedImg = image);
-        }
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.35,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey.shade300,
-                  ),
-                  borderRadius: BorderRadius.circular(
-                    8,
-                  ),
-                ),
-                child: _pickedImg != null
-                    ? Image.file(
-                        File(_pickedImg!.path),
-                      )
-                    : Image.asset(
-                        'assets/auth_group/${isCameraImage ? 'camera' : 'image'}_location.png',
-                      ),
-              ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: IconButton(
-                  onPressed: () => setState(() {
-                    if (_pickedImg == null) {
-                      isCameraImage = !isCameraImage;
-                    } else {
-                      _pickedImg = null;
-                    }
-                  }),
-                  icon: Icon(
-                    _pickedImg != null
-                        ? Icons.cancel_rounded
-                        : Icons.sync_rounded,
-                    color: Colors.grey,
-                  ),
+    final isUsingCamera = ref.watch(isUsingCameraProvider.notifier).state;
+    final image = ref.watch(imageProvider.notifier).state;
+
+    return FormField(
+      initialValue: image == null,
+      autovalidateMode: AutovalidateMode.always,
+      validator: (value) => value == null || value
+          ? '※해당 기관 소속을 증명할 수 있는 명함 또는 신분증을 업로드해주세요.'
+          : null,
+      builder: (field) => ref.watch(proofProvider).when(
+            loading: () => const SBASProgressIndicator(),
+            error: (error, stackTrace) => Center(
+              child: Text(
+                error.toString(),
+                style: const TextStyle(
+                  color: Colors.lightBlueAccent,
                 ),
               ),
-            ],
-          ),
-          Gaps.v8,
-          const Text(
-            '※해당 기관 소속을 증명할 수 있는 명함 또는 신분증을 업로드해주세요.',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
             ),
-          )
-        ],
-      ),
+            data: (data) => GestureDetector(
+              onTap: () async {
+                final image = await widget.picker.pickImage(
+                  source:
+                      isUsingCamera ? ImageSource.camera : ImageSource.gallery,
+                  requestFullMetadata: false,
+                );
+                if (image != null) {
+                  ref.read(imageProvider.notifier).state = image;
+
+                  ref.read(proofProvider.notifier).uploadImage();
+                }
+                field.didChange(image == null);
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                          ),
+                          borderRadius: BorderRadius.circular(
+                            8,
+                          ),
+                        ),
+                        child: image != null
+                            ? Image.file(
+                                File(image.path),
+                              )
+                            : Image.asset(
+                                'assets/auth_group/${isUsingCamera ? 'camera' : 'image'}_location.png',
+                              ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: IconButton(
+                          onPressed: () => setState(
+                            () {
+                              if (image == null) {
+                                ref.read(isUsingCameraProvider.notifier).state =
+                                    !isUsingCamera;
+                              } else {
+                                ref.read(imageProvider.notifier).state = null;
+                              }
+                              field.didChange(ref.read(imageProvider) == null);
+                            },
+                          ),
+                          icon: Icon(
+                            image != null
+                                ? Icons.cancel_rounded
+                                : Icons.sync_rounded,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Gaps.v12,
+                  if (field.hasError)
+                    FieldErrorText(
+                      field: field,
+                    )
+                ],
+              ),
+            ),
+          ),
     );
   }
-
-  bool isCameraImage = false;
-  XFile? _pickedImg;
 }

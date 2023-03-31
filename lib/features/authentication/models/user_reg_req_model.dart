@@ -38,6 +38,27 @@ class UserRegModel {
     this.attcId,
     this.btDt,
   });
+  void clear() {
+    id = '';
+    pw = '';
+    userNm = '';
+    userCi = '';
+    pushKey = '';
+    gndr = '';
+    telno = '';
+    jobCd = '';
+    ocpCd = '';
+    ptTypeCd = '';
+    instTypeCd = '';
+    instId = '';
+    instNm = '';
+    dutyDstr1Cd = '';
+    dutyDstr2Cd = '';
+    dutyAddr = '';
+    attcId = '';
+    btDt = '';
+  }
+
   UserRegModel.empty()
       : id = '',
         pw = '',
