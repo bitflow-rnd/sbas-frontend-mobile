@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
@@ -33,69 +34,91 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
           children: [
             Expanded(
               flex: 1,
-              child: InputDecorator(
-                decoration: widget.inputDecoration,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14,
-                    horizontal: 8,
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      hint: const SizedBox(
-                        width: 150,
-                        child: Text(
-                          '시/도 선택',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
+              child: FormField(
+                initialValue: ref.watch(selectedRegionProvider).cdNm,
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) => value == null ? '담당지역을 선택해주세요.' : null,
+                builder: (field) => SizedBox(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      InputDecorator(
+                        decoration: widget.inputDecoration,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                            horizontal: 8,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      isDense: true,
-                      isExpanded: true,
-                      value: ref.watch(selectedRegionProvider).cdNm,
-                      items: data
-                          .where((e) => e.id?.cdGrpId == 'SIDO')
-                          .map(
-                            (e) => DropdownMenuItem(
-                              alignment: Alignment.center,
-                              value: e.cdNm,
-                              child: SizedBox(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              hint: const SizedBox(
                                 width: 150,
                                 child: Text(
-                                  e.cdNm ?? '',
+                                  '시/도 선택',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 16,
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
+                              isDense: true,
+                              isExpanded: true,
+                              value: ref.watch(selectedRegionProvider).cdNm,
+                              items: data
+                                  .where((e) => e.id?.cdGrpId == 'SIDO')
+                                  .map(
+                                    (e) => DropdownMenuItem(
+                                      alignment: Alignment.center,
+                                      value: e.cdNm,
+                                      child: SizedBox(
+                                        width: 150,
+                                        child: Text(
+                                          e.cdNm ?? '',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) => setState(
+                                () {
+                                  final model =
+                                      ref.read(selectedRegionProvider);
+
+                                  final selectedModel =
+                                      data.firstWhere((e) => value == e.cdNm);
+
+                                  ref.read(selectedCountyProvider).cdNm = null;
+
+                                  model.cdGrpNm = selectedModel.cdGrpNm;
+                                  model.cdNm = selectedModel.cdNm;
+                                  model.cdSeq = selectedModel.cdSeq;
+                                  model.cdVal = selectedModel.cdVal;
+                                  model.id = selectedModel.id;
+                                  model.rgstDttm = selectedModel.rgstDttm;
+                                  model.rgstUserId = selectedModel.rgstUserId;
+                                  model.rmk = selectedModel.rmk;
+                                  model.updtDttm = selectedModel.updtDttm;
+                                  model.updtUserId = selectedModel.updtUserId;
+
+                                  ref
+                                      .read(agencyRegionProvider.notifier)
+                                      .addCounty();
+
+                                  field.didChange(model.cdNm);
+                                },
+                              ),
                             ),
-                          )
-                          .toList(),
-                      onChanged: (value) => setState(
-                        () {
-                          final model = ref.read(selectedRegionProvider);
-
-                          final selectedModel =
-                              data.firstWhere((e) => value == e.cdNm);
-
-                          ref.read(selectedCountyProvider).cdNm = null;
-
-                          model.cdGrpNm = selectedModel.cdGrpNm;
-                          model.cdNm = selectedModel.cdNm;
-                          model.cdSeq = selectedModel.cdSeq;
-                          model.cdVal = selectedModel.cdVal;
-                          model.id = selectedModel.id;
-                          model.rgstDttm = selectedModel.rgstDttm;
-                          model.rgstUserId = selectedModel.rgstUserId;
-                          model.rmk = selectedModel.rmk;
-                          model.updtDttm = selectedModel.updtDttm;
-                          model.updtUserId = selectedModel.updtUserId;
-
-                          ref.read(agencyRegionProvider.notifier).addCounty();
-                        },
+                          ),
+                        ),
                       ),
-                    ),
+                      if (field.hasError) Gaps.v12,
+                      if (field.hasError)
+                        FieldErrorText(
+                          field: field,
+                        )
+                    ],
                   ),
                 ),
               ),

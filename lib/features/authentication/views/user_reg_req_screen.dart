@@ -4,7 +4,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
-import 'package:sbas/features/authentication/blocs/belong_agency_bloc.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/belong_agency_widget.dart';
@@ -89,24 +88,17 @@ class UserRegisterRequestScreenState
                     SizedBox(
                       width: width * 0.5,
                       child: BottomSubmitBtn(
-                        onPressed: _tryAuthValidation(
-                          index,
-                        )
-                            ? null
-                            : () {
-                                if (_tryValidation()) {
-                                  final index =
-                                      ref.read(regIndexProvider.notifier);
+                        onPressed: () {
+                          if (_tryValidation()) {
+                            final index = ref.read(regIndexProvider.notifier);
 
-                                  if (index.state < 1) {
-                                    index.state++;
-                                  } else {
-                                    ref
-                                        .read(signUpProvider.notifier)
-                                        .signUp(context);
-                                  }
-                                }
-                              },
+                            if (index.state < 1) {
+                              index.state++;
+                            } else {
+                              ref.read(signUpProvider.notifier).signUp(context);
+                            }
+                          }
+                        },
                         text: index == 1 ? '등록요청' : '다음',
                       ),
                     ),
@@ -185,34 +177,6 @@ class UserRegisterRequestScreenState
       formKey.currentState?.save();
     }
     return isValid;
-  }
-
-  bool _tryAuthValidation(double index) {
-    final model = ref.watch(regUserProvider);
-
-    if (index == 0) {
-      return model.instTypeCd == null ||
-          model.jobCd == null ||
-          model.ocpCd == null ||
-          model.instTypeCd!.isEmpty ||
-          model.jobCd!.isEmpty ||
-          model.ocpCd!.isEmpty;
-    }
-    if (index == 1.0) {
-      var isApproved = model.dutyDstr1Cd == null ||
-          model.dutyDstr2Cd == null ||
-          model.instId == null ||
-          model.instNm == null ||
-          model.dutyDstr1Cd!.isEmpty ||
-          model.dutyDstr2Cd!.isEmpty ||
-          model.instId!.isEmpty ||
-          model.instNm!.isEmpty;
-
-      isApproved = !ref.watch(isCheckedProvider).containsValue(true);
-
-      return isApproved;
-    }
-    return index != -1.0;
   }
 
   final formKey = GlobalKey<FormState>();

@@ -89,8 +89,9 @@ class _JobRoleState extends ConsumerState<JobRole> {
                   FormField(
                     initialValue: instTypeCd,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: (value) =>
-                        value == null ? '소속기관 유형을 선택해주세요.' : null,
+                    validator: (value) => value == null || value.isEmpty
+                        ? '소속기관 유형을 선택해주세요.'
+                        : null,
                     builder: (field) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -138,7 +139,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                     initialValue: jobCd,
                     autovalidateMode: AutovalidateMode.always,
                     validator: (value) =>
-                        value == null ? '권한그룹을 선택해주세요.' : null,
+                        value == null || value.isEmpty ? '권한그룹을 선택해주세요.' : null,
                     builder: (field) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -188,7 +189,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
                   FormField(
                     initialValue: ocpCd,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: (value) => value == null ? '권한을 선택해주세요.' : null,
+                    validator: (value) =>
+                        value == null || value.isEmpty ? '권한을 선택해주세요.' : null,
                     builder: (field) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
