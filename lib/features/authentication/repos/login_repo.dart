@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/models/auth_token_model.dart';
@@ -8,7 +7,6 @@ import 'package:sbas/features/authentication/providers/login_provider.dart';
 import 'package:sbas/util.dart';
 
 class LoginRepo {
-  final _firebaseAuth = FirebaseAuth.instance;
   final _auth = LoginProvider();
 
   Future<bool> get isLoggedIn async {
@@ -34,28 +32,6 @@ class LoginRepo {
 
   bool get isFirebaseAuth => false;
 
-  User? get user => _firebaseAuth.currentUser;
-
-  Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
-
-  Future<UserCredential> emailSignUp(
-    String email,
-    String password,
-  ) async =>
-      _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-  emailSignIn(
-    String email,
-    String password,
-  ) async =>
-      _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
   Future<AuthTokenModel?> signIn(UserModel user) async {
     final map = await _auth.postSignIn(
       user.toJson(),
@@ -73,9 +49,3 @@ class LoginRepo {
 }
 
 final authRepo = Provider((ref) => LoginRepo());
-
-final authState = StreamProvider((ref) {
-  final repo = ref.read(authRepo);
-
-  return repo.authStateChanges();
-});

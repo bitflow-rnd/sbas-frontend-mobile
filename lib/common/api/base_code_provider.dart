@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
@@ -11,7 +12,7 @@ class BaseCodeProvider {
 
     try {
       final res = await client.get(
-        Uri.parse('$_baseUrl/$route'),
+        Uri.parse('$_baseUrl/codes/$route'),
       );
       if (res.statusCode == 200) {
         final List<BaseCodeModel> list = [];
@@ -33,5 +34,34 @@ class BaseCodeProvider {
     throw ArgumentError();
   }
 
-  final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/common/codes';
+  Future<String> uploadImage(dio.MultipartFile file) async {
+    final client = dio.Dio();
+    try {
+      client.options.contentType = 'multipart/form-data';
+
+      final res = await client.postUri(
+        Uri.parse('$_baseUrl/upload'),
+        data: dio.FormData.fromMap(
+          {
+            'param1': '',
+            'param2': file,
+          },
+        ),
+      );
+      if (res.statusCode == 200) {
+        return res.data['result'];
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
+  final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/common';
 }

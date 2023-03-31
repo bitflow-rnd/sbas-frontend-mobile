@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/api/base_code_provider.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
@@ -16,11 +18,19 @@ class UserRegRequestRepository {
     });
   }
 
-  Future<void> reqUserReg(UserRegModel model) async {
+  Future<int> reqUserReg(UserRegModel model) async {
     final bytes = utf8.encode(model.pw ?? '');
     model.pw = sha512.convert(bytes).toString();
 
-    await _userRegProvider.reqUserReg(model.toJson());
+    return await _userRegProvider.reqUserReg(model.toJson());
+  }
+
+  Future<Map<String, dynamic>> confirm(
+      String phoneNumber, String authNumber) async {
+    return await _userRegProvider.confirm({
+      'phoneNo': phoneNumber,
+      'certNo': authNumber,
+    });
   }
 
   Future<List<BaseCodeModel>> getBaseCode(String route) async =>
@@ -34,6 +44,13 @@ class UserRegRequestRepository {
         'instTypecd=$typeCd&dstrCd2=$dstrCd2',
       );
 
+  Future<String> uploadImage(XFile file) async =>
+      await _baseCodeProvider.uploadImage(
+        await MultipartFile.fromFile(
+          file.path,
+          filename: file.name,
+        ),
+      );
   final _userRegProvider = UserRegProvider();
 
   final _baseCodeProvider = BaseCodeProvider();

@@ -24,6 +24,9 @@ class SelfAuth extends ConsumerWidget {
             if (value == null || value.isEmpty) {
               return '아이디를 입력하세요.';
             }
+            if (value.length < 6) {
+              return '입력하신 아이디는 사용하실 수 없습니다.';
+            }
             return null;
           },
           regExp: r'[a-z|0-9]',
@@ -101,7 +104,9 @@ class SelfAuth extends ConsumerWidget {
                           ),
                         )
                         .compareTo(value) <
-                    0) {
+                    0 ||
+                !RegExp(r'^(19|20)\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$')
+                    .hasMatch(value)) {
               return '본인 생년월일을 정확히 입력하세요.';
             }
             return null;
@@ -139,13 +144,23 @@ class SelfAuth extends ConsumerWidget {
             if (value == null || value.length != 6) {
               return '인증번호를 정확히 입력하세요.';
             }
+            if (model.pushKey != null &&
+                model.pushKey!.isNotEmpty &&
+                model.pushKey?.length != 6) {
+              return '인증번호가 유효하지 않습니다.';
+            }
             return null;
           },
-          onSaved: (newValue) {
-            model.pushKey = newValue;
+          onSaved: (newValue) async {
             model.userCi = newValue;
+
+            final res =
+                await ref.read(signUpProvider.notifier).confirm(newValue ?? '');
+
+            model.pushKey =
+                res['statusCode'] != 200 ? res['message'] : newValue;
           },
-          text: model.userCi,
+          text: model.pushKey,
         ),
       ],
     );

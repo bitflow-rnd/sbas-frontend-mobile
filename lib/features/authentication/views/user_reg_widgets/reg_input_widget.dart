@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_number/mobile_number.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:telephony/telephony.dart';
 
@@ -122,7 +123,10 @@ class _RegInputState extends ConsumerState<RegInput> {
               onNonMatch: (n) => '',
             );
             setState(
-              () => isReadOnly = true,
+              () {
+                ref.read(regUserProvider).pushKey = '';
+                isReadOnly = true;
+              },
             );
           }
         },

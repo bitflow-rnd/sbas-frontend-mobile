@@ -40,15 +40,11 @@ dependencies:
 
   cupertino_icons: ^1.0.2
 
+  dio: ^5.1.1
+
   http: ^0.13.5
 
-  firebase_core: ^2.7.1
-  firebase_auth: ^4.3.0
-
   flutter_dotenv: ^5.0.2
-
-  # firebase only
-  flutter_firebase_recaptcha: ^1.0.2
 
   flutter_riverpod: ^2.3.1
 
@@ -58,14 +54,9 @@ dependencies:
 
   go_router: ^6.2.0
 
-  # web flatform only
-  g_recaptcha_v3: ^0.0.5
-
   image_picker: ^0.8.7
 
   intl: ^0.17.0
-
-  kakao_flutter_sdk: ^1.4.0
 
   mobile_number: ^2.1.1
 
@@ -74,8 +65,6 @@ dependencies:
   phone_number: ^1.0.0
 
   shared_preferences: ^2.0.18
-
-  sms_receiver: ^0.4.1
 
   telephony: ^0.2.0
   
