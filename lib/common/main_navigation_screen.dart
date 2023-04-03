@@ -6,7 +6,7 @@ import 'package:sbas/common/widgets/nav_tab.dart';
 import 'package:sbas/features/assign/views/screens/assign_bed_screen.dart';
 import 'package:sbas/features/messages/views/screens/direct_message_screen.dart';
 import 'package:sbas/features/dashboard/views/screens/dashboard_screen.dart';
-import 'package:sbas/features/lookup/views/screens/patient_lookup.dart';
+import 'package:sbas/features/lookup/views/patient_lookup.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   static const String routeName = 'mainNavigation';
@@ -59,7 +59,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 2,
-            child: const PatientLookupScreen(),
+            child: const PatientLookupScreen(
+              automaticallyImplyLeading: true,
+            ),
           ),
           Offstage(
             offstage: _selectedIndex != 3,
@@ -105,7 +107,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 isSelected: _selectedIndex == 2,
                 icon: FontAwesomeIcons.house,
                 selectedIcon: FontAwesomeIcons.house,
-                onTap: () => _onTap(2),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PatientLookupScreen(
+                      automaticallyImplyLeading: false,
+                    ),
+                  ),
+                ),
                 selectedIndex: _selectedIndex,
               ),
               NavTab(
