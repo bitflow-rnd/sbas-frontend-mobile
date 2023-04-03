@@ -6,7 +6,7 @@ import 'package:sbas/common/widgets/nav_tab.dart';
 import 'package:sbas/features/assign/views/screens/assign_bed_screen.dart';
 import 'package:sbas/features/messages/views/screens/direct_message_screen.dart';
 import 'package:sbas/features/dashboard/views/screens/dashboard_screen.dart';
-import 'package:sbas/features/lookup/views/patient_lookup.dart';
+import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   static const String routeName = 'mainNavigation';

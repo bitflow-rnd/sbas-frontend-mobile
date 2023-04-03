@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 
 class PatientLookupScreen extends ConsumerWidget {
   const PatientLookupScreen({
@@ -339,23 +341,14 @@ class PatientLookupScreen extends ConsumerWidget {
                 bottom: 18,
                 left: 18,
                 right: 18,
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(
-                      6,
-                    ),
-                  ),
-                  child: const Text(
-                    '신규 환자 등록',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                child: BottomPositionedSubmitButton(
+                  text: '신규 환자 등록',
+                  function: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PatientRegScreen(
+                        newPatient: true,
+                      ),
                     ),
                   ),
                 ),
