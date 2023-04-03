@@ -1,3 +1,4 @@
+[![SBAS](https://github.com/bitflow-rnd/sbas-frontend-mobile/actions/workflows/sbas.yml/badge.svg?event=push)](https://github.com/bitflow-rnd/sbas-frontend-mobile/actions/workflows/sbas.yml)
 # 스마트 병상배정 시스템 - 모바일 Flutter
 
 ## Contributor
