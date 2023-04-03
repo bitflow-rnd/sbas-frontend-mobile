@@ -1,4 +1,6 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/blocs/login_bloc.dart';
@@ -39,12 +41,15 @@ class _SubmitButtonState extends ConsumerState<SubmitButton> {
 
     ls.tryValidation();
 
-    if (kDebugMode) {
-      print(ls.formData);
-    }
+    final bytes = utf8.encode(ls.formData['pw'] ?? '');
+    final pw = sha512.convert(bytes).toString();
+
     ref.read(loginProvider.notifier).logIn(
-          context,
-          ls.formData,
-        );
+      context,
+      {
+        'id': ls.formData['id'],
+        'pw': pw,
+      },
+    );
   }
 }

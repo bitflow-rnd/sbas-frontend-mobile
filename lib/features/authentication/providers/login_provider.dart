@@ -10,7 +10,7 @@ class LoginProvider {
 
     try {
       final res = await client.post(
-        Uri.parse('$_baseUrl/v1/test/login'),
+        Uri.parse('$_baseUrl/v1/public/user/login'),
         headers: json,
         body: toJson(map),
       );

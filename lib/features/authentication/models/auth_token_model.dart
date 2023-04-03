@@ -1,18 +1,19 @@
 class AuthTokenModel {
   String? token;
 
-  AuthTokenModel({this.token});
-
+  AuthTokenModel({
+    this.token,
+  });
   AuthTokenModel.fromJson(Map<String, dynamic> json) {
-    if (json["token"] is String) {
-      token = json["token"];
+    if (json["result"] is String) {
+      token = json["result"];
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
-    data["token"] = token;
+    data["result"] = token;
 
     return data;
   }
