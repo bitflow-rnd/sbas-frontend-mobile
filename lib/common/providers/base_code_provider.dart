@@ -36,8 +36,10 @@ class BaseCodeProvider {
 
   Future<String> uploadImage(dio.MultipartFile file) async {
     final client = dio.Dio();
+
     try {
       client.options.contentType = 'multipart/form-data';
+      client.options.headers = authToken;
 
       final res = await client.postUri(
         Uri.parse('$_baseUrl/upload'),

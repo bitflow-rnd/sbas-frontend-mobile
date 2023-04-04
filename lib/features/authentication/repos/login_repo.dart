@@ -10,10 +10,10 @@ class LoginRepo {
   final _auth = LoginProvider();
 
   Future<bool> get isLoggedIn async {
-    final authToken = prefs.getString('auth_token');
+    final token = prefs.getString('auth_token');
 
-    if (authToken != null && authToken.isNotEmpty) {
-      final map = await _auth.getUser(authToken);
+    if (token != null && token.isNotEmpty) {
+      final map = await _auth.getUser(token);
 
       if (map != null) {
         final jwt = JwtModel.fromJson(map);

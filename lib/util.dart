@@ -51,6 +51,8 @@ String toJson(Map<String, dynamic> map) => jsonEncode(map);
 
 Map<String, dynamic> fromJson(String body) => jsonDecode(body);
 
+Map<String, dynamic>? authToken;
+
 const json = {'Content-Type': 'application/json'};
 
 late SharedPreferences prefs;
