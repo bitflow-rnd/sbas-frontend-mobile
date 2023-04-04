@@ -29,14 +29,14 @@ class LoginProvider {
     return null;
   }
 
-  Future<Map<String, dynamic>?> getUser(String authToken) async {
+  Future<Map<String, dynamic>?> getUser(String token) async {
     final client = RetryClient(Client());
 
     try {
       final res = await client.get(
         Uri.parse('$_baseUrl/v1/test/user'),
         headers: {
-          'Authorization': 'Bearer $authToken',
+          'Authorization': 'Bearer $token',
         },
       );
       if (res.statusCode == 200) {

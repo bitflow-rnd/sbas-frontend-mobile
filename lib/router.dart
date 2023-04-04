@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sbas/common/main_navigation_screen.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
+import 'package:sbas/util.dart';
 
 final routerProvider = Provider(
   (ref) => GoRouter(
@@ -13,6 +14,9 @@ final routerProvider = Provider(
       if (!isLoggedIn) {
         return LogInScreen.routeUrl;
       }
+      authToken = {
+        'Authorization': 'Bearer ${prefs.getString('auth_token')}}',
+      };
       return null;
     },
     routes: [
