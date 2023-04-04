@@ -37,7 +37,13 @@ class UserRegisterRequestScreenState
       ),
       body: ModalProgressHUD(
         inAsyncCall: signUp.isLoading,
-        progressIndicator: const SBASProgressIndicator(),
+        progressIndicator: const Center(
+          child: CircularProgressIndicator.adaptive(
+            valueColor: AlwaysStoppedAnimation(
+              Colors.lightBlueAccent,
+            ),
+          ),
+        ),
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Stack(

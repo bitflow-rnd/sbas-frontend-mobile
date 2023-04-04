@@ -4,6 +4,7 @@ import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_item_widg
 
 class PatientRegTopNav extends ConsumerWidget {
   const PatientRegTopNav({
+    required this.x,
     super.key,
   });
   @override
@@ -27,15 +28,15 @@ class PatientRegTopNav extends ConsumerWidget {
         ),
         AnimatedAlign(
           heightFactor: 14,
-          alignment: const Alignment(
-            -0.5,
+          alignment: Alignment(
+            -0.5 * x,
             0,
           ),
           duration: const Duration(
             milliseconds: 500,
           ),
           child: Container(
-            width: width * 0.65,
+            width: width * 0.625,
             height: 4,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
@@ -46,16 +47,18 @@ class PatientRegTopNav extends ConsumerWidget {
           ),
         ),
         const PatientTopNavtItem(
-          x: -0.5,
+          x: 1,
           index: 1,
           text: '역학조사서',
         ),
         const PatientTopNavtItem(
-          x: 0.5,
+          x: -1,
           index: 2,
           text: '환자 기본정보',
         ),
       ],
     );
   }
+
+  final double x;
 }
