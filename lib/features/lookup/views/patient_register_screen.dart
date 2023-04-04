@@ -74,17 +74,20 @@ class PatientRegScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                    ),
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          'assets/auth_group/camera_location.png',
-                        ),
-                      ],
+                  InkWell(
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                      ),
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/auth_group/camera_location.png',
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
