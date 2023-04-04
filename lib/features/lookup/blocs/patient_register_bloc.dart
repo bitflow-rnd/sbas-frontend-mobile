@@ -6,24 +6,24 @@ import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
-class PatientRegisterPresenter extends AsyncNotifier<String> {
+class PatientRegisterPresenter
+    extends AsyncNotifier<EpidemiologicalReportModel> {
   @override
-  FutureOr<String> build() {
+  FutureOr<EpidemiologicalReportModel> build() {
     _regRepository = ref.read(userRegReqProvider);
     _patientRepository = ref.read(patientRepoProvider);
 
-    return '';
+    return EpidemiologicalReportModel.empty();
   }
 
   Future<void> uploadImage(XFile imageFile) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final key = await _regRepository.uploadImage(imageFile);
+      ref.read(patientAttcProvider.notifier).state =
+          await _regRepository.uploadImage(imageFile);
 
-      final char = EpidemiologicalReportModel.fromJson(
+      return EpidemiologicalReportModel.fromJson(
           await _patientRepository.getOpticalCharacterRecognition(imageFile));
-
-      return '';
     });
     if (state.hasError) {}
     if (state.hasValue) {}
@@ -34,7 +34,8 @@ class PatientRegisterPresenter extends AsyncNotifier<String> {
 }
 
 final patientRegProvider =
-    AsyncNotifierProvider<PatientRegisterPresenter, String>(
+    AsyncNotifierProvider<PatientRegisterPresenter, EpidemiologicalReportModel>(
   () => PatientRegisterPresenter(),
 );
 final patientImageProvider = StateProvider<XFile?>((ref) => null);
+final patientAttcProvider = StateProvider<String?>((ref) => null);

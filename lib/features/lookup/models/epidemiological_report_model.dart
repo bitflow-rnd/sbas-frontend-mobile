@@ -58,6 +58,36 @@ class EpidemiologicalReportModel {
     this.diagDrNm,
     this.rptChfNm,
   });
+  EpidemiologicalReportModel.empty()
+      : rcptPhc = '',
+        ptNm = '',
+        rrno1 = '',
+        rrno2 = '',
+        gndr = '',
+        dstr1Cd = '',
+        dstr2Cd = '',
+        baseAddr = '',
+        dtlAddr = '',
+        fullAddr = '',
+        telno = '',
+        diagNm = '',
+        diagGrde = '',
+        job = '',
+        occrDt = '',
+        diagDt = '',
+        rptDt = '',
+        dfdgExamRslt = '',
+        ptCatg = '',
+        admsYn = '',
+        dethYn = '',
+        rmk = '',
+        instNm = '',
+        instId = '',
+        instTelno = '',
+        instAddr = '',
+        diagDrNm = '',
+        rptChfNm = '';
+
   EpidemiologicalReportModel.fromJson(Map<String, dynamic> json) {
     if (json["rcptPhc"] is String) {
       rcptPhc = json["rcptPhc"];
