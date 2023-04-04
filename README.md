@@ -1,4 +1,4 @@
-[![SBAS](https://github.com/bitflow-rnd/sbas-frontend-mobile/actions/workflows/sbas.yml/badge.svg?event=push)](https://github.com/bitflow-rnd/sbas-frontend-mobile/actions/workflows/sbas.yml)
+[![Platform](https://img.shields.io/badge/platform-flutter-blue)](https://flutter.dev/) [![Language](https://img.shields.io/badge/language-dart-blue)](https://dart.dev/) [![SBAS](https://github.com/bitflow-rnd/sbas-frontend-mobile/actions/workflows/sbas.yml/badge.svg?event=push)](https://github.com/bitflow-rnd/sbas-frontend-mobile/actions/workflows/sbas.yml)
 # 스마트 병상배정 시스템 - 모바일 Flutter
 
 ## Contributor
