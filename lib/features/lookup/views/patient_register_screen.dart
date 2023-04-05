@@ -79,7 +79,9 @@ class PatientRegScreen extends ConsumerWidget {
                       horizontal: 18,
                     ),
                     child: patientAttc != null
-                        ? const PatientRegInfo()
+                        ? PatientRegInfo(
+                            model: report,
+                          )
                         : const PatientRegReport(),
                   ),
                 ),
