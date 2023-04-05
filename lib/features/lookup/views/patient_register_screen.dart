@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
-import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
@@ -26,94 +25,80 @@ class PatientRegScreen extends ConsumerWidget {
         true,
         0,
       ),
-      body: ref.watch(patientRegProvider).when(
-            loading: () => const SBASProgressIndicator(),
-            error: (error, stackTrace) => Center(
-              child: Text(
-                error.toString(),
-                style: const TextStyle(
-                  color: Colors.lightBlueAccent,
-                ),
-              ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
             ),
-            data: (report) => Column(
+            child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        'assets/patient.png',
-                        height: 42,
-                      ),
-                      Gaps.h8,
-                      isNewPatient
-                          ? const Text(
-                              '신규 환자 등록',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                              ),
-                            )
-                          : getPatientInfo(),
-                    ],
-                  ),
+                Image.asset(
+                  'assets/patient.png',
+                  height: 42,
                 ),
-                const Divider(
-                  color: Colors.grey,
-                  height: 1,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
-                  child: PatientRegTopNav(x: patientAttc != null ? -1 : 1),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                    ),
-                    child: patientAttc != null
-                        ? PatientRegInfo(
-                            model: report,
-                          )
-                        : const PatientRegReport(),
-                  ),
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: width * 0.5,
-                      child: BottomSubmitBtn(
-                        text: patientAttc != null ? '이전' : '취소',
-                        onPressed: patientAttc != null
-                            ? () => ref
-                                .read(patientAttcProvider.notifier)
-                                .state = null
-                            : () => Navigator.pop(context),
-                      ),
-                    ),
-                    SizedBox(
-                      width: width * 0.5,
-                      child: BottomSubmitBtn(
-                        text: '다음',
-                        onPressed: patientImage != null
-                            ? () => ref
-                                .read(patientRegProvider.notifier)
-                                .uploadImage(patientImage)
-                            : null,
-                      ),
-                    ),
-                  ],
-                ),
+                Gaps.h8,
+                isNewPatient
+                    ? const Text(
+                        '신규 환자 등록',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      )
+                    : getPatientInfo(),
               ],
             ),
           ),
+          const Divider(
+            color: Colors.grey,
+            height: 1,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
+            child: PatientRegTopNav(x: patientAttc != null ? -1 : 1),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18,
+              ),
+              child: patientAttc != null
+                  ? PatientRegInfo()
+                  : const PatientRegReport(),
+            ),
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: width * 0.5,
+                child: BottomSubmitBtn(
+                  text: patientAttc != null ? '이전' : '취소',
+                  onPressed: patientAttc != null
+                      ? () =>
+                          ref.read(patientAttcProvider.notifier).state = null
+                      : () => Navigator.pop(context),
+                ),
+              ),
+              SizedBox(
+                width: width * 0.5,
+                child: BottomSubmitBtn(
+                  text: '다음',
+                  onPressed: patientImage != null
+                      ? () => ref
+                          .read(patientRegProvider.notifier)
+                          .uploadImage(patientImage)
+                      : null,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

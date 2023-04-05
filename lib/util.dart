@@ -53,6 +53,61 @@ Map<String, dynamic> fromJson(String body) => jsonDecode(body);
 
 Map<String, dynamic>? authToken;
 
+Row getSubTitlt(String subTitle, bool isRequired) => Row(
+      children: [
+        Text(
+          subTitle,
+          style: TextStyle(
+            color: Colors.grey.shade600,
+            fontSize: 16,
+          ),
+        ),
+        Text(
+          isRequired ? '' : '*',
+          style: const TextStyle(
+            color: Colors.blue,
+          ),
+        ),
+      ],
+    );
+InputDecoration getInputDecoration(String hintText) => InputDecoration(
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          color: Colors.grey.shade300,
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          color: Colors.grey.shade300,
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          color: Colors.grey.shade300,
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      hintText: hintText,
+      hintStyle: TextStyle(
+        fontSize: 16,
+        color: Colors.grey.shade400,
+      ),
+      contentPadding: const EdgeInsets.symmetric(
+        vertical: 18,
+        horizontal: 22,
+      ),
+    );
 const json = {'Content-Type': 'application/json'};
 
 late SharedPreferences prefs;
