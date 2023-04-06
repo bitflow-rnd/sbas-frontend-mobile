@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/features/messages/repos/talk_rooms_repo.dart';
+import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 
 class DirectMessageScreen extends ConsumerWidget {
   const DirectMessageScreen({
@@ -12,6 +12,10 @@ class DirectMessageScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final talkRooms = ref.watch(talkRoomsProvider);
+
+    getChatRooms() async {
+      return await talkRooms.getMyChats();
+    }
 
     return Scaffold(
       appBar: Bitflow.getAppBar(
@@ -27,30 +31,27 @@ class DirectMessageScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      final chatRooms =
-                          await talkRooms.getMyChats(); // getMyChats() 호출
-
-                      ListView.builder(
-                        itemCount: chatRooms.length,
-                        itemBuilder: (context, index) {
-                          final chatRoom = chatRooms[index];
-                          return ListTile(
-                            title: Text(chatRoom.tkrmNm ?? ''),
-                            subtitle: Text(chatRoom.msg ?? ''),
-                            trailing: Text(chatRoom.rgstDttm ?? ''),
-                          );
-                        },
-                      );
-                    },
-                    child: const Text('채팅방 불러오기'),
-                  ),
-                ],
+              child: FutureBuilder(
+                future: getChatRooms(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        Expanded(
+                          child: TalkRoomWidget(snapshot),
+                        )
+                      ],
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
-            ),
+            )
           ],
         ),
       ),
