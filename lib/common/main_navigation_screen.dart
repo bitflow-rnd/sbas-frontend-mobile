@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sbas/common/widgets/nav_tab.dart';
 import 'package:sbas/features/assign/views/screens/assign_bed_screen.dart';
-import 'package:sbas/features/messages/views/screens/direct_message_screen.dart';
+import 'package:sbas/features/messages/views/direct_message_screen.dart';
 import 'package:sbas/features/dashboard/views/screens/dashboard_screen.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 
@@ -120,7 +120,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               NavTab(
                 text: '연락처/DM',
                 isSelected: _selectedIndex == 3,
-                icon: FontAwesomeIcons.house,
+                icon: FontAwesomeIcons.message,
                 selectedIcon: FontAwesomeIcons.message,
                 onTap: () => _onTap(3),
                 selectedIndex: _selectedIndex,
