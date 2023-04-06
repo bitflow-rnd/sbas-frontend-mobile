@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
@@ -18,23 +19,37 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     return _patientInfoModel;
   }
 
+  Future<void> registry() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      return _patientInfoModel;
+    });
+    if (state.hasError) {}
+    if (state.hasValue) {}
+  }
+
   Future<void> uploadImage(XFile imageFile) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final attcId = await _regRepository.uploadImage(imageFile);
       ref.read(patientAttcProvider.notifier).state = attcId;
 
-      final report = EpidemiologicalReportModel.fromJson(
-          await _patientRepository.getOpticalCharacterRecognition(imageFile));
+      final report =
+          EpidemiologicalReportModel.fromJson(await _patientRepository.getOpticalCharacterRecognition(imageFile));
 
       _patientInfoModel.addr = report.baseAddr;
       _patientInfoModel.attcId = attcId;
       _patientInfoModel.dethYn = report.dethYn;
-      _patientInfoModel.gndr = report.gndr;
+      _patientInfoModel.gndr = report.rrno2 == '1' || report.rrno2 == '3' ? 'M' : 'F';
       _patientInfoModel.job = report.job;
       _patientInfoModel.ptNm = report.ptNm;
       _patientInfoModel.rrno1 = report.rrno1;
       _patientInfoModel.rrno2 = report.rrno2;
+      _patientInfoModel.dethYn = report.dethYn == '사망' ? 'N' : 'Y';
+      _patientInfoModel.dstr1Cd = report.dstr1Cd;
+      _patientInfoModel.dstr2Cd = report.dstr2Cd;
+      _patientInfoModel.mpno = report.telno;
+      _patientInfoModel.natiCd = 'KR';
 
       return _patientInfoModel;
     });
@@ -47,16 +62,10 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     state = await AsyncValue.guard(() async {
       if (_patientInfoModel.rrno1 != null) {
         if (gender == 'F') {
-          _patientInfoModel.rrno2 =
-              '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0
-                  ? '2'
-                  : '4';
+          _patientInfoModel.rrno2 = '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0 ? '2' : '4';
         }
         if (gender == 'M') {
-          _patientInfoModel.rrno2 =
-              '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0
-                  ? '1'
-                  : '3';
+          _patientInfoModel.rrno2 = '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0 ? '1' : '3';
         }
         _patientInfoModel.gndr = gender;
       }
@@ -66,7 +75,29 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     if (state.hasValue) {}
   }
 
-  Future<void> uploadPatientNationality(String nationality) async {
+  Future<void> updatePatientRegion(BaseCodeModel region) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      _patientInfoModel.dstr1Cd = region.id?.cdId;
+
+      return _patientInfoModel;
+    });
+    if (state.hasError) {}
+    if (state.hasValue) {}
+  }
+
+  Future<void> updatePatientCounty(BaseCodeModel region) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      _patientInfoModel.dstr2Cd = region.id?.cdId;
+
+      return _patientInfoModel;
+    });
+    if (state.hasError) {}
+    if (state.hasValue) {}
+  }
+
+  Future<void> updatePatientNationality(String nationality) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       _patientInfoModel.natiCd = nationality;
@@ -77,7 +108,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     if (state.hasValue) {}
   }
 
-  Future<void> uploadPatientCrossroadsOfLife(String life) async {
+  Future<void> updatePatientCrossroadsOfLife(String life) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       _patientInfoModel.dethYn = life;
@@ -86,6 +117,16 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     });
     if (state.hasError) {}
     if (state.hasValue) {}
+  }
+
+  String? findPatientAddress(List<BaseCodeModel> list, String? findValue) {
+    if (list.any((element) => element.id?.cdId == findValue)) {
+      return list.firstWhere((e) => e.id?.cdId == findValue).cdNm;
+    }
+    if (list.any((element) => element.cdNm == findValue)) {
+      return findValue;
+    }
+    return null;
   }
 
   void setTextEditingController(int index, String? value) {
@@ -148,7 +189,17 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         return report.rrno1 ?? '';
 
       case 2:
-        return report.addr ?? '';
+        var address = '';
+        final strArr = report.addr?.split(' ');
+
+        if (strArr != null && strArr.length > 3) {
+          for (int i = 2; i < strArr.length; i++) {
+            address += '${strArr[i]} ';
+          }
+        } else {
+          address = report.addr ?? '';
+        }
+        return address;
 
       case 3:
         return report.dethYn ?? '';
@@ -181,8 +232,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       case 1:
         if (value == null ||
             value.length != 6 ||
-            !RegExp(r'^\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$')
-                .hasMatch(value)) {
+            !RegExp(r'^\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$').hasMatch(value)) {
           return '생년월일을 정확히 입력하세요.';
         }
         break;
@@ -251,8 +301,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   late final UserRegRequestRepository _regRepository;
 }
 
-final patientRegProvider =
-    AsyncNotifierProvider<PatientRegisterPresenter, PatientRegInfoModel>(
+final patientRegProvider = AsyncNotifierProvider<PatientRegisterPresenter, PatientRegInfoModel>(
   () => PatientRegisterPresenter(),
 );
 final patientImageProvider = StateProvider<XFile?>((ref) => null);

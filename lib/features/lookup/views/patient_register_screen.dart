@@ -9,7 +9,7 @@ import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dar
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 
 class PatientRegScreen extends ConsumerWidget {
-  const PatientRegScreen({
+  PatientRegScreen({
     required this.isNewPatient,
     super.key,
   });
@@ -68,7 +68,9 @@ class PatientRegScreen extends ConsumerWidget {
                 horizontal: 18,
               ),
               child: patientAttc != null
-                  ? PatientRegInfo()
+                  ? PatientRegInfo(
+                      formKey: formKey,
+                    )
                   : const PatientRegReport(),
             ),
           ),
@@ -79,8 +81,7 @@ class PatientRegScreen extends ConsumerWidget {
                 child: BottomSubmitBtn(
                   text: patientAttc != null ? '이전' : '취소',
                   onPressed: patientAttc != null
-                      ? () =>
-                          ref.read(patientAttcProvider.notifier).state = null
+                      ? () => ref.read(patientAttcProvider.notifier).state = null
                       : () => Navigator.pop(context),
                 ),
               ),
@@ -89,9 +90,11 @@ class PatientRegScreen extends ConsumerWidget {
                 child: BottomSubmitBtn(
                   text: '다음',
                   onPressed: patientImage != null
-                      ? () => ref
-                          .read(patientRegProvider.notifier)
-                          .uploadImage(patientImage)
+                      ? patientAttc != null
+                          ? _tryValidation()
+                              ? () => ref.read(patientRegProvider.notifier).registry()
+                              : null
+                          : () => ref.read(patientRegProvider.notifier).uploadImage(patientImage)
                       : null,
                 ),
               ),
@@ -102,9 +105,19 @@ class PatientRegScreen extends ConsumerWidget {
     );
   }
 
+  bool _tryValidation() {
+    bool isValid = formKey.currentState?.validate() ?? false;
+
+    if (isValid) {
+      formKey.currentState?.save();
+    }
+    return isValid;
+  }
+
   Widget getPatientInfo() {
     return const SizedBox();
   }
 
+  final formKey = GlobalKey<FormState>();
   final bool isNewPatient;
 }

@@ -165,8 +165,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: const [
                                   Text(
                                     '   최근등록순',
@@ -222,8 +221,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                   ),
                                   Gaps.h8,
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -240,16 +238,13 @@ class PatientLookupScreen extends ConsumerWidget {
                                                 ),
                                                 WidgetSpan(
                                                   child: Container(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
+                                                    padding: const EdgeInsets.symmetric(
                                                       horizontal: 12,
                                                       vertical: 4,
                                                     ),
                                                     decoration: BoxDecoration(
                                                       color: Colors.red.shade50,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
+                                                      borderRadius: BorderRadius.circular(12),
                                                     ),
                                                     child: const Text(
                                                       '입원',
@@ -291,24 +286,20 @@ class PatientLookupScreen extends ConsumerWidget {
                                       ),
                                       Container(
                                         height: 32,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.5,
+                                        width: MediaQuery.of(context).size.width * 0.5,
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 6,
                                         ),
                                         child: ListView.separated(
                                           scrollDirection: Axis.horizontal,
-                                          itemBuilder: (context, index) =>
-                                              Container(
+                                          itemBuilder: (context, index) => Container(
                                             padding: const EdgeInsets.symmetric(
                                               vertical: 4,
                                               horizontal: 6,
                                             ),
                                             decoration: BoxDecoration(
                                               color: Colors.grey[200],
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
+                                              borderRadius: BorderRadius.circular(6),
                                             ),
                                             child: const Text(
                                               '#중증',
@@ -318,8 +309,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                               ),
                                             ),
                                           ),
-                                          separatorBuilder: (context, index) =>
-                                              Gaps.h6,
+                                          separatorBuilder: (context, index) => Gaps.h6,
                                           itemCount: 2,
                                         ),
                                       ),
@@ -346,7 +336,7 @@ class PatientLookupScreen extends ConsumerWidget {
                   function: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PatientRegScreen(
+                      builder: (context) => PatientRegScreen(
                         isNewPatient: true,
                       ),
                     ),
