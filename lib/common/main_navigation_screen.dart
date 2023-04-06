@@ -120,7 +120,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               NavTab(
                 text: '연락처/DM',
                 isSelected: _selectedIndex == 3,
-                icon: FontAwesomeIcons.house,
+                icon: FontAwesomeIcons.message,
                 selectedIcon: FontAwesomeIcons.message,
                 onTap: () => _onTap(3),
                 selectedIndex: _selectedIndex,
