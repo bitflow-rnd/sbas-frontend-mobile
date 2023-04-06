@@ -42,6 +42,52 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     if (state.hasValue) {}
   }
 
+  Future<void> uploadPatientGender(String gender) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      if (_patientInfoModel.rrno1 != null) {
+        if (gender == 'F') {
+          _patientInfoModel.rrno2 =
+              '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0
+                  ? '2'
+                  : '4';
+        }
+        if (gender == 'M') {
+          _patientInfoModel.rrno2 =
+              '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0
+                  ? '1'
+                  : '3';
+        }
+        _patientInfoModel.gndr = gender;
+      }
+      return _patientInfoModel;
+    });
+    if (state.hasError) {}
+    if (state.hasValue) {}
+  }
+
+  Future<void> uploadPatientNationality(String nationality) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      _patientInfoModel.natiCd = nationality;
+
+      return _patientInfoModel;
+    });
+    if (state.hasError) {}
+    if (state.hasValue) {}
+  }
+
+  Future<void> uploadPatientCrossroadsOfLife(String life) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      _patientInfoModel.dethYn = life;
+
+      return _patientInfoModel;
+    });
+    if (state.hasError) {}
+    if (state.hasValue) {}
+  }
+
   void setTextEditingController(int index, String? value) {
     switch (index) {
       case 0:
