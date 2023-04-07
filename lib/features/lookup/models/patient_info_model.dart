@@ -8,13 +8,13 @@ class PatientInfoModel {
   });
 
   PatientInfoModel.fromJson(Map<String, dynamic> json) {
-    if (json["first"] is List) {
-      list = json["first"] == null
+    if (json["items"] is List) {
+      list = json["items"] == null
           ? null
-          : (json["first"] as List).map((e) => Patient.fromJson(e)).toList();
+          : (json["items"] as List).map((e) => Patient.fromJson(e)).toList();
     }
-    if (json["second"] is int) {
-      length = json["second"];
+    if (json["count"] is int) {
+      length = json["count"];
     }
   }
 
@@ -22,9 +22,9 @@ class PatientInfoModel {
     final Map<String, dynamic> data = <String, dynamic>{};
 
     if (list != null) {
-      data["first"] = list?.map((e) => e.toJson()).toList();
+      data["items"] = list?.map((e) => e.toJson()).toList();
     }
-    data["second"] = length;
+    data["count"] = length;
 
     return data;
   }
@@ -51,8 +51,12 @@ class Patient {
   String? mpno;
   String? job;
   String? attcId;
+  String? bedStatCd;
+  String? bedStatNm;
 
   Patient({
+    this.bedStatCd,
+    this.bedStatNm,
     this.rgstUserId,
     this.rgstDttm,
     this.updtUserId,
@@ -76,6 +80,12 @@ class Patient {
   });
 
   Patient.fromJson(Map<String, dynamic> json) {
+    if (json["bedStatCd"] is String) {
+      bedStatCd = json["bedStatCd"];
+    }
+    if (json["bedStatNm"] is String) {
+      bedStatNm = json["bedStatNm"];
+    }
     if (json["rgstUserId"] is String) {
       rgstUserId = json["rgstUserId"];
     }
@@ -161,6 +171,8 @@ class Patient {
     data["mpno"] = mpno;
     data["job"] = job;
     data["attcId"] = attcId;
+    data['bedStatCd'] = bedStatCd;
+    data['bedStatNm'] = bedStatNm;
 
     return data;
   }

@@ -34,7 +34,7 @@ class PatientLookupScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    data: (data) => Column(
+                    data: (patient) => Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -156,13 +156,19 @@ class PatientLookupScreen extends ConsumerWidget {
                                         color: Colors.grey.shade700,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      text: '검색결과 총 ',
-                                      children: const [
+                                      text: '검색결과 총',
+                                      children: [
                                         TextSpan(
-                                          text: '',
-                                          children: [
+                                          text: ' ${patient.length}',
+                                          style: const TextStyle(
+                                            color: Color(0xFF00BFFF),
+                                          ),
+                                          children: const [
                                             TextSpan(
                                               text: '명',
+                                              style: TextStyle(
+                                                color: Color(0xFF000000),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -248,7 +254,12 @@ class PatientLookupScreen extends ConsumerWidget {
                                               children: [
                                                 RichText(
                                                   text: TextSpan(
-                                                    text: '신*후 (남/75세)',
+                                                    text:
+                                                        '${patient.list?[index].ptNm?.replaceRange(
+                                                      1,
+                                                      2,
+                                                      '*',
+                                                    )} (${patient.list?[index].gndr}/${getAge(patient.list?[index])}세)',
                                                     style: const TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 16,
@@ -267,18 +278,30 @@ class PatientLookupScreen extends ConsumerWidget {
                                                           ),
                                                           decoration:
                                                               BoxDecoration(
-                                                            color: Colors
-                                                                .red.shade50,
+                                                            color: getStateColor(
+                                                                true,
+                                                                patient
+                                                                    .list?[
+                                                                        index]
+                                                                    .bedStatCd),
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
                                                                         12),
                                                           ),
-                                                          child: const Text(
-                                                            '입원',
+                                                          child: Text(
+                                                            '${patient.list?[index].bedStatNm}',
                                                             style: TextStyle(
-                                                              color: Colors.red,
+                                                              color: getStateColor(
+                                                                  false,
+                                                                  patient
+                                                                      .list?[
+                                                                          index]
+                                                                      .bedStatCd),
                                                               fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
                                                             ),
                                                           ),
                                                         ),
@@ -297,17 +320,18 @@ class PatientLookupScreen extends ConsumerWidget {
                                               ),
                                             ),
                                             Gaps.v2,
-                                            const Text(
-                                              '대구광역시 북구 / 010-****-1234',
-                                              style: TextStyle(
+                                            Text(
+                                              getAddress(patient.list?[index]),
+                                              style: const TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 16,
                                               ),
                                             ),
                                             Gaps.v2,
-                                            const Text(
-                                              '2023년 2월 19일 15시 22분',
-                                              style: TextStyle(
+                                            Text(
+                                              getDateTimeFormat(patient
+                                                  .list?[index].updtDttm),
+                                              style: const TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 16,
                                               ),
@@ -348,7 +372,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                                 ),
                                                 separatorBuilder:
                                                     (context, index) => Gaps.h6,
-                                                itemCount: 2,
+                                                itemCount: 0,
                                               ),
                                             ),
                                           ],
@@ -357,7 +381,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                     ),
                                   ),
                                   separatorBuilder: (context, index) => Gaps.v8,
-                                  itemCount: 4,
+                                  itemCount: patient.length ?? 0,
                                 ),
                               ),
                             ],
@@ -386,5 +410,6 @@ class PatientLookupScreen extends ConsumerWidget {
           ),
         ),
       );
+
   final bool automaticallyImplyLeading;
 }
