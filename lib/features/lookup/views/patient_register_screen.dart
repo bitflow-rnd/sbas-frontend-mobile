@@ -96,9 +96,11 @@ class PatientRegScreen extends ConsumerWidget {
                           ? _tryValidation()
                               ? () => ref
                                   .read(patientRegProvider.notifier)
-                                  .registry(ref
-                                      .read(agencyRegionProvider.notifier)
-                                      .list)
+                                  .registry(
+                                      ref
+                                          .read(agencyRegionProvider.notifier)
+                                          .list,
+                                      context)
                               : null
                           : () => ref
                               .read(patientRegProvider.notifier)
