@@ -96,6 +96,23 @@ class PatientRegInfoModel {
       attcId = json["attcId"];
     }
   }
+  void clear() {
+    ptNm = '';
+    gndr = '';
+    rrno1 = '';
+    rrno2 = '';
+    dstr1Cd = '';
+    dstr2Cd = '';
+    addr = '';
+    mpno = '';
+    natiCd = '';
+    picaVer = '';
+    dethYn = '';
+    nokNm = '';
+    telno = '';
+    job = '';
+    attcId = '';
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

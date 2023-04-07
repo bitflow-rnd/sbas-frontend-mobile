@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
+import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
@@ -53,6 +54,13 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     if (state.hasError) {}
     if (state.hasValue) {
       context.pop();
+
+      _patientInfoModel.clear();
+
+      ref.read(patientImageProvider.notifier).state = null;
+      ref.read(patientAttcProvider.notifier).state = null;
+
+      await ref.read(patientLookupProvider.notifier).refresh();
     }
   }
 
@@ -92,13 +100,13 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       if (_patientInfoModel.rrno1 != null) {
         if (gender == 'F') {
           _patientInfoModel.rrno2 =
-              '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0
+              '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) < 0
                   ? '2'
                   : '4';
         }
         if (gender == 'M') {
           _patientInfoModel.rrno2 =
-              '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0
+              '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) < 0
                   ? '1'
                   : '3';
         }

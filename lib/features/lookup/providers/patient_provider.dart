@@ -4,6 +4,31 @@ import 'package:dio/dio.dart';
 import 'package:sbas/util.dart';
 
 class PatientProvider {
+  Future<dynamic> lookupPatientInfo() async {
+    final client = Dio();
+
+    try {
+      client.options.contentType = 'application/json';
+      client.options.headers = authToken;
+
+      final res = await client.getUri(
+        Uri.parse('$_baseUrl/search'),
+      );
+      if (res.statusCode == 200) {
+        return res.data['result'];
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
   Future<dynamic> upldepidreport(MultipartFile file) async {
     final client = Dio();
 
