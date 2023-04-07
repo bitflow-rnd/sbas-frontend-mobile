@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/router.dart';
@@ -7,8 +8,11 @@ import 'package:sbas/util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
+  FlutterNativeSplash.preserve(
+    widgetsBinding: widgetsBinding,
+  );
   prefs = await SharedPreferences.getInstance();
 
   await dotenv.load(
