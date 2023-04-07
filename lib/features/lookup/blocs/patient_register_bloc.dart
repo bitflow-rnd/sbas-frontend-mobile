@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
@@ -19,17 +21,39 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     return _patientInfoModel;
   }
 
-  Future<void> registry(List<BaseCodeModel> list) async {
+  Future<void> registry(List<BaseCodeModel> list, BuildContext context) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      /*
+      String region = _patientInfoModel.dstr1Cd ?? '',
+          county = _patientInfoModel.dstr2Cd ?? '';
+
+      if (RegExp(r'^\d+$').hasMatch(region)) {
+        region = list.firstWhere((e) => e.id?.cdId == region).cdNm ?? '';
+      } else {
+        _patientInfoModel.dstr1Cd =
+            list.firstWhere((e) => e.cdNm == region).id?.cdId;
+      }
+      if (RegExp(r'^\d+$').hasMatch(county)) {
+        county = list.firstWhere((e) => e.id?.cdId == county).cdNm ?? '';
+      } else {
+        _patientInfoModel.dstr2Cd =
+            list.firstWhere((e) => e.cdNm == county).id?.cdId;
+      }
       _patientInfoModel.addr =
           '$region $county ${_patientInfoModel.addr?.trim()}';
-*/
+
+      final res = await _patientRepository
+          .registerPatientInfo(_patientInfoModel.toJson());
+
+      if (kDebugMode) {
+        print(res['result']);
+      }
       return _patientInfoModel;
     });
     if (state.hasError) {}
-    if (state.hasValue) {}
+    if (state.hasValue) {
+      context.pop();
+    }
   }
 
   Future<void> uploadImage(XFile imageFile) async {
@@ -50,7 +74,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       _patientInfoModel.ptNm = report.ptNm;
       _patientInfoModel.rrno1 = report.rrno1;
       _patientInfoModel.rrno2 = report.rrno2;
-      _patientInfoModel.dethYn = report.dethYn == '사망' ? 'N' : 'Y';
+      _patientInfoModel.dethYn = report.dethYn == '사망' ? 'Y' : 'N';
       _patientInfoModel.dstr1Cd = report.dstr1Cd;
       _patientInfoModel.dstr2Cd = report.dstr2Cd;
       _patientInfoModel.mpno = report.telno;
@@ -162,6 +186,14 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         _patientInfoModel.mpno = value;
         return;
 
+      case 6:
+        _patientInfoModel.telno = value;
+        return;
+
+      case 7:
+        _patientInfoModel.nokNm = value;
+        return;
+
       case 8:
         _patientInfoModel.job = value;
         return;
@@ -217,6 +249,12 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
 
       case 5:
         return report.mpno ?? '';
+
+      case 6:
+        return report.telno ?? '';
+
+      case 7:
+        return report.nokNm ?? '';
 
       case 8:
         return report.job ?? '';
