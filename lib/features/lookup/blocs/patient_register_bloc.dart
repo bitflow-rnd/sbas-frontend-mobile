@@ -19,9 +19,13 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     return _patientInfoModel;
   }
 
-  Future<void> registry() async {
+  Future<void> registry(List<BaseCodeModel> list) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      /*
+      _patientInfoModel.addr =
+          '$region $county ${_patientInfoModel.addr?.trim()}';
+*/
       return _patientInfoModel;
     });
     if (state.hasError) {}
@@ -34,13 +38,14 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       final attcId = await _regRepository.uploadImage(imageFile);
       ref.read(patientAttcProvider.notifier).state = attcId;
 
-      final report =
-          EpidemiologicalReportModel.fromJson(await _patientRepository.getOpticalCharacterRecognition(imageFile));
+      final report = EpidemiologicalReportModel.fromJson(
+          await _patientRepository.getOpticalCharacterRecognition(imageFile));
 
       _patientInfoModel.addr = report.baseAddr;
       _patientInfoModel.attcId = attcId;
       _patientInfoModel.dethYn = report.dethYn;
-      _patientInfoModel.gndr = report.rrno2 == '1' || report.rrno2 == '3' ? 'M' : 'F';
+      _patientInfoModel.gndr =
+          report.rrno2 == '1' || report.rrno2 == '3' ? 'M' : 'F';
       _patientInfoModel.job = report.job;
       _patientInfoModel.ptNm = report.ptNm;
       _patientInfoModel.rrno1 = report.rrno1;
@@ -62,10 +67,16 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     state = await AsyncValue.guard(() async {
       if (_patientInfoModel.rrno1 != null) {
         if (gender == 'F') {
-          _patientInfoModel.rrno2 = '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0 ? '2' : '4';
+          _patientInfoModel.rrno2 =
+              '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0
+                  ? '2'
+                  : '4';
         }
         if (gender == 'M') {
-          _patientInfoModel.rrno2 = '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0 ? '1' : '3';
+          _patientInfoModel.rrno2 =
+              '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) > 0
+                  ? '1'
+                  : '3';
         }
         _patientInfoModel.gndr = gender;
       }
@@ -232,7 +243,8 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       case 1:
         if (value == null ||
             value.length != 6 ||
-            !RegExp(r'^\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$').hasMatch(value)) {
+            !RegExp(r'^\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$')
+                .hasMatch(value)) {
           return '생년월일을 정확히 입력하세요.';
         }
         break;
@@ -301,7 +313,8 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   late final UserRegRequestRepository _regRepository;
 }
 
-final patientRegProvider = AsyncNotifierProvider<PatientRegisterPresenter, PatientRegInfoModel>(
+final patientRegProvider =
+    AsyncNotifierProvider<PatientRegisterPresenter, PatientRegInfoModel>(
   () => PatientRegisterPresenter(),
 );
 final patientImageProvider = StateProvider<XFile?>((ref) => null);

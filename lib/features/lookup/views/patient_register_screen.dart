@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
@@ -81,7 +82,8 @@ class PatientRegScreen extends ConsumerWidget {
                 child: BottomSubmitBtn(
                   text: patientAttc != null ? '이전' : '취소',
                   onPressed: patientAttc != null
-                      ? () => ref.read(patientAttcProvider.notifier).state = null
+                      ? () =>
+                          ref.read(patientAttcProvider.notifier).state = null
                       : () => Navigator.pop(context),
                 ),
               ),
@@ -92,9 +94,15 @@ class PatientRegScreen extends ConsumerWidget {
                   onPressed: patientImage != null
                       ? patientAttc != null
                           ? _tryValidation()
-                              ? () => ref.read(patientRegProvider.notifier).registry()
+                              ? () => ref
+                                  .read(patientRegProvider.notifier)
+                                  .registry(ref
+                                      .read(agencyRegionProvider.notifier)
+                                      .list)
                               : null
-                          : () => ref.read(patientRegProvider.notifier).uploadImage(patientImage)
+                          : () => ref
+                              .read(patientRegProvider.notifier)
+                              .uploadImage(patientImage)
                       : null,
                 ),
               ),

@@ -26,6 +26,9 @@ class TalkRoomsProvider {
         }
         return list;
       }
+      if (response.statusCode == 404) {
+        return <TalkRoomsModel>[];
+      }
     } catch (exception) {
       if (kDebugMode) {
         print({
