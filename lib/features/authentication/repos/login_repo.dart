@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/models/auth_token_model.dart';
 import 'package:sbas/features/authentication/models/jwt_model.dart';
@@ -19,8 +18,8 @@ class LoginRepo {
         final jwt = JwtModel.fromJson(map);
         final name = jwt.token?.name ?? '';
 
-        if (kDebugMode) {
-          print(jwt.toJson());
+        if (jwt.token != null) {
+          userToken = jwt.token!;
         }
         if (name.isNotEmpty) {
           return await prefs.setString('id', name);
@@ -48,4 +47,5 @@ class LoginRepo {
   }
 }
 
+Token userToken = Token.empty();
 final authRepo = Provider((ref) => LoginRepo());
