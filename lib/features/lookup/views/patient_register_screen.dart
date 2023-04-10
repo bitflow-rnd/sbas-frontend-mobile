@@ -61,7 +61,13 @@ class PatientRegScreen extends ConsumerWidget {
               horizontal: 16,
               vertical: 14,
             ),
-            child: PatientRegTopNav(x: patientAttc != null ? -1 : 1),
+            child: PatientRegTopNav(
+              x: patientAttc != null ? -1 : 1,
+              items: const [
+                '역학조사서',
+                '환자 기본정보',
+              ],
+            ),
           ),
           Expanded(
             child: Padding(
