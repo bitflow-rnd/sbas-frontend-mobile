@@ -42,6 +42,17 @@ class Token {
     this.issuedAtTime,
     this.subject,
   });
+  Token.empty()
+      : name = '',
+        claimNames = [],
+        groups = [],
+        audience = '',
+        rawToken = '',
+        issuer = '',
+        tokenId = '',
+        expirationTime = 0,
+        issuedAtTime = 0,
+        subject = '';
 
   Token.fromJson(Map<String, dynamic> json) {
     if (json["name"] is String) {

@@ -4,6 +4,7 @@ import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_item_widg
 
 class PatientRegTopNav extends ConsumerWidget {
   const PatientRegTopNav({
+    required this.items,
     required this.x,
     super.key,
   });
@@ -46,19 +47,20 @@ class PatientRegTopNav extends ConsumerWidget {
             ),
           ),
         ),
-        const PatientTopNavtItem(
+        PatientTopNavtItem(
           x: 1,
           index: 1,
-          text: '역학조사서',
+          text: items[0],
         ),
-        const PatientTopNavtItem(
+        PatientTopNavtItem(
           x: -1,
           index: 2,
-          text: '환자 기본정보',
+          text: items[1],
         ),
       ],
     );
   }
 
   final double x;
+  final List<String> items;
 }

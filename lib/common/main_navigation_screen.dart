@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sbas/common/widgets/nav_tab.dart';
 import 'package:sbas/features/assign/views/screens/assign_bed_screen.dart';
@@ -44,7 +43,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
       body: Stack(
         children: [
           Offstage(
@@ -70,7 +68,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ],
       ),
       bottomNavigationBar: Container(
-        color: _selectedIndex == 0 ? Colors.black : Colors.white,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+          ),
+        ),
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom + 12,
         ),
@@ -82,16 +84,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               NavTab(
                 text: '홈',
                 isSelected: _selectedIndex == 0,
-                icon: FontAwesomeIcons.house,
-                selectedIcon: FontAwesomeIcons.house,
+                path: 'home',
                 onTap: () => _onTap(0),
                 selectedIndex: _selectedIndex,
               ),
               NavTab(
                 text: '병상배정',
                 isSelected: _selectedIndex == 1,
-                icon: FontAwesomeIcons.house,
-                selectedIcon: FontAwesomeIcons.house,
+                path: 'bed',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -105,8 +105,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               NavTab(
                 text: '환자조회',
                 isSelected: _selectedIndex == 2,
-                icon: FontAwesomeIcons.house,
-                selectedIcon: FontAwesomeIcons.house,
+                path: 'lookup',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -120,8 +119,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               NavTab(
                 text: '연락처/DM',
                 isSelected: _selectedIndex == 3,
-                icon: FontAwesomeIcons.message,
-                selectedIcon: FontAwesomeIcons.message,
+                path: 'message',
                 onTap: () => _onTap(3),
                 selectedIndex: _selectedIndex,
               ),
