@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
@@ -122,12 +123,13 @@ class PatientLookupScreen extends ConsumerWidget {
                                       ),
                                       color: Colors.lightBlue,
                                     ),
-                                    child: const Text(
+                                    child: const AutoSizeText(
                                       '내조직담당',
                                       style: TextStyle(
-                                        fontSize: 16,
                                         color: Colors.white,
                                       ),
+                                      maxLines: 1,
+                                      maxFontSize: 16,
                                     ),
                                   ),
                                 ),
@@ -323,30 +325,37 @@ class PatientLookupScreen extends ConsumerWidget {
                                                 ],
                                               ),
                                               Gaps.v4,
-                                              const Text(
+                                              const AutoSizeText(
                                                 '분당서울대병원',
                                                 style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 16,
                                                 ),
+                                                maxFontSize: 16,
+                                                maxLines: 1,
                                               ),
-                                              Gaps.v2,
-                                              Text(
+                                              Gaps.v4,
+                                              AutoSizeText(
                                                 getAddress(
                                                     patient.list?[index]),
                                                 style: const TextStyle(
                                                   color: Colors.grey,
-                                                  fontSize: 16,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
+                                                maxFontSize: 12,
+                                                maxLines: 1,
                                               ),
                                               Gaps.v2,
-                                              Text(
+                                              AutoSizeText(
                                                 getDateTimeFormat(patient
                                                     .list?[index].updtDttm),
                                                 style: const TextStyle(
                                                   color: Colors.grey,
-                                                  fontSize: 16,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
+                                                maxFontSize: 16,
+                                                maxLines: 1,
                                               ),
                                               Container(
                                                 height: 32,
@@ -375,12 +384,13 @@ class PatientLookupScreen extends ConsumerWidget {
                                                           BorderRadius.circular(
                                                               6),
                                                     ),
-                                                    child: const Text(
+                                                    child: const AutoSizeText(
                                                       '#중증',
                                                       style: TextStyle(
                                                         color: Colors.grey,
-                                                        fontSize: 12,
                                                       ),
+                                                      maxFontSize: 12,
+                                                      maxLines: 1,
                                                     ),
                                                   ),
                                                   separatorBuilder:

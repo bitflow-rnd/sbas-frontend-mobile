@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sbas/common/widgets/nav_tab.dart';
-import 'package:sbas/features/assign/views/screens/assign_bed_screen.dart';
-import 'package:sbas/features/dashboard/views/screens/dashboard_screen.dart';
+import 'package:sbas/features/assign/views/assign_bed_screen.dart';
+import 'package:sbas/features/dashboard/views/dashboard_screen.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 import 'package:sbas/features/messages/views/direct_message_screen.dart';
 
@@ -70,7 +70,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey,
+            color: Colors.grey.shade200,
           ),
         ),
         padding: EdgeInsets.only(

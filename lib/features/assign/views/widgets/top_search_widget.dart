@@ -92,6 +92,7 @@ class _TopSearchState extends State<TopSearch> {
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     value: _currentSelectedItem,
                     isDense: true,
