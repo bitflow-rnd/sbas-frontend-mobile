@@ -11,21 +11,26 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         elevation: 1,
-        title: const Text(
-          'LOGO',
+        leading: Image.asset(
+          'assets/home/home_logo.png',
+          alignment: Alignment.topLeft,
         ),
+        leadingWidth: 256,
         actions: [
           IconButton(
             onPressed: () {},
             icon: const Icon(
               Icons.notifications_none,
+              color: Color(0xFF696969),
             ),
           ),
           IconButton(
             onPressed: () {},
             icon: const Icon(
               Icons.menu,
+              color: Color(0xFF696969),
             ),
           ),
         ],
@@ -75,6 +80,7 @@ class DashboardScreen extends ConsumerWidget {
                               right: 6,
                               bottom: 6,
                             ),
+                            path: 'request',
                           ),
                           Dashbord(
                             title: '승인',
@@ -82,6 +88,7 @@ class DashboardScreen extends ConsumerWidget {
                               left: 6,
                               bottom: 6,
                             ),
+                            path: 'assign',
                           ),
                         ],
                       ),
@@ -96,6 +103,7 @@ class DashboardScreen extends ConsumerWidget {
                               top: 6,
                               right: 6,
                             ),
+                            path: 'transfer',
                           ),
                           Dashbord(
                             title: '입원',
@@ -103,6 +111,7 @@ class DashboardScreen extends ConsumerWidget {
                               top: 6,
                               left: 6,
                             ),
+                            path: 'hospitalization',
                           ),
                         ],
                       ),

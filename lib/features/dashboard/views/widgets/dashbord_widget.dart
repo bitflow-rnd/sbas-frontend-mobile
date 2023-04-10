@@ -6,6 +6,7 @@ class Dashbord extends StatelessWidget {
     super.key,
     required this.title,
     required this.edge,
+    required this.path,
   });
 
   @override
@@ -35,12 +36,21 @@ class Dashbord extends StatelessWidget {
           child: Stack(
             children: [
               Center(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/home/${path}_icon.png',
+                      height: 76,
+                    ),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Positioned(
@@ -74,6 +84,6 @@ class Dashbord extends StatelessWidget {
     );
   }
 
-  final String title;
+  final String title, path;
   final EdgeInsets edge;
 }
