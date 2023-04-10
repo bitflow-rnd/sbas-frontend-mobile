@@ -1,4 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/dashboard/views/widgets/dashbord_widget.dart';
@@ -11,6 +13,11 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         backgroundColor: Colors.white,
         elevation: 1,
         leading: Image.asset(
@@ -45,21 +52,22 @@ class DashboardScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            AutoSizeText(
               '${prefs.getString('id')}님 안녕하세요!',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 24,
               ),
+              maxFontSize: 24,
+              maxLines: 1,
             ),
             Gaps.v8,
-            const Text(
+            const AutoSizeText(
               '병상배정 통합연계시스템에 오신걸 환영합니다.\n신속한 병상배정 서비스를 경험해보세요.',
               style: TextStyle(
-                fontSize: 18,
                 fontWeight: FontWeight.normal,
                 color: Colors.grey,
               ),
+              maxFontSize: 18,
             ),
             Gaps.v16,
             Expanded(
@@ -123,17 +131,22 @@ class DashboardScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                const AutoSizeText(
                   '최근 활동',
                   style: TextStyle(
-                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
+                  maxFontSize: 24,
+                  maxLines: 1,
                 ),
                 TextButton(
                   onPressed: () {},
-                  child: const Text(
+                  child: const AutoSizeText(
                     '더보기',
+                    style: TextStyle(
+                      letterSpacing: -1,
+                    ),
+                    maxFontSize: 12,
                   ),
                 ),
               ],

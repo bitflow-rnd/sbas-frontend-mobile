@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -43,12 +44,13 @@ class Dashbord extends StatelessWidget {
                       'assets/home/${path}_icon.png',
                       height: 76,
                     ),
-                    Text(
+                    AutoSizeText(
                       title,
                       style: const TextStyle(
-                        fontSize: 20,
                         fontWeight: FontWeight.w600,
                       ),
+                      maxFontSize: 20,
+                      maxLines: 1,
                     ),
                   ],
                 ),
@@ -67,13 +69,14 @@ class Dashbord extends StatelessWidget {
                     vertical: 6,
                     horizontal: 12,
                   ),
-                  child: const Text(
+                  child: const AutoSizeText(
                     '25',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
                       fontWeight: FontWeight.w400,
                     ),
+                    maxFontSize: 16,
+                    maxLines: 1,
                   ),
                 ),
               ),

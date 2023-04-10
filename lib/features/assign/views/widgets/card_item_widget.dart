@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:sbas/constants/gaps.dart';
 
@@ -54,13 +55,14 @@ class CardItem extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(
+                        AutoSizeText(
                           '$patientName ($patientSex/$patientAge세) ',
                           style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 22,
                           ),
+                          maxLines: 1,
+                          maxFontSize: 22,
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -73,30 +75,34 @@ class CardItem extends StatelessWidget {
                               30,
                             ),
                           ),
-                          child: Text(
+                          child: AutoSizeText(
                             symbol,
                             style: TextStyle(
                               color: color,
                               fontWeight: FontWeight.bold,
                             ),
+                            maxLines: 1,
+                            maxFontSize: 18,
                           ),
                         ),
                       ],
                     ),
                     Gaps.v4,
-                    const Text(
+                    const AutoSizeText(
                       '코로나바이러스 감염증-19',
                       style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 18,
                       ),
+                      maxLines: 1,
+                      maxFontSize: 18,
                     ),
-                    const Text(
+                    const AutoSizeText(
                       '서울특별시 구로구 구로동 디지털로 86가길 32',
                       style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 18,
                       ),
+                      maxLines: 1,
+                      maxFontSize: 18,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -115,7 +121,7 @@ class CardItem extends StatelessWidget {
                               ),
                               color: Colors.grey.shade100,
                             ),
-                            child: const Text(
+                            child: const AutoSizeText(
                               '#임산부',
                               style: TextStyle(
                                 color: Colors.grey,
@@ -133,12 +139,13 @@ class CardItem extends StatelessWidget {
             Positioned(
               top: 2,
               right: 4,
-              child: Text(
+              child: AutoSizeText(
                 '3시간전',
                 style: TextStyle(
                   color: Colors.grey.shade400,
-                  fontSize: 16,
                 ),
+                maxLines: 1,
+                maxFontSize: 16,
               ),
             ),
           ],
