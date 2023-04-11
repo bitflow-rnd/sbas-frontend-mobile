@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/router.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -32,17 +33,20 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
-      routerConfig: ref.watch(routerProvider),
-      debugShowCheckedModeBanner: false,
-      title: '스마트병상배정시스템',
-      /*
-        TODO: remove this line if you are using a theme.
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      builder: (BuildContext context, Widget) => MaterialApp.router(
+        routerConfig: ref.watch(routerProvider),
+        debugShowCheckedModeBanner: false,
+        title: '스마트병상배정시스템',
+        /*
+          TODO: remove this line if you are using a theme.
 
-        themeMode: ThemeMode.system,
-      */
-      theme: Bitflow.getTheme(),
-      darkTheme: Bitflow.getDarkTheme(),
+          themeMode: ThemeMode.system,
+        */
+        theme: Bitflow.getTheme(),
+        darkTheme: Bitflow.getDarkTheme(),
+      ),
     );
   }
 }
