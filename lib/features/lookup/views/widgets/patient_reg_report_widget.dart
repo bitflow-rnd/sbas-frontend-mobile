@@ -21,10 +21,29 @@ class PatientRegReport extends ConsumerWidget {
         children: [
           Container(
             alignment: Alignment.topLeft,
-            child: const Text(
-              '역학조사서 업로드(선택)',
-              style: TextStyle(
-                fontSize: 18,
+            child: RichText(
+              text: TextSpan(
+                text: '역학조사서 업로드 ',
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+                children: [
+                  WidgetSpan(
+                    child: GestureDetector(
+                      onTap: () => ref
+                          .read(patientIsUploadProvider.notifier)
+                          .state = !ref.read(patientIsUploadProvider),
+                      child: Icon(
+                        ref.watch(patientIsUploadProvider)
+                            ? Icons.cancel_outlined
+                            : Icons.check_circle_outline_rounded,
+                        size: 20,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -59,9 +78,12 @@ class PatientRegReport extends ConsumerWidget {
                       top: 0,
                       right: 0,
                       child: IconButton(
-                        onPressed: () => ref
-                            .read(patientImageProvider.notifier)
-                            .state = null,
+                        onPressed: () {
+                          ref.read(patientImageProvider.notifier).state = null;
+                          ref.read(patientAttcProvider.notifier).state = null;
+                          ref.read(patientIsUploadProvider.notifier).state =
+                              true;
+                        },
                         icon: Icon(
                           Icons.cancel_sharp,
                           color: Colors.grey.shade700,
