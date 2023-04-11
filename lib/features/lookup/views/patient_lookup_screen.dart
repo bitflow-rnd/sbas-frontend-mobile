@@ -19,7 +19,7 @@ class PatientLookupScreen extends ConsumerWidget {
         resizeToAvoidBottomInset: false,
         appBar: Bitflow.getAppBar(
           '환자 목록',
-          false,
+          automaticallyImplyLeading,
           0,
         ),
         body: GestureDetector(

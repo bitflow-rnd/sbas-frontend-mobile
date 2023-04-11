@@ -7,6 +7,7 @@ import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 class DirectMessageScreen extends ConsumerWidget {
   const DirectMessageScreen({
     super.key,
+    required this.automaticallyImplyLeading,
   });
 
   @override
@@ -20,7 +21,7 @@ class DirectMessageScreen extends ConsumerWidget {
     return Scaffold(
       appBar: Bitflow.getAppBar(
         '연락처/DM',
-        false,
+        automaticallyImplyLeading,
         0.5,
       ),
       body: GestureDetector(
@@ -58,6 +59,7 @@ class DirectMessageScreen extends ConsumerWidget {
     );
   }
 
+  final bool automaticallyImplyLeading;
   static String routeName = 'directMessage';
   static String routeUrl = '/directMessage';
 }

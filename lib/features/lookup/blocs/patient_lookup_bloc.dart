@@ -11,16 +11,16 @@ class PatientLookupBloc extends AsyncNotifier<PatientInfoModel> {
   FutureOr<PatientInfoModel> build() async {
     _patientRepository = ref.read(patientRepoProvider);
 
-    return await _patientRepository.lookupPatientInfo();
+    return await refresh() ?? await _patientRepository.lookupPatientInfo();
   }
 
-  Future<void> refresh() async {
+  Future<PatientInfoModel?> refresh() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       return await _patientRepository.lookupPatientInfo();
     });
     if (state.hasError) {}
-    if (state.hasValue) {}
+    return state.hasValue ? state.value : null;
   }
 
   late final PatientRepository _patientRepository;

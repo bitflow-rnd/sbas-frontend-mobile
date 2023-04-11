@@ -12,6 +12,9 @@ class PatientRepository {
   Future<dynamic> registerPatientInfo(Map<String, dynamic> map) async =>
       await _patientProvider.registerPatientInfo(toJson(map));
 
+  Future<dynamic> amendPatientInfo(String id, Map<String, dynamic> map) async =>
+      await _patientProvider.amendPatientInfo(id, toJson(map));
+
   Future<Map<String, dynamic>> getOpticalCharacterRecognition(
     XFile image,
   ) async =>
