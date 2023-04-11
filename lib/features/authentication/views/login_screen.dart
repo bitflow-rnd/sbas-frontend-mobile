@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/views/login_widgets/login_form_widget.dart';
@@ -22,7 +23,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Bitflow.getAppBar(
-        '로그인',
+        '',
         false,
         0,
       ),
@@ -30,35 +31,18 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 36),
+            padding: EdgeInsets.symmetric(horizontal: 36.w),
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 12,
-                  ),
-                  height: 175,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/login_logo.png',
-                      ),
-                    ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 36.w),
+                  child: Image.asset(
+                    'assets/login_logo.png',
+                    height: 168.h,
                   ),
                 ),
                 const LoginForm(),
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 20,
-                  ),
-                  color: Colors.amber,
-                  child: const Text(
-                    'recaptcha',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
+                Gaps.v5,
                 const SubmitButton(),
                 Gaps.v24,
                 Row(
