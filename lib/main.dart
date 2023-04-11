@@ -35,15 +35,10 @@ class App extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ScreenUtilInit(
       designSize: const Size(360, 690),
-      builder: (BuildContext context, Widget) => MaterialApp.router(
+      builder: (context, _) => MaterialApp.router(
         routerConfig: ref.watch(routerProvider),
         debugShowCheckedModeBanner: false,
         title: '스마트병상배정시스템',
-        /*
-          TODO: remove this line if you are using a theme.
-
-          themeMode: ThemeMode.system,
-        */
         theme: Bitflow.getTheme(),
         darkTheme: Bitflow.getDarkTheme(),
       ),
