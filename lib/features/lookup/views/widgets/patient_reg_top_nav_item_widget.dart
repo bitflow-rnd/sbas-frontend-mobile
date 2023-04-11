@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 
 class PatientTopNavtItem extends ConsumerWidget {
   const PatientTopNavtItem({
+    required this.position,
     super.key,
     required this.x,
     required this.index,
     required this.text,
   });
-  final double x;
+  final double x, position;
   final int index;
   final String text;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final width = MediaQuery.of(context).size.width * 0.55;
-    final position = ref.watch(patientAttcProvider) == null ? 1 : -1;
 
     return Align(
       heightFactor: 1,
