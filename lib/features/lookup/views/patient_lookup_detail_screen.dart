@@ -146,14 +146,19 @@ class PatientLookupDetailScreen extends ConsumerWidget {
               child: BottomPositionedSubmitButton(
                 color: Colors.green,
                 text: '수정',
-                function: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PatientRegScreen(
-                      patient: patient,
+                function: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PatientRegScreen(
+                        patient: patient,
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
+                },
               ),
             ),
           ],

@@ -29,19 +29,21 @@ Future main() async {
 }
 
 class App extends ConsumerWidget {
-  const App({super.key});
-
+  const App({
+    super.key,
+  });
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ScreenUtilInit(
-      designSize: const Size(360, 690),
-      builder: (context, _) => MaterialApp.router(
-        routerConfig: ref.watch(routerProvider),
-        debugShowCheckedModeBanner: false,
-        title: '스마트병상배정시스템',
-        theme: Bitflow.getTheme(),
-        darkTheme: Bitflow.getDarkTheme(),
-      ),
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) => ScreenUtilInit(
+        designSize: const Size(
+          360,
+          690,
+        ),
+        builder: (context, _) => MaterialApp.router(
+          routerConfig: ref.watch(routerProvider),
+          debugShowCheckedModeBanner: false,
+          title: '스마트병상배정시스템',
+          theme: Bitflow.getTheme(),
+          darkTheme: Bitflow.getDarkTheme(),
+        ),
+      );
 }

@@ -139,6 +139,7 @@ class PatientRegScreen extends ConsumerWidget {
                               ? () => ref
                                   .read(patientRegProvider.notifier)
                                   .registry(
+                                      patient?.id,
                                       ref
                                           .read(agencyRegionProvider.notifier)
                                           .list,
@@ -148,9 +149,15 @@ class PatientRegScreen extends ConsumerWidget {
                               ? () => ref
                                   .read(patientRegProvider.notifier)
                                   .uploadImage(patientImage)
-                              : () => ref
-                                  .read(patientAttcProvider.notifier)
-                                  .state = '')
+                              : () {
+                                  if (patient != null) {
+                                    ref
+                                        .read(patientRegProvider.notifier)
+                                        .overrideInfo(patient!);
+                                  }
+                                  ref.read(patientAttcProvider.notifier).state =
+                                      '';
+                                })
                       : null,
                 ),
               ),

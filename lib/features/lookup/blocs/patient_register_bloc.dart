@@ -9,6 +9,7 @@ import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
+import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
@@ -22,7 +23,8 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     return _patientInfoModel;
   }
 
-  Future<void> registry(List<BaseCodeModel> list, BuildContext context) async {
+  Future<void> registry(
+      String? id, List<BaseCodeModel> list, BuildContext context) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       String region = _patientInfoModel.dstr1Cd ?? '',
@@ -43,11 +45,14 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       _patientInfoModel.addr =
           '$region $county ${_patientInfoModel.addr?.trim()}';
 
-      final res = await _patientRepository
-          .registerPatientInfo(_patientInfoModel.toJson());
-
-      if (kDebugMode) {
-        print(res['result']);
+      if (id == null) {
+        await _patientRepository
+            .registerPatientInfo(_patientInfoModel.toJson());
+      } else {
+        await _patientRepository.amendPatientInfo(
+          id,
+          _patientInfoModel.toJson(),
+        );
       }
       return _patientInfoModel;
     });
@@ -77,7 +82,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         );
         _patientInfoModel.addr = report.baseAddr;
         _patientInfoModel.attcId = attcId;
-        _patientInfoModel.dethYn = report.dethYn;
         _patientInfoModel.gndr =
             report.rrno2 == '1' || report.rrno2 == '3' ? 'M' : 'F';
         _patientInfoModel.job = report.job;
@@ -168,14 +172,22 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     if (state.hasValue) {}
   }
 
-  String? findPatientAddress(List<BaseCodeModel> list, String? findValue) {
-    if (list.any((element) => element.id?.cdId == findValue)) {
-      return list.firstWhere((e) => e.id?.cdId == findValue).cdNm;
-    }
-    if (list.any((element) => element.cdNm == findValue)) {
-      return findValue;
-    }
-    return null;
+  void overrideInfo(Patient patient) {
+    _patientInfoModel.addr = patient.addr;
+    _patientInfoModel.dethYn = patient.dethYn;
+    _patientInfoModel.gndr = patient.gndr;
+    _patientInfoModel.job = patient.job;
+    _patientInfoModel.ptNm = patient.ptNm;
+    _patientInfoModel.rrno1 = patient.rrno1;
+    _patientInfoModel.rrno2 = patient.rrno2;
+    _patientInfoModel.dstr1Cd = patient.dstr1Cd;
+    _patientInfoModel.dstr2Cd = patient.dstr2Cd;
+    _patientInfoModel.mpno = patient.mpno;
+    _patientInfoModel.natiCd = patient.natiCd;
+    _patientInfoModel.telno = patient.telno;
+    _patientInfoModel.attcId = patient.attcId;
+    _patientInfoModel.nokNm = patient.nokNm;
+    _patientInfoModel.picaVer = patient.picaVer;
   }
 
   void setTextEditingController(int index, String? value) {
@@ -230,6 +242,16 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       case 4:
       case 8:
         return 9;
+    }
+    return null;
+  }
+
+  String? findPatientAddress(List<BaseCodeModel> list, String? findValue) {
+    if (list.any((element) => element.id?.cdId == findValue)) {
+      return list.firstWhere((e) => e.id?.cdId == findValue).cdNm;
+    }
+    if (list.any((element) => element.cdNm == findValue)) {
+      return findValue;
     }
     return null;
   }

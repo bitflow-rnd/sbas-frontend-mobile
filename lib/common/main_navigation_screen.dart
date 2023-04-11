@@ -63,7 +63,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 3,
-            child: const DirectMessageScreen(),
+            child: const DirectMessageScreen(
+              automaticallyImplyLeading: true,
+            ),
           ),
         ],
       ),
@@ -120,7 +122,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 text: '연락처/DM',
                 isSelected: _selectedIndex == 3,
                 path: 'message',
-                onTap: () => _onTap(3),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DirectMessageScreen(
+                      automaticallyImplyLeading: false,
+                    ),
+                  ),
+                ),
                 selectedIndex: _selectedIndex,
               ),
             ],
