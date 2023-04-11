@@ -48,11 +48,13 @@ class PatientRegTopNav extends ConsumerWidget {
           ),
         ),
         PatientTopNavtItem(
+          position: x,
           x: 1,
           index: 1,
           text: items[0],
         ),
         PatientTopNavtItem(
+          position: x,
           x: -1,
           index: 2,
           text: items[1],

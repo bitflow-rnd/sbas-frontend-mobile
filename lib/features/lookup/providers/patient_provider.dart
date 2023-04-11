@@ -29,6 +29,31 @@ class PatientProvider {
     throw ArgumentError();
   }
 
+  Future<dynamic> getAllocationHistory(String id) async {
+    final client = Dio();
+
+    try {
+      client.options.contentType = 'application/json';
+      client.options.headers = authToken;
+
+      final res = await client.getUri(
+        Uri.parse('$_baseUrl/basicinfo/$id'),
+      );
+      if (res.statusCode == 200) {
+        return res.data['result'];
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
   Future<dynamic> upldepidreport(MultipartFile file) async {
     final client = Dio();
 

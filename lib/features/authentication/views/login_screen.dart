@@ -23,7 +23,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Bitflow.getAppBar(
-        '',
+        '로그인 ',
         false,
         0,
       ),
@@ -31,18 +31,22 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 36.w),
+            padding: EdgeInsets.symmetric(
+              horizontal: 36.w,
+            ),
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 36.w),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 36.w,
+                  ),
                   child: Image.asset(
                     'assets/login_logo.png',
                     height: 168.h,
                   ),
                 ),
                 const LoginForm(),
-                Gaps.v5,
+                Gaps.v48,
                 const SubmitButton(),
                 Gaps.v24,
                 Row(
