@@ -68,26 +68,32 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final attcId = await _regRepository.uploadImage(imageFile);
+
       ref.read(patientAttcProvider.notifier).state = attcId;
 
-      final report = EpidemiologicalReportModel.fromJson(
-          await _patientRepository.getOpticalCharacterRecognition(imageFile));
-
-      _patientInfoModel.addr = report.baseAddr;
-      _patientInfoModel.attcId = attcId;
-      _patientInfoModel.dethYn = report.dethYn;
-      _patientInfoModel.gndr =
-          report.rrno2 == '1' || report.rrno2 == '3' ? 'M' : 'F';
-      _patientInfoModel.job = report.job;
-      _patientInfoModel.ptNm = report.ptNm;
-      _patientInfoModel.rrno1 = report.rrno1;
-      _patientInfoModel.rrno2 = report.rrno2;
-      _patientInfoModel.dethYn = report.dethYn == '사망' ? 'Y' : 'N';
-      _patientInfoModel.dstr1Cd = report.dstr1Cd;
-      _patientInfoModel.dstr2Cd = report.dstr2Cd;
-      _patientInfoModel.mpno = report.telno;
-      _patientInfoModel.natiCd = 'KR';
-
+      try {
+        final report = EpidemiologicalReportModel.fromJson(
+          await _patientRepository.getOpticalCharacterRecognition(imageFile),
+        );
+        _patientInfoModel.addr = report.baseAddr;
+        _patientInfoModel.attcId = attcId;
+        _patientInfoModel.dethYn = report.dethYn;
+        _patientInfoModel.gndr =
+            report.rrno2 == '1' || report.rrno2 == '3' ? 'M' : 'F';
+        _patientInfoModel.job = report.job;
+        _patientInfoModel.ptNm = report.ptNm;
+        _patientInfoModel.rrno1 = report.rrno1;
+        _patientInfoModel.rrno2 = report.rrno2;
+        _patientInfoModel.dethYn = report.dethYn == '사망' ? 'Y' : 'N';
+        _patientInfoModel.dstr1Cd = report.dstr1Cd;
+        _patientInfoModel.dstr2Cd = report.dstr2Cd;
+        _patientInfoModel.mpno = report.telno;
+        _patientInfoModel.natiCd = 'KR';
+      } catch (exception) {
+        if (kDebugMode) {
+          print(exception);
+        }
+      }
       return _patientInfoModel;
     });
     if (state.hasError) {}
@@ -365,3 +371,4 @@ final patientRegProvider =
 );
 final patientImageProvider = StateProvider<XFile?>((ref) => null);
 final patientAttcProvider = StateProvider<String?>((ref) => null);
+final patientIsUploadProvider = StateProvider<bool>((ref) => true);

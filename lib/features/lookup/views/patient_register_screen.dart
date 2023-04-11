@@ -4,14 +4,16 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
+import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 
 class PatientRegScreen extends ConsumerWidget {
   PatientRegScreen({
-    required this.isNewPatient,
+    this.patient,
     super.key,
   });
   @override
@@ -19,6 +21,7 @@ class PatientRegScreen extends ConsumerWidget {
     final width = MediaQuery.of(context).size.width;
     final patientImage = ref.watch(patientImageProvider);
     final patientAttc = ref.watch(patientAttcProvider);
+    final patientIsUpload = ref.watch(patientIsUploadProvider);
 
     return Scaffold(
       appBar: Bitflow.getAppBar(
@@ -40,7 +43,7 @@ class PatientRegScreen extends ConsumerWidget {
                   height: 42,
                 ),
                 Gaps.h8,
-                isNewPatient
+                patient == null
                     ? const Text(
                         '신규 환자 등록',
                         style: TextStyle(
@@ -48,7 +51,37 @@ class PatientRegScreen extends ConsumerWidget {
                           fontSize: 22,
                         ),
                       )
-                    : getPatientInfo(),
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: '${patient?.ptNm}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: '[${getPatientInfo(patient!)}]',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                    letterSpacing: -0.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Gaps.v4,
+                          const Text(
+                            '#temp',
+                            style: TextStyle(
+                              color: Colors.lightBlue,
+                            ),
+                          ),
+                        ],
+                      ),
               ],
             ),
           ),
@@ -88,8 +121,11 @@ class PatientRegScreen extends ConsumerWidget {
                 child: BottomSubmitBtn(
                   text: patientAttc != null ? '이전' : '취소',
                   onPressed: patientAttc != null
-                      ? () =>
-                          ref.read(patientAttcProvider.notifier).state = null
+                      ? () {
+                          ref.read(patientIsUploadProvider.notifier).state =
+                              true;
+                          ref.read(patientAttcProvider.notifier).state = null;
+                        }
                       : () => Navigator.pop(context),
                 ),
               ),
@@ -97,7 +133,7 @@ class PatientRegScreen extends ConsumerWidget {
                 width: width * 0.5,
                 child: BottomSubmitBtn(
                   text: '다음',
-                  onPressed: patientImage != null
+                  onPressed: patientImage != null || !patientIsUpload
                       ? patientAttc != null
                           ? _tryValidation()
                               ? () => ref
@@ -108,9 +144,13 @@ class PatientRegScreen extends ConsumerWidget {
                                           .list,
                                       context)
                               : null
-                          : () => ref
-                              .read(patientRegProvider.notifier)
-                              .uploadImage(patientImage)
+                          : (patientImage != null
+                              ? () => ref
+                                  .read(patientRegProvider.notifier)
+                                  .uploadImage(patientImage)
+                              : () => ref
+                                  .read(patientAttcProvider.notifier)
+                                  .state = '')
                       : null,
                 ),
               ),
@@ -130,10 +170,6 @@ class PatientRegScreen extends ConsumerWidget {
     return isValid;
   }
 
-  Widget getPatientInfo() {
-    return const SizedBox();
-  }
-
   final formKey = GlobalKey<FormState>();
-  final bool isNewPatient;
+  final Patient? patient;
 }

@@ -5,6 +5,7 @@ class BottomPositionedSubmitButton extends ConsumerWidget {
   const BottomPositionedSubmitButton({
     required this.function,
     required this.text,
+    this.color,
     super.key,
   });
   @override
@@ -16,7 +17,7 @@ class BottomPositionedSubmitButton extends ConsumerWidget {
             vertical: 16,
           ),
           decoration: BoxDecoration(
-            color: Colors.blueAccent,
+            color: color ?? Colors.blueAccent,
             borderRadius: BorderRadius.circular(
               6,
             ),
@@ -32,5 +33,6 @@ class BottomPositionedSubmitButton extends ConsumerWidget {
         ),
       );
   final String text;
+  final Color? color;
   final void Function() function;
 }

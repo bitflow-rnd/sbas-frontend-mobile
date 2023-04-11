@@ -5,6 +5,7 @@ import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 
 class PatientLookupDetailScreen extends ConsumerWidget {
@@ -14,7 +15,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
-        appBar: Bitflow.getAppBar('환자등록', true, 0),
+        appBar: Bitflow.getAppBar('환자  등록', true, 0),
         body: Stack(
           children: [
             Column(
@@ -94,35 +95,37 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      for (int i = 0; i < list.length; i++)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 22,
-                            vertical: 14,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '${i + 1}.${list[i]}',
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        for (int i = 0; i < list.length; i++)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 22,
+                              vertical: 14,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '${i + 1}.${list[i]}',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                getConvertPatientInfo(i, patient),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                ),
-                              )
-                            ],
+                                Text(
+                                  getConvertPatientInfo(i, patient),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -132,8 +135,25 @@ class PatientLookupDetailScreen extends ConsumerWidget {
               left: 18,
               right: 18,
               child: BottomPositionedSubmitButton(
-                text: '수정',
+                text: '다음',
                 function: () {},
+              ),
+            ),
+            Positioned(
+              bottom: 46 + 18 + 10,
+              left: 18,
+              right: 18,
+              child: BottomPositionedSubmitButton(
+                color: Colors.green,
+                text: '수정',
+                function: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PatientRegScreen(
+                      patient: patient,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
