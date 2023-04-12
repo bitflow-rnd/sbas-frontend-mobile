@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
-import 'package:sbas/features/authentication/views/user_reg_widgets/top_nav_req_item_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
+import 'package:sbas/features/lookup/views/widgets/hospital_bed_request_nav_item.dart';
 
-class TopNavbarRequest extends ConsumerWidget {
-  const TopNavbarRequest({
+class HospitalBedRequestNav extends ConsumerWidget {
+  HospitalBedRequestNav({
     super.key,
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final width = MediaQuery.of(context).size.width - 32;
-    final x = ref.watch(regIndexProvider);
+    final width = (256 + 64).w;
 
     return Stack(
       children: [
@@ -30,14 +30,14 @@ class TopNavbarRequest extends ConsumerWidget {
         AnimatedAlign(
           heightFactor: 14,
           alignment: Alignment(
-            x,
+            0.85 * ref.watch(orderOfRequestProvider),
             0,
           ),
           duration: const Duration(
             milliseconds: 500,
           ),
           child: Container(
-            width: width * 0.3,
+            width: width * 0.35,
             height: 4,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
@@ -47,22 +47,19 @@ class TopNavbarRequest extends ConsumerWidget {
             ),
           ),
         ),
-        const TopNavRequestItem(
-          x: -1,
-          index: 1,
-          text: '본인인증',
-        ),
-        const TopNavRequestItem(
-          x: 0,
-          index: 2,
-          text: '업무역할',
-        ),
-        const TopNavRequestItem(
-          x: 1,
-          index: 3,
-          text: '소속기관',
-        ),
+        for (int i = 0; i < _titles.length; i++)
+          HospitalBedRequestNavItem(
+            index: i + 3,
+            text: _titles[i],
+            x: i - 1,
+          ),
       ],
     );
   }
+
+  final _titles = [
+    '감염병정보',
+    '중증정보',
+    '출발지정보',
+  ];
 }

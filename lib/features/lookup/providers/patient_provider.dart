@@ -143,5 +143,33 @@ class PatientProvider {
     throw ArgumentError();
   }
 
+  Future<dynamic> getEpidemiologicalReport(String attcId) async {
+    final client = Dio();
+
+    try {
+      client.options.contentType = 'application/json';
+      client.options.headers = authToken;
+
+      final res = await client.getUri(
+        Uri.parse('$_baseUrl/read-epidreport/$attcId'),
+      );
+      if (res.statusCode == 200) {
+        if (kDebugMode) {
+          print(res.data);
+        }
+        return res.data['result'];
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/private/patient';
 }
