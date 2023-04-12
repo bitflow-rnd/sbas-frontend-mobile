@@ -18,6 +18,9 @@ class PatientRepository {
   Future<dynamic> getAllocationHistory(String id) async =>
       await _patientProvider.getAllocationHistory(id);
 
+  Future<dynamic> getEpidemiologicalReport(String attcId) async =>
+      await _patientProvider.getEpidemiologicalReport(attcId);
+
   Future<Map<String, dynamic>> getOpticalCharacterRecognition(
     XFile image,
   ) async =>
@@ -33,3 +36,4 @@ class PatientRepository {
 final patientRepoProvider = Provider(
   (ref) => PatientRepository(),
 );
+late String attcId;

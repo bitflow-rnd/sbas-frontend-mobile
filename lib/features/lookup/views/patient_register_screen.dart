@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
-import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
-import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
 class PatientRegScreen extends ConsumerWidget {
   PatientRegScreen({
@@ -31,59 +30,8 @@ class PatientRegScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
-            child: Row(
-              children: [
-                Image.asset(
-                  'assets/patient.png',
-                  height: 42,
-                ),
-                Gaps.h8,
-                patient == null
-                    ? const Text(
-                        '신규 환자 등록',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                        ),
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                              text: '${patient?.ptNm}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: '[${getPatientInfo(patient!)}]',
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                    letterSpacing: -0.5,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Gaps.v4,
-                          const Text(
-                            '#temp',
-                            style: TextStyle(
-                              color: Colors.lightBlue,
-                            ),
-                          ),
-                        ],
-                      ),
-              ],
-            ),
+          PatientTopInfo(
+            patient: patient,
           ),
           const Divider(
             color: Colors.grey,
