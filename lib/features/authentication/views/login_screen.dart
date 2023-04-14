@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/common/Common.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/login_widgets/login_form_widget.dart';
 import 'package:sbas/features/authentication/views/login_widgets/submit_button_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_req_screen.dart';
@@ -22,8 +24,9 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: Bitflow.getAppBar(
-        '로그인 ',
+        '',
         false,
         0,
       ),
@@ -46,36 +49,66 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                   ),
                 ),
                 const LoginForm(),
-                Gaps.v48,
-                const SubmitButton(),
                 Gaps.v24,
+                const SubmitButton(),
+                Gaps.v20,
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
+                      ),
                       onPressed: () => findId(context),
-                      child: const Text(
+                      child: Text(
                         '아이디 찾기',
+                        style: TextStyle(
+                          fontSize: 12.h,
+                          color: Palette.greyText,
+                        ),
                       ),
                     ),
+                    Container(
+                      height: 10.h,
+                      width: 1.2.w,
+                      color: Palette.greyText,
+                    ),
                     TextButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
+                      ),
                       onPressed: () => setPassword(context),
-                      child: const Text(
+                      child: Text(
                         '비밀번호 재설정',
+                        style: TextStyle(
+                          fontSize: 12.h,
+                          color: Palette.greyText,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 Gaps.v48,
                 TextButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
+                  ),
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const UserRegisterRequestScreen(),
                     ),
                   ),
-                  child: const Text(
-                    '사용자 등록 요청',
+                  child: Row(
+                    children: [
+                      Text(
+                        '사용자 등록 요청 >',
+                        style: TextStyle(
+                          fontSize: 12.h,
+                          color: Palette.greyText,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
