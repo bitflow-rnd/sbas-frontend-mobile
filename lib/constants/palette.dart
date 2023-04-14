@@ -8,4 +8,14 @@ class Palette {
   static const Color facebookColor = Color(0xFF3B5999);
   static const Color googleColor = Color(0xFFDE4B39);
   static const Color backgroundColor = Color(0xFFECF3F9);
+
+  static const Color diabledGrey = Color(0xFFE5E5E5);
+
+  static const Color primary = Color(0xFF538ef5);
+  static const Color primaryLight = Color(0XFF4caff1);
+  static const Color primaryErr = Color(0XFFff666e);
+  static Color primaryErrLight = const Color(0XFFff666e).withOpacity(0.16);
+
+  static const Color greyText = Color(0XFF676a7a);
+  static Color greyText_60 = const Color(0XFF676a7a).withOpacity(0.6);
 }

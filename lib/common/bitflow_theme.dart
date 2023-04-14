@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Bitflow {
+  static final defaultRadius = 9.2.r; //border radius
   static ThemeData getTheme() {
     return ThemeData(
       appBarTheme: const AppBarTheme(

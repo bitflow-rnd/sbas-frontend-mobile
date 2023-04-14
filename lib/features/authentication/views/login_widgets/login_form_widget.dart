@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/login_bloc.dart';
@@ -23,20 +25,15 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       child: Column(
         children: [
           TextFormField(
-            keyboardType: ref.read(loginProvider.notifier).isFirebaseAuth()
-                ? TextInputType.emailAddress
-                : TextInputType.text,
+            keyboardType: ref.read(loginProvider.notifier).isFirebaseAuth() ? TextInputType.emailAddress : TextInputType.text,
             inputFormatters: [
               FilteringTextInputFormatter.allow(
-                RegExp(ref.read(loginProvider.notifier).isFirebaseAuth()
-                    ? r'[a-z|0-9|@.]'
-                    : r'[a-z|0-9]'),
+                RegExp(ref.read(loginProvider.notifier).isFirebaseAuth() ? r'[a-z|0-9|@.]' : r'[a-z|0-9]'),
               ),
               FilteringTextInputFormatter.singleLineFormatter,
             ],
             controller: fieldId,
-            maxLength:
-                ref.read(loginProvider.notifier).isFirebaseAuth() ? 32 : 15,
+            maxLength: ref.read(loginProvider.notifier).isFirebaseAuth() ? 32 : 15,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return '아이디를 입력하세요.';
@@ -47,50 +44,51 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             decoration: InputDecoration(
               fillColor: Colors.grey[250],
               filled: true,
+              counterStyle: const TextStyle(
+                height: double.minPositive,
+              ),
+              counterText: "",
+              contentPadding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 20.r),
               prefixIcon: const Icon(
                 Icons.account_circle_rounded,
                 color: Colors.black,
               ),
               suffixIcon: IconButton(
+                splashRadius: 20.r,
                 onPressed: () => setState(() {
                   fieldId.clear();
                   ls.formData.remove('id');
                 }),
                 icon: Icon(
-                  ls.formData['id'] != null && ls.formData['id']!.isNotEmpty
-                      ? Icons.close_rounded
-                      : null,
+                  ls.formData['id'] != null && ls.formData['id']!.isNotEmpty ? Icons.close_rounded : null,
                 ),
               ),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
                   style: BorderStyle.none,
                   color: Palette.textColor1,
                 ),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(10),
+                  Radius.circular(Bitflow.defaultRadius),
                 ),
               ),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
                   style: BorderStyle.none,
                   color: Palette.textColor1,
                 ),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(10),
+                  Radius.circular(Bitflow.defaultRadius),
                 ),
               ),
-              hintText: ref.read(loginProvider.notifier).isFirebaseAuth()
-                  ? '이메일'
-                  : '아이디',
+              hintText: ref.read(loginProvider.notifier).isFirebaseAuth() ? '이메일' : '아이디',
               hintStyle: const TextStyle(
                 fontSize: 14,
                 color: Palette.textColor1,
               ),
-              contentPadding: const EdgeInsets.all(10),
             ),
           ),
-          Gaps.v16,
+          Gaps.v24,
           TextFormField(
             inputFormatters: [
               FilteringTextInputFormatter.allow(
@@ -111,6 +109,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             decoration: InputDecoration(
               fillColor: Colors.grey[250],
               filled: true,
+              counterStyle: const TextStyle(
+                height: double.minPositive,
+              ),
+              counterText: "",
               prefixIcon: const Icon(
                 Icons.lock_rounded,
                 color: Colors.black,
@@ -121,19 +123,18 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
+                      splashRadius: 20.r,
                       onPressed: () => setState(() {
                         fieldPassword.clear();
                         ls.formData.remove('pw');
                       }),
                       icon: Icon(
-                        ls.formData['pw'] != null && ls.formData.isNotEmpty
-                            ? Icons.close_rounded
-                            : null,
+                        ls.formData['pw'] != null && ls.formData.isNotEmpty ? Icons.close_rounded : null,
                       ),
                     ),
                     IconButton(
-                      onPressed: () =>
-                          setState(() => isVisibility = !isVisibility),
+                      splashRadius: 20.r,
+                      onPressed: () => setState(() => isVisibility = !isVisibility),
                       icon: Icon(
                         isVisibility ? Icons.visibility : Icons.visibility_off,
                       ),
@@ -141,22 +142,22 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   ],
                 ),
               ),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
                   style: BorderStyle.none,
                   color: Palette.textColor1,
                 ),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(10),
+                  Radius.circular(Bitflow.defaultRadius),
                 ),
               ),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
                   style: BorderStyle.none,
                   color: Palette.textColor1,
                 ),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(10),
+                  Radius.circular(Bitflow.defaultRadius),
                 ),
               ),
               hintText: '비밀번호',
@@ -164,7 +165,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 fontSize: 14,
                 color: Palette.textColor1,
               ),
-              contentPadding: const EdgeInsets.all(10),
+              contentPadding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 20.r),
             ),
           ),
         ],

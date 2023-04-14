@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/features/authentication/blocs/login_bloc.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
 
@@ -21,10 +22,10 @@ class _SubmitButtonState extends ConsumerState<SubmitButton> {
           onPressed: ref.watch(loginProvider).isLoading ? null : _onSubmit,
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(9.2.r),
             ),
-            padding: const EdgeInsets.symmetric(
-              vertical: 16,
+            padding: EdgeInsets.symmetric(
+              vertical: 15.r,
             ),
           ),
           child: const Text(
