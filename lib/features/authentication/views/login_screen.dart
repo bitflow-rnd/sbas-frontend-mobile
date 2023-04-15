@@ -88,26 +88,32 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                   ],
                 ),
                 Gaps.v48,
-                TextButton(
-                  style: ButtonStyle(
-                    overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
-                  ),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UserRegisterRequestScreen(),
+                Gaps.v48,
+                Gaps.v48,
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 40.r),
+                  child: TextButton(
+                    style: ButtonStyle(
+                      overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        '사용자 등록 요청 >',
-                        style: TextStyle(
-                          fontSize: 12.h,
-                          color: Palette.greyText,
-                        ),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UserRegisterRequestScreen(),
                       ),
-                    ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '사용자 등록 요청 >',
+                          style: TextStyle(
+                            fontSize: 12.h,
+                            color: Palette.greyText,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
