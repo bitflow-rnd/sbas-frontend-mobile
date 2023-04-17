@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/util.dart';
 
 class FindIdResult extends StatelessWidget {
@@ -12,37 +15,40 @@ class FindIdResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
         children: [
-          Center(
-            child: ShaderMask(
-              shaderCallback: (bounds) => RadialGradient(
-                colors: [
-                  Colors.blue.shade700,
-                  Colors.blue.shade300,
-                ],
-                center: Alignment.topLeft,
-                radius: 1,
-                tileMode: TileMode.clamp,
-              ).createShader(bounds),
-              child: const Icon(
-                Icons.check_circle,
-                color: Colors.white,
-                size: 128,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Center(
+              child: ShaderMask(
+                shaderCallback: (bounds) => RadialGradient(
+                  colors: [
+                    Colors.blue.shade700,
+                    Colors.blue.shade300,
+                  ],
+                  center: Alignment.topLeft,
+                  radius: 1,
+                  tileMode: TileMode.clamp,
+                ).createShader(bounds),
+                child: const Icon(
+                  Icons.check_circle,
+                  color: Colors.white,
+                  size: 128,
+                ),
               ),
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(
-              vertical: 16,
+              vertical: 16.h,
             ),
             child: Text(
               '아이디 찾기 결과입니다.',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
+              style: CTS.bold(
+                fontSize: 15,
               ),
             ),
           ),
           Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w),
             alignment: Alignment.center,
             width: double.infinity,
             decoration: BoxDecoration(
@@ -57,16 +63,17 @@ class FindIdResult extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: 12,
+                vertical: 16,
               ),
               child: Text(
                 id,
-                style: const TextStyle(
-                  fontSize: 22,
+                style: CTS(
+                  fontSize: 13,
                 ),
               ),
             ),
           ),
+          Spacer(),
           Padding(
             padding: const EdgeInsets.symmetric(
               vertical: 18,
@@ -81,28 +88,27 @@ class FindIdResult extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
-                          30,
+                          0,
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 16.h,
                       ),
                       side: const BorderSide(
                         color: Colors.blue,
                       ),
-                      foregroundColor: Colors.blue,
+                      foregroundColor: Palette.backgroundColor,
                       backgroundColor: Colors.white,
                     ),
-                    child: const Text(
+                    child: Text(
                       '로그인',
-                      style: TextStyle(
-                        fontSize: 22,
+                      style: CTS(
+                        fontSize: 16,
                         color: Colors.blue,
                       ),
                     ),
                   ),
                 ),
-                Gaps.h8,
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
@@ -119,17 +125,18 @@ class FindIdResult extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
-                          30,
+                          0,
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 16.h,
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       '비밀번호 재설정',
-                      style: TextStyle(
-                        fontSize: 22,
+                      style: CTS(
+                        color: Palette.white,
+                        fontSize: 16,
                       ),
                     ),
                   ),

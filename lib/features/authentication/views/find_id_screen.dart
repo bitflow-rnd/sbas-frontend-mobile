@@ -24,17 +24,11 @@ class FindIdScreenState extends ConsumerState<FindIdScreen> {
         id.isEmpty,
         0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 36,
-        ),
-        child: id.isNotEmpty
-            ? FindIdResult(
-                id: id,
-              )
-            : const FindId(),
-      ),
+      body: id.isNotEmpty
+          ? FindIdResult(
+              id: id,
+            )
+          : const FindId(),
     );
   }
 
