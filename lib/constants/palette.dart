@@ -18,4 +18,5 @@ class Palette {
 
   static const Color greyText = Color(0XFF676a7a);
   static Color greyText_60 = const Color(0XFF676a7a).withOpacity(0.6);
+  static Color greyText_30 = const Color(0XFF676a7a).withOpacity(0.3);
 }

@@ -34,6 +34,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             ],
             controller: fieldId,
             maxLength: ref.read(loginProvider.notifier).isFirebaseAuth() ? 32 : 15,
+            onChanged: (value) => setState(() {
+              ls.formData['id'] = value;
+            }),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return '아이디를 입력하세요.';
@@ -49,20 +52,23 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               ),
               counterText: "",
               contentPadding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 20.r),
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.account_circle_rounded,
-                color: Colors.black,
+                color: Palette.greyText_30,
               ),
-              suffixIcon: IconButton(
-                splashRadius: 20.r,
-                onPressed: () => setState(() {
-                  fieldId.clear();
-                  ls.formData.remove('id');
-                }),
-                icon: Icon(
-                  ls.formData['id'] != null && ls.formData['id']!.isNotEmpty ? Icons.close_rounded : null,
-                ),
-              ),
+              suffixIcon: ls.formData['id'] != null && ls.formData['id']!.isNotEmpty
+                  ? IconButton(
+                      splashRadius: 20.r,
+                      onPressed: () => setState(() {
+                        fieldId.clear();
+                        ls.formData.remove('id');
+                      }),
+                      icon: Icon(
+                        Icons.close_rounded,
+                        color: Palette.greyText_30,
+                      ),
+                    )
+                  : null,
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                   style: BorderStyle.none,
@@ -105,6 +111,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               }
               return null;
             },
+            onChanged: (value) => setState(() {
+              ls.formData['pw'] = value;
+            }),
             onSaved: (newValue) => ls.formData['pw'] = newValue ?? '',
             decoration: InputDecoration(
               fillColor: Colors.grey[250],
@@ -113,30 +122,34 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 height: double.minPositive,
               ),
               counterText: "",
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.lock_rounded,
-                color: Colors.black,
+                color: Palette.greyText_30,
               ),
               suffixIcon: SizedBox(
                 width: 150,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(
-                      splashRadius: 20.r,
-                      onPressed: () => setState(() {
-                        fieldPassword.clear();
-                        ls.formData.remove('pw');
-                      }),
-                      icon: Icon(
-                        ls.formData['pw'] != null && ls.formData.isNotEmpty ? Icons.close_rounded : null,
-                      ),
-                    ),
+                    ls.formData['pw'] != null && ls.formData['pw']!.isNotEmpty
+                        ? IconButton(
+                            splashRadius: 20.r,
+                            onPressed: () => setState(() {
+                              fieldPassword.clear();
+                              ls.formData.remove('pw');
+                            }),
+                            icon: Icon(
+                              ls.formData['pw'] != null && ls.formData.isNotEmpty ? Icons.close_rounded : null,
+                              color: Palette.greyText_30,
+                            ),
+                          )
+                        : Container(),
                     IconButton(
                       splashRadius: 20.r,
                       onPressed: () => setState(() => isVisibility = !isVisibility),
                       icon: Icon(
                         isVisibility ? Icons.visibility : Icons.visibility_off,
+                        color: Palette.greyText_30,
                       ),
                     ),
                   ],
