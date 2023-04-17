@@ -31,7 +31,7 @@ class _SubmitButtonState extends ConsumerState<SubmitButton> {
           child: const Text(
             '로그인',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 16,
             ),
           ),
         ),
