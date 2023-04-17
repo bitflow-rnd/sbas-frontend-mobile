@@ -18,6 +18,7 @@ class AuthPhone extends StatefulWidget {
 class _AuthPhoneState extends State<AuthPhone> {
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Palette.white,
         appBar: Bitflow.getAppBar(
           '휴대폰 본인인증',
           false,

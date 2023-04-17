@@ -17,7 +17,7 @@ class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
     return list;
   }
 
-  exchangeTheAgency() async {
+  Future<void> exchangeTheAgency() async {
     list.clear();
 
     state = const AsyncLoading();
@@ -27,7 +27,23 @@ class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
       final user = ref.read(regUserProvider);
 
       list.addAll(await _infoInstRepository.getOrganCode(
-          user.instTypeCd ?? '', agency.id?.cdId ?? ','));
+          user.instTypeCd ?? '', agency.id?.cdId ?? ''));
+
+      return list;
+    });
+    if (state.hasError) {
+      if (kDebugMode) {
+        print(state.error);
+      }
+    }
+  }
+
+  Future<void> updatePublicHealthCenter(String id) async {
+    list.clear();
+
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      list.addAll(await _infoInstRepository.getPublicHealthCenter(id));
 
       return list;
     });

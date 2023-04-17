@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/authenticate_phone_screen.dart';
 import 'package:sbas/features/authentication/views/find_id_widgets/find_id_result_widget.dart';
 import 'package:sbas/features/authentication/views/find_id_widgets/find_id_widget.dart';
@@ -17,22 +18,17 @@ class FindIdScreenState extends ConsumerState<FindIdScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Palette.white,
       appBar: Bitflow.getAppBar(
         '아이디 찾기',
         id.isEmpty,
         0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 36,
-        ),
-        child: id.isNotEmpty
-            ? FindIdResult(
-                id: id,
-              )
-            : const FindId(),
-      ),
+      body: id.isNotEmpty
+          ? FindIdResult(
+              id: id,
+            )
+          : const FindId(),
     );
   }
 

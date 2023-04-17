@@ -40,26 +40,6 @@ class InfectiousDiseaseModel {
     this.diagDrNm,
     this.rptChfNm,
   });
-  InfectiousDiseaseModel.empty()
-      : ptId = '',
-        rcptPhc = '',
-        diagNm = '',
-        diagGrde = '',
-        cv19Symp = '',
-        occrDt = '',
-        diagDt = '',
-        rptDt = '',
-        dfdgExamRslt = '',
-        ptCatg = '',
-        admsYn = '',
-        rptType = '',
-        rmk = '',
-        instNm = '',
-        instId = '',
-        instTelno = '',
-        instAddr = '',
-        diagDrNm = '',
-        rptChfNm = '';
   InfectiousDiseaseModel.fromJson(Map<String, dynamic> json) {
     if (json["ptId"] is String) {
       ptId = json["ptId"];
@@ -144,4 +124,25 @@ class InfectiousDiseaseModel {
 
     return data;
   }
+
+  InfectiousDiseaseModel.empty()
+      : ptId = null,
+        rcptPhc = null,
+        diagNm = null,
+        diagGrde = null,
+        cv19Symp = null,
+        occrDt = null,
+        diagDt = null,
+        rptDt = null,
+        dfdgExamRslt = null,
+        ptCatg = null,
+        admsYn = null,
+        rptType = null,
+        rmk = null,
+        instNm = null,
+        instId = null,
+        instTelno = null,
+        instAddr = null,
+        diagDrNm = null,
+        rptChfNm = null;
 }
