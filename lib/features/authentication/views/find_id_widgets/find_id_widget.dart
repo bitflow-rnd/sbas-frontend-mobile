@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/find_id_screen.dart';
@@ -15,13 +16,10 @@ class FindId extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const AutoSizeText(
+        AutoSizeText(
           '휴대전화 번호 본인인증을 통해\n가입하신 아이디를 확인하실 수 있습니다.',
           maxLines: 2,
-          style: TextStyle(
-            color: Palette.textColor1,
-            fontSize: 16,
-          ),
+          style: CTS(color: Palette.greyText_80, fontSize: 14, height: 5.5 / 3.5),
         ),
         Gaps.v24,
         SizedBox(
@@ -33,10 +31,11 @@ class FindId extends StatelessWidget {
                 vertical: 16,
               ),
             ),
-            child: const Text(
+            child: Text(
               '인증하기',
-              style: TextStyle(
-                fontSize: 20,
+              style: CTS(
+                color: Palette.white,
+                fontSize: 15,
               ),
             ),
           ),
@@ -45,10 +44,10 @@ class FindId extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               '비밀번호 재설정을 원하시나요?',
-              style: TextStyle(
-                fontSize: 16,
+              style: CTS(
+                fontSize: 13,
                 color: Palette.textColor1,
               ),
             ),
@@ -61,8 +60,12 @@ class FindId extends StatelessWidget {
                   Navigator.pop(context);
                 }
               },
-              child: const Text(
+              child: Text(
                 '비밀번호 재설정',
+                style: CTS.bold(
+                  fontSize: 13,
+                  color: Palette.primary,
+                ),
               ),
             ),
           ],
