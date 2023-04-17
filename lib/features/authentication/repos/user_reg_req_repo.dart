@@ -36,6 +36,12 @@ class UserRegRequestRepository {
   Future<List<BaseCodeModel>> getBaseCode(String route) async =>
       await _baseCodeProvider.getBaseCode(route);
 
+  Future<List<InfoInstModel>> getPublicHealthCenter(
+    String dstrCd1,
+  ) async =>
+      await _baseOrganProvider.getOrganCode(
+        'instTypecd=ORGN0003&dstrCd1=$dstrCd1',
+      );
   Future<List<InfoInstModel>> getOrganCode(
     String typeCd,
     String dstrCd2,
