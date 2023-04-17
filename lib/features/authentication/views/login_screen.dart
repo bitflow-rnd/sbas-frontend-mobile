@@ -56,34 +56,25 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                   children: [
                     TextButton(
                       style: ButtonStyle(
-                        overlayColor: MaterialStateColor.resolveWith(
-                            (states) => Palette.diabledGrey),
+                        overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
                       ),
                       onPressed: () => findId(context),
                       child: Text(
                         '아이디 찾기',
-                        style: TextStyle(
-                          fontSize: 12.h,
-                          color: Palette.greyText,
-                        ),
+                        style: CTS(fontSize: 12, color: Palette.greyText_60),
                       ),
                     ),
-                    Container(
-                      height: 10.h,
-                      width: 1.2.w,
-                      color: Palette.greyText,
-                    ),
+                    Container(height: 10.h, width: 1.2.w, color: Palette.greyText_60),
                     TextButton(
                       style: ButtonStyle(
-                        overlayColor: MaterialStateColor.resolveWith(
-                            (states) => Palette.diabledGrey),
+                        overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
                       ),
                       onPressed: () => setPassword(context),
                       child: Text(
                         '비밀번호 재설정',
-                        style: TextStyle(
-                          fontSize: 12.h,
-                          color: Palette.greyText,
+                        style: CTS(
+                          fontSize: 12,
+                          color: Palette.greyText_60,
                         ),
                       ),
                     ),
@@ -94,8 +85,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                   margin: EdgeInsets.symmetric(horizontal: 40.r),
                   child: TextButton(
                     style: ButtonStyle(
-                      overlayColor: MaterialStateColor.resolveWith(
-                          (states) => Palette.diabledGrey),
+                      overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
                     ),
                     onPressed: () => Navigator.push(
                       context,
@@ -105,9 +95,9 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                     ),
                     child: Text(
                       '사용자 등록 요청 >',
-                      style: TextStyle(
-                        fontSize: 12.h,
-                        color: Palette.greyText,
+                      style: CTS(
+                        fontSize: 12,
+                        color: Palette.greyText_60,
                       ),
                     ),
                   ),

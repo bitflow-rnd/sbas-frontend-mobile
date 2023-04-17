@@ -127,13 +127,15 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 color: Palette.greyText_30,
               ),
               suffixIcon: SizedBox(
-                width: 150,
+                width: 100.w,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ls.formData['pw'] != null && ls.formData['pw']!.isNotEmpty
                         ? IconButton(
-                            splashRadius: 20.r,
+                            padding: EdgeInsets.symmetric(horizontal: 2.w), // 패딩 설정
+                            constraints: const BoxConstraints(),
+                            splashRadius: 15.r,
                             onPressed: () => setState(() {
                               fieldPassword.clear();
                               ls.formData.remove('pw');
@@ -145,7 +147,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                           )
                         : Container(),
                     IconButton(
-                      splashRadius: 20.r,
+                      padding: EdgeInsets.only(left: 10.w, right: 10.w), // 패딩 설정
+                      constraints: const BoxConstraints(),
+                      splashRadius: 15.r,
                       onPressed: () => setState(() => isVisibility = !isVisibility),
                       icon: Icon(
                         isVisibility ? Icons.visibility : Icons.visibility_off,
