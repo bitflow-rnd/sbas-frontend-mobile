@@ -56,7 +56,8 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                   children: [
                     TextButton(
                       style: ButtonStyle(
-                        overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
+                        overlayColor: MaterialStateColor.resolveWith(
+                            (states) => Palette.diabledGrey),
                       ),
                       onPressed: () => findId(context),
                       child: Text(
@@ -74,7 +75,8 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                     ),
                     TextButton(
                       style: ButtonStyle(
-                        overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
+                        overlayColor: MaterialStateColor.resolveWith(
+                            (states) => Palette.diabledGrey),
                       ),
                       onPressed: () => setPassword(context),
                       child: Text(
@@ -87,14 +89,13 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                     ),
                   ],
                 ),
-                Gaps.v48,
-                Gaps.v48,
-                Gaps.v48,
+                Gaps.v144,
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 40.r),
                   child: TextButton(
                     style: ButtonStyle(
-                      overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
+                      overlayColor: MaterialStateColor.resolveWith(
+                          (states) => Palette.diabledGrey),
                     ),
                     onPressed: () => Navigator.push(
                       context,
@@ -102,17 +103,12 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                         builder: (context) => const UserRegisterRequestScreen(),
                       ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '사용자 등록 요청 >',
-                          style: TextStyle(
-                            fontSize: 12.h,
-                            color: Palette.greyText,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      '사용자 등록 요청 >',
+                      style: TextStyle(
+                        fontSize: 12.h,
+                        color: Palette.greyText,
+                      ),
                     ),
                   ),
                 ),

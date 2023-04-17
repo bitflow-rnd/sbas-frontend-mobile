@@ -12,10 +12,9 @@ class HospitalBedRequest extends AsyncNotifier<EpidemiologicalReportModel> {
 
     if (attcId.isNotEmpty) {
       try {
-        final report = EpidemiologicalReportModel.fromJson(
+        return EpidemiologicalReportModel.fromJson(
           await _patientRepository.getEpidemiologicalReport(attcId),
         );
-        return report;
       } catch (exception) {
         if (kDebugMode) {
           print(exception);
