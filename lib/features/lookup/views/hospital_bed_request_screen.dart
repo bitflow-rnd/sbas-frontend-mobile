@@ -56,6 +56,7 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                       width: width,
                       child: InfectiousDisease(
                         formKey: formKey,
+                        report: report,
                       ),
                     ),
                   ),

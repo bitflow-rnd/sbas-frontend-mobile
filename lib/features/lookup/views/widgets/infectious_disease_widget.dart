@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
+import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
+import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
+import 'package:sbas/util.dart';
 
 class InfectiousDisease extends ConsumerStatefulWidget {
   InfectiousDisease({
+    required this.report,
     required this.formKey,
     super.key,
   });
@@ -33,11 +39,14 @@ class InfectiousDisease extends ConsumerStatefulWidget {
     '기타 진료정보 이미지·영상',
   ];
   final GlobalKey<FormState> formKey;
+  final EpidemiologicalReportModel report;
 }
 
 class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
   @override
   Widget build(BuildContext context) {
+    final vm = ref.read(infectiousDiseaseProvider.notifier);
+
     return ref.watch(infectiousDiseaseProvider).when(
           loading: () => const SBASProgressIndicator(),
           error: (error, stackTrace) => Center(
@@ -48,7 +57,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
               ),
             ),
           ),
-          data: (patient) => Form(
+          data: (disease) => Form(
             key: widget.formKey,
             autovalidateMode: AutovalidateMode.always,
             child: SingleChildScrollView(
@@ -72,22 +81,86 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                         ),
                         Gaps.v4,
                         if (i == 0)
-                          FormField(
-                            builder: (field) => ref
-                                .watch(agencyRegionProvider)
-                                .when(
-                                  loading: () => const SBASProgressIndicator(),
-                                  error: (error, stackTrace) => Center(
-                                    child: Text(
-                                      error.toString(),
-                                      style: const TextStyle(
-                                        color: Colors.lightBlueAccent,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ref.watch(agencyRegionProvider).when(
+                                      loading: () =>
+                                          const SBASProgressIndicator(),
+                                      error: (error, stackTrace) => Center(
+                                        child: Text(
+                                          error.toString(),
+                                          style: const TextStyle(
+                                            color: Colors.lightBlueAccent,
+                                          ),
+                                        ),
+                                      ),
+                                      data: (region) => FormField(
+                                        builder: (field) => _selectRegion(
+                                          region.where(
+                                            (e) => e.id?.cdGrpId == 'SIDO',
+                                          ),
+                                          field,
+                                        ),
+                                        validator: (value) {
+                                          return null;
+                                        },
+                                        initialValue: widget.report.dstr1Cd,
                                       ),
                                     ),
-                                  ),
-                                  data: (region) =>
-                                      _selectRegion(region, field),
-                                ),
+                              ),
+                              Gaps.h8,
+                              Expanded(
+                                child: ref.watch(agencyDetailProvider).when(
+                                      loading: () =>
+                                          const SBASProgressIndicator(),
+                                      error: (error, stackTrace) => Center(
+                                        child: Text(
+                                          error.toString(),
+                                          style: const TextStyle(
+                                            color: Colors.lightBlueAccent,
+                                          ),
+                                        ),
+                                      ),
+                                      data: (publicHealthCenter) => FormField(
+                                        builder: (field) =>
+                                            _selectPublicHealthCenter(
+                                                publicHealthCenter, field),
+                                        validator: (value) {
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                              ),
+                            ],
+                          ),
+                        if (i != 7 && i != 14)
+                          TextFormField(
+                            decoration: getInputDecoration(
+                              '${widget._titles[i]}${i == 3 || i == 4 || i == 8 || i == 12 || i == 13 ? '을' : '를'} 입력해주세요.',
+                            ),
+                            controller: TextEditingController(
+                              text: vm.init(i, widget.report),
+                            ),
+                            onSaved: (newValue) =>
+                                vm.setTextEditingController(i, newValue),
+                            onChanged: (value) =>
+                                vm.setTextEditingController(i, value),
+                            validator: (value) {
+                              if (i == 7) {}
+                              return null;
+                            },
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|ㆍ|ᆢ]'),
+                              ),
+                              FilteringTextInputFormatter.singleLineFormatter,
+                            ],
+                            autovalidateMode: AutovalidateMode.always,
+                            keyboardType: i == 4 || i == 11
+                                ? TextInputType.number
+                                : TextInputType.text,
+                            maxLength: null,
                           ),
                         Gaps.v12,
                       ],
@@ -100,7 +173,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
   }
 
   Widget _selectRegion(
-          List<BaseCodeModel> region, FormFieldState<Object?> field) =>
+          Iterable<BaseCodeModel> region, FormFieldState<Object?> field) =>
       SizedBox(
         child: Column(
           children: [
@@ -109,7 +182,6 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   items: region
-                      .where((e) => e.id?.cdGrpId == 'SIDO')
                       .map(
                         (e) => DropdownMenuItem(
                           alignment: Alignment.center,
@@ -128,6 +200,64 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                     width: 150,
                     child: Text(
                       '시/도 선택',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  isDense: true,
+                  isExpanded: true,
+                  onChanged: (value) {
+                    ref
+                        .read(agencyDetailProvider.notifier)
+                        .updatePublicHealthCenter(
+                          region.firstWhere((e) => e.cdNm == value).id?.cdId ??
+                              '',
+                        );
+                    field.didChange(value);
+                  },
+                  value: field.value != '' ? field.value : null,
+                ),
+              ),
+            ),
+            Gaps.v8,
+            if (field.hasError)
+              FieldErrorText(
+                field: field,
+              )
+          ],
+        ),
+      );
+  Widget _selectPublicHealthCenter(
+          Iterable<InfoInstModel> center, FormFieldState<Object?> field) =>
+      SizedBox(
+        child: Column(
+          children: [
+            InputDecorator(
+              decoration: _inputDecoration,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  items: center
+                      .map(
+                        (e) => DropdownMenuItem(
+                          alignment: Alignment.center,
+                          value: e.instNm,
+                          child: SizedBox(
+                            width: 150,
+                            child: Text(
+                              e.instNm ?? '',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  hint: const SizedBox(
+                    width: 150,
+                    child: Text(
+                      '보건소 선택',
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 16,
