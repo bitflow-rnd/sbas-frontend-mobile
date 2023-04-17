@@ -12,7 +12,7 @@ import 'package:sbas/features/lookup/views/widgets/infectious_disease_widget.dar
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
 class HospitalBedRequestScreen extends ConsumerWidget {
-  const HospitalBedRequestScreen({
+  HospitalBedRequestScreen({
     this.patient,
     super.key,
   });
@@ -51,9 +51,13 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                 Gaps.v12,
                 HospitalBedRequestNav(),
                 if (order == -1)
-                  SizedBox(
-                    width: width,
-                    child: InfectiousDisease(),
+                  Expanded(
+                    child: SizedBox(
+                      width: width,
+                      child: InfectiousDisease(
+                        formKey: formKey,
+                      ),
+                    ),
                   ),
                 if (order == 0)
                   SizedBox(
@@ -63,7 +67,6 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                   SizedBox(
                     width: width,
                   ),
-                const Expanded(child: Gaps.h1),
                 Row(
                   children: [
                     SizedBox(
@@ -91,5 +94,6 @@ class HospitalBedRequestScreen extends ConsumerWidget {
     );
   }
 
+  final formKey = GlobalKey<FormState>();
   final Patient? patient;
 }
