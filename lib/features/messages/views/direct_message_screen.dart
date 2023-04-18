@@ -1,65 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/features/messages/repos/talk_rooms_repo.dart';
-import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
+import 'package:sbas/features/messages/blocs/talk_rooms_block.dart';
+import 'package:sbas/features/messages/models/talk_rooms_response_model.dart';
 
-class DirectMessageScreen extends ConsumerWidget {
-  const DirectMessageScreen({
-    super.key,
-    required this.automaticallyImplyLeading,
-  });
+class DirectMessageScreen extends StatefulWidget {
+  final automaticallyImplyLeading;
+  final userId;
+  const DirectMessageScreen(
+      {super.key,
+      required this.automaticallyImplyLeading,
+      required this.userId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final talkRooms = ref.watch(talkRoomsProvider);
+  _DirectMessageScreenState createState() => _DirectMessageScreenState();
+}
 
-    getChatRooms() async {
-      return await talkRooms.getMyChats();
-    }
+class _DirectMessageScreenState extends State<DirectMessageScreen> {
+  late final TalkRoomsBloc _talkRoomsBloc;
 
-    return Scaffold(
-      appBar: Bitflow.getAppBar(
-        '연락처/DM',
-        automaticallyImplyLeading,
-        0.5,
-      ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              child: FutureBuilder(
-                future: getChatRooms(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: [
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        Expanded(
-                          child: TalkRoomWidget(snapshot),
-                        )
-                      ],
-                    );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
+  @override
+  void initState() {
+    super.initState();
+    _talkRoomsBloc = TalkRoomsBloc(userId: 'haksung59');
+  }
+
+  @override
+  void dispose() {
+    _talkRoomsBloc.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Talk Rooms Demo',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Talk Rooms'),
+        ),
+        body: StreamBuilder<List<TalkRoomsResponseModel>>(
+          stream: _talkRoomsBloc.chatRoomListStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final chatRoomList = snapshot.data!;
+              return ListView.builder(
+                itemCount: chatRoomList.length,
+                itemBuilder: (context, index) {
+                  final chatRoom = chatRoomList[index];
+                  return ListTile(
+                    title: Text(chatRoom.tkrmNm!),
+                    subtitle: Text(chatRoom.msg!),
                   );
                 },
-              ),
-            )
-          ],
+              );
+            } else if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );
   }
 
-  final bool automaticallyImplyLeading;
   static String routeName = 'directMessage';
   static String routeUrl = '/directMessage';
 }
