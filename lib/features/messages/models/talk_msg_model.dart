@@ -22,7 +22,9 @@ class TalkMsgModel {
 
   static TalkMsgModel fromJson(Map<String, dynamic> json) {
     return TalkMsgModel(
-        id: json['id'] == null ? null : TalkMsgId.fromJson(json['id'] as Map<String, dynamic>),
+        id: json['id'] == null
+            ? null
+            : TalkMsgId.fromJson(json['id'] as Map<String, dynamic>),
         histCd: json['histCd'] == null ? null : json['histCd'] as String,
         msg: json['msg'] == null ? null : json['msg'] as String,
         attcId: json['attcId'] == null ? null : json['attcId'] as String);
