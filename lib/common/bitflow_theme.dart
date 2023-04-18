@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Bitflow {
   static final defaultRadius = 9.2.r; //border radius
+  static final radius_4 = 4.r; //border radius
   static ThemeData getTheme() {
     return ThemeData(
       fontFamily: 'SpoqaHanSansNeo',
