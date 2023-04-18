@@ -12,6 +12,9 @@ class PatientRepository {
   Future<dynamic> registerPatientInfo(Map<String, dynamic> map) async =>
       await _patientProvider.registerPatientInfo(toJson(map));
 
+  Future<dynamic> registerDiseaseInfo(Map<String, dynamic> map) async =>
+      await _patientProvider.registerDiseaseInfo(toJson(map));
+
   Future<dynamic> amendPatientInfo(String id, Map<String, dynamic> map) async =>
       await _patientProvider.amendPatientInfo(id, toJson(map));
 

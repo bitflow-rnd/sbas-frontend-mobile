@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:sbas/features/messages/models/talk_rooms_model.dart';
+import 'package:sbas/features/messages/models/talk_rooms_response_model.dart';
 
-ListView TalkRoomWidget(AsyncSnapshot<List<TalkRoomsModel>> snapshot) {
+ListView TalkRoomWidget(AsyncSnapshot<List<TalkRoomsResponseModel>> snapshot) {
   return ListView.separated(
     itemBuilder: (context, index) {
       var talkRoomTkrmId = snapshot.data![index].tkrmId;
@@ -19,7 +19,7 @@ ListView TalkRoomWidget(AsyncSnapshot<List<TalkRoomsModel>> snapshot) {
       );
     },
     separatorBuilder: (context, index) => const SizedBox(
-      width: 40,
+      height: 40,
     ),
     itemCount: snapshot.data!.length,
   );

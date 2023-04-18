@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sbas/common/widgets/nav_tab.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
+import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/dashboard/views/dashboard_screen.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 import 'package:sbas/features/messages/views/direct_message_screen.dart';
@@ -63,8 +64,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 3,
-            child: const DirectMessageScreen(
+            child: DirectMessageScreen(
               automaticallyImplyLeading: true,
+              userId: userToken.name!,
             ),
           ),
         ],
@@ -127,6 +129,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                   MaterialPageRoute(
                     builder: (context) => const DirectMessageScreen(
                       automaticallyImplyLeading: false,
+                      userId: '',
                     ),
                   ),
                 ),

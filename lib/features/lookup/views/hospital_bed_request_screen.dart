@@ -5,6 +5,7 @@ import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
+import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/hospital_bed_request_nav_widget.dart';
@@ -83,8 +84,16 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                       width: width * 0.5,
                       child: BottomSubmitBtn(
                         text: '다음',
-                        onPressed: () =>
-                            ref.read(orderOfRequestProvider.notifier).state++,
+                        onPressed: () {
+                          final index = ref.read(orderOfRequestProvider);
+
+                          if (index == -1) {
+                            ref
+                                .read(infectiousDiseaseProvider.notifier)
+                                .registry(patient?.id ?? '');
+                          }
+                          ref.read(orderOfRequestProvider.notifier).state++;
+                        },
                       ),
                     ),
                   ],
