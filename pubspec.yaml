@@ -75,6 +75,8 @@ dependencies:
   url_launcher: ^6.1.10
 
   flutter_screenutil: ^5.7.0
+  
+  web_socket_channel: ^2.1.0
 
 dev_dependencies:
   flutter_test:
