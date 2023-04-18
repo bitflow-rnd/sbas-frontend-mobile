@@ -19,7 +19,7 @@ ListView TalkRoomWidget(AsyncSnapshot<List<TalkRoomsResponseModel>> snapshot) {
       );
     },
     separatorBuilder: (context, index) => const SizedBox(
-      width: 40,
+      height: 40,
     ),
     itemCount: snapshot.data!.length,
   );
