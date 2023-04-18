@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
@@ -38,6 +42,16 @@ class InfectiousDisease extends ConsumerStatefulWidget {
     '신고기관장 성명',
     '기타 진료정보 이미지·영상',
   ];
+  final _subTitles = [
+    '진단일',
+    '신고일',
+  ];
+  final _status = [
+    '입원',
+    '외래',
+    '재택',
+    '기타',
+  ];
   final GlobalKey<FormState> formKey;
   final EpidemiologicalReportModel report;
 }
@@ -46,6 +60,8 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.read(infectiousDiseaseProvider.notifier);
+    final patientImage = ref.watch(infectiousImageProvider);
+    final ImagePicker picker = ImagePicker();
 
     return ref.watch(infectiousDiseaseProvider).when(
           loading: () => const SBASProgressIndicator(),
@@ -152,7 +168,9 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                             },
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
-                                RegExp(r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|ㆍ|ᆢ]'),
+                                RegExp(i == 4
+                                    ? r'[0-9|.-]'
+                                    : r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|ㆍ|ᆢ]'),
                               ),
                               FilteringTextInputFormatter.singleLineFormatter,
                             ],
@@ -160,8 +178,161 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                             keyboardType: i == 4 || i == 11
                                 ? TextInputType.number
                                 : TextInputType.text,
-                            maxLength: null,
+                            maxLength: i == 4 ? 10 : null,
+                          )
+                        else if (i == 7)
+                          SizedBox(
+                            height: 36,
+                            child: ListView.separated(
+                              separatorBuilder: (context, index) => Gaps.h8,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: widget._status.length,
+                              itemBuilder: (context, index) => GestureDetector(
+                                onTap: () =>
+                                    setState(() => vm.setTextEditingController(
+                                          i,
+                                          widget._status[index],
+                                        )),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                    horizontal: 24,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      style: widget._status[index] ==
+                                              disease.admsYn
+                                          ? BorderStyle.none
+                                          : BorderStyle.solid,
+                                      color: Colors.grey,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      18,
+                                    ),
+                                    color:
+                                        widget._status[index] == disease.admsYn
+                                            ? Colors.lightBlue
+                                            : Colors.transparent,
+                                  ),
+                                  child: Text(
+                                    widget._status[index],
+                                    style: TextStyle(
+                                      color: widget._status[index] ==
+                                              disease.admsYn
+                                          ? Colors.white
+                                          : Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        else if (i == 14)
+                          InkWell(
+                            onTap: () async {
+                              final image = await picker.pickImage(
+                                source: kDebugMode
+                                    ? ImageSource.gallery
+                                    : ImageSource.camera,
+                                preferredCameraDevice: CameraDevice.front,
+                                requestFullMetadata: false,
+                              );
+                              if (image != null) {
+                                ref
+                                    .read(infectiousImageProvider.notifier)
+                                    .state = image;
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                              ),
+                              alignment: Alignment.center,
+                              child: Stack(
+                                children: [
+                                  if (patientImage != null &&
+                                      patientImage.path.isNotEmpty)
+                                    Image.file(
+                                      File(patientImage.path),
+                                    )
+                                  else
+                                    Image.asset(
+                                      'assets/auth_group/camera_location.png',
+                                    ),
+                                  if (patientImage != null &&
+                                      patientImage.path.isNotEmpty)
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          ref
+                                              .read(infectiousImageProvider
+                                                  .notifier)
+                                              .state = null;
+                                          ref
+                                              .read(infectiousAttcProvider
+                                                  .notifier)
+                                              .state = null;
+                                          ref
+                                              .read(infectiousIsUploadProvider
+                                                  .notifier)
+                                              .state = true;
+                                        },
+                                        icon: Icon(
+                                          Icons.cancel_sharp,
+                                          color: Colors.grey.shade700,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
                           ),
+                        if (i == 4)
+                          for (int i = 0; i < widget._subTitles.length; i++)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Gaps.v8,
+                                Text(
+                                  widget._subTitles[i],
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                Gaps.v2,
+                                TextFormField(
+                                  decoration: getInputDecoration(
+                                    '${widget._subTitles[i]}을 입력해주세요.',
+                                  ),
+                                  controller: TextEditingController(
+                                    text: vm.init(i + 100, widget.report),
+                                  ),
+                                  onSaved: (newValue) =>
+                                      vm.setTextEditingController(
+                                          i + 100, newValue),
+                                  onChanged: (value) => vm
+                                      .setTextEditingController(i + 100, value),
+                                  validator: (value) => null,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9|.-]'),
+                                    ),
+                                    FilteringTextInputFormatter
+                                        .singleLineFormatter,
+                                  ],
+                                  autovalidateMode: AutovalidateMode.always,
+                                  keyboardType: TextInputType.number,
+                                  maxLength: 10,
+                                ),
+                              ],
+                            ),
                         Gaps.v12,
                       ],
                     ),

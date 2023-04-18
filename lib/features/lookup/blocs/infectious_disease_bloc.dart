@@ -1,15 +1,40 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/infectious_disease_model.dart';
+import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
 class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
   @override
   FutureOr<InfectiousDiseaseModel> build() {
+    _diseaseRepository = ref.read(patientRepoProvider);
+    _regRepository = ref.read(userRegReqProvider);
     _patientDiseaseModel = InfectiousDiseaseModel.empty();
 
     return _patientDiseaseModel;
+  }
+
+  Future<void> registry(String id) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      _patientDiseaseModel.ptId = id;
+
+      final imageFile = ref.read(infectiousImageProvider);
+
+      if (imageFile != null) {
+        _patientDiseaseModel.attcId =
+            await _regRepository.uploadImage(imageFile);
+      }
+      await _diseaseRepository.registerDiseaseInfo(
+        _patientDiseaseModel.toJson(),
+      );
+      return _patientDiseaseModel;
+    });
+    if (state.hasError) {}
+    if (state.hasValue) {}
   }
 
   void setTextEditingController(int index, String? value) {
@@ -32,6 +57,14 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
 
       case 4:
         _patientDiseaseModel.occrDt = value;
+        break;
+
+      case 100:
+        _patientDiseaseModel.diagDt = value;
+        break;
+
+      case 101:
+        _patientDiseaseModel.rptDt = value;
         break;
 
       case 5:
@@ -76,6 +109,7 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
     switch (index) {
       case 0:
         _patientDiseaseModel.rcptPhc ??= report.rcptPhc;
+        _patientDiseaseModel.admsYn ??= report.admsYn;
 
         return _patientDiseaseModel.rcptPhc;
 
@@ -98,6 +132,16 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
         _patientDiseaseModel.occrDt ??= report.occrDt;
 
         return _patientDiseaseModel.occrDt;
+
+      case 100:
+        _patientDiseaseModel.diagDt ??= report.diagDt;
+
+        return _patientDiseaseModel.diagDt;
+
+      case 101:
+        _patientDiseaseModel.rptDt ??= report.rptDt;
+
+        return _patientDiseaseModel.rptDt;
 
       case 5:
         _patientDiseaseModel.ptCatg ??= report.ptCatg;
@@ -149,10 +193,15 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
     return null;
   }
 
+  late final PatientRepository _diseaseRepository;
   late final InfectiousDiseaseModel _patientDiseaseModel;
+  late final UserRegRequestRepository _regRepository;
 }
 
 final infectiousDiseaseProvider =
     AsyncNotifierProvider<InfectiousDiseaseBloc, InfectiousDiseaseModel>(
   () => InfectiousDiseaseBloc(),
 );
+final infectiousImageProvider = StateProvider<XFile?>((ref) => null);
+final infectiousAttcProvider = StateProvider<String?>((ref) => null);
+final infectiousIsUploadProvider = StateProvider<bool>((ref) => true);
