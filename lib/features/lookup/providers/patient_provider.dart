@@ -114,6 +114,35 @@ class PatientProvider {
     throw ArgumentError();
   }
 
+  Future<dynamic> registerDiseaseInfo(String json) async {
+    final client = Dio();
+
+    try {
+      client.options.contentType = 'application/json';
+      client.options.headers = authToken;
+
+      final res = await client.postUri(
+        Uri.parse('$_baseUrl/regdisesinfo'),
+        data: json,
+      );
+      if (res.statusCode == 200) {
+        if (kDebugMode) {
+          print(res.data);
+        }
+        return res.data;
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
   Future<dynamic> amendPatientInfo(String id, String json) async {
     final client = Dio();
 

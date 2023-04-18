@@ -18,6 +18,7 @@ class InfectiousDiseaseModel {
   String? instAddr;
   String? diagDrNm;
   String? rptChfNm;
+  String? attcId;
 
   InfectiousDiseaseModel({
     this.ptId,
@@ -39,6 +40,7 @@ class InfectiousDiseaseModel {
     this.instAddr,
     this.diagDrNm,
     this.rptChfNm,
+    this.attcId,
   });
   InfectiousDiseaseModel.fromJson(Map<String, dynamic> json) {
     if (json["ptId"] is String) {
@@ -98,6 +100,9 @@ class InfectiousDiseaseModel {
     if (json["rptChfNm"] is String) {
       rptChfNm = json["rptChfNm"];
     }
+    if (json["attcId"] is String) {
+      attcId = json["attcId"];
+    }
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -121,6 +126,7 @@ class InfectiousDiseaseModel {
     data["instAddr"] = instAddr;
     data["diagDrNm"] = diagDrNm;
     data["rptChfNm"] = rptChfNm;
+    data["attcId"] = attcId;
 
     return data;
   }
@@ -144,5 +150,6 @@ class InfectiousDiseaseModel {
         instTelno = null,
         instAddr = null,
         diagDrNm = null,
+        attcId = null,
         rptChfNm = null;
 }
