@@ -30,7 +30,10 @@ jobs:
       run: flutter pub get
       
     - name: Build
-      run: flutter build apk --release --split-per-abi --sound-null-safety
+      run: |
+        flutter build apk --release --split-per-abi --sound-null-safety
+        cd build/app/outputs/flutter-apk/
+        zip -r sbas-frontend-mobile.zip app-release.apk
     
     - name: Deploy to Android App Server
       uses: appleboy/scp-action@master
@@ -38,8 +41,8 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER_NAME }}
         password: ${{ secrets.PASSWORD }}
-        source: ./build/app/outputs/apk/release/app-arm64-v8a-release.apk
-        target: c:\sbas\www\public
+        source: ./build/app/outputs/flutter-apk/sbas-frontend-mobile.zip
+        target: 'c:\\sbas\\www\\public'
 
   iOS:
     runs-on: macos-latest
