@@ -30,7 +30,8 @@ jobs:
       run: flutter pub get
       
     - name: Build
-      run: flutter build apk --release --split-per-abi --sound-null-safety && mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/sbas.apk
+      run: flutter build apk --release --split-per-abi --sound-null-safety
+           mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/sbas.apk
 
   iOS:
     runs-on: macos-latest
