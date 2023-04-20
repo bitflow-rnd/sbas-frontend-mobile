@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/models/talk_rooms_response_model.dart';
+import 'package:sbas/features/messages/views/chatting_screen.dart';
 
 ListView talkRoomWidget(AsyncSnapshot<List<TalkRoomsResponseModel>> snapshot) {
   return ListView.separated(
@@ -19,7 +21,7 @@ ListView talkRoomWidget(AsyncSnapshot<List<TalkRoomsResponseModel>> snapshot) {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          talkRoom.msg == 'null' || talkRoom.msg == null ? '' : talkRoom.msg!,
+          talkRoom.msg ?? '',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(color: Colors.grey),
@@ -29,7 +31,14 @@ ListView talkRoomWidget(AsyncSnapshot<List<TalkRoomsResponseModel>> snapshot) {
           style: const TextStyle(fontSize: 12.0, color: Colors.grey),
         ),
         onTap: () {
-          print(talkRoom.tkrmId);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChattingScreen(
+                  userId: userToken.name!,
+                  tkrmId: talkRoom.tkrmId!,
+                ),
+              ));
         },
       );
     },
