@@ -5,15 +5,15 @@ import 'package:sbas/features/messages/models/talk_rooms_response_model.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 
 class DirectMessageScreen extends StatefulWidget {
-  final automaticallyImplyLeading;
-  final userId;
-  const DirectMessageScreen(
-      {super.key,
-      required this.automaticallyImplyLeading,
-      required this.userId});
+  final bool automaticallyImplyLeading;
+
+  const DirectMessageScreen({Key? key, required this.automaticallyImplyLeading})
+      : super(key: key);
 
   @override
-  _DirectMessageScreenState createState() => _DirectMessageScreenState();
+  State<StatefulWidget> createState() {
+    return _DirectMessageScreenState();
+  }
 }
 
 class _DirectMessageScreenState extends State<DirectMessageScreen> {
@@ -22,7 +22,7 @@ class _DirectMessageScreenState extends State<DirectMessageScreen> {
   @override
   void initState() {
     super.initState();
-    _talkRoomsBloc = TalkRoomsBloc(userId: 'haksung59');
+    _talkRoomsBloc = TalkRoomsBloc();
   }
 
   @override
@@ -68,8 +68,7 @@ class _DirectMessageScreenState extends State<DirectMessageScreen> {
         stream: _talkRoomsBloc.chatRoomListStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final chatRoomList = snapshot.data!;
-            return TalkRoomWidget(snapshot);
+            return talkRoomWidget(snapshot);
           } else if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
           } else {
