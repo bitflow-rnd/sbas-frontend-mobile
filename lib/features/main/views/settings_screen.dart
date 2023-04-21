@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/main/views/alert_settings_page.dart';
+import 'package:sbas/features/main/views/app_license_screen.dart';
 import 'package:sbas/features/main/views/app_permission_setting_screen.dart';
 import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
 
@@ -52,7 +53,7 @@ class _SettingPageState extends State<SettingPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const UserDataHandlingPolicyPage(),
+                    builder: (context) => const AppLicensePage(),
                   ));
             }),
           ]),
