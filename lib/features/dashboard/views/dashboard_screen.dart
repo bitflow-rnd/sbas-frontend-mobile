@@ -2,7 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/dashboard/views/widgets/dashbord_widget.dart';
 import 'package:sbas/util.dart';
 
@@ -34,7 +36,9 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
             icon: const Icon(
               Icons.menu,
               color: Color(0xFF696969),
@@ -54,17 +58,16 @@ class DashboardScreen extends ConsumerWidget {
           children: [
             AutoSizeText(
               '${prefs.getString('id')}님 안녕하세요!',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+              style: CTS.bold(
+                fontSize: 18,
               ),
               maxFontSize: 24,
               maxLines: 1,
             ),
             Gaps.v8,
-            const AutoSizeText(
+            AutoSizeText(
               '병상배정 통합연계시스템에 오신걸 환영합니다.\n신속한 병상배정 서비스를 경험해보세요.',
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
+              style: CTS(
                 color: Colors.grey,
               ),
               maxFontSize: 18,
@@ -131,22 +134,15 @@ class DashboardScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const AutoSizeText(
+                Text(
                   '최근 활동',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxFontSize: 24,
-                  maxLines: 1,
+                  style: CTS.bold(fontSize: 16),
                 ),
                 TextButton(
                   onPressed: () {},
-                  child: const AutoSizeText(
+                  child: Text(
                     '더보기',
-                    style: TextStyle(
-                      letterSpacing: -1,
-                    ),
-                    maxFontSize: 12,
+                    style: CTS.medium(color: Palette.greyText, fontSize: 11),
                   ),
                 ),
               ],
