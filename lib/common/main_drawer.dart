@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/main/views/service_policy_screen.dart';
+import 'package:sbas/features/main/views/settings_screen.dart';
 import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
 import 'package:sbas/features/messages/views/direct_message_screen.dart';
 
@@ -24,7 +25,6 @@ class MainDrawer extends ConsumerWidget {
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
                         'assets/message/doctor_icon.png',
@@ -56,7 +56,7 @@ class MainDrawer extends ConsumerWidget {
                       const Spacer(),
                       InkWell(
                         borderRadius: BorderRadius.circular(100.r),
-                        onTap: () {},
+                        onTap: () => settingsPage(context),
                         child: Image.asset(
                           'assets/setting_icon.png',
                           height: 32.h,
@@ -181,5 +181,10 @@ class MainDrawer extends ConsumerWidget {
       context,
       MaterialPageRoute(
         builder: (context) => const UserDataHandlingPolicyPage(),
+      ));
+  Future settingsPage(BuildContext context) async => await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SettingPage(),
       ));
 }
