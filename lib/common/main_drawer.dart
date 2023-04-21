@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/alarm/views/alarm_screen.dart';
+import 'package:sbas/features/alarm/views/public_alarm_screen.dart';
 import 'package:sbas/features/main/views/service_policy_screen.dart';
 import 'package:sbas/features/main/views/settings_screen.dart';
 import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
@@ -68,14 +70,14 @@ class MainDrawer extends ConsumerWidget {
                   ),
                   SizedBox(height: 12.h),
                   Container(color: Palette.dividerGrey, height: 1.h),
-                  _drawerItem("병상요청", "assets/auth_group/selected_request.png", 24, "", context),
-                  _drawerItem("배정승인", "assets/auth_group/selected_request.png", 24, "", context),
-                  _drawerItem("이송", "assets/auth_group/selected_request.png", 24, "", context),
-                  _drawerItem("입·퇴원", "assets/auth_group/selected_request.png", 24, "", context),
+                  _drawerItem("병상요청", "assets/auth_group/selected_request.png", 24, "", context, null),
+                  _drawerItem("배정승인", "assets/auth_group/selected_request.png", 24, "", context, null),
+                  _drawerItem("이송", "assets/auth_group/selected_request.png", 24, "", context, null),
+                  _drawerItem("입·퇴원", "assets/auth_group/selected_request.png", 24, "", context, null),
                   Container(color: Palette.dividerGrey, height: 1.h),
-                  _drawerItem("공지사항", "assets/auth_group/selected_request.png", null, "", context),
+                  _drawerItem("공지사항", "assets/auth_group/selected_request.png", null, "", context, PublicAlarmPage()),
                   Container(color: Palette.dividerGrey, height: 1.h),
-                  _drawerItem("내활동내역", "assets/auth_group/selected_request.png", null, "", context),
+                  _drawerItem("내활동내역", "assets/auth_group/selected_request.png", null, "", context, null),
                 ],
               ),
             ),
@@ -119,7 +121,7 @@ class MainDrawer extends ConsumerWidget {
     );
   }
 
-  Widget _drawerItem(String title, String iconPath, int? count, String route, BuildContext context) {
+  Widget _drawerItem(String title, String iconPath, int? count, String route, BuildContext context, dynamic page) {
     return InkWell(
       child: Container(
         // padding: count == null ? EdgeInsets.symmetric(vertical: 8.h) : null,
@@ -165,7 +167,7 @@ class MainDrawer extends ConsumerWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(builder: (context) {
-          return DirectMessageScreen(automaticallyImplyLeading: false);
+          return page;
         }),
       ),
     );

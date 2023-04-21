@@ -9,19 +9,20 @@ class AlarmPage extends StatefulWidget {
   const AlarmPage({super.key});
 
   @override
-  State<AlarmPage> createState() => _AlarmPageState();
+  State<AlarmPage> createState() => AlarmPageState();
 }
 
-class _AlarmPageState extends State<AlarmPage> {
+class AlarmPageState extends State<AlarmPage> {
   List<String> dropdownList = ['최근1개월', '최근3개월', '최근1년'];
   String selectedDropdown = '최근1개월';
+  bool hasAlarm = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.dividerGrey,
       appBar: AppBar(
         title: Text(
-          "공지사항",
+          "알림함",
           style: CTS.medium(
             fontSize: 15,
             color: Colors.black,
@@ -86,85 +87,65 @@ class _AlarmPageState extends State<AlarmPage> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 6.h),
-                alertCard(
-                    "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                    "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                    "공지",
-                    "2023.03.03",
-                    true,
-                    true),
-                alertCard(
-                    "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                    "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                    "뉴스",
-                    "2023.03.03",
-                    true,
-                    true),
-                alertCard(
-                    "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                    "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                    "뉴스",
-                    "2023.03.03",
-                    false,
-                    false),
-                alertCard(
-                    "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                    "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                    "공지",
-                    "2023.03.03",
-                    true,
-                    false),
-                alertCard(
-                    "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                    "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                    "공지",
-                    "2023.03.03",
-                    false,
-                    true),
-                alertCard(
-                    "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                    "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                    "공지",
-                    "2023.03.03",
-                    false,
-                    true),
-                alertCard(
-                    "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                    "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                    "공지",
-                    "2023.03.03",
-                    false,
-                    true),
-                alertCard(
-                    "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                    "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                    "공지",
-                    "2023.03.03",
-                    false,
-                    true),
-                alertCard(
-                    "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                    "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                    "공지",
-                    "2023.03.03",
-                    false,
-                    true),
-                alertCard(
-                    "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                    "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                    "공지",
-                    "2023.03.03",
-                    false,
-                    true),
-              ],
-            ),
-          ),
+          child: hasAlarm
+              ? _emptyPage()
+              : SingleChildScrollView(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    moveCompleteCard(
+                        dateTime: "02. 07 (화) 오전 11시 27분",
+                        name: "김희순",
+                        gender: "남",
+                        age: 88,
+                        departure: "영남대병원 (2/7  08:12)",
+                        arrival: "칠곡경북대병원 (2/7  08:12)",
+                        moveBy: "이동국 (대구 제2구급대)")
+                  ]),
+                ),
         ),
+      ),
+    );
+  }
+
+  Widget moveCompleteCard(
+      {required String dateTime,
+      required String name,
+      required String gender,
+      required int age,
+      required String departure,
+      required String arrival,
+      required String moveBy}) {
+    return Container(
+      child: Row(
+        children: [
+          Column(
+            children: [
+              IntrinsicHeight(
+                child: Container(
+                  child: Column(children: [
+                    Image.asset(
+                      "assets/common_icon/req_icon_mask.png",
+                      height: 28.w,
+                    )
+                  ]),
+                  decoration: BoxDecoration(
+                    color: Color(0xff538ef5).withOpacity(0.06),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xff538ef5).withOpacity(0.06),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
@@ -277,6 +258,39 @@ class _AlarmPageState extends State<AlarmPage> {
           ),
         ),
       ),
+    );
+  }
+
+  _emptyPage() {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/home/warn_icon.png',
+                width: 100.w,
+                // height: 200.h,
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              Text(
+                '수신된 알림이 없습니다.',
+                style: CTS.medium(
+                  fontSize: 15,
+                  color: Color(0xff676a7a),
+                ),
+              ),
+              SizedBox(
+                height: 100.h,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

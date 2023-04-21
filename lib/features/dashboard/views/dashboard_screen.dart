@@ -6,6 +6,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/views/alarm_screen.dart';
+import 'package:sbas/features/alarm/views/public_alarm_screen.dart';
 import 'package:sbas/features/dashboard/views/widgets/dashbord_widget.dart';
 import 'package:sbas/util.dart';
 
