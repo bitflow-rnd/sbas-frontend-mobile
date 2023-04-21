@@ -84,7 +84,7 @@ class _AppLicensePageState extends State<AppLicensePage> {
           ),
           SizedBox(height: 8.h),
           Text(
-            'Apache 2.0',
+            lib,
             style: CTS.medium(
               color: Colors.black,
               fontSize: 13,

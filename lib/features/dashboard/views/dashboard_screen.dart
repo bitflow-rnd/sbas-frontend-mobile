@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/alarm/views/alarm_screen.dart';
 import 'package:sbas/features/dashboard/views/widgets/dashbord_widget.dart';
 import 'package:sbas/util.dart';
 
@@ -29,7 +30,12 @@ class DashboardScreen extends ConsumerWidget {
         leadingWidth: 256,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AlarmPage(),
+              ),
+            ),
             icon: const Icon(
               Icons.notifications_none,
               color: Color(0xFF696969),
