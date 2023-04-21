@@ -53,7 +53,7 @@ class FindIdResult extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
-                4,
+                4.r,
               ),
               border: Border.all(
                 color: Colors.grey.shade300,
@@ -62,8 +62,8 @@ class FindIdResult extends StatelessWidget {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 16,
+              padding: EdgeInsets.symmetric(
+                vertical: 12.h,
               ),
               child: Text(
                 id,
@@ -74,10 +74,7 @@ class FindIdResult extends StatelessWidget {
             ),
           ),
           Spacer(),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 18,
-            ),
+          SafeArea(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
