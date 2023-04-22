@@ -2,6 +2,7 @@ import 'package:flutter/painting.dart';
 
 class Palette {
   static const Color white = Color(0xFFFFFFFF);
+  static const Color black = Color(0xFF000000);
   static const Color iconColor = Color(0xFFB6C7D1);
   static const Color activeColor = Color(0xFF09126C);
   static const Color textColor1 = Color(0xFF696969);
@@ -10,8 +11,8 @@ class Palette {
   static const Color googleColor = Color(0xFFDE4B39);
   static const Color backgroundColor = Color(0xFFECF3F9);
 
-  static const Color diabledGrey = Color(0xFFE5E5E5);
-
+  static const Color diabledGrey = Color(0xFFF5F5F5);
+  static Color dividerGrey = const Color(0xfff5f5f5);
   static const Color primary = Color(0xFF538ef5);
   static const Color primaryLight = Color(0XFF4caff1);
   static const Color primaryErr = Color(0XFFff666e);

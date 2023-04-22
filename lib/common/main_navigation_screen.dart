@@ -1,7 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/main_drawer.dart';
 import 'package:sbas/common/widgets/nav_tab.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/dashboard/views/dashboard_screen.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
@@ -42,6 +46,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MainDrawer(),
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
@@ -123,8 +128,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const DirectMessageScreen(
-                        automaticallyImplyLeading: false),
+                    builder: (context) => const DirectMessageScreen(automaticallyImplyLeading: false),
                   ),
                 ),
                 selectedIndex: _selectedIndex,

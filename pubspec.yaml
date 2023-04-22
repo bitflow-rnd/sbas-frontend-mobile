@@ -75,7 +75,7 @@ dependencies:
   url_launcher: ^6.1.10
 
   flutter_screenutil: ^5.7.0
-  
+
   web_socket_channel: ^2.1.0
 
 dev_dependencies:
@@ -131,6 +131,8 @@ flutter:
     - assets/lookup/
     - assets/auth_group/
     - assets/message/
+    - assets/settings/
+    - assets/common_icon/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

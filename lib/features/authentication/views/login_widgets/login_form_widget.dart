@@ -87,6 +87,24 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   Radius.circular(Bitflow.defaultRadius),
                 ),
               ),
+              errorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  style: BorderStyle.none,
+                  color: Palette.textColor1,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(Bitflow.defaultRadius),
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  style: BorderStyle.none,
+                  color: Palette.textColor1,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(Bitflow.defaultRadius),
+                ),
+              ),
               hintText: ref.read(loginProvider.notifier).isFirebaseAuth() ? '이메일' : '아이디',
               hintStyle: const TextStyle(
                 fontSize: 14,
@@ -169,6 +187,24 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 ),
               ),
               focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  style: BorderStyle.none,
+                  color: Palette.textColor1,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(Bitflow.defaultRadius),
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  style: BorderStyle.none,
+                  color: Palette.textColor1,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(Bitflow.defaultRadius),
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                   style: BorderStyle.none,
                   color: Palette.textColor1,
