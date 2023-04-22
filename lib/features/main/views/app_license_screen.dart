@@ -25,30 +25,28 @@ class _AppLicensePageState extends State<AppLicensePage> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 6.h),
-                  openSourceLicenseCard("Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2",
-                      "https://github.com/square/okhttp"),
-                  openSourceLicenseCard("Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2",
-                      "https://github.com/square/okhttp"),
-                  openSourceLicenseCard("Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2",
-                      "https://github.com/square/okhttp"),
-                  openSourceLicenseCard("Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2",
-                      "https://github.com/square/okhttp"),
-                  openSourceLicenseCard("Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2",
-                      "https://github.com/square/okhttp"),
-                  openSourceLicenseCard("Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2",
-                      "https://github.com/square/okhttp"),
-                  openSourceLicenseCard("Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2",
-                      "https://github.com/square/okhttp"),
-                  openSourceLicenseCard("Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2",
-                      "https://github.com/square/okhttp"),
-                ],
-              ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 6.h),
+                openSourceLicenseCard(
+                    "Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2", "https://github.com/square/okhttp"),
+                openSourceLicenseCard(
+                    "Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2", "https://github.com/square/okhttp"),
+                openSourceLicenseCard(
+                    "Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2", "https://github.com/square/okhttp"),
+                openSourceLicenseCard(
+                    "Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2", "https://github.com/square/okhttp"),
+                openSourceLicenseCard(
+                    "Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2", "https://github.com/square/okhttp"),
+                openSourceLicenseCard(
+                    "Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2", "https://github.com/square/okhttp"),
+                openSourceLicenseCard(
+                    "Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2", "https://github.com/square/okhttp"),
+                openSourceLicenseCard(
+                    "Retrofit2", "Apache 2.0", "https://github.com/square/okhttp/blob/master/LICENSE.txt", "Version 4.9.2", "https://github.com/square/okhttp"),
+              ],
             ),
           ),
         ),

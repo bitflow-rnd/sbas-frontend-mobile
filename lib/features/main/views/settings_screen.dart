@@ -15,6 +15,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  bool isRecentVersion = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,13 +143,29 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
           const Spacer(),
-          Text(
-            '최신 버전 입니다.',
-            style: CTS(
-              color: Palette.greyText_80,
-              fontSize: 13,
-            ),
-          ),
+          isRecentVersion
+              ? Text(
+                  '최신 버전 입니다.',
+                  style: CTS(
+                    color: Palette.greyText_80,
+                    fontSize: 13,
+                  ),
+                )
+              : InkWell(
+                  onTap: () {},
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                    decoration: BoxDecoration(color: Colors.blueAccent, borderRadius: BorderRadius.circular(5.r)),
+                    child: Text(
+                      '업데이트',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontFamily: 'SpoqaHanSansNeo',
+                      ),
+                    ),
+                  ),
+                ),
         ],
       ),
     );
