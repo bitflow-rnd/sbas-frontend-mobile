@@ -10,18 +10,18 @@ class BaseCodeModel {
   int? cdSeq;
   String? rmk;
 
-  BaseCodeModel(
-      {this.rgstUserId,
-      this.rgstDttm,
-      this.updtUserId,
-      this.updtDttm,
-      this.id,
-      this.cdGrpNm,
-      this.cdNm,
-      this.cdVal,
-      this.cdSeq,
-      this.rmk});
-
+  BaseCodeModel({
+    this.rgstUserId,
+    this.rgstDttm,
+    this.updtUserId,
+    this.updtDttm,
+    this.id,
+    this.cdGrpNm,
+    this.cdNm,
+    this.cdVal,
+    this.cdSeq,
+    this.rmk,
+  });
   BaseCodeModel.fromJson(Map<String, dynamic> json) {
     if (json["rgstUserId"] is String) {
       rgstUserId = json["rgstUserId"];
@@ -52,7 +52,6 @@ class BaseCodeModel {
       rmk = json["rmk"];
     }
   }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["rgstUserId"] = rgstUserId;
@@ -75,8 +74,10 @@ class Id {
   String? cdGrpId;
   String? cdId;
 
-  Id({this.cdGrpId, this.cdId});
-
+  Id({
+    this.cdGrpId,
+    this.cdId,
+  });
   Id.fromJson(Map<String, dynamic> json) {
     if (json["cdGrpId"] is String) {
       cdGrpId = json["cdGrpId"];
@@ -85,7 +86,6 @@ class Id {
       cdId = json["cdId"];
     }
   }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["cdGrpId"] = cdGrpId;
