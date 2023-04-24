@@ -8,6 +8,7 @@ class BottomPositionedSubmitButton extends ConsumerWidget {
     this.color,
     super.key,
   });
+  
   @override
   Widget build(BuildContext context, WidgetRef ref) => Container(
         color: Colors.blueAccent,
