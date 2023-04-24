@@ -23,19 +23,16 @@ class TalkRoomBloc {
 
   late final List<TalkMsgModel> chatDetailList;
 
-  void _fetchChattingRoom() async {
-    final channel = IOWebSocketChannel.connect('$_wsUrl/$tkrmId/$userId');
+  late final channel = IOWebSocketChannel.connect('$_wsUrl/$tkrmId/$userId');
 
+  void _fetchChattingRoom() async {
     channel.stream.listen((message) {
-      print("상세채팅방의 어떠한 데이터 받음");
       final parsedData = json.decode(message);
 
       if (parsedData is List) {
-        print("대화방 전체 내용 데이터 받음");
         chatDetailList = TalkMsgModel.fromArrJson(parsedData);
         _chatDetailListController.add(chatDetailList);
       } else if (parsedData is Map<String, dynamic>) {
-        print("추가되는 메시지 데이터 받음");
         final addData = TalkMsgModel.fromJson(parsedData);
 
         chatDetailList.add(addData);
@@ -51,7 +48,6 @@ class TalkRoomBloc {
   }
 
   Future<void> sendMessage(String message) async {
-    final channel = IOWebSocketChannel.connect('$_wsUrl/$tkrmId/$userId');
     channel.sink.add(message);
 
     TalkRoomsBloc(userId: userId).sendMessage(tkrmId);

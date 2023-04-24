@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/blocs/talk_room_block.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
 import 'package:sbas/features/messages/views/widgets/chat_widget.dart';
@@ -21,6 +22,7 @@ class ChattingScreen extends StatefulWidget {
 class _ChattingScreenState extends State<ChattingScreen> {
   late final TalkRoomBloc _talkRoomBloc;
   late final TextEditingController _messageController;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
@@ -30,12 +32,14 @@ class _ChattingScreenState extends State<ChattingScreen> {
       tkrmId: widget.tkrmId,
     );
     _messageController = TextEditingController();
+    _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
     _talkRoomBloc.dispose();
     _messageController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -87,7 +91,14 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                return ChatWidget(snapshot);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent,
+                    duration: const Duration(microseconds: 300),
+                    curve: Curves.easeOut,
+                  );
+                });
+                return chatWidget(userToken.name!, snapshot, _scrollController);
               },
             ),
           ),
@@ -119,7 +130,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   setState(() {});
                 },
                 decoration: const InputDecoration(
-                  hintText: 'Type a message',
+                  hintText: '메세지를 입력해 주세요.',
                   border: InputBorder.none,
                 ),
               ),
