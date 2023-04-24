@@ -23,6 +23,12 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
     list.addAll(
       await _userRegRequestRepository.getBaseCode('DNRA'),
     );
+    for (final e in list) {
+      if (e.id != null && e.id!.cdId != null && e.id!.cdId!.isNotEmpty) {
+        ref.read(checkedSeverelyDiseaseProvider.notifier).state[e.id!.cdId!] =
+            false;
+      }
+    }
     return list;
   }
 
@@ -32,4 +38,7 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
 final severelyDiseaseProvider =
     AsyncNotifierProvider<SeverelyDiseasePresenter, List<BaseCodeModel>>(
   () => SeverelyDiseasePresenter(),
+);
+final checkedSeverelyDiseaseProvider = StateProvider<Map<String, bool>>(
+  (ref) => {},
 );
