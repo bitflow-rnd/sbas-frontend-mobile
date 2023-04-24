@@ -11,6 +11,7 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/hospital_bed_request_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/infectious_disease_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/severely_disease_widget.dart';
 
 class HospitalBedRequestScreen extends ConsumerWidget {
   HospitalBedRequestScreen({
@@ -60,12 +61,15 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                         report: report,
                       ),
                     ),
-                  ),
-                if (order == 0)
-                  SizedBox(
-                    width: width,
-                  ),
-                if (order == 1)
+                  )
+                else if (order == 0)
+                  Expanded(
+                    child: SizedBox(
+                      width: width,
+                      child: SeverelyDisease(),
+                    ),
+                  )
+                else if (order == 1)
                   SizedBox(
                     width: width,
                   ),
