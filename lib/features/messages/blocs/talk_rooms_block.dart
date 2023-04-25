@@ -21,7 +21,11 @@ class TalkRoomsBloc {
 
   late final List<TalkRoomsResponseModel> chatRoomList;
 
-  late final channel = IOWebSocketChannel.connect('$_wsUrl/$userId');
+  late final channel = IOWebSocketChannel.connect(
+    '$_wsUrl/$userId',
+    pingInterval: const Duration(seconds: 30),
+    connectTimeout: const Duration(seconds: 5),
+  );
 
   void _fetchChatRoomList() async {
     channel.stream.listen((message) {

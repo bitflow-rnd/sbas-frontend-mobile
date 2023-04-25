@@ -107,14 +107,14 @@ class _ChattingScreenState extends State<ChattingScreen> {
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
             ),
-            child: _buildTextComposer(),
+            child: _textSender(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTextComposer() {
+  Widget _textSender() {
     return IconTheme(
       data: IconThemeData(
         color: Theme.of(context).colorScheme.secondary,
@@ -141,6 +141,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   ? null
                   : () {
                       _talkRoomBloc.sendMessage(_messageController.text);
+                      _messageController.clear();
                     },
             ),
           ],

@@ -23,7 +23,11 @@ class TalkRoomBloc {
 
   late final List<TalkMsgModel> chatDetailList;
 
-  late final channel = IOWebSocketChannel.connect('$_wsUrl/$tkrmId/$userId');
+  late final channel = IOWebSocketChannel.connect(
+    '$_wsUrl/$tkrmId/$userId',
+    pingInterval: const Duration(seconds: 30),
+    connectTimeout: const Duration(seconds: 5),
+  );
 
   void _fetchChattingRoom() async {
     channel.stream.listen((message) {
@@ -54,6 +58,7 @@ class TalkRoomBloc {
   }
 
   void dispose() {
+    print('chat room close');
     _chatDetailListController.close();
   }
 
