@@ -172,6 +172,35 @@ class PatientProvider {
     throw ArgumentError();
   }
 
+  Future<dynamic> bioinfoanlys(String json) async {
+    final client = Dio();
+
+    try {
+      client.options.contentType = 'application/json';
+      client.options.headers = authToken;
+
+      final res = await client.postUri(
+        Uri.parse('$_baseUrl/bioinfoanlys'),
+        data: json,
+      );
+      if (res.statusCode == 200) {
+        if (kDebugMode) {
+          print(res.data);
+        }
+        return res.data['result'];
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
   Future<dynamic> getEpidemiologicalReport(String attcId) async {
     final client = Dio();
 
