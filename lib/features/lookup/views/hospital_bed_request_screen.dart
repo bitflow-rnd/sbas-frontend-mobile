@@ -66,7 +66,9 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                   Expanded(
                     child: SizedBox(
                       width: width,
-                      child: SeverelyDisease(),
+                      child: SeverelyDisease(
+                        formKey: formKey,
+                      ),
                     ),
                   )
                 else if (order == 1)

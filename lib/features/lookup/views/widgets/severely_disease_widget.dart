@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/models/base_code_model.dart';
+import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/lookup/blocs/bio_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
+import 'package:sbas/features/lookup/models/bio_info_model.dart';
 
 class SeverelyDisease extends ConsumerStatefulWidget {
   SeverelyDisease({
+    required this.formKey,
     super.key,
   });
+  final GlobalKey<FormState> formKey;
   final _subTitles = [
     '환자유형',
     '기저질환',
@@ -151,7 +157,7 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
         itemCount: model.length,
         physics: const NeverScrollableScrollPhysics(),
       );
-  Widget _init() => GridView.builder(
+  Widget _init(BioInfoModel model) => GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 3.15,
@@ -193,11 +199,199 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
               ),
               labelText: widget._labelTitles[index],
             ),
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                RegExp(r'[0-9|.]'),
+              ),
+              FilteringTextInputFormatter.singleLineFormatter,
+            ],
+            validator: (value) {
+              if (value != null &&
+                  value.isNotEmpty &&
+                  (int.tryParse(value) is int ||
+                      double.tryParse(value) is double)) {
+                return null;
+              }
+              return '수치를 정확히 입력하세요.';
+            },
+            onSaved: (newValue) {
+              if (newValue != null && newValue.isNotEmpty) {
+                switch (index) {
+                  case 0:
+                    model.bdTemp = double.tryParse(newValue);
+                    break;
+
+                  case 1:
+                    model.pulse = double.tryParse(newValue);
+                    break;
+
+                  case 2:
+                    model.breath = double.tryParse(newValue);
+                    break;
+
+                  case 3:
+                    model.spo2 = double.tryParse(newValue);
+                    break;
+
+                  case 4:
+                    model.sbp = double.tryParse(newValue);
+                    break;
+                }
+              }
+            },
+            autovalidateMode: AutovalidateMode.always,
           ),
         ),
         itemCount: widget._labelTitles.length,
         physics: const NeverScrollableScrollPhysics(),
       );
+  Widget _initBioInfo() => ref.watch(bioInfoProvider).when(
+        loading: () => const SBASProgressIndicator(),
+        error: (error, stackTrace) => Center(
+          child: Text(
+            error.toString(),
+            style: const TextStyle(
+              color: Colors.lightBlueAccent,
+            ),
+          ),
+        ),
+        data: (bio) => Form(
+          key: widget.formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Divider(
+                color: Colors.grey,
+              ),
+              FormField(
+                autovalidateMode: AutovalidateMode.always,
+                builder: (field) => Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Text(
+                          '의식상태',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Gaps.h12,
+                        for (int i = 3; i < 5; i++)
+                          _initClassification(
+                            _selectedStateIndex,
+                            i,
+                            () => setState(() {
+                              _selectedStateIndex = i;
+                              bio.avpu = i == 3 ? 'A' : 'U';
+                              field.didChange(bio.avpu);
+                            }),
+                          ),
+                      ],
+                    ),
+                    Gaps.v6,
+                    if (field.hasError)
+                      FieldErrorText(
+                        field: field,
+                      ),
+                  ],
+                ),
+                validator: (value) => value != null ? null : '의식상태를 선택하세요.',
+              ),
+              FormField(
+                autovalidateMode: AutovalidateMode.always,
+                builder: (field) => Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Text(
+                          '산소 투여 여부',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Gaps.h12,
+                        for (int i = 5; i < widget._classification.length; i++)
+                          _initClassification(
+                            _selectedOxygenIndex,
+                            i,
+                            () => setState(() {
+                              _selectedOxygenIndex = i;
+                              bio.o2Apply = i == 5 ? 'N' : 'Y';
+                              field.didChange(bio.o2Apply);
+                            }),
+                          ),
+                      ],
+                    ),
+                    Gaps.v6,
+                    if (field.hasError)
+                      FieldErrorText(
+                        field: field,
+                      ),
+                  ],
+                ),
+                validator: (value) => value != null ? null : '산소 투여 여부를 선택하세요.',
+              ),
+              SizedBox(
+                height: (128 + 32).h,
+                child: _init(bio),
+              ),
+              const Text(
+                '※생체정보를 모두 입력하신 경우에 A.I.분석이 가능합니다.',
+                style: TextStyle(
+                  color: Colors.lightBlueAccent,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                  left: 2,
+                  top: 4,
+                  right: 2,
+                  bottom: 18,
+                ),
+                child: TextButton(
+                  onPressed: _submit,
+                  style: ButtonStyle(
+                    side: MaterialStateProperty.all(
+                      const BorderSide(
+                        style: BorderStyle.solid,
+                        color: Colors.lightBlueAccent,
+                      ),
+                    ),
+                    minimumSize: MaterialStateProperty.all(
+                      Size(
+                        MediaQuery.of(context).size.width,
+                        18 * 3,
+                      ),
+                    ),
+                  ),
+                  child: const Text(
+                    '분석',
+                    style: TextStyle(
+                      color: Colors.lightBlueAccent,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+  Future<void> _submit() async {
+    if (widget.formKey.currentState != null &&
+        widget.formKey.currentState!.validate()) {
+      widget.formKey.currentState!.save();
+
+      _score = await ref.read(bioInfoProvider.notifier).analyze();
+    }
+  }
+
   @override
   Widget build(BuildContext context) => ref.watch(severelyDiseaseProvider).when(
         loading: () => const SBASProgressIndicator(),
@@ -251,101 +445,8 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                                 ),
                               ),
                               Gaps.v6,
-                              if (_selectedIndex == 1)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Divider(
-                                      color: Colors.grey,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text(
-                                          '의식상태',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                        Gaps.h12,
-                                        for (int i = 3; i < 5; i++)
-                                          _initClassification(
-                                            _selectedStateIndex,
-                                            i,
-                                            () => setState(
-                                                () => _selectedStateIndex = i),
-                                          ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text(
-                                          '산소 투여 여부',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                        Gaps.h12,
-                                        for (int i = 5;
-                                            i < widget._classification.length;
-                                            i++)
-                                          _initClassification(
-                                            _selectedOxygenIndex,
-                                            i,
-                                            () => setState(
-                                                () => _selectedOxygenIndex = i),
-                                          ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: (128 + 32).h,
-                                      child: _init(),
-                                    ),
-                                    const Text(
-                                      '※생체정보를 모두 입력하신 경우에 AI분석이 가능합니다.',
-                                      style: TextStyle(
-                                        color: Colors.lightBlueAccent,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(
-                                        left: 2,
-                                        top: 4,
-                                        right: 2,
-                                        bottom: 18,
-                                      ),
-                                      child: TextButton(
-                                        onPressed: () {},
-                                        style: ButtonStyle(
-                                          side: MaterialStateProperty.all(
-                                            const BorderSide(
-                                              style: BorderStyle.solid,
-                                              color: Colors.lightBlueAccent,
-                                            ),
-                                          ),
-                                          minimumSize:
-                                              MaterialStateProperty.all(
-                                            Size(
-                                              MediaQuery.of(context).size.width,
-                                              18 * 3,
-                                            ),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          '분석',
-                                          style: TextStyle(
-                                            color: Colors.lightBlueAccent,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              if (_selectedIndex == 1 && _score == 0)
+                                _initBioInfo(),
                               if (_selectedIndex == 0 || _selectedIndex == 1)
                                 const Text(
                                   '중증도 분석 결과',
@@ -353,6 +454,30 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                                     color: Colors.grey,
                                     fontSize: 18,
                                   ),
+                                ),
+                              if (_selectedIndex == 1 && _score > 0)
+                                Column(
+                                  children: [
+                                    Gaps.v4,
+                                    Text(
+                                      'NEWS Score: $_score',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const Divider(
+                                      color: Colors.grey,
+                                    ),
+                                    const Text(
+                                      '※중증도 분석 A.I.시스템의 분석 값 입니다.',
+                                      style: TextStyle(
+                                        color: Colors.lightBlueAccent,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                             ],
                           ),
@@ -443,5 +568,8 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
   double _getHeight(Iterable<BaseCodeModel> model, int crossAxisCount) =>
       (model.length / crossAxisCount + 1) * 54.h;
 
-  int _selectedIndex = -1, _selectedStateIndex = -1, _selectedOxygenIndex = -1;
+  int _selectedIndex = -1,
+      _selectedStateIndex = -1,
+      _selectedOxygenIndex = -1,
+      _score = 0;
 }
