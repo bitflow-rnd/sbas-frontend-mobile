@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
@@ -13,7 +12,6 @@ class AssignBedScreen extends ConsumerWidget {
     super.key,
     required this.automaticallyImplyLeading,
   });
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -110,4 +108,7 @@ class AssignBedScreen extends ConsumerWidget {
   }
 
   final bool automaticallyImplyLeading;
+
+  static const String routeName = 'assign';
+  static const String routeUrl = '/assign';
 }

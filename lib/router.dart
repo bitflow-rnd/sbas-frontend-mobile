@@ -2,6 +2,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sbas/common/main_navigation_screen.dart';
+import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
 import 'package:sbas/util.dart';
@@ -35,6 +36,13 @@ final routerProvider = Provider(
             name: LogInScreen.routeName,
             path: LogInScreen.routeUrl,
             builder: (context, state) => const LogInScreen(),
+          ),
+          GoRoute(
+            name: AssignBedScreen.routeName,
+            path: AssignBedScreen.routeUrl,
+            builder: (context, state) => const AssignBedScreen(
+              automaticallyImplyLeading: false,
+            ),
           ),
           GoRoute(
             name: MainNavigationScreen.routeName,
