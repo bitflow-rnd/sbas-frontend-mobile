@@ -1,20 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:sbas/features/messages/blocs/talk_rooms_block.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/status.dart' as status;
 
 class TalkRoomBloc {
   final String userId;
   final String tkrmId;
   final _chatDetailListController = StreamController<List<TalkMsgModel>>();
 
-  TalkRoomBloc({
-    required this.userId,
-    required this.tkrmId,
-  }) {
+  TalkRoomBloc({required this.userId, required this.tkrmId}) {
     _fetchChattingRoom();
   }
 
@@ -46,19 +42,17 @@ class TalkRoomBloc {
       }
     }, onError: (error) {
       _chatDetailListController.addError(error);
-    }, onDone: () {
-      channel.sink.close(status.goingAway);
     });
   }
 
   Future<void> sendMessage(String message) async {
     channel.sink.add(message);
 
-    TalkRoomsBloc(userId: userId).sendMessage(tkrmId);
+    // TalkRoomsProvider(userId: userId).sendMessage(tkrmId);
+    TalkRoomsProvider.getInstance(userId: userId).sendMessage(tkrmId);
   }
 
   void dispose() {
-    print('chat room close');
     _chatDetailListController.close();
   }
 

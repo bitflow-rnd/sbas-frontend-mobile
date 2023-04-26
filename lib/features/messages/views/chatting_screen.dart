@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
-import 'package:sbas/features/messages/blocs/talk_room_block.dart';
+import 'package:sbas/features/messages/blocs/talk_room_bloc.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
 import 'package:sbas/features/messages/views/widgets/chat_widget.dart';
 
@@ -65,14 +65,14 @@ class _ChattingScreenState extends State<ChattingScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => print('hi'),
             icon: const Icon(
               Icons.search,
               color: Color(0xFF696969),
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => print('bye'),
             icon: const Icon(
               Icons.more_vert,
               color: Color(0xFF696969),

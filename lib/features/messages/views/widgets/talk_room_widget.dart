@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/models/talk_rooms_response_model.dart';
-import 'package:sbas/features/messages/views/chatting_screen.dart';
 
-ListView talkRoomWidget(AsyncSnapshot<List<TalkRoomsResponseModel>> snapshot) {
+ListView talkRoomWidget(List<TalkRoomsResponseModel> snapshot, Function onTap) {
   return ListView.separated(
     itemBuilder: (context, index) {
-      var talkRoom = snapshot.data![index];
+      var talkRoom = snapshot[index];
 
       return ListTile(
         contentPadding:
@@ -31,19 +30,12 @@ ListView talkRoomWidget(AsyncSnapshot<List<TalkRoomsResponseModel>> snapshot) {
           style: const TextStyle(fontSize: 12.0, color: Colors.grey),
         ),
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChattingScreen(
-                  userId: userToken.name!,
-                  tkrmId: talkRoom.tkrmId!,
-                ),
-              ));
+          onTap(userToken.name!, talkRoom.tkrmId!);
         },
       );
     },
     separatorBuilder: (context, index) => const Divider(height: 1.0),
-    itemCount: snapshot.data!.length,
+    itemCount: snapshot.length,
   );
 }
 

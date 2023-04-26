@@ -1,18 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/models/talk_rooms_response_model.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/status.dart' as status;
 
-class TalkRoomsBloc {
+class TalkRoomsProvider {
   late final String userId;
   final _chatRoomListController =
       StreamController<List<TalkRoomsResponseModel>>();
 
-  TalkRoomsBloc({String? userId}) {
-    this.userId = userId ?? userToken.name!;
+  static TalkRoomsProvider? _instance;
+
+  static TalkRoomsProvider getInstance({String? userId}) {
+    _instance ??= TalkRoomsProvider._(userId: userId);
+    return _instance!;
+  }
+
+  TalkRoomsProvider._({String? userId}) {
+    this.userId = userId ?? '';
     _fetchChatRoomList();
   }
 
@@ -32,9 +39,11 @@ class TalkRoomsBloc {
       final parsedData = json.decode(message);
 
       if (parsedData is List) {
+        print(parsedData);
         chatRoomList = TalkRoomsResponseModel.fromArrJson(parsedData);
         _chatRoomListController.add(chatRoomList);
       } else if (parsedData is Map<String, dynamic>) {
+        print(parsedData);
         final modifyData = TalkRoomsResponseModel.fromJson(parsedData);
         if (chatRoomList.isEmpty) {
           chatRoomList.add(modifyData);
@@ -51,8 +60,6 @@ class TalkRoomsBloc {
       _chatRoomListController.add(chatRoomList);
     }, onError: (error) {
       _chatRoomListController.addError(error);
-    }, onDone: () {
-      channel.sink.close(status.goingAway);
     });
   }
 
@@ -66,3 +73,13 @@ class TalkRoomsBloc {
 
   final String _wsUrl = '${dotenv.env['WS_URL']}/chat-rooms';
 }
+
+final talkRoomsProvider = Provider(
+  (ref) => TalkRoomsProvider.getInstance(userId: userToken.name),
+);
+
+final talkRoomsStateProvider =
+    StreamProvider<List<TalkRoomsResponseModel>>((ref) {
+  final provider = ref.watch(talkRoomsProvider);
+  return provider.chatRoomListStream.asBroadcastStream();
+});
