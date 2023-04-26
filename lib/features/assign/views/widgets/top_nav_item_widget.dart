@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/widgets/top_navbar_widget.dart';
 
 class TopNavItem extends StatefulWidget {
-  const TopNavItem({
-    super.key,
-    required this.text,
-    required this.x,
-  });
+  const TopNavItem({super.key, required this.text, required this.x});
   final String text;
   final double x;
-
+  // final double width;
   @override
   State<TopNavItem> createState() => _TopNavItemState();
 }
@@ -19,7 +18,7 @@ class _TopNavItemState extends State<TopNavItem> {
   @override
   Widget build(BuildContext context) {
     final tn = context.findAncestorStateOfType<TopNavbarState>()!;
-
+    bool isSelected() => tn.x == widget.x;
     return Align(
       alignment: Alignment(
         widget.x,
@@ -33,33 +32,43 @@ class _TopNavItemState extends State<TopNavItem> {
           width: tn.width * 0.2,
           color: Colors.transparent,
           alignment: Alignment.center,
-          child: RichText(
-            text: TextSpan(
-              text: widget.text,
-              style: TextStyle(
-                color: color,
-                fontSize: 12,
-              ),
-              children: const [
-                WidgetSpan(
-                  child: Gaps.h1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.text,
+                style: CTS.medium(
+                  color: color,
+                  fontSize: 13,
                 ),
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.lightBlue,
-                    maxRadius: 8,
-                    child: Text(
-                      '7',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
+              ),
+              SizedBox(width: 2.w),
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: isSelected() ? Colors.blueAccent : Colors.transparent,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isSelected() ? Colors.blueAccent : Palette.greyText_60,
+                      width: 1.2.r,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.all(2.3.r),
+                    child: Center(
+                      child: Text(
+                        '1',
+                        style: CTS.medium(
+                          color: isSelected() ? Colors.white : Palette.greyText,
+                          fontSize: 10.0,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
