@@ -215,7 +215,7 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
           backgroundColor: Colors.white,
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
           ),
         ),
         child: Container(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/features/assign/views/widgets/top_nav_item_widget.dart';
 
 class TopNavbar extends StatefulWidget {
@@ -11,7 +12,7 @@ class TopNavbar extends StatefulWidget {
 class TopNavbarState extends State<TopNavbar> {
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width - 16;
+    width = MediaQuery.of(context).size.width - 24.w;
 
     return Stack(
       children: [
@@ -22,38 +23,41 @@ class TopNavbarState extends State<TopNavbar> {
             0,
           ),
           duration: const Duration(
-            milliseconds: 500,
+            milliseconds: 200,
           ),
           child: Container(
-            width: width * 0.2,
-            height: 6,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                30,
-              ),
-              color: Colors.lightBlue,
+            width: width * 0.19,
+            height: 6.h,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.zero,
+              color: Colors.blueAccent,
             ),
           ),
         ),
         const TopNavItem(
           text: '병상요청',
           x: -1,
+          // width: 0.3.sw,
         ),
         const TopNavItem(
           text: '병상배정',
           x: -0.5,
+          // width: 0.3.sw,
         ),
         const TopNavItem(
-          text: '이송/배차',
+          text: '배차',
+          // width: 0.2.sw,
           x: 0,
         ),
         const TopNavItem(
-          text: '입/퇴원',
+          text: '입퇴원',
+          // width: 0.3.sw,
           x: 0.5,
         ),
         const TopNavItem(
+          // width: 0.3.sw,
           text: '완료',
-          x: 1,
+          x: 1.0,
         ),
       ],
     );
