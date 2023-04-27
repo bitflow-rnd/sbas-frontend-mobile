@@ -8,6 +8,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
+import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/hospital_bed_request_nav_widget.dart';
@@ -71,6 +72,7 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                       width: width,
                       child: SeverelyDisease(
                         formKey: formKey,
+                        ptId: patient?.id ?? '',
                       ),
                     ),
                   )
@@ -106,7 +108,11 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                                 .read(infectiousDiseaseProvider.notifier)
                                 .registry(patient?.id ?? '');
                           }
-                          if (index == 0) {}
+                          if (index == 0) {
+                            ref
+                                .read(severelyDiseaseProvider.notifier)
+                                .registry(patient?.id ?? '');
+                          }
                           if (index == 1) {
                             Navigator.pop(context);
 

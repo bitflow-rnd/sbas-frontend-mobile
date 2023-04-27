@@ -32,6 +32,15 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
     return list;
   }
 
+  registry(String ptId) {
+    for (final kv in ref.read(checkedSeverelyDiseaseProvider).entries) {
+      if (kv.value) {
+        print(kv.key);
+      }
+    }
+    print(ptId);
+  }
+
   late final UserRegRequestRepository _userRegRequestRepository;
 }
 

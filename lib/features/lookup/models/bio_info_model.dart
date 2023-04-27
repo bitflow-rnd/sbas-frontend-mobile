@@ -2,10 +2,10 @@ class BioInfoModel {
   String? avpu;
   String? o2Apply;
   double? bdTemp;
-  double? pulse;
-  double? breath;
   double? spo2;
-  double? sbp;
+  int? pulse;
+  int? breath;
+  int? sbp;
   int? score;
 
   BioInfoModel({
@@ -28,10 +28,10 @@ class BioInfoModel {
     if (json["bdTemp"] is double) {
       bdTemp = json["bdTemp"];
     }
-    if (json["pulse"] is double) {
+    if (json["pulse"] is int) {
       pulse = json["pulse"];
     }
-    if (json["breath"] is double) {
+    if (json["breath"] is int) {
       breath = json["breath"];
     }
     if (json["spo2"] is double) {
