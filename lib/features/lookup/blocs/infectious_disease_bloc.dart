@@ -25,7 +25,7 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
       final imageFile = ref.read(infectiousImageProvider);
 
       if (imageFile != null) {
-        _patientDiseaseModel.attcId =
+        _patientDiseaseModel.diagAttcId =
             await _regRepository.uploadImage(imageFile);
       }
       await _diseaseRepository.registerDiseaseInfo(
