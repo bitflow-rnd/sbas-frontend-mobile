@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/widgets/card_item_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_navbar_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_search_widget.dart';
@@ -15,6 +17,7 @@ class AssignBedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      backgroundColor: Palette.white,
       appBar: Bitflow.getAppBar(
         '병상 배정 현황',
         automaticallyImplyLeading,
@@ -24,39 +27,34 @@ class AssignBedScreen extends ConsumerWidget {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(
-                vertical: 24,
-                horizontal: 16,
+                vertical: 14.h,
+                horizontal: 16.w,
               ),
-              child: TopSearch(),
+              child: const TopSearch(),
             ),
-            const Divider(
-              color: Colors.grey,
+            Divider(
+              color: Palette.greyText_20,
               height: 1,
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(
-                16,
-                14,
-                16,
-                0,
-              ),
-              child: TopNavbar(),
+            SizedBox(height: 10.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.r),
+              child: const TopNavbar(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16.r,
               ),
               child: Container(
                 alignment: Alignment.topLeft,
                 child: RichText(
-                  text: const TextSpan(
+                  text: TextSpan(
                     text: '총',
-                    style: TextStyle(
+                    style: CTS.bold(
                       color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 15,
                     ),
                     children: [
                       WidgetSpan(
@@ -64,18 +62,16 @@ class AssignBedScreen extends ConsumerWidget {
                       ),
                       TextSpan(
                         text: '17',
-                        style: TextStyle(
+                        style: CTS.bold(
                           color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 15,
                         ),
                       ),
                       TextSpan(
                         text: '명',
-                        style: TextStyle(
+                        style: CTS.bold(
                           color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 15,
                         ),
                       )
                     ],
@@ -83,23 +79,29 @@ class AssignBedScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            const CardItem(
-              patientAge: '88',
-              patientName: '김*준',
-              patientSex: '남',
-              symbol: '병상요청',
-              color: Colors.green,
-            ),
             Expanded(
-              flex: 1,
-              child: Container(
-                width: double.infinity,
-                color: Colors.transparent,
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(children: [
+                      CardItem(patientAge: '88', patientName: '김*준', patientSex: '남', symbol: '병상요청', color: Colors.green),
+                      CardItem(patientAge: '88', patientName: '김*준', patientSex: '남', symbol: '배정대기', color: Palette.primary),
+                      CardItem(patientAge: '88', patientName: '김*준', patientSex: '남', symbol: '이송대기', hospital: "분당 서울대 병원", color: Palette.primary),
+                      CardItem(patientAge: '88', patientName: '김*준', patientSex: '남', symbol: '  이송중  ', hospital: "분당 서울대 병원", color: Palette.primary),
+                      CardItem(patientAge: '88', patientName: '김*준', patientSex: '남', symbol: '    입원    ', color: Palette.red),
+                    ]),
+                  ),
+                  Column(
+                    children: const [
+                      Spacer(),
+                      BottomSubmitBtn(
+                        onPressed: null,
+                        text: '병상요청',
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ),
-            const BottomSubmitBtn(
-              onPressed: null,
-              text: '병상요청',
             ),
           ],
         ),
