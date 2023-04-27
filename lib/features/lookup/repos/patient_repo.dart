@@ -35,6 +35,10 @@ class PatientRepository {
       await _patientProvider.bioinfoanlys(
         toJson(map),
       );
+  Future<dynamic> reqBioInfo(Map<String, dynamic> map) async =>
+      await _patientProvider.reqBioInfo(
+        toJson(map),
+      );
   Future<Map<String, dynamic>> getOpticalCharacterRecognition(
     XFile image,
   ) async =>

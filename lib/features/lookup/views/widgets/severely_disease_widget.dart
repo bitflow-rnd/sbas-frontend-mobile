@@ -13,8 +13,10 @@ import 'package:sbas/features/lookup/models/bio_info_model.dart';
 class SeverelyDisease extends ConsumerStatefulWidget {
   SeverelyDisease({
     required this.formKey,
+    required this.ptId,
     super.key,
   });
+  final String ptId;
   final GlobalKey<FormState> formKey;
   final _subTitles = [
     '환자유형',
@@ -101,6 +103,8 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                 setState(() {
                   final state =
                       ref.read(checkedSeverelyDiseaseProvider.notifier).state;
+
+                  if (state[key] == true) return;
 
                   state[key] = !isChecked;
 
@@ -223,11 +227,11 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                     break;
 
                   case 1:
-                    model.pulse = double.tryParse(newValue);
+                    model.pulse = int.tryParse(newValue);
                     break;
 
                   case 2:
-                    model.breath = double.tryParse(newValue);
+                    model.breath = int.tryParse(newValue);
                     break;
 
                   case 3:
@@ -235,7 +239,7 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                     break;
 
                   case 4:
-                    model.sbp = double.tryParse(newValue);
+                    model.sbp = int.tryParse(newValue);
                     break;
                 }
               }
@@ -388,7 +392,7 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
         widget.formKey.currentState!.validate()) {
       widget.formKey.currentState!.save();
 
-      _score = await ref.read(bioInfoProvider.notifier).analyze();
+      _score = await ref.read(bioInfoProvider.notifier).analyze(widget.ptId);
     }
   }
 
@@ -438,8 +442,11 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                                       _initClassification(
                                         _selectedIndex,
                                         i,
-                                        () =>
-                                            setState(() => _selectedIndex = i),
+                                        () => setState(() {
+                                          if (_selectedIndex != i) {
+                                            _selectedIndex = i;
+                                          }
+                                        }),
                                       ),
                                   ],
                                 ),
