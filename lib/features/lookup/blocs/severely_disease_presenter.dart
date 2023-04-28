@@ -20,6 +20,9 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
       await _userRegRequestRepository.getBaseCode('SVTP'),
     );
     _list.addAll(
+      await _userRegRequestRepository.getBaseCode('SVIP'),
+    );
+    _list.addAll(
       await _userRegRequestRepository.getBaseCode('BDTP'),
     );
     _list.addAll(
@@ -49,8 +52,11 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
               reqBedTypeCd: entries
                   .firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP')
                   .key,
-              svrtIptTypeCd: entries
+              svrtTypeCd: entries
                   .firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP')
+                  .key,
+              svrtIptTypeCd: entries
+                  .firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP')
                   .key,
               udds: entries
                   .where((e) => e.value && e.key.substring(0, 4) == 'UDDS')

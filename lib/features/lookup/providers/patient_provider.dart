@@ -129,7 +129,7 @@ class PatientProvider {
         if (kDebugMode) {
           print(res.data);
         }
-        return res.data;
+        return res.data['result'];
       }
     } catch (exception) {
       if (kDebugMode) {
@@ -220,9 +220,7 @@ class PatientProvider {
       }
     } catch (exception) {
       if (kDebugMode) {
-        print({
-          'exception': exception,
-        });
+        print({'exception': exception, 'json': json});
       }
     } finally {
       client.close();
