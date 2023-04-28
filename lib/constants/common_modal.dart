@@ -94,7 +94,7 @@ class Common {
                                     ),
                                     child: InkWell(
                                       onTap: () {
-                                        button1Function == null ? Navigator.pop(context, false) : button2Function();
+                                        button1Function == null ? Navigator.pop(context, false) : button1Function();
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(vertical: 9.r),
@@ -111,7 +111,7 @@ class Common {
                               ),
                             )
                           : Container(),
-                      if (button2Function != null) SizedBox(width: 12.w),
+                      if (button1Function != null) SizedBox(width: 12.w),
                       Expanded(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(6.r),
@@ -128,7 +128,7 @@ class Common {
                               color: button2Color,
                               child: InkWell(
                                 onTap: () {
-                                  button1Function == null ? Navigator.pop(context, true) : button1Function();
+                                  button2Function == null ? Navigator.pop(context, true) : button2Function();
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(vertical: 9.r),
