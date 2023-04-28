@@ -22,7 +22,7 @@ class BioInfoPresenter extends AsyncNotifier<BioInfoModel> {
       return _model;
     });
     if (state.hasValue) {
-      _patientRepository.reqBioInfo(BioInfoRegistryModel(
+      _patientRepository.regBioInfo(BioInfoRegistryModel(
         ptId: ptId,
         svrtIptTypeCd: '',
         svrtTypeCd: '',
