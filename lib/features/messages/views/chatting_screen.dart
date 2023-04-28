@@ -8,11 +8,13 @@ import 'package:sbas/features/messages/views/widgets/chat_widget.dart';
 class ChattingScreen extends StatefulWidget {
   final String userId;
   final String tkrmId;
+  // final TalkRoomsProvider provider;
 
   const ChattingScreen({
     Key? key,
     required this.userId,
     required this.tkrmId,
+    // required this.provider,
   }) : super(key: key);
 
   @override
@@ -30,6 +32,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
     _talkRoomBloc = TalkRoomBloc(
       userId: widget.userId,
       tkrmId: widget.tkrmId,
+      // provider: widget.provider,
     );
     _messageController = TextEditingController();
     _scrollController = ScrollController();
