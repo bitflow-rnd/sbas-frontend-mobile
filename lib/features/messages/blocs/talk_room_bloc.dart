@@ -2,15 +2,17 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:web_socket_channel/io.dart';
 
 class TalkRoomBloc {
   final String userId;
   final String tkrmId;
-  // final TalkRoomsProvider provider;
+  final TalkRoomsProvider provider;
   final _chatDetailListController = StreamController<List<TalkMsgModel>>();
 
-  TalkRoomBloc({required this.userId, required this.tkrmId}) {
+  TalkRoomBloc(
+      {required this.userId, required this.tkrmId, required this.provider}) {
     _fetchChattingRoom();
   }
 

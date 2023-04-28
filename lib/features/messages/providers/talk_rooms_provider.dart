@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,6 +42,10 @@ class TalkRoomsProvider extends StateNotifier<List<TalkRoomsResponseModel>> {
         throw Exception('Invalid data type received from server');
       }
     }, onError: (error) {});
+  }
+
+  Future<void> sendMessage(String message) async {
+    channel.sink.add(message);
   }
 
   @override
