@@ -3,18 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/blocs/talk_room_bloc.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/views/widgets/chat_widget.dart';
 
 class ChattingScreen extends StatefulWidget {
   final String userId;
   final String tkrmId;
-  // final TalkRoomsProvider provider;
+  final TalkRoomsProvider provider;
 
   const ChattingScreen({
     Key? key,
     required this.userId,
     required this.tkrmId,
-    // required this.provider,
+    required this.provider,
   }) : super(key: key);
 
   @override
@@ -32,7 +33,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
     _talkRoomBloc = TalkRoomBloc(
       userId: widget.userId,
       tkrmId: widget.tkrmId,
-      // provider: widget.provider,
+      provider: widget.provider,
     );
     _messageController = TextEditingController();
     _scrollController = ScrollController();

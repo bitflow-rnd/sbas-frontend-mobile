@@ -22,7 +22,7 @@ class DirectMessageScreen extends ConsumerWidget {
           builder: (context) => ChattingScreen(
             userId: ref.watch(talkRoomsProvider.notifier).userId,
             tkrmId: tkrmId,
-            // provider: ref.watch(talkRoomsProvider.notifier),
+            provider: ref.watch(talkRoomsProvider.notifier),
           ),
         ),
       );
