@@ -7,6 +7,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/util.dart';
+import 'package:sbas/constants/palette.dart';
 
 class PatientRegInfo extends ConsumerStatefulWidget {
   PatientRegInfo({
@@ -49,7 +50,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                   child: Text(
                     error.toString(),
                     style: const TextStyle(
-                      color: Colors.lightBlueAccent,
+                      color: Palette.mainColor,
                     ),
                   ),
                 ),
@@ -70,96 +71,68 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                     child: Text(
                                       error.toString(),
                                       style: const TextStyle(
-                                        color: Colors.lightBlueAccent,
+                                        color: Palette.mainColor,
                                       ),
                                     ),
                                   ),
                                   data: (region) => Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
                                         flex: 1,
                                         child: FormField(
                                           builder: (field) => SizedBox(
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 InputDecorator(
                                                   decoration: _inputDecoration,
                                                   child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
+                                                    padding: const EdgeInsets.symmetric(
                                                       vertical: 14,
                                                       horizontal: 8,
                                                     ),
-                                                    child:
-                                                        DropdownButtonHideUnderline(
+                                                    child: DropdownButtonHideUnderline(
                                                       child: DropdownButton(
                                                         hint: const SizedBox(
                                                           width: 150,
                                                           child: Text(
                                                             '시/도 선택',
                                                             style: TextStyle(
-                                                              color:
-                                                                  Colors.grey,
+                                                              color: Colors.grey,
                                                               fontSize: 16,
                                                             ),
-                                                            textAlign: TextAlign
-                                                                .center,
+                                                            textAlign: TextAlign.center,
                                                           ),
                                                         ),
                                                         isDense: true,
                                                         isExpanded: true,
                                                         items: region
-                                                            .where((e) =>
-                                                                e.id?.cdGrpId ==
-                                                                'SIDO')
+                                                            .where((e) => e.id?.cdGrpId == 'SIDO')
                                                             .map(
-                                                              (e) =>
-                                                                  DropdownMenuItem(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
+                                                              (e) => DropdownMenuItem(
+                                                                alignment: Alignment.center,
                                                                 value: e.cdNm,
                                                                 child: SizedBox(
                                                                   width: 150,
                                                                   child: Text(
-                                                                    e.cdNm ??
-                                                                        '',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
+                                                                    e.cdNm ?? '',
+                                                                    textAlign: TextAlign.center,
                                                                   ),
                                                                 ),
                                                               ),
                                                             )
                                                             .toList(),
-                                                        value: vm
-                                                            .findPatientAddress(
-                                                                region,
-                                                                report.dstr1Cd),
+                                                        value: vm.findPatientAddress(region, report.dstr1Cd),
                                                         onChanged: (value) {
-                                                          final selectedRegion =
-                                                              region.firstWhere(
-                                                                  (e) =>
-                                                                      e.cdNm ==
-                                                                      value);
+                                                          final selectedRegion = region.firstWhere((e) => e.cdNm == value);
 
-                                                          vm.updatePatientRegion(
-                                                              selectedRegion);
+                                                          vm.updatePatientRegion(selectedRegion);
 
-                                                          ref
-                                                              .read(
-                                                                  agencyRegionProvider
-                                                                      .notifier)
-                                                              .selectTheCounty(
-                                                                  selectedRegion);
+                                                          ref.read(agencyRegionProvider.notifier).selectTheCounty(selectedRegion);
 
-                                                          field
-                                                              .didChange(value);
+                                                          field.didChange(value);
                                                         },
                                                       ),
                                                     ),
@@ -174,95 +147,64 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                             ),
                                           ),
                                           initialValue: report.dstr1Cd,
-                                          autovalidateMode:
-                                              AutovalidateMode.always,
-                                          validator: (value) =>
-                                              value == null || value.isEmpty
-                                                  ? '\'시/도\'를 선택해주세요.'
-                                                  : null,
+                                          autovalidateMode: AutovalidateMode.always,
+                                          validator: (value) => value == null || value.isEmpty ? '\'시/도\'를 선택해주세요.' : null,
                                         ),
                                       ),
                                       Gaps.h8,
                                       Expanded(
                                         flex: 1,
                                         child: FormField(
-                                          autovalidateMode:
-                                              AutovalidateMode.always,
+                                          autovalidateMode: AutovalidateMode.always,
                                           builder: (field) => SizedBox(
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 InputDecorator(
                                                   decoration: _inputDecoration,
                                                   child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
+                                                    padding: const EdgeInsets.symmetric(
                                                       vertical: 14,
                                                       horizontal: 8,
                                                     ),
-                                                    child:
-                                                        DropdownButtonHideUnderline(
+                                                    child: DropdownButtonHideUnderline(
                                                       child: DropdownButton(
                                                         hint: const SizedBox(
                                                           width: 150,
                                                           child: Text(
                                                             '시/구/군 선택',
                                                             style: TextStyle(
-                                                              color:
-                                                                  Colors.grey,
+                                                              color: Colors.grey,
                                                               fontSize: 16,
                                                             ),
-                                                            textAlign: TextAlign
-                                                                .center,
+                                                            textAlign: TextAlign.center,
                                                           ),
                                                         ),
                                                         isDense: true,
                                                         isExpanded: true,
-                                                        value: vm
-                                                            .findPatientAddress(
-                                                                region,
-                                                                report.dstr2Cd),
+                                                        value: vm.findPatientAddress(region, report.dstr2Cd),
                                                         items: region
-                                                            .where((e) =>
-                                                                e.id != null &&
-                                                                e.id?.cdGrpId !=
-                                                                    null &&
-                                                                e.id!.cdGrpId!
-                                                                        .length >
-                                                                    4)
+                                                            .where((e) => e.id != null && e.id?.cdGrpId != null && e.id!.cdGrpId!.length > 4)
                                                             .map(
-                                                              (e) =>
-                                                                  DropdownMenuItem(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
+                                                              (e) => DropdownMenuItem(
+                                                                alignment: Alignment.center,
                                                                 value: e.cdNm,
                                                                 child: SizedBox(
                                                                   width: 150,
                                                                   child: Text(
-                                                                    e.cdNm ??
-                                                                        '',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
+                                                                    e.cdNm ?? '',
+                                                                    textAlign: TextAlign.center,
                                                                   ),
                                                                 ),
                                                               ),
                                                             )
                                                             .toList(),
                                                         onChanged: (value) {
-                                                          final selectedRegion =
-                                                              region.firstWhere(
-                                                                  (e) =>
-                                                                      e.cdNm ==
-                                                                      value);
+                                                          final selectedRegion = region.firstWhere((e) => e.cdNm == value);
 
-                                                          vm.updatePatientCounty(
-                                                              selectedRegion);
+                                                          vm.updatePatientCounty(selectedRegion);
 
-                                                          field
-                                                              .didChange(value);
+                                                          field.didChange(value);
                                                         },
                                                       ),
                                                     ),
@@ -277,16 +219,10 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                             ),
                                           ),
                                           initialValue: report.dstr2Cd,
-                                          validator: (value) => value == null ||
-                                                  value.isEmpty ||
-                                                  !ref
-                                                      .read(agencyRegionProvider
-                                                          .notifier)
-                                                      .list
-                                                      .any((e) =>
-                                                          e.cdNm == value)
-                                              ? '\'시/구/군\'을 선택해주세요.'
-                                              : null,
+                                          validator: (value) =>
+                                              value == null || value.isEmpty || !ref.read(agencyRegionProvider.notifier).list.any((e) => e.cdNm == value)
+                                                  ? '\'시/구/군\'을 선택해주세요.'
+                                                  : null,
                                         ),
                                       ),
                                     ],
@@ -306,12 +242,10 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                     ),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       GestureDetector(
-                                        onTap: () => vm
-                                            .updatePatientCrossroadsOfLife('N'),
+                                        onTap: () => vm.updatePatientCrossroadsOfLife('N'),
                                         child: const Text(
                                           '  생존  ',
                                           style: TextStyle(
@@ -322,8 +256,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () => vm
-                                            .updatePatientCrossroadsOfLife('Y'),
+                                        onTap: () => vm.updatePatientCrossroadsOfLife('Y'),
                                         child: const Text(
                                           '  사망  ',
                                           style: TextStyle(
@@ -349,9 +282,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                     margin: const EdgeInsets.symmetric(
                                       horizontal: 4,
                                     ),
-                                    width: MediaQuery.of(context).size.width *
-                                            0.5 -
-                                        24,
+                                    width: MediaQuery.of(context).size.width * 0.5 - 24,
                                     height: 36,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(
@@ -377,12 +308,10 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                     ),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       GestureDetector(
-                                        onTap: () =>
-                                            vm.updatePatientNationality('KR'),
+                                        onTap: () => vm.updatePatientNationality('KR'),
                                         child: const Text(
                                           '대한민국',
                                           style: TextStyle(
@@ -393,8 +322,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () =>
-                                            vm.updatePatientNationality(''),
+                                        onTap: () => vm.updatePatientNationality(''),
                                         child: const Text(
                                           ' 외국인 ',
                                           style: TextStyle(
@@ -420,9 +348,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                     margin: const EdgeInsets.symmetric(
                                       horizontal: 4,
                                     ),
-                                    width: MediaQuery.of(context).size.width *
-                                            0.5 -
-                                        24,
+                                    width: MediaQuery.of(context).size.width * 0.5 - 24,
                                     height: 36,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(
@@ -435,8 +361,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                               ],
                             ),
                           if (i == 4 && report.natiCd != 'KR') Gaps.v8,
-                          if (i != 3 && i != 4 ||
-                              i == 4 && report.natiCd != 'KR')
+                          if (i != 3 && i != 4 || i == 4 && report.natiCd != 'KR')
                             TextFormField(
                               decoration: getInputDecoration(
                                 '${widget.list[i]}${i == 0 || i == 4 || i == 9 ? '을' : '를'} 입력해주세요.',
@@ -444,11 +369,8 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                               controller: TextEditingController(
                                 text: vm.getTextEditingController(i, report),
                               ),
-                              onSaved: (newValue) =>
-                                  vm.setTextEditingController(i, newValue),
-                              onChanged: (value) => ref
-                                  .read(patientRegProvider.notifier)
-                                  .setTextEditingController(i, value),
+                              onSaved: (newValue) => vm.setTextEditingController(i, newValue),
+                              onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(i, value),
                               validator: (value) => vm.isValid(i, value),
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
@@ -482,12 +404,10 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                         ),
                                       ),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
                                           GestureDetector(
-                                            onTap: () =>
-                                                vm.uploadPatientGender('M'),
+                                            onTap: () => vm.uploadPatientGender('M'),
                                             child: const Text(
                                               '   남   ',
                                               style: TextStyle(
@@ -498,8 +418,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                             ),
                                           ),
                                           GestureDetector(
-                                            onTap: () =>
-                                                vm.uploadPatientGender('F'),
+                                            onTap: () => vm.uploadPatientGender('F'),
                                             child: const Text(
                                               '   여   ',
                                               style: TextStyle(
@@ -525,10 +444,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                         margin: const EdgeInsets.symmetric(
                                           horizontal: 4,
                                         ),
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                    0.5 -
-                                                24,
+                                        width: MediaQuery.of(context).size.width * 0.5 - 24,
                                         height: 36,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(

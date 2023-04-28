@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 
 class AuthorizationGroup<T> extends ConsumerWidget {
   const AuthorizationGroup({
@@ -29,9 +30,7 @@ class AuthorizationGroup<T> extends ConsumerWidget {
               12,
             ),
             border: Border.all(
-              color: index == selectedIndex
-                  ? Colors.lightBlue
-                  : Colors.grey.shade400,
+              color: index == selectedIndex ? Palette.mainColor : Colors.grey.shade400,
               style: BorderStyle.solid,
             ),
           ),
@@ -45,8 +44,7 @@ class AuthorizationGroup<T> extends ConsumerWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color:
-                      index == selectedIndex ? Colors.lightBlue : Colors.black,
+                  color: index == selectedIndex ? Palette.mainColor : Colors.black,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),

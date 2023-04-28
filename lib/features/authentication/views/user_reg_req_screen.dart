@@ -4,6 +4,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/belong_agency_widget.dart';
@@ -17,12 +18,10 @@ class UserRegisterRequestScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<UserRegisterRequestScreen> createState() =>
-      UserRegisterRequestScreenState();
+  ConsumerState<UserRegisterRequestScreen> createState() => UserRegisterRequestScreenState();
 }
 
-class UserRegisterRequestScreenState
-    extends ConsumerState<UserRegisterRequestScreen> {
+class UserRegisterRequestScreenState extends ConsumerState<UserRegisterRequestScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -40,7 +39,7 @@ class UserRegisterRequestScreenState
         progressIndicator: const Center(
           child: CircularProgressIndicator.adaptive(
             valueColor: AlwaysStoppedAnimation(
-              Colors.lightBlueAccent,
+              Palette.mainColor,
             ),
           ),
         ),

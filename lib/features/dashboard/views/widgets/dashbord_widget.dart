@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sbas/constants/palette.dart';
 
 class Dashbord extends StatelessWidget {
   const Dashbord({
@@ -62,7 +63,7 @@ class Dashbord extends StatelessWidget {
                 left: 12,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.lightBlue,
+                    color: Palette.mainColor,
                     borderRadius: BorderRadius.circular(
                       20,
                     ),

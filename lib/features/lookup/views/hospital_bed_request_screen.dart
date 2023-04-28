@@ -16,6 +16,7 @@ import 'package:sbas/features/lookup/views/widgets/infectious_disease_widget.dar
 import 'package:sbas/features/lookup/views/widgets/origin_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/severely_disease_widget.dart';
+import 'package:sbas/constants/palette.dart';
 
 class HospitalBedRequestScreen extends ConsumerWidget {
   HospitalBedRequestScreen({
@@ -41,7 +42,7 @@ class HospitalBedRequestScreen extends ConsumerWidget {
               child: Text(
                 error.toString(),
                 style: const TextStyle(
-                  color: Colors.lightBlueAccent,
+                  color: Palette.mainColor,
                 ),
               ),
             ),
@@ -91,9 +92,7 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                       width: width * 0.5,
                       child: BottomSubmitBtn(
                         text: order == -1 ? '취소' : '이전',
-                        onPressed: () => order == -1
-                            ? Navigator.pop(context)
-                            : ref.read(orderOfRequestProvider.notifier).state--,
+                        onPressed: () => order == -1 ? Navigator.pop(context) : ref.read(orderOfRequestProvider.notifier).state--,
                       ),
                     ),
                     SizedBox(
@@ -104,14 +103,10 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                           final index = ref.read(orderOfRequestProvider);
 
                           if (index == -1) {
-                            ref
-                                .read(infectiousDiseaseProvider.notifier)
-                                .registry(patient?.id ?? '');
+                            ref.read(infectiousDiseaseProvider.notifier).registry(patient?.id ?? '');
                           }
                           if (index == 0) {
-                            ref
-                                .read(severelyDiseaseProvider.notifier)
-                                .registry(patient?.id ?? '');
+                            ref.read(severelyDiseaseProvider.notifier).registry(patient?.id ?? '');
                           }
                           if (index == 1) {
                             Navigator.pop(context);

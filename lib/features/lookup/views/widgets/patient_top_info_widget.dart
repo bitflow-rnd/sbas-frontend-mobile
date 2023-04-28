@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/constants/palette.dart';
 
 class PatientTopInfo extends StatelessWidget {
   const PatientTopInfo({
@@ -22,11 +24,10 @@ class PatientTopInfo extends StatelessWidget {
             ),
             Gaps.h8,
             patient == null
-                ? const Text(
+                ? Text(
                     '신규 환자 등록',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
+                    style: CTS.bold(
+                      fontSize: 16,
                     ),
                   )
                 : Column(
@@ -35,27 +36,26 @@ class PatientTopInfo extends StatelessWidget {
                       RichText(
                         text: TextSpan(
                           text: '${patient?.ptNm}',
-                          style: const TextStyle(
+                          style: CTS(
                             fontSize: 16,
                             color: Colors.black,
                           ),
                           children: [
                             TextSpan(
                               text: '[${getPatientInfo(patient!)}]',
-                              style: const TextStyle(
+                              style: CTS(
                                 color: Colors.grey,
                                 fontSize: 12,
-                                letterSpacing: -0.5,
                               ),
                             ),
                           ],
                         ),
                       ),
                       Gaps.v4,
-                      const Text(
+                      Text(
                         '#temp',
-                        style: TextStyle(
-                          color: Colors.lightBlue,
+                        style: CTS(
+                          color: Palette.mainColor,
                         ),
                       ),
                     ],

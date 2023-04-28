@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/top_nav_req_item_widget.dart';
+import 'package:sbas/constants/palette.dart';
 
 class TopNavbarRequest extends ConsumerWidget {
   const TopNavbarRequest({
@@ -43,7 +44,7 @@ class TopNavbarRequest extends ConsumerWidget {
               borderRadius: BorderRadius.circular(
                 30,
               ),
-              color: Colors.lightBlue,
+              color: Palette.mainColor,
             ),
           ),
         ),
