@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/views/widgets/hospital_bed_request_nav_item.dart';
+import 'package:sbas/constants/palette.dart';
 
 class HospitalBedRequestNav extends ConsumerWidget {
   HospitalBedRequestNav({
@@ -43,7 +44,7 @@ class HospitalBedRequestNav extends ConsumerWidget {
               borderRadius: BorderRadius.circular(
                 30,
               ),
-              color: Colors.lightBlue,
+              color: Palette.mainColor,
             ),
           ),
         ),

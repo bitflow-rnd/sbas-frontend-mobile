@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/blocs/belong_agency_bloc.dart';
+import 'package:sbas/constants/palette.dart';
 
 class PatientType<T> extends ConsumerWidget {
   const PatientType({
@@ -30,7 +31,7 @@ class PatientType<T> extends ConsumerWidget {
           borderRadius: BorderRadius.circular(
             30,
           ),
-          color: isChecked[id]! ? Colors.lightBlue : Colors.transparent,
+          color: isChecked[id]! ? Palette.mainColor : Colors.transparent,
         ),
         padding: const EdgeInsets.symmetric(
           horizontal: 12,

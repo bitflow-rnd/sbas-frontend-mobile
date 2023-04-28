@@ -8,6 +8,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_detail_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
+import 'package:sbas/constants/palette.dart';
 
 class PatientLookupScreen extends ConsumerWidget {
   const PatientLookupScreen({
@@ -32,7 +33,7 @@ class PatientLookupScreen extends ConsumerWidget {
                       child: Text(
                         error.toString(),
                         style: const TextStyle(
-                          color: Colors.lightBlueAccent,
+                          color: Palette.mainColor,
                         ),
                       ),
                     ),
@@ -73,8 +74,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                               style: BorderStyle.solid,
                                               color: Colors.grey.shade300,
                                             ),
-                                            borderRadius:
-                                                const BorderRadius.all(
+                                            borderRadius: const BorderRadius.all(
                                               Radius.circular(30),
                                             ),
                                           ),
@@ -83,13 +83,11 @@ class PatientLookupScreen extends ConsumerWidget {
                                               style: BorderStyle.solid,
                                               color: Colors.grey.shade300,
                                             ),
-                                            borderRadius:
-                                                const BorderRadius.all(
+                                            borderRadius: const BorderRadius.all(
                                               Radius.circular(30),
                                             ),
                                           ),
-                                          contentPadding:
-                                              const EdgeInsets.all(16),
+                                          contentPadding: const EdgeInsets.all(16),
                                         ),
                                       ),
                                     ),
@@ -121,7 +119,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                       borderRadius: BorderRadius.circular(
                                         24,
                                       ),
-                                      color: Colors.lightBlue,
+                                      color: Palette.mainColor,
                                     ),
                                     child: const AutoSizeText(
                                       '내조직담당',
@@ -150,8 +148,7 @@ class PatientLookupScreen extends ConsumerWidget {
                           child: Column(
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   RichText(
                                     text: TextSpan(
@@ -190,8 +187,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                       ),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: const [
                                         Text(
                                           '   최근등록순',
@@ -209,9 +205,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                 ],
                               ),
                               Container(
-                                height: MediaQuery.of(context).size.height -
-                                    256 -
-                                    64,
+                                height: MediaQuery.of(context).size.height - 256 - 64,
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 12,
                                   horizontal: 4,
@@ -224,8 +218,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            PatientLookupDetailScreen(
+                                        builder: (context) => PatientLookupDetailScreen(
                                           patient: patient.list![index],
                                         ),
                                       ),
@@ -251,8 +244,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                         ],
                                       ),
                                       child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Image.asset(
                                             'assets/patient.png',
@@ -260,15 +252,13 @@ class PatientLookupScreen extends ConsumerWidget {
                                           ),
                                           Gaps.h8,
                                           Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Row(
                                                 children: [
                                                   RichText(
                                                     text: TextSpan(
-                                                      text:
-                                                          '${patient.list?[index].ptNm?.replaceRange(
+                                                      text: '${patient.list?[index].ptNm?.replaceRange(
                                                         1,
                                                         2,
                                                         '*',
@@ -283,38 +273,20 @@ class PatientLookupScreen extends ConsumerWidget {
                                                         ),
                                                         WidgetSpan(
                                                           child: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .symmetric(
+                                                            padding: const EdgeInsets.symmetric(
                                                               horizontal: 12,
                                                               vertical: 4,
                                                             ),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: getStateColor(
-                                                                  true,
-                                                                  patient
-                                                                      .list?[
-                                                                          index]
-                                                                      .bedStatCd),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
+                                                            decoration: BoxDecoration(
+                                                              color: getStateColor(true, patient.list?[index].bedStatCd),
+                                                              borderRadius: BorderRadius.circular(12),
                                                             ),
                                                             child: Text(
                                                               '${patient.list?[index].bedStatNm}',
                                                               style: TextStyle(
-                                                                color: getStateColor(
-                                                                    false,
-                                                                    patient
-                                                                        .list?[
-                                                                            index]
-                                                                        .bedStatCd),
+                                                                color: getStateColor(false, patient.list?[index].bedStatCd),
                                                                 fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                                fontWeight: FontWeight.bold,
                                                               ),
                                                             ),
                                                           ),
@@ -335,54 +307,40 @@ class PatientLookupScreen extends ConsumerWidget {
                                               ),
                                               Gaps.v4,
                                               AutoSizeText(
-                                                getAddress(
-                                                    patient.list?[index]),
+                                                getAddress(patient.list?[index]),
                                                 style: const TextStyle(
                                                   color: Colors.grey,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                  overflow: TextOverflow.ellipsis,
                                                 ),
                                                 maxFontSize: 12,
                                                 maxLines: 1,
                                               ),
                                               Gaps.v2,
                                               AutoSizeText(
-                                                getDateTimeFormat(patient
-                                                    .list?[index].updtDttm),
+                                                getDateTimeFormat(patient.list?[index].updtDttm),
                                                 style: const TextStyle(
                                                   color: Colors.grey,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                  overflow: TextOverflow.ellipsis,
                                                 ),
                                                 maxFontSize: 16,
                                                 maxLines: 1,
                                               ),
                                               Container(
                                                 height: 32,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.5,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
+                                                width: MediaQuery.of(context).size.width * 0.5,
+                                                padding: const EdgeInsets.symmetric(
                                                   vertical: 6,
                                                 ),
                                                 child: ListView.separated(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  itemBuilder:
-                                                      (context, index) =>
-                                                          Container(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
+                                                  scrollDirection: Axis.horizontal,
+                                                  itemBuilder: (context, index) => Container(
+                                                    padding: const EdgeInsets.symmetric(
                                                       vertical: 4,
                                                       horizontal: 6,
                                                     ),
                                                     decoration: BoxDecoration(
                                                       color: Colors.grey[200],
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              6),
+                                                      borderRadius: BorderRadius.circular(6),
                                                     ),
                                                     child: const AutoSizeText(
                                                       '#중증',
@@ -393,9 +351,7 @@ class PatientLookupScreen extends ConsumerWidget {
                                                       maxLines: 1,
                                                     ),
                                                   ),
-                                                  separatorBuilder:
-                                                      (context, index) =>
-                                                          Gaps.h6,
+                                                  separatorBuilder: (context, index) => Gaps.h6,
                                                   itemCount: 0,
                                                 ),
                                               ),

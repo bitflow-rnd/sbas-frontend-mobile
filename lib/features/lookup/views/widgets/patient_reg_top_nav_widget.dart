@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_item_widget.dart';
 
 class PatientRegTopNav extends ConsumerWidget {
@@ -43,7 +44,7 @@ class PatientRegTopNav extends ConsumerWidget {
               borderRadius: BorderRadius.circular(
                 30,
               ),
-              color: Colors.lightBlue,
+              color: Palette.mainColor,
             ),
           ),
         ),

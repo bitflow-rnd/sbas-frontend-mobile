@@ -5,6 +5,7 @@ import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
+import 'package:sbas/constants/palette.dart';
 
 class AgencyRegion extends ConsumerStatefulWidget {
   const AgencyRegion({
@@ -25,7 +26,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
           child: Text(
             error.toString(),
             style: const TextStyle(
-              color: Colors.lightBlueAccent,
+              color: Palette.mainColor,
             ),
           ),
         ),
@@ -38,8 +39,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
               child: FormField(
                 initialValue: ref.watch(selectedRegionProvider).cdNm,
                 autovalidateMode: AutovalidateMode.always,
-                validator: (value) =>
-                    value == null || value.isEmpty ? '\'시/도\'를 선택해주세요.' : null,
+                validator: (value) => value == null || value.isEmpty ? '\'시/도\'를 선택해주세요.' : null,
                 builder: (field) => SizedBox(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,11 +85,9 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                                   .toList(),
                               onChanged: (value) => setState(
                                 () {
-                                  final model =
-                                      ref.read(selectedRegionProvider);
+                                  final model = ref.read(selectedRegionProvider);
 
-                                  final selectedModel =
-                                      data.firstWhere((e) => value == e.cdNm);
+                                  final selectedModel = data.firstWhere((e) => value == e.cdNm);
 
                                   ref.read(selectedCountyProvider).cdNm = null;
 
@@ -104,9 +102,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                                   model.updtDttm = selectedModel.updtDttm;
                                   model.updtUserId = selectedModel.updtUserId;
 
-                                  ref
-                                      .read(agencyRegionProvider.notifier)
-                                      .exchangeTheCounty();
+                                  ref.read(agencyRegionProvider.notifier).exchangeTheCounty();
 
                                   field.didChange(selectedModel.cdNm);
                                 },
@@ -131,11 +127,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
               child: FormField(
                 autovalidateMode: AutovalidateMode.always,
                 initialValue: ref.watch(selectedCountyProvider).cdNm,
-                validator: (value) => value == null ||
-                        value.isEmpty ||
-                        ref.watch(selectedCountyProvider).cdNm == null
-                    ? '\'시/구/군\'을 선택해주세요.'
-                    : null,
+                validator: (value) => value == null || value.isEmpty || ref.watch(selectedCountyProvider).cdNm == null ? '\'시/구/군\'을 선택해주세요.' : null,
                 builder: (field) => SizedBox(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,10 +156,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                               isExpanded: true,
                               value: ref.watch(selectedCountyProvider).cdNm,
                               items: data
-                                  .where((e) =>
-                                      e.id != null &&
-                                      e.id?.cdGrpId != null &&
-                                      e.id!.cdGrpId!.length > 4)
+                                  .where((e) => e.id != null && e.id?.cdGrpId != null && e.id!.cdGrpId!.length > 4)
                                   .map(
                                     (e) => DropdownMenuItem(
                                       alignment: Alignment.center,
@@ -184,14 +173,11 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                                   .toList(),
                               onChanged: (value) => setState(
                                 () {
-                                  final model =
-                                      ref.read(selectedCountyProvider);
+                                  final model = ref.read(selectedCountyProvider);
 
-                                  final selectedModel =
-                                      data.firstWhere((e) => value == e.cdNm);
+                                  final selectedModel = data.firstWhere((e) => value == e.cdNm);
 
-                                  final agency =
-                                      ref.watch(selectedAgencyProvider);
+                                  final agency = ref.watch(selectedAgencyProvider);
 
                                   agency.instNm = null;
                                   agency.id = null;
@@ -207,9 +193,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                                   model.updtDttm = selectedModel.updtDttm;
                                   model.updtUserId = selectedModel.updtUserId;
 
-                                  ref
-                                      .read(agencyDetailProvider.notifier)
-                                      .exchangeTheAgency();
+                                  ref.read(agencyDetailProvider.notifier).exchangeTheAgency();
 
                                   field.didChange(selectedModel.cdNm);
                                 },
