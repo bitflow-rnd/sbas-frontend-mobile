@@ -5,8 +5,9 @@ class SeverelyDiseaseModel {
   String? undrDsesEtc;
   String? reqBedTypeCd;
   String? dnrAgreYn;
-  late Iterable<String> pttp;
-  late Iterable<String> udds;
+  String? svrtIptTypeCd;
+  late List<String> pttp;
+  late List<String> udds;
 
   SeverelyDiseaseModel({
     this.ptId,
@@ -15,6 +16,7 @@ class SeverelyDiseaseModel {
     this.undrDsesEtc,
     this.reqBedTypeCd,
     this.dnrAgreYn,
+    this.svrtIptTypeCd,
     required this.pttp,
     required this.udds,
   });
@@ -37,6 +39,9 @@ class SeverelyDiseaseModel {
     if (json["dnrAgreYn"] is String) {
       dnrAgreYn = json["dnrAgreYn"];
     }
+    if (json["svrtIptTypeCd"] is String) {
+      svrtIptTypeCd = json["svrtIptTypeCd"];
+    }
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -45,7 +50,25 @@ class SeverelyDiseaseModel {
     data["undrDsesEtc"] = undrDsesEtc;
     data["reqBedTypeCd"] = reqBedTypeCd;
     data["dnrAgreYn"] = dnrAgreYn;
+    data["svrtIptTypeCd"] = svrtIptTypeCd;
 
+    ptTypeCd = '';
+    undrDsesCd = '';
+
+    for (int i = 0; i < pttp.length; i++) {
+      if (i == pttp.length - 1) {
+        ptTypeCd = '$ptTypeCd${pttp[i]}';
+      } else {
+        ptTypeCd = '$ptTypeCd${pttp[i]};';
+      }
+    }
+    for (int i = 0; i < udds.length; i++) {
+      if (i == udds.length - 1) {
+        undrDsesCd = '$undrDsesCd${udds[i]}';
+      } else {
+        undrDsesCd = '$undrDsesCd${udds[i]};';
+      }
+    }
     data["ptTypeCd"] = ptTypeCd;
     data["undrDsesCd"] = undrDsesCd;
 
