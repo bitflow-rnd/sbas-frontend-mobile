@@ -6,8 +6,8 @@ import 'package:sbas/constants/palette.dart';
 import '../common/bitflow_theme.dart';
 
 class Common {
-  static showModal(BuildContext context, Widget modal) {
-    Navigator.push(
+  static showModal(BuildContext context, Widget modal) async {
+    return Navigator.push(
       context,
       PageRouteBuilder(
         barrierColor: Palette.modalBackground,
@@ -94,10 +94,7 @@ class Common {
                                     ),
                                     child: InkWell(
                                       onTap: () {
-                                        // button1Route == null ? Navigator.pop(context) : Navigator.push(context, button1Route);
-                                        if (button1Function != null) {
-                                          button1Function();
-                                        }
+                                        button1Function == null ? Navigator.pop(context, false) : button1Function();
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(vertical: 9.r),
@@ -114,7 +111,7 @@ class Common {
                               ),
                             )
                           : Container(),
-                      if (button2Function != null) SizedBox(width: 12.w),
+                      if (button1Function != null) SizedBox(width: 12.w),
                       Expanded(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(6.r),
@@ -131,9 +128,7 @@ class Common {
                               color: button2Color,
                               child: InkWell(
                                 onTap: () {
-                                  if (button2Function != null) {
-                                    button2Function();
-                                  }
+                                  button2Function == null ? Navigator.pop(context, true) : button2Function();
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(vertical: 9.r),
