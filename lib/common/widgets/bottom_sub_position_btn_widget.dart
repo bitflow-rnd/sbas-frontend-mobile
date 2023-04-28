@@ -20,7 +20,7 @@ class BottomPositionedSubmitButton extends ConsumerWidget {
             child: Container(
               alignment: Alignment.center,
               padding: EdgeInsets.symmetric(
-                vertical: 16.h,
+                vertical: 14.h,
               ),
               decoration: BoxDecoration(color: color ?? Colors.blueAccent, borderRadius: BorderRadius.zero
                   // borderRadius: BorderRadius.circular(
@@ -31,7 +31,7 @@ class BottomPositionedSubmitButton extends ConsumerWidget {
                 text,
                 style: CTS.bold(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 16,
                 ),
               ),
             ),
