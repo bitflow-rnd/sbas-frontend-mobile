@@ -26,9 +26,6 @@ class SeverelyDisease extends ConsumerStatefulWidget {
     'DNR 동의 여부',
   ];
   final _classification = [
-    '직접선택',
-    '생체정보 입력분석',
-    '알수없음',
     '명료',
     '비명료',
     '비투여',
@@ -46,7 +43,8 @@ class SeverelyDisease extends ConsumerStatefulWidget {
 }
 
 class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
-  Widget _initClassification(int selectedIndex, int index, Function() func) =>
+  Widget _initClassification(
+          String title, int selectedIndex, int index, Function() func) =>
       GestureDetector(
         onTap: func,
         child: Container(
@@ -72,7 +70,7 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
             ),
           ),
           child: Text(
-            widget._classification[index],
+            title,
             style: TextStyle(
               color: selectedIndex == index ? Colors.white : Colors.grey,
               fontWeight: FontWeight.bold,
@@ -104,7 +102,7 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                   final state =
                       ref.read(checkedSeverelyDiseaseProvider.notifier).state;
 
-                  if (state[key] == true) return;
+                  if (subIndex > 1 && state[key] == true) return;
 
                   state[key] = !isChecked;
 
@@ -282,13 +280,14 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                           ),
                         ),
                         Gaps.h12,
-                        for (int i = 3; i < 5; i++)
+                        for (int i = 0; i < 2; i++)
                           _initClassification(
+                            widget._classification[i],
                             _selectedStateIndex,
                             i,
                             () => setState(() {
                               _selectedStateIndex = i;
-                              bio.avpu = i == 3 ? 'A' : 'U';
+                              bio.avpu = i == 0 ? 'A' : 'U';
                               field.didChange(bio.avpu);
                             }),
                           ),
@@ -317,13 +316,14 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                           ),
                         ),
                         Gaps.h12,
-                        for (int i = 5; i < widget._classification.length; i++)
+                        for (int i = 2; i < widget._classification.length; i++)
                           _initClassification(
+                            widget._classification[i],
                             _selectedOxygenIndex,
                             i,
                             () => setState(() {
                               _selectedOxygenIndex = i;
-                              bio.o2Apply = i == 5 ? 'N' : 'Y';
+                              bio.o2Apply = i == 4 ? 'N' : 'Y';
                               field.didChange(bio.o2Apply);
                             }),
                           ),
@@ -387,6 +387,46 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
           ),
         ),
       );
+  Widget _initRowClassification(Iterable<BaseCodeModel> model) => Row(
+        children: [
+          for (int i = 0; i < model.length; i++)
+            _initClassification(
+              model.map((e) => e.cdNm).toList()[i] ?? '',
+              _selectedIndex,
+              i,
+              () => setState(() {
+                if (_selectedIndex != i) {
+                  _selectedIndex = i;
+                }
+                final key = model.toList()[i].id?.cdId;
+
+                if (key != null && key.isNotEmpty) {
+                  final isChecked =
+                      ref.watch(checkedSeverelyDiseaseProvider)[key];
+
+                  if (isChecked != null) {
+                    setState(() {
+                      final state = ref
+                          .read(checkedSeverelyDiseaseProvider.notifier)
+                          .state;
+
+                      if (state[key] == true) return;
+
+                      state[key] = !isChecked;
+
+                      for (var e in state.keys) {
+                        if (e.substring(0, 4) == key.substring(0, 4) &&
+                            e != key) {
+                          state[e] = isChecked;
+                        }
+                      }
+                    });
+                  }
+                }
+              }),
+            ),
+        ],
+      );
   Future<void> _submit() async {
     if (widget.formKey.currentState != null &&
         widget.formKey.currentState!.validate()) {
@@ -436,20 +476,8 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                             children: [
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    for (int i = 0; i < 3; i++)
-                                      _initClassification(
-                                        _selectedIndex,
-                                        i,
-                                        () => setState(() {
-                                          if (_selectedIndex != i) {
-                                            _selectedIndex = i;
-                                          }
-                                        }),
-                                      ),
-                                  ],
-                                ),
+                                child: _initRowClassification(model
+                                    .where((e) => e.id?.cdGrpId == 'SVIP')),
                               ),
                               Gaps.v6,
                               if (_selectedIndex == 1 && _score == 0)
