@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
+import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/hospital_bed_request_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/infectious_disease_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/origin_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/severely_disease_widget.dart';
 
 class HospitalBedRequestScreen extends ConsumerWidget {
   HospitalBedRequestScreen({
@@ -60,14 +65,25 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                         report: report,
                       ),
                     ),
-                  ),
-                if (order == 0)
-                  SizedBox(
-                    width: width,
-                  ),
-                if (order == 1)
-                  SizedBox(
-                    width: width,
+                  )
+                else if (order == 0)
+                  Expanded(
+                    child: SizedBox(
+                      width: width,
+                      child: SeverelyDisease(
+                        formKey: formKey,
+                        ptId: patient?.id ?? '',
+                      ),
+                    ),
+                  )
+                else if (order == 1)
+                  Expanded(
+                    child: SizedBox(
+                      width: width,
+                      child: OriginInfomation(
+                        formKey: formKey,
+                      ),
+                    ),
                   ),
                 Row(
                   children: [
@@ -83,7 +99,7 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                     SizedBox(
                       width: width * 0.5,
                       child: BottomSubmitBtn(
-                        text: '다음',
+                        text: order == 1 ? '병상 요청 완료' : '다음',
                         onPressed: () {
                           final index = ref.read(orderOfRequestProvider);
 
@@ -91,6 +107,18 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                             ref
                                 .read(infectiousDiseaseProvider.notifier)
                                 .registry(patient?.id ?? '');
+                          }
+                          if (index == 0) {
+                            ref
+                                .read(severelyDiseaseProvider.notifier)
+                                .registry(patient?.id ?? '');
+                          }
+                          if (index == 1) {
+                            Navigator.pop(context);
+
+                            context.goNamed(AssignBedScreen.routeName);
+
+                            return;
                           }
                           ref.read(orderOfRequestProvider.notifier).state++;
                         },

@@ -14,6 +14,10 @@ class PatientRegInfoModel {
   String? telno;
   String? job;
   String? attcId;
+  String? bascAddr;
+  String? detlAddr;
+  String? zip;
+  String? natiNm;
 
   PatientRegInfoModel({
     this.ptNm,
@@ -31,6 +35,10 @@ class PatientRegInfoModel {
     this.telno,
     this.job,
     this.attcId,
+    this.bascAddr,
+    this.detlAddr,
+    this.zip,
+    this.natiNm,
   });
   PatientRegInfoModel.empty()
       : ptNm = '',
@@ -47,7 +55,11 @@ class PatientRegInfoModel {
         nokNm = '',
         telno = '',
         job = '',
-        attcId = '';
+        attcId = '',
+        bascAddr = '',
+        detlAddr = '',
+        zip = '',
+        natiNm = '';
 
   PatientRegInfoModel.fromJson(Map<String, dynamic> json) {
     if (json["ptNm"] is String) {
@@ -95,6 +107,18 @@ class PatientRegInfoModel {
     if (json["attcId"] is String) {
       attcId = json["attcId"];
     }
+    if (json["bascAddr"] is String) {
+      bascAddr = json["bascAddr"];
+    }
+    if (json["detlAddr"] is String) {
+      detlAddr = json["detlAddr"];
+    }
+    if (json["zip"] is String) {
+      zip = json["zip"];
+    }
+    if (json["natiNm"] is String) {
+      natiNm = json["natiNm"];
+    }
   }
   void clear() {
     ptNm = '';
@@ -112,6 +136,10 @@ class PatientRegInfoModel {
     telno = '';
     job = '';
     attcId = '';
+    bascAddr = '';
+    detlAddr = '';
+    zip = '';
+    natiNm = '';
   }
 
   Map<String, dynamic> toJson() {
@@ -132,6 +160,10 @@ class PatientRegInfoModel {
     data["telno"] = telno;
     data["job"] = job;
     data["attcId"] = attcId;
+    data["bascAddr"] = bascAddr;
+    data["detlAddr"] = detlAddr;
+    data["zip"] = zip;
+    data["natiNm"] = natiNm;
 
     return data;
   }

@@ -30,6 +30,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       String region = _patientInfoModel.dstr1Cd ?? '',
           county = _patientInfoModel.dstr2Cd ?? '';
 
+      if (region.isNotEmpty && county.isNotEmpty) {
+        _patientInfoModel.bascAddr = '$region $county';
+      }
       if (RegExp(r'^\d+$').hasMatch(region)) {
         region = list.firstWhere((e) => e.id?.cdId == region).cdNm ?? '';
       } else {

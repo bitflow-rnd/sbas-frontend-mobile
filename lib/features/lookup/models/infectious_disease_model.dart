@@ -18,7 +18,12 @@ class InfectiousDiseaseModel {
   String? instAddr;
   String? diagDrNm;
   String? rptChfNm;
-  String? attcId;
+
+  String? esvyAttcId;
+  String? instBascAddr;
+  String? instDetlAddr;
+  String? instZip;
+  String? diagAttcId;
 
   InfectiousDiseaseModel({
     this.ptId,
@@ -40,7 +45,11 @@ class InfectiousDiseaseModel {
     this.instAddr,
     this.diagDrNm,
     this.rptChfNm,
-    this.attcId,
+    this.esvyAttcId,
+    this.instBascAddr,
+    this.instDetlAddr,
+    this.instZip,
+    this.diagAttcId,
   });
   InfectiousDiseaseModel.fromJson(Map<String, dynamic> json) {
     if (json["ptId"] is String) {
@@ -100,8 +109,20 @@ class InfectiousDiseaseModel {
     if (json["rptChfNm"] is String) {
       rptChfNm = json["rptChfNm"];
     }
-    if (json["attcId"] is String) {
-      attcId = json["attcId"];
+    if (json["esvyAttcId"] is String) {
+      esvyAttcId = json["esvyAttcId"];
+    }
+    if (json["instBascAddr"] is String) {
+      instBascAddr = json["instBascAddr"];
+    }
+    if (json["instDetlAddr"] is String) {
+      instDetlAddr = json["instDetlAddr"];
+    }
+    if (json["instZip"] is String) {
+      instZip = json["instZip"];
+    }
+    if (json["diagAttcId"] is String) {
+      diagAttcId = json["diagAttcId"];
     }
   }
   Map<String, dynamic> toJson() {
@@ -126,7 +147,11 @@ class InfectiousDiseaseModel {
     data["instAddr"] = instAddr;
     data["diagDrNm"] = diagDrNm;
     data["rptChfNm"] = rptChfNm;
-    data["attcId"] = attcId;
+    data["esvyAttcId"] = esvyAttcId;
+    data["instBascAddr"] = instBascAddr;
+    data["instDetlAddr"] = instDetlAddr;
+    data["instZip"] = instZip;
+    data["diagAttcId"] = diagAttcId;
 
     return data;
   }
@@ -150,6 +175,10 @@ class InfectiousDiseaseModel {
         instTelno = null,
         instAddr = null,
         diagDrNm = null,
-        attcId = null,
+        esvyAttcId = null,
+        instBascAddr = null,
+        instDetlAddr = null,
+        instZip = null,
+        diagAttcId = null,
         rptChfNm = null;
 }

@@ -7,23 +7,42 @@ import 'package:sbas/util.dart';
 
 class PatientRepository {
   Future<PatientInfoModel> lookupPatientInfo() async =>
-      PatientInfoModel.fromJson(await _patientProvider.lookupPatientInfo());
-
+      PatientInfoModel.fromJson(
+        await _patientProvider.lookupPatientInfo(),
+      );
   Future<dynamic> registerPatientInfo(Map<String, dynamic> map) async =>
-      await _patientProvider.registerPatientInfo(toJson(map));
-
+      await _patientProvider.registerPatientInfo(
+        toJson(map),
+      );
   Future<dynamic> registerDiseaseInfo(Map<String, dynamic> map) async =>
-      await _patientProvider.registerDiseaseInfo(toJson(map));
-
+      await _patientProvider.registerDiseaseInfo(
+        toJson(map),
+      );
   Future<dynamic> amendPatientInfo(String id, Map<String, dynamic> map) async =>
-      await _patientProvider.amendPatientInfo(id, toJson(map));
-
+      await _patientProvider.amendPatientInfo(
+        id,
+        toJson(map),
+      );
   Future<dynamic> getAllocationHistory(String id) async =>
-      await _patientProvider.getAllocationHistory(id);
-
+      await _patientProvider.getAllocationHistory(
+        id,
+      );
   Future<dynamic> getEpidemiologicalReport(String attcId) async =>
-      await _patientProvider.getEpidemiologicalReport(attcId);
-
+      await _patientProvider.getEpidemiologicalReport(
+        attcId,
+      );
+  Future<int> bioinfoanlys(Map<String, dynamic> map) async =>
+      await _patientProvider.bioinfoanlys(
+        toJson(map),
+      );
+  Future<dynamic> regBioInfo(Map<String, dynamic> map) async =>
+      await _patientProvider.regBioInfo(
+        toJson(map),
+      );
+  Future<dynamic> regSevrInfo(Map<String, dynamic> map) async =>
+      await _patientProvider.regSevrInfo(
+        toJson(map),
+      );
   Future<Map<String, dynamic>> getOpticalCharacterRecognition(
     XFile image,
   ) async =>

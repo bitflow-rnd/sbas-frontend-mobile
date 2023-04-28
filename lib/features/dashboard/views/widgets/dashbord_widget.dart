@@ -25,10 +25,12 @@ class Dashbord extends StatelessWidget {
         child: Container(
           margin: edge,
           decoration: BoxDecoration(
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
-                blurRadius: 5,
-                color: Colors.black.withOpacity(0.25),
+                color: Color(0x1a645c5c),
+                offset: Offset(0, 3),
+                blurRadius: 12,
+                spreadRadius: 0,
               ),
             ],
             borderRadius: BorderRadius.circular(15),
