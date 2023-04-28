@@ -11,21 +11,21 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
   FutureOr<List<BaseCodeModel>> build() async {
     _userRegRequestRepository = ref.read(userRegReqProvider);
 
-    list = await _userRegRequestRepository.getBaseCode('PTTP');
+    _list = await _userRegRequestRepository.getBaseCode('PTTP');
 
-    list.addAll(
+    _list.addAll(
       await _userRegRequestRepository.getBaseCode('UDDS'),
     );
-    list.addAll(
+    _list.addAll(
       await _userRegRequestRepository.getBaseCode('SVTP'),
     );
-    list.addAll(
+    _list.addAll(
       await _userRegRequestRepository.getBaseCode('BDTP'),
     );
-    list.addAll(
+    _list.addAll(
       await _userRegRequestRepository.getBaseCode('DNRA'),
     );
-    for (final e in list) {
+    for (final e in _list) {
       if (e.id != null && e.id!.cdId != null && e.id!.cdId!.isNotEmpty) {
         ref.read(checkedSeverelyDiseaseProvider.notifier).state[e.id!.cdId!] =
             false;
@@ -33,14 +33,14 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
     }
     _patientRepository = ref.read(patientRepoProvider);
 
-    return list;
+    return _list;
   }
 
   Future<void> registry(String ptId) async {
-    final entries = ref.read(checkedSeverelyDiseaseProvider).entries;
-
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      final entries = ref.read(checkedSeverelyDiseaseProvider).entries;
+
       await _patientRepository.regSevrInfo(SeverelyDiseaseModel(
               ptId: ptId,
               dnrAgreYn: entries
@@ -62,12 +62,12 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
                   .toList())
           .toJson());
 
-      return list;
+      return _list;
     });
     if (state.hasError) {}
   }
 
-  late final List<BaseCodeModel> list;
+  late final List<BaseCodeModel> _list;
   late final PatientRepository _patientRepository;
   late final UserRegRequestRepository _userRegRequestRepository;
 }
