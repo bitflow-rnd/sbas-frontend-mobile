@@ -6,6 +6,7 @@ class SeverelyDiseaseModel {
   String? reqBedTypeCd;
   String? dnrAgreYn;
   String? svrtIptTypeCd;
+  String? svrtTypeCd;
   late List<String> pttp;
   late List<String> udds;
 
@@ -17,6 +18,7 @@ class SeverelyDiseaseModel {
     this.reqBedTypeCd,
     this.dnrAgreYn,
     this.svrtIptTypeCd,
+    this.svrtTypeCd,
     required this.pttp,
     required this.udds,
   });
@@ -42,6 +44,9 @@ class SeverelyDiseaseModel {
     if (json["svrtIptTypeCd"] is String) {
       svrtIptTypeCd = json["svrtIptTypeCd"];
     }
+    if (json["svrtTypeCd"] is String) {
+      svrtTypeCd = json["svrtTypeCd"];
+    }
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -51,6 +56,7 @@ class SeverelyDiseaseModel {
     data["reqBedTypeCd"] = reqBedTypeCd;
     data["dnrAgreYn"] = dnrAgreYn;
     data["svrtIptTypeCd"] = svrtIptTypeCd;
+    data["svrtTypeCd"] = svrtTypeCd;
 
     ptTypeCd = '';
     undrDsesCd = '';
