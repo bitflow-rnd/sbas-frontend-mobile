@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sbas/constants/palette.dart';
 
 class SBASProgressIndicator extends StatelessWidget {
   const SBASProgressIndicator({
@@ -8,7 +9,7 @@ class SBASProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) => const Center(
         child: CircularProgressIndicator.adaptive(
           valueColor: AlwaysStoppedAnimation(
-            Colors.lightBlueAccent,
+            Palette.mainColor,
           ),
         ),
       );

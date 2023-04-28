@@ -12,6 +12,7 @@ import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/views/hospital_bed_request_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
+import 'package:sbas/constants/palette.dart';
 
 class PatientLookupDetailScreen extends ConsumerWidget {
   PatientLookupDetailScreen({
@@ -66,7 +67,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                         const Text(
                           '#temp',
                           style: TextStyle(
-                            color: Colors.lightBlue,
+                            color: Palette.mainColor,
                           ),
                         ),
                       ],
@@ -115,8 +116,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                   vertical: 14,
                                 ),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       '${i + 1}.${list[i]}',
@@ -142,7 +142,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                               child: Text(
                                 error.toString(),
                                 style: const TextStyle(
-                                  color: Colors.lightBlueAccent,
+                                  color: Palette.mainColor,
                                 ),
                               ),
                             ),

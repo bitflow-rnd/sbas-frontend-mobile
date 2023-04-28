@@ -8,6 +8,7 @@ import 'package:sbas/features/authentication/views/user_reg_widgets/agency_detai
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_proof_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_region_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/patient_type_widget.dart';
+import 'package:sbas/constants/palette.dart';
 
 class BelongAgency extends ConsumerStatefulWidget {
   const BelongAgency({
@@ -70,8 +71,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
           FormField(
             autovalidateMode: AutovalidateMode.always,
             initialValue: ref.watch(isCheckedProvider).containsValue(true),
-            validator: (value) =>
-                value == null || !value ? '※담당 환자 유형을 1개 이상 선택해주세요.' : null,
+            validator: (value) => value == null || !value ? '※담당 환자 유형을 1개 이상 선택해주세요.' : null,
             builder: (field) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -83,7 +83,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
                           child: Text(
                             error.toString(),
                             style: const TextStyle(
-                              color: Colors.lightBlueAccent,
+                              color: Palette.mainColor,
                             ),
                           ),
                         ),
@@ -92,8 +92,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
                             vertical: 12,
                           ),
                           itemCount: data.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 4,
                             mainAxisSpacing: 12,
                             crossAxisSpacing: 16,
@@ -108,9 +107,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
                               onChanged: (value) => setState(() {
                                 ref.read(isCheckedProvider)[id] = !value;
 
-                                field.didChange(ref
-                                    .watch(isCheckedProvider)
-                                    .containsValue(true));
+                                field.didChange(ref.watch(isCheckedProvider).containsValue(true));
                               }),
                             );
                           },

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 
 class OriginInfomation extends ConsumerStatefulWidget {
@@ -67,15 +68,8 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                       if (i == 0)
                         Row(
                           children: [
-                            for (int i = 0;
-                                i < widget._classification.length;
-                                i++)
-                              _initClassification(
-                                  widget._classification[i],
-                                  _selectedOriginIndex,
-                                  i,
-                                  () =>
-                                      setState(() => _selectedOriginIndex = i)),
+                            for (int i = 0; i < widget._classification.length; i++)
+                              _initClassification(widget._classification[i], _selectedOriginIndex, i, () => setState(() => _selectedOriginIndex = i)),
                           ],
                         )
                       else if (i == 1)
@@ -87,8 +81,7 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.5 -
-                                    18,
+                                width: MediaQuery.of(context).size.width * 0.5 - 18,
                                 child: _selectLocalGovernment(),
                               ),
                               Gaps.v4,
@@ -157,15 +150,8 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                         else if (i == 3)
                           Row(
                             children: [
-                              for (int i = 0;
-                                  i < widget._assignedToTheFloorTitles.length;
-                                  i++)
-                                _initClassification(
-                                    widget._assignedToTheFloorTitles[i],
-                                    assignedToTheFloor,
-                                    i,
-                                    () =>
-                                        setState(() => assignedToTheFloor = i)),
+                              for (int i = 0; i < widget._assignedToTheFloorTitles.length; i++)
+                                _initClassification(widget._assignedToTheFloorTitles[i], assignedToTheFloor, i, () => setState(() => assignedToTheFloor = i)),
                             ],
                           )
                         else if (i == 4)
@@ -184,7 +170,7 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
           child: Text(
             error.toString(),
             style: const TextStyle(
-              color: Colors.lightBlueAccent,
+              color: Palette.mainColor,
             ),
           ),
         ),
@@ -281,9 +267,7 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
         },
         autovalidateMode: AutovalidateMode.always,
         maxLines: isSingleLine ? 1 : null,
-        keyboardType: isSingleLine
-            ? TextInputType.streetAddress
-            : TextInputType.multiline,
+        keyboardType: isSingleLine ? TextInputType.streetAddress : TextInputType.multiline,
         textInputAction: isSingleLine ? null : TextInputAction.newline,
       );
   Widget _initSearchBtn() => TextButton(
@@ -306,9 +290,7 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
           ),
         ),
       );
-  Widget _initClassification(
-          String title, int selectedIndex, int index, Function() func) =>
-      GestureDetector(
+  Widget _initClassification(String title, int selectedIndex, int index, Function() func) => GestureDetector(
         onTap: func,
         child: Container(
           alignment: Alignment.center,
@@ -322,13 +304,8 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
             right: 12,
           ),
           decoration: BoxDecoration(
-            border: Border.all(
-                color: Colors.grey,
-                style: selectedIndex == index
-                    ? BorderStyle.none
-                    : BorderStyle.solid),
-            color:
-                selectedIndex == index ? Colors.lightBlue : Colors.transparent,
+            border: Border.all(color: Colors.grey, style: selectedIndex == index ? BorderStyle.none : BorderStyle.solid),
+            color: selectedIndex == index ? Palette.mainColor : Colors.transparent,
             borderRadius: BorderRadius.circular(
               18,
             ),
