@@ -6,6 +6,59 @@ import 'package:sbas/constants/palette.dart';
 import '../common/bitflow_theme.dart';
 
 class Common {
+  static Widget bottomer({String lBtnText = '배정 불가', String rBtnText = "승인", required Function lBtnFunc, required Function rBtnFunc, bool isOneBtn = false}) {
+    return Row(
+      children: [
+        !isOneBtn
+            ? Expanded(
+                child: InkWell(
+                  onTap: () {
+                    lBtnFunc();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 11.h),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Palette.greyText_80,
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      lBtnText,
+                      style: CTS(
+                        color: Palette.greyText_80,
+                        fontSize: 16,
+                      ),
+                    ).c,
+                  ),
+                ),
+              )
+            : Container(),
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              rBtnFunc();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 12.h),
+              decoration: const BoxDecoration(
+                color: Palette.mainColor,
+              ),
+              child: Text(
+                rBtnText,
+                style: CTS(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ).c,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   static showModal(BuildContext context, Widget modal) async {
     return Navigator.push(
       context,

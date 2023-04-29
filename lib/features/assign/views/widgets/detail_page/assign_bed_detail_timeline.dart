@@ -3,14 +3,23 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/main_drawer.dart';
+import 'package:sbas/constants/common_modal.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_screen.dart';
+import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_cancel_screen.dart';
+import 'package:sbas/features/lookup/models/patient_info_model.dart';
+
+import 'assign_bed_find_screen.dart';
 
 class AssignBedDetailTimeLine extends ConsumerWidget {
   const AssignBedDetailTimeLine({
     super.key,
+    required this.patient,
   });
+  final Patient patient;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
@@ -39,50 +48,189 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                         // timeline_move_complete
                         // timeline_refused
                         // timeline_go_home
+                        //
+                        //timeline_suspend //  원형 점
                         children: [
-                          moveCompleteCard(
-                            title: "승인",
-                            dateTime: "오후 2시 33분",
-                            src: "timeline_approved",
-                            by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                            detail: "병상배정이 완료되었습니다.",
-                          ),
-                          moveCompleteCard(
-                            title: "배정불가",
-                            dateTime: "오후 2시 33분",
-                            src: "timeline_refused",
-                            by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                            detail: "병상배정이 완료되었습니다.",
-                          ),
-                          moveCompleteCard(
-                              title: "배정완료",
-                              dateTime: "오후 2시 33분",
-                              src: "timeline_bed_assign_complete",
-                              by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                              detail: "병상배정이 완료되었습니다."),
-                          moveCompleteCard(
-                            title: "이송완료",
-                            dateTime: "오후 2시 33분",
-                            src: "timeline_move_complete",
-                            by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                            detail: "병상배정이 완료되었습니다.",
-                            isBlue: true,
-                          ),
-                          moveCompleteCard(
-                            title: "입원완료",
-                            dateTime: "오후 2시 33분",
-                            src: "timeline_go_hosipital_complete",
-                            by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                            detail: "병상배정이 완료되었습니다.",
-                          ),
-                          moveCompleteCard(
-                              title: "귀가요청",
-                              dateTime: "오후 2시 33분",
-                              src: "timeline_go_home",
-                              by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                              detail: "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
-                              isBlue: true,
-                              isSelected: true),
+                          if (patient.bedStatNm == '승인대기')
+                            Column(
+                              children: [
+                                completeCard(
+                                  title: "승인",
+                                  dateTime: "오후 2시 33분",
+                                  src: "timeline_approved",
+                                  by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  detail: "병상배정이 완료되었습니다.",
+                                ),
+                                suspendCard(
+                                  title: "승인대기",
+                                  src: "timeline_suspend",
+                                  detail: "대구광역시 병상배정반",
+                                ),
+                                closedCard(
+                                  title: "승인대기",
+                                  src: "timeline_bed_assign_complete",
+                                ),
+                                closedCard(
+                                  title: "이송",
+                                  src: "timeline_bed_assign_complete",
+                                ),
+                                closedCard(
+                                  title: "입원",
+                                  src: "timeline_bed_assign_complete",
+                                ),
+                              ],
+                            ),
+                          if (patient.bedStatNm == '배정대기')
+                            Column(
+                              children: [
+                                completeCard(
+                                  title: "승인",
+                                  dateTime: "오후 2시 33분",
+                                  src: "timeline_approved",
+                                  by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  detail: "병상배정이 완료되었습니다.",
+                                ),
+                                completeCard(
+                                  title: "배정불가",
+                                  dateTime: "오후 2시 33분",
+                                  src: "timeline_refused",
+                                  by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  detail: "병상배정이 완료되었습니다.",
+                                ),
+                                suspendCard(
+                                  title: "배정대기(읍압격리)",
+                                  src: "timeline_suspend",
+                                  detail: "대구 칠곡경북대병원/감염내과/김감염",
+                                ),
+                                closedCard(
+                                  title: "이송",
+                                  src: "timeline_bed_assign_complete",
+                                ),
+                                closedCard(
+                                  title: "입원",
+                                  src: "timeline_bed_assign_complete",
+                                ),
+                              ],
+                            ),
+                          if (patient.bedStatNm == '이송대기')
+                            Column(
+                              children: [
+                                completeCard(
+                                  title: "승인",
+                                  dateTime: "오후 2시 33분",
+                                  src: "timeline_approved",
+                                  by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  detail: "병상배정이 완료되었습니다.",
+                                ),
+                                completeCard(
+                                  title: "배정불가",
+                                  dateTime: "오후 2시 33분",
+                                  src: "timeline_refused",
+                                  by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  detail: "가능한 음압격리 병실이 없습니다.",
+                                ),
+                                completeCard(
+                                    title: "배정완료",
+                                    dateTime: "오후 2시 33분",
+                                    src: "timeline_bed_assign_complete",
+                                    by: "대구의료원 / 신경내과 / 강성일",
+                                    detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
+                                suspendCard(
+                                  title: "이송대기",
+                                  src: "timeline_suspend",
+                                  // detail: "",
+                                ),
+                                closedCard(
+                                  title: "입원",
+                                  src: "timeline_go_hosipital_complete",
+                                ),
+                              ],
+                            ),
+                          if (patient.bedStatNm == '이송중')
+                            Column(
+                              children: [
+                                completeCard(
+                                  title: "승인",
+                                  dateTime: "오후 2시 33분",
+                                  src: "timeline_approved",
+                                  by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  detail: "병상배정이 완료되었습니다.",
+                                ),
+                                completeCard(
+                                  title: "배정불가",
+                                  dateTime: "오후 2시 33분",
+                                  src: "timeline_refused",
+                                  by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  detail: "가능한 음압격리 병실이 없습니다.",
+                                ),
+                                completeCard(
+                                    title: "배정완료",
+                                    dateTime: "오후 2시 33분",
+                                    src: "timeline_bed_assign_complete",
+                                    by: "대구의료원 / 신경내과 / 강성일",
+                                    detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
+                                completeCard(
+                                    title: "이송중",
+                                    dateTime: "오후 2시 33분",
+                                    src: "timeline_suspend",
+                                    by: "대구광역시 중부 대명 구급 / 신채호 외 2명",
+                                    isBlue: true,
+                                    isSelected: true,
+                                    detail: "128라5431 / 128km / 예상 24분"),
+                                suspendCard(
+                                  title: "입원",
+                                  detail: "대구 칠곡경북대병원 / 감염내과 / 김감염",
+                                  src: "timeline_go_hosipital_complete",
+                                  isSelected: false,
+                                ),
+                              ],
+                            ),
+                          if (patient.bedStatNm == '입원')
+                            Column(
+                              children: [
+                                completeCard(
+                                  title: "승인",
+                                  dateTime: "오후 2시 33분",
+                                  src: "timeline_approved",
+                                  by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  detail: "병상배정이 완료되었습니다.",
+                                ),
+                                completeCard(
+                                  title: "배정불가",
+                                  dateTime: "오후 2시 33분",
+                                  src: "timeline_refused",
+                                  by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  detail: "가능한 음압격리 병실이 없습니다.",
+                                ),
+                                completeCard(
+                                    title: "배정완료",
+                                    dateTime: "오후 2시 33분",
+                                    src: "timeline_bed_assign_complete",
+                                    by: "대구의료원 / 신경내과 / 강성일",
+                                    detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
+                                completeCard(
+                                    title: "이송완료",
+                                    dateTime: "오후 2시 33분",
+                                    src: "timeline_move_complete",
+                                    by: "대구광역시 중부 대명 구급 / 신채호 외 2명",
+                                    detail: "128라5431 / 128km / 예상 24분"),
+                                completeCard(
+                                  title: "입원완료",
+                                  dateTime: "오후 2시 33분",
+                                  src: "timeline_go_hosipital_complete",
+                                  by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  detail: "병상배정이 완료되었습니다.",
+                                ),
+                                completeCard(
+                                    title: "귀가요청",
+                                    dateTime: "오후 2시 33분",
+                                    src: "timeline_go_home",
+                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                    detail: "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
+                                    isBlue: true,
+                                    isSelected: true),
+                              ],
+                            ),
                         ],
                       ),
                     ]),
@@ -91,51 +239,384 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               ),
             ),
           ),
-          Container(
-            height: 50.h,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Palette.greyText_20,
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  color: Palette.greyText_20,
-                  margin: EdgeInsets.all(2.r),
-                  child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
-                ),
-                Expanded(
-                    child: TextField(
-                  // controller: _messageController,
-                  onChanged: (value) {
-                    // setState(() {});
-                  },
-                  decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
-                )),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    color: Palette.mainColor,
-                    padding: EdgeInsets.all(12.r),
-                    margin: EdgeInsets.all(2.r),
-                    child: Icon(
-                      Icons.send,
-                      color: Palette.white,
-                      size: 20.h,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
+          _whichBottomer(patient.bedStatNm ?? '', context)
         ],
       ),
     );
   }
 
-  Widget moveCompleteCard(
+//   승인대기
+// 배정대기
+// 이송대기
+// 이송중
+// 입원
+
+  Widget _whichBottomer(String type, BuildContext context) {
+    switch (type) {
+      case '승인대기':
+        return _bottomer(
+            lBtnText: "배정 불가",
+            rBtnText: "승인",
+            lBtnFunc: () {
+              Navigator.pop(context);
+            },
+            rBtnFunc: () async {
+              dynamic res = await _showBottomSheet(
+                context: context,
+              );
+              if (res != null) {
+                //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AssignBedFindScreen(
+                      patient: patient,
+                    ),
+                  ),
+                );
+              }
+            });
+      case '배정대기':
+        return _bottomer(
+            lBtnText: "배정 불가",
+            rBtnText: "배정 승인",
+            lBtnFunc: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssignBedCancelScreen(
+                    patient: patient,
+                  ),
+                ),
+              );
+            },
+            rBtnFunc: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssignBedApproveScreen(
+                    patient: patient,
+                  ),
+                ),
+              );
+            });
+      case '이송대기':
+        return _msgBottomer();
+      case '이송중':
+        return _msgBottomer();
+      case '입원':
+        return _msgBottomer();
+      default:
+        return Container();
+    }
+  }
+
+  _showBottomSheet({required BuildContext context, String header = '배정 승인', String hintText = '메시지 입력', String btnText = '승인'}) async {
+    TextEditingController textEditingController = TextEditingController();
+    final focusNode = FocusNode();
+
+    // Call requestFocus() on the focus node when the bottom sheet is displayed
+    WidgetsBinding.instance.addPostFrameCallback((_) => focusNode.requestFocus());
+    return showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          // <-- SEE HERE
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(24.r),
+          ),
+        ),
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: GestureDetector(
+              onTap: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+                if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                  currentFocus.focusedChild?.unfocus();
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Container(
+                  padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            header,
+                            style: CTS.medium(
+                              fontSize: 15,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              weight: 24.h,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 3,
+                            child: TextField(
+                                focusNode: focusNode,
+                                controller: textEditingController,
+                                decoration: InputDecoration(
+                                  hintText: hintText,
+                                  enabledBorder: _outlineInputBorder,
+                                  focusedBorder: _outlineInputBorder,
+                                  errorBorder: _outlineInputBorder,
+                                )),
+                          ),
+                          Gaps.h8,
+                          Expanded(
+                            flex: 1,
+                            child: ElevatedButton(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16.h),
+                                child: Text(
+                                  btnText,
+                                  style: CTS(color: Palette.white, fontSize: 13),
+                                ),
+                              ),
+                              onPressed: () {
+                                String text = textEditingController.text;
+                                // Perform action with the entered text here
+                                return Navigator.pop(context, text);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget _bottomer({String lBtnText = '배정 붏가', String rBtnText = "승인", required Function lBtnFunc, required Function rBtnFunc}) {
+    return Row(
+      children: [
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              lBtnFunc();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 11.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: Palette.greyText_80,
+                  width: 1,
+                ),
+              ),
+              child: Text(
+                lBtnText,
+                style: CTS(
+                  color: Palette.greyText_80,
+                  fontSize: 16,
+                ),
+              ).c,
+            ),
+          ),
+        ),
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              rBtnFunc();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 12.h),
+              decoration: const BoxDecoration(
+                color: Palette.mainColor,
+              ),
+              child: Text(
+                rBtnText,
+                style: CTS(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ).c,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _msgBottomer() {
+    return Container(
+      height: 50.h,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Palette.greyText_20,
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            color: Palette.greyText_20,
+            margin: EdgeInsets.all(2.r),
+            child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
+          ),
+          Expanded(
+              child: TextField(
+            // controller: _messageController,
+            onChanged: (value) {
+              // setState(() {});
+            },
+            decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+          )),
+          InkWell(
+            onTap: () {},
+            child: Container(
+              color: Palette.mainColor,
+              padding: EdgeInsets.all(12.r),
+              margin: EdgeInsets.all(2.r),
+              child: Icon(
+                Icons.send,
+                color: Palette.white,
+                size: 20.h,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget closedCard({required String title, required String src}) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.only(left: 16.w, right: 24.w),
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            Column(
+              children: [imageIconFrag(imgSrc: "assets/common_icon/$src.png")],
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 12.w),
+                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x1a645c5c),
+                      offset: Offset(0, 3),
+                      blurRadius: 12,
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          title,
+                          style: CTS.medium(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget suspendCard({required String title, required String src, String? detail, bool isSelected = true}) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.only(left: 16.w, right: 24.w),
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            Column(
+              children: [imageIconFrag(imgSrc: "assets/common_icon/$src.png")],
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 12.w),
+                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: isSelected
+                      ? Border.all(
+                          color: Palette.mainColor,
+                          width: 2,
+                        )
+                      : null,
+                  borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x1a645c5c),
+                      offset: Offset(0, 3),
+                      blurRadius: 12,
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          title,
+                          style: CTS.medium(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: detail != null ? 8.h : 0),
+                    detail != null
+                        ? Text(
+                            detail,
+                            style: CTS(
+                              color: Palette.greyText,
+                              fontSize: 13,
+                            ),
+                          )
+                        : Container()
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget completeCard(
       {required String title,
       required String dateTime,
       required String src,
@@ -285,3 +766,13 @@ class DashedLineVerticalPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
+
+InputBorder get _outlineInputBorder => OutlineInputBorder(
+      borderSide: BorderSide(
+        style: BorderStyle.solid,
+        color: Colors.grey.shade300,
+      ),
+      borderRadius: BorderRadius.all(
+        Radius.circular(4.r),
+      ),
+    );

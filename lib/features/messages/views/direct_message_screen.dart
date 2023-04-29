@@ -11,6 +11,11 @@ import 'package:sbas/features/messages/views/chatting_screen.dart';
 import 'package:sbas/features/messages/views/contract_detail_screen.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 
+final selecteTabProvider = StateProvider(
+  //tab 전환용
+  (ref) => 0,
+);
+
 class DirectMessageScreen extends ConsumerWidget {
   final bool automaticallyImplyLeading;
 
@@ -21,6 +26,8 @@ class DirectMessageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedTabIndex = ref.watch(selecteTabProvider);
+
     void onTap(BuildContext context, tkrmId) {
       Navigator.push(
         context,
@@ -91,11 +98,16 @@ class DirectMessageScreen extends ConsumerWidget {
                         children: [
                           Row(
                             children: [
-                              Text(
-                                '연락처',
-                                style: CTS.medium(
-                                  color: Color(0xff676a7a),
-                                  fontSize: 13,
+                              InkWell(
+                                onTap: () {
+                                  ref.read(selecteTabProvider.notifier).state = 0;
+                                },
+                                child: Text(
+                                  '연락처',
+                                  style: CTS.medium(
+                                    color: Color(0xff676a7a),
+                                    fontSize: 13,
+                                  ),
                                 ),
                               ),
                               Container(
@@ -117,11 +129,16 @@ class DirectMessageScreen extends ConsumerWidget {
                           Gaps.h44,
                           Row(
                             children: [
-                              Text(
-                                '메세지',
-                                style: CTS.medium(
-                                  color: Palette.black,
-                                  fontSize: 13,
+                              InkWell(
+                                onTap: () {
+                                  ref.read(selecteTabProvider.notifier).state = 1;
+                                },
+                                child: Text(
+                                  '메세지',
+                                  style: CTS.medium(
+                                    color: Palette.black,
+                                    fontSize: 13,
+                                  ),
                                 ),
                               ),
                               Container(
@@ -156,8 +173,8 @@ class DirectMessageScreen extends ConsumerWidget {
                                 ),
                               ),
                               Positioned(
-                                left: selectIndex == 0 ? 0 : null,
-                                right: selectIndex == 0 ? null : 0,
+                                left: ref.watch(selecteTabProvider.notifier).state == 0 ? 0 : null,
+                                right: ref.watch(selecteTabProvider.notifier).state == 0 ? null : 0,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 12.h),
                                   height: 6.h,
@@ -202,7 +219,7 @@ class DirectMessageScreen extends ConsumerWidget {
               color: Palette.greyText_20,
               height: 1,
             ),
-            selectIndex != 0
+            selectedTabIndex != 0
                 ? Expanded(
                     child: TalkRoomWidget(onTap: (tkrmId) => onTap(context, tkrmId)),
                   )
@@ -504,7 +521,6 @@ class DirectMessageScreen extends ConsumerWidget {
     );
   }
 
-  final int selectIndex = 1;
   static String routeName = 'directMessage';
   static String routeUrl = '/directMessage';
 }

@@ -16,9 +16,11 @@ import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'widgets/detail_page/assign_bed_detail_disease_info.dart';
 
 class AssignBedDetailScreen extends StatefulWidget {
-  const AssignBedDetailScreen({
+  AssignBedDetailScreen({
     super.key,
+    required this.patient,
   });
+  Patient patient;
   @override
   State<AssignBedDetailScreen> createState() => _AssignBedDetailState();
 }
@@ -26,6 +28,7 @@ class AssignBedDetailScreen extends StatefulWidget {
 class _AssignBedDetailState extends State<AssignBedDetailScreen> {
   List<String> headerList = ["타임라인", "환자정보", "질병정보", "이송정보"];
   int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +73,7 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
-              _header("홍길동", "(남 / 88세 / 대구 북구 / 010-8833-1234)"),
+              _header(widget.patient.ptNm ?? '', "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
               Divider(
                 color: Palette.greyText_20,
                 height: 1,
@@ -139,7 +142,7 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
                   ],
                 ),
               ),
-              if (_selectedIndex == 0) const AssignBedDetailTimeLine(),
+              if (_selectedIndex == 0) AssignBedDetailTimeLine(patient: widget.patient),
               if (_selectedIndex == 1)
                 AssignBedDetailPaitentInfo(
                   patient: tempPaitent,
