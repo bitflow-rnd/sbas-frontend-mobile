@@ -70,7 +70,7 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                             Text(
                               '허용',
                               style: CTS(
-                                color: Colors.blueAccent,
+                                color: Palette.mainColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -84,7 +84,7 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                             key: ValueKey<bool>(true),
                             value: true,
                             onChanged: (value) {},
-                            activeColor: Colors.blueAccent,
+                            activeColor: Palette.mainColor,
                           ),
                         ),
                       ],
@@ -106,7 +106,7 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                             Text(
                               '허용',
                               style: CTS(
-                                color: Colors.blueAccent,
+                                color: Palette.mainColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -120,7 +120,7 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                             key: ValueKey<bool>(true),
                             value: true,
                             onChanged: (value) {},
-                            activeColor: Colors.blueAccent,
+                            activeColor: Palette.mainColor,
                           ),
                         ),
                       ],

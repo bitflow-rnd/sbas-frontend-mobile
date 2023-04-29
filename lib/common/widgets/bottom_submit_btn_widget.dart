@@ -25,8 +25,8 @@ class BottomSubmitBtn extends StatelessWidget {
             Radius.zero,
           ),
         ),
-        disabledBackgroundColor: Colors.blueAccent,
-        backgroundColor: Colors.blueAccent,
+        disabledBackgroundColor: Palette.mainColor,
+        backgroundColor: Palette.mainColor,
       ),
       child: SafeArea(
         child: Center(

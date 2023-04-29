@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 
 class HospitalBedRequestNavItem extends ConsumerWidget {
@@ -29,7 +30,7 @@ class HospitalBedRequestNavItem extends ConsumerWidget {
               ),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: x == order ? Colors.blue : Colors.grey,
+                color: x == order ? Palette.mainColor : Colors.grey,
               ),
               child: Text(
                 index.toString(),

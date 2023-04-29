@@ -189,7 +189,7 @@ class AlarmPageState extends State<AlarmPage> {
                               Text(
                                 '바로가기',
                                 style: CTS.medium(
-                                  color: Colors.blueAccent,
+                                  color: Palette.mainColor,
                                   fontSize: 12,
                                 ),
                               ),
@@ -283,7 +283,7 @@ class AlarmPageState extends State<AlarmPage> {
                               Text(
                                 '바로가기',
                                 style: CTS.medium(
-                                  color: Colors.blueAccent,
+                                  color: Palette.mainColor,
                                   fontSize: 12,
                                 ),
                               ),
@@ -404,7 +404,7 @@ class AlarmPageState extends State<AlarmPage> {
                               Text(
                                 '바로가기',
                                 style: CTS.medium(
-                                  color: Colors.blueAccent,
+                                  color: Palette.mainColor,
                                   fontSize: 12,
                                 ),
                               ),
@@ -549,7 +549,7 @@ class AlarmPageState extends State<AlarmPage> {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
               decoration: BoxDecoration(
-                  color: Colors.blueAccent.withOpacity(0.06),
+                  color: Palette.mainColor.withOpacity(0.06),
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(12.r), bottomLeft: Radius.circular(12.r))),
               child: Column(
                 children: [

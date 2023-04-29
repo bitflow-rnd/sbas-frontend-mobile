@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 
 class TopNavRequestItem extends ConsumerWidget {
@@ -27,27 +29,27 @@ class TopNavRequestItem extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.all(
-                5,
-              ),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: position == x ? Colors.blue : Colors.grey,
-              ),
-              child: Text(
-                index.toString(),
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Gaps.h2,
+            // Container(
+            //   padding: const EdgeInsets.all(
+            //     5,
+            //   ),
+            //   decoration: BoxDecoration(
+            //     shape: BoxShape.circle,
+            //     color: position == x ? Palette.mainColor : Colors.grey,
+            //   ),
+            //   child: Text(
+            //     index.toString(),
+            //     style: const TextStyle(
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            // ),
+            // Gaps.h2,
             Text(
               text,
-              style: TextStyle(
-                fontSize: 16,
-                color: x == position ? Colors.black : Colors.grey,
+              style: CTS.medium(
+                fontSize: 13,
+                color: x == position ? Colors.black : Palette.greyText,
               ),
             ),
           ],

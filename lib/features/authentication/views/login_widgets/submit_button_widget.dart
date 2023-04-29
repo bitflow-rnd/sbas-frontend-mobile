@@ -22,8 +22,8 @@ class _SubmitButtonState extends ConsumerState<SubmitButton> {
         child: ElevatedButton(
           onPressed: ref.watch(loginProvider).isLoading ? null : _onSubmit,
           style: ElevatedButton.styleFrom(
-            disabledBackgroundColor: Colors.blueAccent,
-            backgroundColor: Colors.blueAccent,
+            disabledBackgroundColor: Palette.mainColor,
+            backgroundColor: Palette.mainColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(9.2.r),
             ),

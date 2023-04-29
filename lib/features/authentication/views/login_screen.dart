@@ -7,6 +7,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/login_widgets/login_form_widget.dart';
 import 'package:sbas/features/authentication/views/login_widgets/submit_button_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_req_screen.dart';
+import 'package:sbas/features/authentication/views/user_reg_req_screen_v2.dart';
 import 'package:sbas/util.dart';
 
 class LogInScreen extends ConsumerStatefulWidget {
@@ -90,7 +91,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const UserRegisterRequestScreen(),
+                        builder: (context) => const UserRegisterRequestScreenV2(),
                       ),
                     ),
                     child: Text(

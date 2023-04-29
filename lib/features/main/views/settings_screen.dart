@@ -106,7 +106,7 @@ class _SettingPageState extends State<SettingPage> {
                   //자동로그인 해제
                 }
               },
-              activeColor: Colors.blueAccent,
+              activeColor: Palette.mainColor,
             ),
           ),
         ],
@@ -161,7 +161,7 @@ class _SettingPageState extends State<SettingPage> {
             child: Text(
               'v 1.2.2',
               style: CTS(
-                color: Colors.blueAccent,
+                color: Palette.mainColor,
                 fontSize: 13,
               ),
             ),
@@ -187,7 +187,7 @@ class _SettingPageState extends State<SettingPage> {
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-                    decoration: BoxDecoration(color: Colors.blueAccent, borderRadius: BorderRadius.circular(5.r)),
+                    decoration: BoxDecoration(color: Palette.mainColor, borderRadius: BorderRadius.circular(5.r)),
                     child: Text(
                       '업데이트',
                       style: CTS(

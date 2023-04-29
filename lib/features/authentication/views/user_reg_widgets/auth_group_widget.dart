@@ -38,7 +38,7 @@ class AuthorizationGroup<T> extends ConsumerWidget {
             children: [
               Image.asset(
                 index == selectedIndex ? selectedImage : disabledImage,
-                width: MediaQuery.of(context).size.width * 0.275,
+                width: MediaQuery.of(context).size.width * 0.25,
               ),
               Gaps.v4,
               Text(
