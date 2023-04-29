@@ -8,20 +8,20 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
-class AssignBedApproveScreen extends StatefulWidget {
-  AssignBedApproveScreen({
+class AssignBedCancelScreen extends StatefulWidget {
+  AssignBedCancelScreen({
     super.key,
     required this.patient,
   });
   Patient patient;
   @override
-  State<AssignBedApproveScreen> createState() => _AssignBedApproveScreenState();
+  State<AssignBedCancelScreen> createState() => _AssignBedCancelScreenState();
 }
 
-class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
+class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
   @override
-  List<String> list = ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
-  List<String> hintList = ['칠곡경북대병원', '병실번호', '진료과 이름', '담당의 이름', '의료진 연락처 입력', '메시지 입력'];
+  List<String> list = ['의료기관명', '메시지'];
+  List<String> hintList = ['칠곡경북대병원', '메시지 입력'];
   // 이부분 의료기관명 readonly 로 들어갈부분.
   Widget build(BuildContext context) {
     return StreamBuilder<Object>(
@@ -32,7 +32,7 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
                 backgroundColor: Palette.white,
                 appBar: AppBar(
                   title: Text(
-                    "병상 배정",
+                    "배정 불가",
                     style: CTS.medium(
                       fontSize: 15,
                       color: Colors.black,
@@ -66,15 +66,26 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
                             child: Column(
                               children: [
                                 Gaps.v20,
-                                for (var i = 0; i < list.length; i++)
-                                  Column(
-                                    children: [
-                                      _getTitle(list[i], false),
-                                      Gaps.v16,
-                                      _getTextInputField(hint: hintList[i], isFixed: i == 0),
-                                      Gaps.v28,
-                                    ],
-                                  )
+                                Column(
+                                  children: [
+                                    _getTitle(list[0], false),
+                                    Gaps.v16,
+                                    _getTextInputField(hint: hintList[0], isFixed: true),
+                                    Gaps.v28,
+                                    //
+
+                                    _getTitle('불가 사유', true),
+                                    Gaps.v16,
+                                    //
+                                    rowMultiSelectButton(['병상부족', '정신이상자 수용 불가', '투석장비없음'], ['병상부족']),
+                                    Gaps.v28,
+                                    //
+                                    _getTitle(list[1], true),
+                                    Gaps.v16,
+                                    _getTextInputField(hint: hintList[1]),
+                                    Gaps.v28,
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -82,7 +93,7 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
                       ),
 
                       Common.bottomer(
-                        rBtnText: "배정 승인",
+                        rBtnText: "불가 처리",
                         isOneBtn: true,
                         lBtnFunc: () {},
                         rBtnFunc: () {
@@ -95,6 +106,39 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
                 )),
           );
         });
+  }
+
+  Widget rowMultiSelectButton(list, selectList) {
+    return Row(
+      children: [
+        Expanded(
+          child: Wrap(
+            spacing: 11.w,
+            runSpacing: 12.h,
+            direction: Axis.horizontal,
+            children: [
+              for (var i in list)
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                  decoration: BoxDecoration(
+                    color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
+                    border: Border.all(
+                      color: Palette.greyText_20,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(13.5.r),
+                  ),
+                  child: Text(i,
+                      style: CTS.bold(
+                        fontSize: 13,
+                        color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
+                      )),
+                )
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _getTextInputField(

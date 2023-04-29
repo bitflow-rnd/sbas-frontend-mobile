@@ -9,6 +9,7 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_screen.dart';
+import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_cancel_screen.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
 import 'assign_bed_find_screen.dart';
@@ -280,7 +281,14 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             lBtnText: "배정 불가",
             rBtnText: "배정 승인",
             lBtnFunc: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssignBedCancelScreen(
+                    patient: patient,
+                  ),
+                ),
+              );
             },
             rBtnFunc: () {
               Navigator.push(
