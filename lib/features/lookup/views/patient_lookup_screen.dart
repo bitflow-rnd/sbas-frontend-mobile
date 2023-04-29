@@ -14,6 +14,7 @@ import 'package:sbas/features/lookup/views/patient_lookup_detail_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_list_card_item.dart';
+import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
 
 class PatientLookupScreen extends ConsumerWidget {
   PatientLookupScreen({
@@ -41,7 +42,9 @@ class PatientLookupScreen extends ConsumerWidget {
               ),
               margin: EdgeInsets.only(right: 16.w),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  PatientRegInfoModal().showModal6(context);
+                },
                 child: Image.asset(
                   "assets/common_icon/flask_icon.png",
                   height: 24.h,

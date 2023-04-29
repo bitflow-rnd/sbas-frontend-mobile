@@ -59,14 +59,14 @@ Row getSubTitlt(String subTitle, bool isRequired) => Row(
       children: [
         Text(
           subTitle,
-          style: TextStyle(
+          style: CTS.medium(
             color: Colors.grey.shade600,
-            fontSize: 16,
+            fontSize: 13,
           ),
         ),
         Text(
           isRequired ? '' : '(필수)',
-          style: CTS.bold(color: Palette.mainColor, fontSize: 13),
+          style: CTS.medium(color: Palette.mainColor, fontSize: 13),
         ),
       ],
     );
