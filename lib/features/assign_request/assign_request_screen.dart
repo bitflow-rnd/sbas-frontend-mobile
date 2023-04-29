@@ -154,20 +154,20 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                   ),
                 ),
               ),
-              if (_selectedIndex == 0)
+              if (_selectedIndex == 0) //역학조사서
                 Padding(
                   padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
                   child: const PatientRegReport(),
                 ),
-              if (_selectedIndex == 1)
+              if (_selectedIndex == 1) //환자정보
                 Expanded(
                     child: Padding(
                   padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
                   child: PatientRegInfo(formKey: GlobalKey<FormState>()),
                 )),
-              if (_selectedIndex == 2) AssignReqDiseaseInfoInputScreen(),
-              if (_selectedIndex == 3) AssignReqCriticalAttackInputScreen(),
-              if (_selectedIndex == 4) AssignReqDepatureInfoInputScreen()
+              if (_selectedIndex == 2) AssignReqDiseaseInfoInputScreen(), //감염병정보
+              if (_selectedIndex == 3) AssignReqCriticalAttackInputScreen(), //중증정보
+              if (_selectedIndex == 4) AssignReqDepatureInfoInputScreen() //출발정보
             ],
           ),
         ));
