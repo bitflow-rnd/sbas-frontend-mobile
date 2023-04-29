@@ -22,7 +22,7 @@ class BottomPositionedSubmitButton extends ConsumerWidget {
               padding: EdgeInsets.symmetric(
                 vertical: 14.h,
               ),
-              decoration: BoxDecoration(color: color ?? Colors.blueAccent, borderRadius: BorderRadius.zero
+              decoration: BoxDecoration(color: color ?? Palette.mainColor, borderRadius: BorderRadius.zero
                   // borderRadius: BorderRadius.circular(
                   //   6.r,
                   // ),

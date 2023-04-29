@@ -16,7 +16,7 @@ class FieldErrorText extends StatelessWidget {
           field.errorText!,
           style: TextStyle(
             fontStyle: FontStyle.normal,
-            fontSize: 13,
+            fontSize: 12,
             color: Colors.red[700],
             height: 0.5,
           ),

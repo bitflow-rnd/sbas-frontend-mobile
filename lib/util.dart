@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/find_id_screen.dart';
 import 'package:sbas/features/authentication/views/set_password_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,9 +66,7 @@ Row getSubTitlt(String subTitle, bool isRequired) => Row(
         ),
         Text(
           isRequired ? '' : '(필수)',
-          style: const TextStyle(
-            color: Colors.blue,
-          ),
+          style: CTS.bold(color: Palette.mainColor, fontSize: 13),
         ),
       ],
     );

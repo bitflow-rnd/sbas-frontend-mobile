@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/top_nav_req_item_widget.dart';
 import 'package:sbas/constants/palette.dart';
@@ -16,10 +17,10 @@ class TopNavbarRequest extends ConsumerWidget {
     return Stack(
       children: [
         Align(
-          heightFactor: 14,
+          heightFactor: 9,
           child: Container(
             width: width,
-            height: 4,
+            height: 6.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
                 30,
@@ -29,17 +30,17 @@ class TopNavbarRequest extends ConsumerWidget {
           ),
         ),
         AnimatedAlign(
-          heightFactor: 14,
+          heightFactor: 9,
           alignment: Alignment(
             x,
             0,
           ),
           duration: const Duration(
-            milliseconds: 500,
+            milliseconds: 200,
           ),
           child: Container(
             width: width * 0.3,
-            height: 4,
+            height: 6.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
                 30,

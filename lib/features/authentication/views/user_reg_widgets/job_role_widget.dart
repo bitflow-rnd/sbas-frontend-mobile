@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
+import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/affiliation_widget.dart';
@@ -31,15 +33,16 @@ class _JobRoleState extends ConsumerState<JobRole> {
         children: [
           Text(
             widget.title[index],
-            style: TextStyle(
+            style: CTS.bold(
               color: Colors.grey.shade600,
-              fontSize: 16,
+              fontSize: 13,
             ),
           ),
-          const Text(
-            '*',
-            style: TextStyle(
-              color: Colors.blue,
+          Text(
+            '(필수)',
+            style: CTS.bold(
+              fontSize: 13,
+              color: Palette.mainColor,
             ),
           ),
         ],
@@ -59,7 +62,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
           error: (error, stackTrace) => Center(
             child: Text(
               error.toString(),
-              style: const TextStyle(
+              style: CTS(
                 color: Palette.mainColor,
               ),
             ),
@@ -95,8 +98,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
                             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               mainAxisSpacing: 12,
-                              crossAxisSpacing: 16,
-                              childAspectRatio: 3 / 1,
+                              crossAxisSpacing: 24,
+                              childAspectRatio: 2.5,
                             ),
                             itemBuilder: (context, index) => Affiliation(
                               title: data[index].cdNm ?? '',
@@ -215,6 +218,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                       ],
                     ),
                   ),
+                  Gaps.v52
                 ],
               ),
             );

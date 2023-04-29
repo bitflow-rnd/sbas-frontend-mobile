@@ -63,7 +63,7 @@ class AssignBedScreen extends ConsumerWidget {
                       TextSpan(
                         text: '17',
                         style: CTS.bold(
-                          color: Colors.blue,
+                          color: Palette.mainColor,
                           fontSize: 15,
                         ),
                       ),
