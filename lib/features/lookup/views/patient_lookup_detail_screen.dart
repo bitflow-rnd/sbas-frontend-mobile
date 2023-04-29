@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
@@ -11,6 +12,7 @@ import 'package:sbas/features/lookup/blocs/patient_lookup_detail_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/views/hospital_bed_request_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
+import 'package:sbas/features/lookup/views/widgets/bed_assign_history_card.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/constants/palette.dart';
 
@@ -24,40 +26,79 @@ class PatientLookupDetailScreen extends ConsumerWidget {
     final progress = ref.watch(patientProgressProvider);
 
     return Scaffold(
-      appBar: Bitflow.getAppBar('환자  등록', true, 0),
+      backgroundColor: Palette.white,
+      appBar: AppBar(
+        title: Text(
+          "환자 상세 정보",
+          style: CTS.medium(
+            fontSize: 15,
+            color: Colors.black,
+          ),
+        ),
+        actions: [
+          progress == 0
+              ? Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.h,
+                  ),
+                  margin: EdgeInsets.only(right: 16.w),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Image.asset(
+                      "assets/common_icon/share_icon.png",
+                      height: 24.h,
+                      width: 24.w,
+                    ),
+                  ),
+                )
+              : Container()
+        ],
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        leading: const BackButton(
+          color: Colors.black,
+        ),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+      ),
       body: Stack(
         children: [
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.h,
+                  vertical: 14.w,
                 ),
                 child: Row(
                   children: [
                     Image.asset(
                       'assets/patient.png',
-                      height: 42,
+                      height: 36.h,
+                      width: 36.h,
                     ),
                     Gaps.h8,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         RichText(
+                          textAlign: TextAlign.center,
                           text: TextSpan(
                             text: '${patient.ptNm}',
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: CTS.bold(
+                              fontSize: 15,
                               color: Colors.black,
                             ),
                             children: [
                               TextSpan(
-                                text: '[${getPatientInfo(patient)}]',
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                  letterSpacing: -0.5,
+                                text: '(${getPatientInfo(patient)})', //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
+                                style: CTS(
+                                  color: Color(0xff333333),
+                                  fontSize: 10,
                                 ),
                               ),
                             ],
@@ -71,18 +112,6 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                           ),
                         ),
                       ],
-                    ),
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.share_outlined,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 ),
@@ -110,29 +139,96 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                       ? Column(
                           children: [
                             for (int i = 0; i < list.length; i++)
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 22,
-                                  vertical: 14,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '${i + 1}.${list[i]}',
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 16,
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 20.w,
+                                      vertical: 12.h,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            '${list[i]}',
+                                            style: CTS(
+                                              color: Palette.greyText,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Text(
+                                            getConvertPatientInfo(i, patient),
+                                            style: CTS.medium(
+                                              fontSize: 13,
+                                            ),
+                                            textAlign: TextAlign.end,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  if (i == 1)
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 24.w,
+                                        vertical: 12.h,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '성별',
+                                                style: CTS(
+                                                  color: Palette.greyText,
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                              Gaps.h10,
+                                              Text(
+                                                "남",
+                                                style: CTS.medium(
+                                                  fontSize: 13,
+                                                ),
+                                                textAlign: TextAlign.end,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                          Gaps.h32,
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '나이',
+                                                style: CTS(
+                                                  color: Palette.greyText,
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                              Gaps.h10,
+                                              Text(
+                                                "30세",
+                                                style: CTS.medium(
+                                                  fontSize: 13,
+                                                ),
+                                                textAlign: TextAlign.end,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Text(
-                                      getConvertPatientInfo(i, patient),
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                ],
                               ),
                           ],
                         )
@@ -146,34 +242,80 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                 ),
                               ),
                             ),
-                            data: (history) => Center(
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/lookup/history_icon.png',
-                                    height: 128.h,
-                                  ),
-                                  const AutoSizeText(
-                                    '병상 배정 이력이 없습니다.',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey,
+                            data: (history) => progress != 0 // has history 값에 따라 요소들 보여주거나 "병상배정이력이없습니다 출력"
+                                ? SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        BedAssignHistoryCardItem(
+                                          name: "칠곡경북대병원",
+                                          disease: "코로나바이러스감염증-19",
+                                          timestamp: '2023년 2월 18일 15시 22분',
+                                          count: "1",
+                                          tagList: const [
+                                            "중증",
+                                            "중증",
+                                            "중증",
+                                            "중증",
+                                          ],
+                                          patient: patient,
+                                        ),
+                                        BedAssignHistoryCardItem(
+                                          name: "칠곡경북대병원",
+                                          disease: "코로나바이러스감염증-19",
+                                          timestamp: '2023년 2월 18일 15시 22분',
+                                          count: "2",
+                                          tagList: const [
+                                            "중증",
+                                            "중증",
+                                            "중증",
+                                            "중증",
+                                          ],
+                                          patient: patient,
+                                        ),
+                                        BedAssignHistoryCardItem(
+                                          name: "칠곡경북대병원",
+                                          disease: "코로나바이러스감염증-19",
+                                          timestamp: '2023년 2월 18일 15시 22분',
+                                          count: "3",
+                                          tagList: const [
+                                            "중증",
+                                            "중증",
+                                            "중증",
+                                            "중증",
+                                          ],
+                                          patient: patient,
+                                        ),
+                                      ],
                                     ),
-                                    maxLines: 1,
-                                    maxFontSize: 22,
+                                  )
+                                : Center(
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/lookup/history_icon.png',
+                                          height: 128.h,
+                                        ),
+                                        const AutoSizeText(
+                                          '병상 배정 이력이 없습니다.',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey,
+                                          ),
+                                          maxLines: 1,
+                                          maxFontSize: 22,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
-                            ),
                           ),
                 ),
               ),
             ],
           ),
           Positioned(
-            bottom: 18,
-            left: 18,
-            right: 18,
+            bottom: 0,
+            left: 0,
+            right: 0,
             child: BottomPositionedSubmitButton(
               text: progress == 0 ? '다음' : '신규 병상 요청',
               function: () => progress == 0
@@ -190,9 +332,9 @@ class PatientLookupDetailScreen extends ConsumerWidget {
           ),
           if (progress == 0)
             Positioned(
-              bottom: 46 + 18 + 10,
-              left: 18,
-              right: 18,
+              bottom: 54,
+              left: 0,
+              right: 0,
               child: BottomPositionedSubmitButton(
                 color: Colors.green,
                 text: '수정',
@@ -210,12 +352,13 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                   }
                 },
               ),
-            ),
+            )
         ],
       ),
     );
   }
 
+  final hasHistory = false;
   final List<String> list = [
     '환자이름',
     '주민등록번호',

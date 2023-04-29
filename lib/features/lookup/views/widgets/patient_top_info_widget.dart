@@ -45,7 +45,7 @@ class PatientTopInfo extends StatelessWidget {
                               text: '[${getPatientInfo(patient!)}]',
                               style: CTS(
                                 color: Colors.grey,
-                                fontSize: 12,
+                                fontSize: 10,
                               ),
                             ),
                           ],

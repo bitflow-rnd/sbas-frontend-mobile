@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
+import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/belong_agency_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_detail_widget.dart';
@@ -22,10 +25,50 @@ class BelongAgency extends ConsumerStatefulWidget {
 }
 
 class _BelongAgencyState extends ConsumerState<BelongAgency> {
+  bool _isSelected = false;
+
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            children: [
+              _getTitle(
+                "소속기관 유형",
+                true,
+              ),
+              Spacer(),
+              Checkbox(
+                activeColor: Palette.mainColor,
+                visualDensity: VisualDensity.compact,
+                value: _isSelected,
+                onChanged: (bool? newValue) {
+                  setState(() {
+                    _isSelected = newValue ?? false;
+                  });
+                },
+                checkColor: Colors.white,
+                tristate: false,
+              ),
+              Text(
+                '조회전용',
+                style: CTS(
+                  color: Palette.greyText,
+                  fontSize: 11,
+                ),
+              ),
+            ],
+          ),
+          Gaps.v10,
+          Row(
+            children: [
+              selectorWidget("의료진", true),
+              selectorWidget("병상배정반 ", false),
+              selectorWidget("보건소", false),
+              selectorWidget("전산", false),
+            ],
+          ),
+          Gaps.v36,
           _getTitle(
             widget.titles[0],
             true,
@@ -54,17 +97,6 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
           ),
           Gaps.v16,
           _getTitle(
-            widget.titles[2],
-            false,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8,
-            ),
-            child: AgencyProof(),
-          ),
-          Gaps.v16,
-          _getTitle(
             widget.titles[3],
             false,
           ),
@@ -82,7 +114,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
                         error: (error, stackTrace) => Center(
                           child: Text(
                             error.toString(),
-                            style: const TextStyle(
+                            style: CTS(
                               color: Palette.mainColor,
                             ),
                           ),
@@ -93,9 +125,9 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
                           ),
                           itemCount: data.length,
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
+                            crossAxisCount: 5,
                             mainAxisSpacing: 12,
-                            crossAxisSpacing: 16,
+                            crossAxisSpacing: 8,
                             childAspectRatio: 2.15 / 1,
                           ),
                           itemBuilder: (context, index) {
@@ -122,6 +154,18 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
               ],
             ),
           ),
+          Gaps.v16,
+          _getTitle(
+            widget.titles[2],
+            false,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+            ),
+            child: AgencyProof(),
+          ),
+          Gaps.v52,
         ],
       );
 
@@ -146,17 +190,36 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: CTS.bold(
               color: Colors.grey.shade600,
-              fontSize: 16,
+              fontSize: 13,
             ),
           ),
           Text(
-            isRequired ? '*' : '',
-            style: const TextStyle(
-              color: Colors.blue,
+            isRequired ? '(필수)' : '',
+            style: CTS.bold(
+              fontSize: 13,
+              color: Palette.mainColor,
             ),
           ),
         ],
       );
+  Widget selectorWidget(String title, bool isSelected) {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 10.h),
+        decoration: BoxDecoration(
+          color: isSelected ? Palette.mainColor : Color(0xffecedef).withOpacity(0.6),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Text(
+          title,
+          style: CTS.medium(
+            color: isSelected ? Colors.white : Palette.greyText_60,
+            fontSize: 11,
+          ),
+        ).c,
+      ),
+    );
+  }
 }

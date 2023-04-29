@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
@@ -61,9 +63,10 @@ class _AgencyProofState extends ConsumerState<AgencyProof> {
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.grey.shade300,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(
-                            8,
+                            4.r,
                           ),
                         ),
                         child: image != null
@@ -98,8 +101,14 @@ class _AgencyProofState extends ConsumerState<AgencyProof> {
                   ),
                   Gaps.v12,
                   if (field.hasError)
-                    FieldErrorText(
-                      field: field,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 24,
+                      ),
+                      child: Text(
+                        field.errorText!,
+                        style: CTS.medium(fontSize: 11, color: Palette.greyText_60),
+                      ),
                     )
                 ],
               ),

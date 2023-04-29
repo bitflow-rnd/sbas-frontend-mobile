@@ -231,7 +231,7 @@ class _AuthPhoneState extends State<AuthPhone> {
                 ),
               ),
               Container(
-                color: Colors.blueAccent,
+                color: Palette.mainColor,
                 child: SafeArea(
                   child: BottomPositionedSubmitButton(
                     text: '확인',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/palette.dart';
 
 class Affiliation<T> extends ConsumerWidget {
@@ -39,9 +40,9 @@ class Affiliation<T> extends ConsumerWidget {
             title,
             style: TextStyle(
               color: index == selectedIndex ? Colors.white : Colors.grey,
-              fontSize: 16,
+              fontSize: 12,
             ),
-          ),
+          ).c,
         ),
       );
 }

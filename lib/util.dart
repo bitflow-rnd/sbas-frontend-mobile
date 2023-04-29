@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/find_id_screen.dart';
 import 'package:sbas/features/authentication/views/set_password_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,8 +47,7 @@ Future setPassword(BuildContext context) async => await Navigator.push(
       builder: (context) => const SetPasswordScreen(),
     ));
 
-String format(int remainingTime) =>
-    Duration(seconds: remainingTime).toString().substring(2, 7);
+String format(int remainingTime) => Duration(seconds: remainingTime).toString().substring(2, 7);
 
 String toJson(Map<String, dynamic> map) => jsonEncode(map);
 
@@ -57,16 +59,14 @@ Row getSubTitlt(String subTitle, bool isRequired) => Row(
       children: [
         Text(
           subTitle,
-          style: TextStyle(
+          style: CTS.medium(
             color: Colors.grey.shade600,
-            fontSize: 16,
+            fontSize: 13,
           ),
         ),
         Text(
-          isRequired ? '' : '*',
-          style: const TextStyle(
-            color: Colors.blue,
-          ),
+          isRequired ? '' : '(필수)',
+          style: CTS.medium(color: Palette.mainColor, fontSize: 13),
         ),
       ],
     );
@@ -76,8 +76,8 @@ InputDecoration getInputDecoration(String hintText) => InputDecoration(
           style: BorderStyle.solid,
           color: Colors.grey.shade300,
         ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(10),
+        borderRadius: BorderRadius.all(
+          Radius.circular(4.r),
         ),
       ),
       focusedBorder: OutlineInputBorder(
@@ -85,8 +85,8 @@ InputDecoration getInputDecoration(String hintText) => InputDecoration(
           style: BorderStyle.solid,
           color: Colors.grey.shade300,
         ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(10),
+        borderRadius: BorderRadius.all(
+          Radius.circular(4.r),
         ),
       ),
       errorBorder: OutlineInputBorder(
@@ -94,8 +94,8 @@ InputDecoration getInputDecoration(String hintText) => InputDecoration(
           style: BorderStyle.solid,
           color: Colors.grey.shade300,
         ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(10),
+        borderRadius: BorderRadius.all(
+          Radius.circular(4.r),
         ),
       ),
       hintText: hintText,

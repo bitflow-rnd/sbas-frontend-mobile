@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/constants/palette.dart';
 
 class Bitflow {
   static final defaultRadius = 9.2.r; //border radius
   static final radius_4 = 4.r; //border radius
+
+  static MaterialColor myCustomMaterialColor = MaterialColor(Palette.mainColor.value, Palette.myCustomColorShades);
+
   static ThemeData getTheme() {
     return ThemeData(
       fontFamily: 'SpoqaHanSansNeo',
@@ -23,7 +27,7 @@ class Bitflow {
           color: Colors.black,
         ),
       ),
-      primarySwatch: Colors.blue,
+      primarySwatch: myCustomMaterialColor,
     );
   }
 

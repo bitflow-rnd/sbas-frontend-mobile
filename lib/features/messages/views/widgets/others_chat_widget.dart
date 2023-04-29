@@ -3,6 +3,8 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 
+import '../../../../common/bitflow_theme.dart';
+
 Row othersChatWidget(
   TalkMsgModel input,
   ScrollController scrollController,
@@ -43,25 +45,23 @@ Row othersChatWidget(
                   margin: const EdgeInsets.only(right: 5),
                   padding: const EdgeInsets.all(10),
                   decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(8),
-                        topRight: Radius.circular(8),
-                        bottomLeft: Radius.circular(8)),
+                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(8), topRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
                     color: Colors.white,
                   ),
-                  child: Text(input.msg ?? '',
-                      textAlign: TextAlign.start,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontFamily: 'OverpassRegular',
-                          fontWeight: FontWeight.w300)),
+                  child: Text(
+                    input.msg ?? '',
+                    textAlign: TextAlign.start,
+                    style: CTS(
+                      color: Colors.black,
+                      fontSize: 13,
+                    ),
+                  ),
                 ),
               ),
               Text(
                 textAlign: TextAlign.left,
                 formatDateTime(input.updtDttm!),
-                style: const TextStyle(fontSize: 8.0, color: Colors.grey),
+                style: CTS(fontSize: 12, color: Colors.grey),
               ),
             ],
           ),

@@ -26,18 +26,14 @@ class NavTab extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/home/${path}_icon.png',
-                    color: isSelected
-                        ? const Color(0xFF000000)
-                        : const Color(0xFF696969),
+                    color: isSelected ? const Color(0xFF000000) : const Color(0xFF696969),
                     height: 22,
                   ),
                   Gaps.v5,
                   Text(
                     text,
                     style: TextStyle(
-                      color: isSelected
-                          ? const Color(0xFF000000)
-                          : const Color(0xFF696969),
+                      color: isSelected ? const Color(0xFF000000) : const Color(0xFF696969),
                     ),
                   )
                 ],

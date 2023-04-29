@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/widgets/top_nav_item_widget.dart';
 
 class TopNavbar extends StatefulWidget {
@@ -30,7 +31,7 @@ class TopNavbarState extends State<TopNavbar> {
             height: 6.h,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.zero,
-              color: Colors.blueAccent,
+              color: Palette.mainColor,
             ),
           ),
         ),
