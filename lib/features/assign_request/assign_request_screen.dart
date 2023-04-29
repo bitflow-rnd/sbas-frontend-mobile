@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,7 +32,6 @@ class AssignBedRequestScreen extends StatefulWidget {
 class _AssignBedRequestState extends State<AssignBedRequestScreen> {
   List<String> headerList = ["역학조사서", "환자정보", "감염병정보", "중증정보", "출발정보"];
   int _selectedIndex = 0;
-  String _selectedIndexString = "역학조사서";
   bool isRight = false;
   @override
   Widget build(BuildContext context) {
@@ -101,12 +102,14 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                                   children: List.generate(
                                     5,
                                     (index) => InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          _selectedIndex = index;
-                                        });
-                                      },
-                                      child: Container(
+                                      // onTap:
+                                      // () {
+                                      // setState(() {
+                                      //   _selectedIndex = index;
+                                      // });
+                                      //상단 버튼 눌러서 이동 하는 로직 비활성화 .
+                                      // },
+                                      child: SizedBox(
                                         width: 0.22.sw,
                                         child: Text(
                                           headerList[index],
@@ -122,14 +125,15 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                           ),
                           Stack(
                             children: [
-                              // Container(
-                              //   height: 6.h,
-                              //   width: double.infinity,
-                              //   decoration: BoxDecoration(
-                              //     color: Color(0xffecedef),
-                              //     borderRadius: BorderRadius.circular(3),
-                              //   ),
-                              // ),
+                              Container(
+                                margin: EdgeInsets.only(left: 16.w),
+                                height: 6.h,
+                                width: 0.22.sw * 5,
+                                decoration: BoxDecoration(
+                                  color: Color(0xffecedef),
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              ),
                               AnimatedContainer(
                                 padding: EdgeInsets.only(left: 0.22.sw * _selectedIndex + 16.w),
                                 duration: const Duration(
@@ -155,9 +159,11 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                 ),
               ),
               if (_selectedIndex == 0) //역학조사서
-                Padding(
-                  padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
-                  child: const PatientRegReport(),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
+                    child: const PatientRegReport(),
+                  ),
                 ),
               if (_selectedIndex == 1) //환자정보
                 Expanded(
@@ -167,10 +173,76 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                 )),
               if (_selectedIndex == 2) AssignReqDiseaseInfoInputScreen(), //감염병정보
               if (_selectedIndex == 3) AssignReqCriticalAttackInputScreen(), //중증정보
-              if (_selectedIndex == 4) AssignReqDepatureInfoInputScreen() //출발정보
+              if (_selectedIndex == 4) AssignReqDepatureInfoInputScreen(), //출발정보
+              _bottomer(),
             ],
           ),
         ));
+  }
+
+  Widget _bottomer() {
+    return Row(
+      children: [
+        _selectedIndex != 0
+            ? Expanded(
+                child: InkWell(
+                  onTap: () {
+                    if (_selectedIndex == 0) {
+                      Navigator.pop(context);
+                    } else {
+                      setState(() {
+                        _selectedIndex--;
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 11.h),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Palette.greyText_80,
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      '이전',
+                      style: CTS(
+                        color: Palette.greyText_80,
+                        fontSize: 16,
+                      ),
+                    ).c,
+                  ),
+                ),
+              )
+            : Container(),
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              if (_selectedIndex == 4) {
+                //모두 작성 완료시 로직처리.
+              } else {
+                setState(() {
+                  _selectedIndex++;
+                });
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 12.h),
+              decoration: const BoxDecoration(
+                color: Palette.mainColor,
+              ),
+              child: Text(
+                _selectedIndex == 4 ? '요청 완료' : '다음',
+                style: CTS(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ).c,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _header(String name, String detail) {
