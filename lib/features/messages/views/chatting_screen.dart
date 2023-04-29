@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/blocs/talk_room_bloc.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
@@ -124,30 +126,39 @@ class _ChattingScreenState extends State<ChattingScreen> {
         color: Theme.of(context).colorScheme.secondary,
       ),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           children: [
-            Expanded(
-              child: TextField(
-                controller: _messageController,
-                onChanged: (value) {
-                  setState(() {});
-                },
-                decoration: const InputDecoration(
-                  hintText: '메세지를 입력해 주세요.',
-                  border: InputBorder.none,
-                ),
-              ),
+            Container(
+              color: Palette.greyText_20,
+              margin: EdgeInsets.all(2.r),
+              child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
             ),
-            IconButton(
-              icon: const Icon(Icons.send),
-              onPressed: _messageController.text.trim().isEmpty
+            Expanded(
+                child: TextField(
+              controller: _messageController,
+              onChanged: (value) {
+                setState(() {});
+              },
+              decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+            )),
+            InkWell(
+              onTap: _messageController.text.trim().isEmpty
                   ? null
                   : () {
                       _talkRoomBloc.sendMessage(_messageController.text);
                       _messageController.clear();
                     },
-            ),
+              child: Container(
+                color: Palette.mainColor,
+                padding: EdgeInsets.all(12.r),
+                margin: EdgeInsets.all(2.r),
+                child: Icon(
+                  Icons.send,
+                  color: Palette.white,
+                  size: 20.h,
+                ),
+              ),
+            )
           ],
         ),
       ),

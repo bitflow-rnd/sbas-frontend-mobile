@@ -38,6 +38,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                         // timeline_go_hosipital_complete
                         // timeline_move_complete
                         // timeline_refused
+                        // timeline_go_home
                         children: [
                           moveCompleteCard(
                             title: "승인",
@@ -74,6 +75,14 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                             by: "대구광역시 병상배정반 / 팀장 / 홍성수",
                             detail: "병상배정이 완료되었습니다.",
                           ),
+                          moveCompleteCard(
+                              title: "귀가요청",
+                              dateTime: "오후 2시 33분",
+                              src: "timeline_go_home",
+                              by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                              detail: "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
+                              isBlue: true,
+                              isSelected: true),
                         ],
                       ),
                     ]),
@@ -82,13 +91,58 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               ),
             ),
           ),
+          Container(
+            height: 50.h,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Palette.greyText_20,
+                width: 1,
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  color: Palette.greyText_20,
+                  margin: EdgeInsets.all(2.r),
+                  child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
+                ),
+                Expanded(
+                    child: TextField(
+                  // controller: _messageController,
+                  onChanged: (value) {
+                    // setState(() {});
+                  },
+                  decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+                )),
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    color: Palette.mainColor,
+                    padding: EdgeInsets.all(12.r),
+                    margin: EdgeInsets.all(2.r),
+                    child: Icon(
+                      Icons.send,
+                      color: Palette.white,
+                      size: 20.h,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget moveCompleteCard(
-      {required String title, required String dateTime, required String src, required String by, required String detail, bool isBlue = false}) {
+      {required String title,
+      required String dateTime,
+      required String src,
+      required String by,
+      required String detail,
+      bool isBlue = false,
+      bool isSelected = false}) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.only(left: 16.w, right: 24.w),
@@ -99,12 +153,17 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               children: [imageIconFrag(imgSrc: "assets/common_icon/$src.png")],
             ),
             Expanded(
-              flex: 7,
               child: Container(
                 margin: EdgeInsets.only(left: 12.w),
                 padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
+                  border: isSelected
+                      ? Border.all(
+                          color: Palette.mainColor,
+                          width: 2,
+                        )
+                      : null,
                   borderRadius: BorderRadius.all(Radius.circular(12.r)),
                   boxShadow: const [
                     BoxShadow(
