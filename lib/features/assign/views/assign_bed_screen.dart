@@ -8,6 +8,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/widgets/card_item_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_navbar_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_search_widget.dart';
+import 'package:sbas/features/assign_request/assign_request_screen.dart';
 
 class AssignBedScreen extends ConsumerWidget {
   const AssignBedScreen({
@@ -92,10 +93,12 @@ class AssignBedScreen extends ConsumerWidget {
                     ]),
                   ),
                   Column(
-                    children: const [
+                    children: [
                       Spacer(),
                       BottomSubmitBtn(
-                        onPressed: null,
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const AssignBedRequestScreen()));
+                        },
                         text: '병상요청',
                       ),
                     ],

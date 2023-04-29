@@ -71,6 +71,7 @@ Row getSubTitlt(String subTitle, bool isRequired) => Row(
       ],
     );
 InputDecoration getInputDecoration(String hintText) => InputDecoration(
+      counterText: "",
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
           style: BorderStyle.solid,
