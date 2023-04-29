@@ -514,4 +514,5 @@ class Contract {
   String name;
   String phone;
   String organization;
+  
 }
