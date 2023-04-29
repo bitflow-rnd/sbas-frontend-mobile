@@ -504,7 +504,7 @@ class DirectMessageScreen extends ConsumerWidget {
     );
   }
 
-  final int selectIndex = 0;
+  final int selectIndex = 1;
   static String routeName = 'directMessage';
   static String routeUrl = '/directMessage';
 }

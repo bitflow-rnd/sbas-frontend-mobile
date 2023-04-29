@@ -1,69 +1,21 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/alarm/views/alarm_screen.dart';
-import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
-
 import 'package:sbas/constants/palette.dart';
 
-class PatientBedAssignDetailPage extends ConsumerWidget {
-  PatientBedAssignDetailPage({
-    required this.patient,
+class AssignBedDetailTimeLine extends ConsumerWidget {
+  const AssignBedDetailTimeLine({
     super.key,
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      backgroundColor: Palette.white,
-      appBar: AppBar(
-        title: Text(
-          "타임라인",
-          style: CTS.medium(
-            fontSize: 15,
-            color: Colors.black,
-          ),
-        ),
-        actions: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 8.h,
-            ),
-            margin: EdgeInsets.only(right: 16.w),
-            child: InkWell(
-              onTap: () {},
-              child: Image.asset(
-                "assets/common_icon/share_icon.png",
-                height: 24.h,
-                width: 24.w,
-              ),
-            ),
-          )
-        ],
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        leading: const BackButton(
-          color: Colors.black,
-        ),
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarBrightness: Brightness.light,
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
-        ),
-      ),
-      body: Column(
+    return Expanded(
+      child: Column(
         children: [
-          
-          const Divider(
-            color: Colors.grey,
-            height: 1,
-          ),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -86,6 +38,7 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
                         // timeline_go_hosipital_complete
                         // timeline_move_complete
                         // timeline_refused
+                        // timeline_go_home
                         children: [
                           moveCompleteCard(
                             title: "승인",
@@ -122,6 +75,14 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
                             by: "대구광역시 병상배정반 / 팀장 / 홍성수",
                             detail: "병상배정이 완료되었습니다.",
                           ),
+                          moveCompleteCard(
+                              title: "귀가요청",
+                              dateTime: "오후 2시 33분",
+                              src: "timeline_go_home",
+                              by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                              detail: "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
+                              isBlue: true,
+                              isSelected: true),
                         ],
                       ),
                     ]),
@@ -130,13 +91,58 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
               ),
             ),
           ),
+          Container(
+            height: 50.h,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Palette.greyText_20,
+                width: 1,
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  color: Palette.greyText_20,
+                  margin: EdgeInsets.all(2.r),
+                  child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
+                ),
+                Expanded(
+                    child: TextField(
+                  // controller: _messageController,
+                  onChanged: (value) {
+                    // setState(() {});
+                  },
+                  decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+                )),
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    color: Palette.mainColor,
+                    padding: EdgeInsets.all(12.r),
+                    margin: EdgeInsets.all(2.r),
+                    child: Icon(
+                      Icons.send,
+                      color: Palette.white,
+                      size: 20.h,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget moveCompleteCard(
-      {required String title, required String dateTime, required String src, required String by, required String detail, bool isBlue = false}) {
+      {required String title,
+      required String dateTime,
+      required String src,
+      required String by,
+      required String detail,
+      bool isBlue = false,
+      bool isSelected = false}) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.only(left: 16.w, right: 24.w),
@@ -147,12 +153,17 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
               children: [imageIconFrag(imgSrc: "assets/common_icon/$src.png")],
             ),
             Expanded(
-              flex: 7,
               child: Container(
                 margin: EdgeInsets.only(left: 12.w),
                 padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
+                  border: isSelected
+                      ? Border.all(
+                          color: Palette.mainColor,
+                          width: 2,
+                        )
+                      : null,
                   borderRadius: BorderRadius.all(Radius.circular(12.r)),
                   boxShadow: const [
                     BoxShadow(
@@ -256,8 +267,6 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
       ),
     );
   }
-
-  final Patient patient;
 }
 
 class DashedLineVerticalPainter extends CustomPainter {

@@ -32,7 +32,7 @@ class Common {
     Color button2Color = Palette.mainColor,
     String button1Text = '취소',
     String button2Text = '확인',
-    Color button1TextColor = const Color(0xFF424242),
+    Color button1TextColor = Palette.greyText,
     Color button2TextColor = Palette.white,
     Route? button1Route,
     Route? button2Route,
@@ -76,7 +76,7 @@ class Common {
                   padding: EdgeInsets.only(bottom: 16.r),
                   child: Row(
                     children: [
-                      button2Function != null
+                      button1Function != null
                           ? Expanded(
                               //left button(이전)
                               child: ClipRRect(
@@ -87,7 +87,7 @@ class Common {
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       border: Border.all(
-                                        color: Color(0xff676a7a),
+                                        color: Palette.greyText_20,
                                         width: 1.w,
                                       ),
                                       borderRadius: BorderRadius.circular(6.r),
