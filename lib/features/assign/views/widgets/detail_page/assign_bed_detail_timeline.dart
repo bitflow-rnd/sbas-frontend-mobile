@@ -3,10 +3,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/main_drawer.dart';
+import 'package:sbas/constants/common_modal.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_screen.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+
+import 'assign_bed_find_screen.dart';
 
 class AssignBedDetailTimeLine extends ConsumerWidget {
   const AssignBedDetailTimeLine({
@@ -43,7 +48,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                         // timeline_refused
                         // timeline_go_home
                         //
-                        //timeline_suspend
+                        //timeline_suspend //  원형 점
                         children: [
                           if (patient.bedStatNm == '승인대기')
                             Column(
@@ -233,45 +238,255 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               ),
             ),
           ),
-          Container(
-            height: 50.h,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Palette.greyText_20,
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  color: Palette.greyText_20,
-                  margin: EdgeInsets.all(2.r),
-                  child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
-                ),
-                Expanded(
-                    child: TextField(
-                  // controller: _messageController,
-                  onChanged: (value) {
-                    // setState(() {});
-                  },
-                  decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
-                )),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    color: Palette.mainColor,
-                    padding: EdgeInsets.all(12.r),
-                    margin: EdgeInsets.all(2.r),
-                    child: Icon(
-                      Icons.send,
-                      color: Palette.white,
-                      size: 20.h,
+          _whichBottomer(patient.bedStatNm ?? '', context)
+        ],
+      ),
+    );
+  }
+
+//   승인대기
+// 배정대기
+// 이송대기
+// 이송중
+// 입원
+
+  Widget _whichBottomer(String type, BuildContext context) {
+    switch (type) {
+      case '승인대기':
+        return _bottomer(
+            lBtnText: "배정 불가",
+            rBtnText: "승인",
+            lBtnFunc: () {
+              Navigator.pop(context);
+            },
+            rBtnFunc: () async {
+              dynamic res = await _showBottomSheet(
+                context: context,
+              );
+              if (res != null) {
+                //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AssignBedFindScreen(
+                      patient: patient,
                     ),
                   ),
-                )
-              ],
+                );
+              }
+            });
+      case '배정대기':
+        return _bottomer(
+            lBtnText: "배정 불가",
+            rBtnText: "배정 승인",
+            lBtnFunc: () {
+              Navigator.pop(context);
+            },
+            rBtnFunc: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssignBedApproveScreen(
+                    patient: patient,
+                  ),
+                ),
+              );
+            });
+      case '이송대기':
+        return _msgBottomer();
+      case '이송중':
+        return _msgBottomer();
+      case '입원':
+        return _msgBottomer();
+      default:
+        return Container();
+    }
+  }
+
+  _showBottomSheet({required BuildContext context, String header = '배정 승인', String hintText = '메시지 입력', String btnText = '승인'}) async {
+    TextEditingController textEditingController = TextEditingController();
+    final focusNode = FocusNode();
+
+    // Call requestFocus() on the focus node when the bottom sheet is displayed
+    WidgetsBinding.instance.addPostFrameCallback((_) => focusNode.requestFocus());
+    return showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          // <-- SEE HERE
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(24.r),
+          ),
+        ),
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: GestureDetector(
+              onTap: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+                if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                  currentFocus.focusedChild?.unfocus();
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Container(
+                  padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            header,
+                            style: CTS.medium(
+                              fontSize: 15,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              weight: 24.h,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 3,
+                            child: TextField(
+                                focusNode: focusNode,
+                                controller: textEditingController,
+                                decoration: InputDecoration(
+                                  hintText: hintText,
+                                  enabledBorder: _outlineInputBorder,
+                                  focusedBorder: _outlineInputBorder,
+                                  errorBorder: _outlineInputBorder,
+                                )),
+                          ),
+                          Gaps.h8,
+                          Expanded(
+                            flex: 1,
+                            child: ElevatedButton(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16.h),
+                                child: Text(
+                                  btnText,
+                                  style: CTS(color: Palette.white, fontSize: 13),
+                                ),
+                              ),
+                              onPressed: () {
+                                String text = textEditingController.text;
+                                // Perform action with the entered text here
+                                return Navigator.pop(context, text);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget _bottomer({String lBtnText = '배정 붏가', String rBtnText = "승인", required Function lBtnFunc, required Function rBtnFunc}) {
+    return Row(
+      children: [
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              lBtnFunc();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 11.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: Palette.greyText_80,
+                  width: 1,
+                ),
+              ),
+              child: Text(
+                lBtnText,
+                style: CTS(
+                  color: Palette.greyText_80,
+                  fontSize: 16,
+                ),
+              ).c,
             ),
           ),
+        ),
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              rBtnFunc();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 12.h),
+              decoration: const BoxDecoration(
+                color: Palette.mainColor,
+              ),
+              child: Text(
+                rBtnText,
+                style: CTS(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ).c,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _msgBottomer() {
+    return Container(
+      height: 50.h,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Palette.greyText_20,
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            color: Palette.greyText_20,
+            margin: EdgeInsets.all(2.r),
+            child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
+          ),
+          Expanded(
+              child: TextField(
+            // controller: _messageController,
+            onChanged: (value) {
+              // setState(() {});
+            },
+            decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+          )),
+          InkWell(
+            onTap: () {},
+            child: Container(
+              color: Palette.mainColor,
+              padding: EdgeInsets.all(12.r),
+              margin: EdgeInsets.all(2.r),
+              child: Icon(
+                Icons.send,
+                color: Palette.white,
+                size: 20.h,
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -543,3 +758,13 @@ class DashedLineVerticalPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
+
+InputBorder get _outlineInputBorder => OutlineInputBorder(
+      borderSide: BorderSide(
+        style: BorderStyle.solid,
+        color: Colors.grey.shade300,
+      ),
+      borderRadius: BorderRadius.all(
+        Radius.circular(4.r),
+      ),
+    );
