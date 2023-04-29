@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/constants/common_modal.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/blocs/talk_room_bloc.dart';
@@ -69,22 +70,22 @@ class _ChattingScreenState extends State<ChattingScreen> {
           style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () => print('hi'),
-            icon: const Icon(
-              Icons.search,
-              color: Color(0xFF696969),
-            ),
-          ),
-          IconButton(
-            onPressed: () => print('bye'),
-            icon: const Icon(
-              Icons.more_vert,
-              color: Color(0xFF696969),
-            ),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () => print('hi'),
+        //     icon: const Icon(
+        //       Icons.search,
+        //       color: Color(0xFF696969),
+        //     ),
+        //   ),
+        //   IconButton(
+        //     onPressed: () => print('bye'),
+        //     icon: const Icon(
+        //       Icons.more_vert,
+        //       color: Color(0xFF696969),
+        //     ),
+        //   ),
+        // ],
       ),
       body: Column(
         children: [
@@ -128,10 +129,16 @@ class _ChattingScreenState extends State<ChattingScreen> {
       child: Container(
         child: Row(
           children: [
-            Container(
-              color: Palette.greyText_20,
-              margin: EdgeInsets.all(2.r),
-              child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
+            InkWell(
+              onTap: () {
+                //모달사용방법. :  Common.showModal(context, Common.commonModal(context: context, mainText: "text"));
+                //23.04.29. 하진우
+              },
+              child: Container(
+                color: Palette.greyText_20,
+                margin: EdgeInsets.all(2.r),
+                child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
+              ),
             ),
             Expanded(
                 child: TextField(
