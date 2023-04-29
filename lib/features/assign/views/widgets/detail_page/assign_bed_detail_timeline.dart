@@ -1,69 +1,21 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/alarm/views/alarm_screen.dart';
-import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
-
 import 'package:sbas/constants/palette.dart';
 
-class PatientBedAssignDetailPage extends ConsumerWidget {
-  PatientBedAssignDetailPage({
-    required this.patient,
+class AssignBedDetailTimeLine extends ConsumerWidget {
+  const AssignBedDetailTimeLine({
     super.key,
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      backgroundColor: Palette.white,
-      appBar: AppBar(
-        title: Text(
-          "타임라인",
-          style: CTS.medium(
-            fontSize: 15,
-            color: Colors.black,
-          ),
-        ),
-        actions: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 8.h,
-            ),
-            margin: EdgeInsets.only(right: 16.w),
-            child: InkWell(
-              onTap: () {},
-              child: Image.asset(
-                "assets/common_icon/share_icon.png",
-                height: 24.h,
-                width: 24.w,
-              ),
-            ),
-          )
-        ],
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        leading: const BackButton(
-          color: Colors.black,
-        ),
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarBrightness: Brightness.light,
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
-        ),
-      ),
-      body: Column(
+    return Expanded(
+      child: Column(
         children: [
-          
-          const Divider(
-            color: Colors.grey,
-            height: 1,
-          ),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -256,8 +208,6 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
       ),
     );
   }
-
-  final Patient patient;
 }
 
 class DashedLineVerticalPainter extends CustomPainter {

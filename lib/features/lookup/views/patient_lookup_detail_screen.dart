@@ -358,7 +358,6 @@ class PatientLookupDetailScreen extends ConsumerWidget {
     );
   }
 
-
   final hasHistory = false;
   final List<String> list = [
     '환자이름',

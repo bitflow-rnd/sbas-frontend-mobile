@@ -75,18 +75,14 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 5:
-      text =
-          patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? '';
+      text = patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? '';
       break;
 
     case 6:
       final length = patient.telno?.length ?? 0;
 
       if (length > 0) {
-        text = patient.telno
-                ?.replaceRange(length - 4, length - 4, '-')
-                .replaceRange(length - 7, length - 7, '-') ??
-            '';
+        text = patient.telno?.replaceRange(length - 4, length - 4, '-').replaceRange(length - 7, length - 7, '-') ?? '';
       } else {
         text = '';
       }
@@ -101,7 +97,7 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 9:
-      text = '';
+      text = '기저질환';
       break;
   }
   return text;
@@ -133,7 +129,6 @@ String getDateTimeFormat(String? dt) {
   return DateFormat('yyyy년 MM월 dd일 HH시 mm분').format(dateTime ?? DateTime.now());
 }
 
-final patientLookupProvider =
-    AsyncNotifierProvider<PatientLookupBloc, PatientInfoModel>(
+final patientLookupProvider = AsyncNotifierProvider<PatientLookupBloc, PatientInfoModel>(
   () => PatientLookupBloc(),
 );
