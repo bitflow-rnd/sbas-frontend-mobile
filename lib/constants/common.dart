@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/constants/extensions.dart';
+import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 
 import '../common/bitflow_theme.dart';
@@ -268,4 +269,110 @@ class Common {
       ),
     );
   }
+
+  static showBottomSheet({required BuildContext context, String header = '배정 승인', String hintText = '메시지 입력', String btnText = '승인'}) async {
+    TextEditingController textEditingController = TextEditingController();
+    final focusNode = FocusNode();
+
+    // Call requestFocus() on the focus node when the bottom sheet is displayed
+    WidgetsBinding.instance.addPostFrameCallback((_) => focusNode.requestFocus());
+    return showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          // <-- SEE HERE
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(24.r),
+          ),
+        ),
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: GestureDetector(
+              onTap: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+                if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                  currentFocus.focusedChild?.unfocus();
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Container(
+                  padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            header,
+                            style: CTS.medium(
+                              fontSize: 15,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              weight: 24.h,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 3,
+                            child: TextField(
+                                focusNode: focusNode,
+                                controller: textEditingController,
+                                decoration: InputDecoration(
+                                  hintText: hintText,
+                                  enabledBorder: _outlineInputBorder,
+                                  focusedBorder: _outlineInputBorder,
+                                  errorBorder: _outlineInputBorder,
+                                )),
+                          ),
+                          Gaps.h8,
+                          Expanded(
+                            flex: 1,
+                            child: ElevatedButton(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16.h),
+                                child: Text(
+                                  btnText,
+                                  style: CTS(color: Palette.white, fontSize: 13),
+                                ),
+                              ),
+                              onPressed: () {
+                                String text = textEditingController.text;
+                                // Perform action with the entered text here
+                                return Navigator.pop(context, text);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  static InputBorder get _outlineInputBorder => OutlineInputBorder(
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          color: Colors.grey.shade300,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(4.r),
+        ),
+      );
 }
