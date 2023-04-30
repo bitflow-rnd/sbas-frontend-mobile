@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sbas/constants/common_modal.dart';
+import 'package:sbas/constants/common.dart';
 
 class PatientInfoModal {
   approveReqestModal(context) {
