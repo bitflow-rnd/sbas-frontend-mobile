@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sbas/constants/common_modal.dart';
+import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/blocs/talk_room_bloc.dart';

@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/constants/common_modal.dart';
+import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 

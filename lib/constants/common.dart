@@ -6,6 +6,67 @@ import 'package:sbas/constants/palette.dart';
 import '../common/bitflow_theme.dart';
 
 class Common {
+  static InputBorder get _inputBorder => OutlineInputBorder(
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          color: Colors.grey.shade300,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(
+            8.r,
+          ),
+        ),
+      );
+  static InputDecoration get inputDecoration => InputDecoration(
+        enabledBorder: _inputBorder,
+        focusedBorder: _inputBorder,
+        contentPadding: const EdgeInsets.all(0),
+      );
+
+  static InputDecoration getInputDecoration(String hintText) => InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4.r),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4.r),
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4.r),
+          ),
+        ),
+        hintText: hintText,
+        hintStyle: TextStyle(
+          fontSize: 16,
+          color: Colors.grey.shade400,
+        ),
+        contentPadding: hintText == ""
+            ? EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 14.h,
+              )
+            : const EdgeInsets.symmetric(
+                vertical: 18,
+                horizontal: 22,
+              ),
+      );
+
   static Widget bottomer({String lBtnText = '배정 불가', String rBtnText = "승인", required Function lBtnFunc, required Function rBtnFunc, bool isOneBtn = false}) {
     return Row(
       children: [

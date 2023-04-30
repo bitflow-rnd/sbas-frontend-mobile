@@ -4,12 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/main_drawer.dart';
-import 'package:sbas/constants/common_modal.dart';
+import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_move.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_screen.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_cancel_screen.dart';
+import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_go_home.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
 import 'assign_bed_find_screen.dart';
@@ -301,9 +303,35 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               );
             });
       case '이송대기':
-        return _msgBottomer();
+        return Common.bottomer(
+            isOneBtn: true,
+            rBtnText: "이송 처리",
+            lBtnFunc: () {},
+            rBtnFunc: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssignBedApproveMoveScreen(
+                    patient: patient,
+                  ),
+                ),
+              );
+            });
       case '이송중':
-        return _msgBottomer();
+        return Common.bottomer(
+            isOneBtn: true,
+            rBtnText: "입퇴원 처리",
+            lBtnFunc: () {},
+            rBtnFunc: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssignBedGoHome(
+                    patient: patient,
+                  ),
+                ),
+              );
+            });
       case '입원':
         return _msgBottomer();
       default:

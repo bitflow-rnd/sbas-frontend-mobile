@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/constants/common_modal.dart';
+import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/main/views/alert_settings_page.dart';
 import 'package:sbas/features/main/views/app_license_screen.dart';
