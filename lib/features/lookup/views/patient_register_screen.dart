@@ -10,6 +10,7 @@ import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
@@ -62,7 +63,7 @@ class PatientRegScreen extends ConsumerWidget {
                 horizontal: 18,
               ),
               child: patientAttc != null
-                  ? PatientRegInfo(
+                  ? PatientRegInfoV2(
                       formKey: formKey,
                     )
                   : const PatientRegReport(),
