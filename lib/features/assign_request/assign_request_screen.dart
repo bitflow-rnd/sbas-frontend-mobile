@@ -18,6 +18,7 @@ import 'package:sbas/features/assign_request/view/assign_request_disease_info_in
 
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 
 import '../lookup/views/widgets/patient_reg_report_widget.dart';
 
@@ -169,7 +170,7 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                 Expanded(
                     child: Padding(
                   padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
-                  child: PatientRegInfo(formKey: GlobalKey<FormState>()),
+                  child: PatientRegInfoV2(formKey: GlobalKey<FormState>()),
                 )),
               if (_selectedIndex == 2) AssignReqDiseaseInfoInputScreen(), //감염병정보
               if (_selectedIndex == 3) AssignReqCriticalAttackInputScreen(), //중증정보
