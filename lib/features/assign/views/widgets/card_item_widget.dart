@@ -2,20 +2,20 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/assign_bed_detail_screen.dart';
+import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
 class CardItem extends StatelessWidget {
   CardItem({
     super.key,
-    required this.patientName,
-    required this.patientSex,
-    required this.patientAge,
-    required this.symbol,
+    required this.patient,
     required this.color,
     this.hospital,
   });
+  Patient patient;
   String? hospital;
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class CardItem extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const AssignBedDetailScreen(),
+                builder: (context) =>  AssignBedDetailScreen(patient: patient),
               ));
         },
         child: Container(
@@ -64,7 +64,7 @@ class CardItem extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '$patientName ($patientSex/$patientAge세) ',
+                            '${patient.ptNm} (${patient.getSex()}/${patient.getAge()}세) ',
                             style: CTS.bold(
                               color: Colors.black,
                               fontSize: 15,
@@ -84,7 +84,7 @@ class CardItem extends StatelessWidget {
                               ),
                             ),
                             child: Text(
-                              symbol,
+                              patient.bedStatNm ?? '', //symbol
                               style: CTS.bold(color: color, fontSize: 12),
                               maxLines: 1,
                               // maxFontSize: 18,
@@ -172,5 +172,4 @@ class CardItem extends StatelessWidget {
   }
 
   final Color color;
-  final String patientName, patientSex, patientAge, symbol;
 }

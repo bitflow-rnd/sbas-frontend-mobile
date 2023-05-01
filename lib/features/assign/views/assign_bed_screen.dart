@@ -8,14 +8,65 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/widgets/card_item_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_navbar_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_search_widget.dart';
+import 'package:sbas/features/assign_request/assign_request_screen.dart';
+import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
 class AssignBedScreen extends ConsumerWidget {
   const AssignBedScreen({
     super.key,
     required this.automaticallyImplyLeading,
   });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    List<Patient> tempPaitentList = [
+// 승인대기
+// 배정대기
+// 이송대기
+// 이송중
+// 입원
+      Patient(
+        id: "PT00000055",
+        ptNm: "달나라",
+        gndr: "F",
+        rrno1: "310301", //주민번호 앞자리
+        rrno2: "2", //성별
+        bedStatNm: "승인대기",
+      ),
+      Patient(
+        id: "PT00000055",
+        ptNm: "달나라",
+        gndr: "F",
+        rrno1: "310301", //주민번호 앞자리
+        rrno2: "2", //성별
+        bedStatNm: "배정대기",
+      ),
+      Patient(
+        id: "PT00000055",
+        ptNm: "달나라",
+        gndr: "F",
+        rrno1: "310301", //주민번호 앞자리
+        rrno2: "2", //성별
+        bedStatNm: "이송대기",
+      ),
+      Patient(
+        id: "PT00000055",
+        ptNm: "달나라",
+        gndr: "F",
+        rrno1: "310301", //주민번호 앞자리
+        rrno2: "2", //성별
+        bedStatNm: "이송중",
+      ),
+      Patient(
+        id: "PT00000055",
+        ptNm: "달나라",
+        gndr: "F",
+        rrno1: "310301", //주민번호 앞자리
+        rrno2: "2", //성별
+        bedStatNm: "입원",
+      ),
+    ];
+    tempPaitentList.add(Patient());
     return Scaffold(
       backgroundColor: Palette.white,
       appBar: Bitflow.getAppBar(
@@ -84,18 +135,30 @@ class AssignBedScreen extends ConsumerWidget {
                 children: [
                   SingleChildScrollView(
                     child: Column(children: [
-                      CardItem(patientAge: '88', patientName: '김*준', patientSex: '남', symbol: '병상요청', color: Colors.green),
-                      CardItem(patientAge: '88', patientName: '김*준', patientSex: '남', symbol: '배정대기', color: Palette.primary),
-                      CardItem(patientAge: '88', patientName: '김*준', patientSex: '남', symbol: '이송대기', hospital: "분당 서울대 병원", color: Palette.primary),
-                      CardItem(patientAge: '88', patientName: '김*준', patientSex: '남', symbol: '  이송중  ', hospital: "분당 서울대 병원", color: Palette.primary),
-                      CardItem(patientAge: '88', patientName: '김*준', patientSex: '남', symbol: '    입원    ', color: Palette.red),
+                      //// 승인대기 보라
+                      // 배정대기
+                      // 이송대기
+                      // 이송중
+                      // 입원
+                      // CardItem(
+                      //   // symbol: '병상요청',
+                      //   color: Colors.green,
+                      //   patient: tempPaitentList[2],
+                      // ),
+                      CardItem(patient: tempPaitentList[0], color: Color(0xFF7767cc)), //승인대기
+                      CardItem(patient: tempPaitentList[1], color: Color(0xFF4caff1)), //배정대기
+                      CardItem(patient: tempPaitentList[2], color: Palette.primary, hospital: "분당 서울대 병원"), //  '이송대기',
+                      CardItem(patient: tempPaitentList[3], color: Palette.primary, hospital: "분당 서울대 병원"), // '  이송중  ',
+                      CardItem(patient: tempPaitentList[4], color: Palette.red), //// symbol: '    입원    ',
                     ]),
                   ),
                   Column(
-                    children: const [
+                    children: [
                       Spacer(),
                       BottomSubmitBtn(
-                        onPressed: null,
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const AssignBedRequestScreen()));
+                        },
                         text: '병상요청',
                       ),
                     ],
