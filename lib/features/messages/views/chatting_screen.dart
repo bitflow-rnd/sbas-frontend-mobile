@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/constants/common.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/blocs/talk_room_bloc.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/views/widgets/chat_widget.dart';
 
 class ChattingScreen extends StatefulWidget {
   final String userId;
   final String tkrmId;
+  final TalkRoomsProvider provider;
 
   const ChattingScreen({
     Key? key,
     required this.userId,
     required this.tkrmId,
+    required this.provider,
   }) : super(key: key);
 
   @override
@@ -30,6 +36,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
     _talkRoomBloc = TalkRoomBloc(
       userId: widget.userId,
       tkrmId: widget.tkrmId,
+      provider: widget.provider,
     );
     _messageController = TextEditingController();
     _scrollController = ScrollController();
@@ -63,22 +70,22 @@ class _ChattingScreenState extends State<ChattingScreen> {
           style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () => print('hi'),
-            icon: const Icon(
-              Icons.search,
-              color: Color(0xFF696969),
-            ),
-          ),
-          IconButton(
-            onPressed: () => print('bye'),
-            icon: const Icon(
-              Icons.more_vert,
-              color: Color(0xFF696969),
-            ),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () => print('hi'),
+        //     icon: const Icon(
+        //       Icons.search,
+        //       color: Color(0xFF696969),
+        //     ),
+        //   ),
+        //   IconButton(
+        //     onPressed: () => print('bye'),
+        //     icon: const Icon(
+        //       Icons.more_vert,
+        //       color: Color(0xFF696969),
+        //     ),
+        //   ),
+        // ],
       ),
       body: Column(
         children: [
@@ -120,30 +127,45 @@ class _ChattingScreenState extends State<ChattingScreen> {
         color: Theme.of(context).colorScheme.secondary,
       ),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           children: [
-            Expanded(
-              child: TextField(
-                controller: _messageController,
-                onChanged: (value) {
-                  setState(() {});
-                },
-                decoration: const InputDecoration(
-                  hintText: '메세지를 입력해 주세요.',
-                  border: InputBorder.none,
-                ),
+            InkWell(
+              onTap: () {
+                //모달사용방법. :  Common.showModal(context, Common.commonModal(context: context, mainText: "text"));
+                //23.04.29. 하진우
+              },
+              child: Container(
+                color: Palette.greyText_20,
+                margin: EdgeInsets.all(2.r),
+                child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.send),
-              onPressed: _messageController.text.trim().isEmpty
+            Expanded(
+                child: TextField(
+              controller: _messageController,
+              onChanged: (value) {
+                setState(() {});
+              },
+              decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+            )),
+            InkWell(
+              onTap: _messageController.text.trim().isEmpty
                   ? null
                   : () {
                       _talkRoomBloc.sendMessage(_messageController.text);
                       _messageController.clear();
                     },
-            ),
+              child: Container(
+                color: Palette.mainColor,
+                padding: EdgeInsets.all(12.r),
+                margin: EdgeInsets.all(2.r),
+                child: Icon(
+                  Icons.send,
+                  color: Palette.white,
+                  size: 20.h,
+                ),
+              ),
+            )
           ],
         ),
       ),

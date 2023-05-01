@@ -1,42 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:sbas/features/authentication/repos/login_repo.dart';
-import 'package:sbas/features/messages/models/talk_rooms_response_model.dart';
+import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 
-ListView talkRoomWidget(List<TalkRoomsResponseModel> snapshot, Function onTap) {
-  return ListView.separated(
-    itemBuilder: (context, index) {
-      var talkRoom = snapshot[index];
+class TalkRoomWidget extends ConsumerWidget {
+  final Function onTap;
 
-      return ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-        leading: Image.asset(
-          'assets/message/doctor_icon.png',
-          height: 45,
-        ),
-        title: Text(
-          talkRoom.tkrmNm!,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(
-          talkRoom.msg ?? '',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(color: Colors.grey),
-        ),
-        trailing: Text(
-          formatDateTime(talkRoom.rgstDttm!),
-          style: const TextStyle(fontSize: 12.0, color: Colors.grey),
-        ),
-        onTap: () {
-          onTap(userToken.name!, talkRoom.tkrmId!);
-        },
-      );
-    },
-    separatorBuilder: (context, index) => const Divider(height: 1.0),
-    itemCount: snapshot.length,
-  );
+  const TalkRoomWidget({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final talkRooms = ref.watch(talkRoomsProvider);
+
+    return ListView.separated(
+      itemBuilder: (context, index) {
+        var talkRoom = talkRooms[index];
+
+        return ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/message/doctor_icon.png',
+                    height: 36.h,
+                  ),
+                  Gaps.h10,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            talkRoom.tkrmNm!,
+                            style: CTS.bold(
+                              fontSize: 15,
+                            ),
+                          ),
+                          Gaps.h4,
+                          Image.asset(
+                            "assets/message/unread_msg.png",
+                            width: 16.w,
+                            height: 16.w,
+                          )
+                        ],
+                      ),
+                      Gaps.v8,
+                      Text(
+                        talkRoom.msg ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Gaps.v8,
+              Row(
+                children: [
+                  Gaps.h52,
+                  Text(
+                    formatDateTime(talkRoom.rgstDttm!),
+                    style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          onTap: () {
+            onTap(talkRoom.tkrmId!);
+          },
+        );
+      },
+      separatorBuilder: (context, index) => Divider(height: 1.0.h),
+      itemCount: talkRooms.length,
+    );
+  }
 }
 
 String formatDateTime(String dateTimeString) {

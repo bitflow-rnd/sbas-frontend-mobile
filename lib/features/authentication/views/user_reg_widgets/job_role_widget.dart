@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
+import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/affiliation_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/auth_group_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/detail_auth_widget.dart';
+import 'package:sbas/constants/palette.dart';
 
 class JobRole extends ConsumerStatefulWidget {
   const JobRole({
@@ -19,13 +22,7 @@ class JobRole extends ConsumerStatefulWidget {
     required this.title,
     super.key,
   });
-  final List<String> title,
-      authGroupSelectedImages,
-      authGroupDisabledImages,
-      authGroupTitles,
-      authGroupSubTitles,
-      detailAuthTitles,
-      detailAuthSubTitles;
+  final List<String> title, authGroupSelectedImages, authGroupDisabledImages, authGroupTitles, authGroupSubTitles, detailAuthTitles, detailAuthSubTitles;
 
   @override
   ConsumerState<JobRole> createState() => _JobRoleState();
@@ -36,22 +33,21 @@ class _JobRoleState extends ConsumerState<JobRole> {
         children: [
           Text(
             widget.title[index],
-            style: TextStyle(
+            style: CTS.bold(
               color: Colors.grey.shade600,
-              fontSize: 16,
+              fontSize: 13,
             ),
           ),
-          const Text(
-            '*',
-            style: TextStyle(
-              color: Colors.blue,
+          Text(
+            '(필수)',
+            style: CTS.bold(
+              fontSize: 13,
+              color: Palette.mainColor,
             ),
           ),
         ],
       );
-  int affiliationSelectedIndex = -1,
-      authGroupSelectedIndex = -1,
-      detailAuthSelectedIndex = -1;
+  int affiliationSelectedIndex = -1, authGroupSelectedIndex = -1, detailAuthSelectedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +62,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
           error: (error, stackTrace) => Center(
             child: Text(
               error.toString(),
-              style: const TextStyle(
-                color: Colors.lightBlueAccent,
+              style: CTS(
+                color: Palette.mainColor,
               ),
             ),
           ),
@@ -79,8 +75,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
               authGroupSelectedIndex = widget.authGroupTitles.indexOf(jobCd);
             }
             if (instTypeCd != null && instTypeCd.isNotEmpty) {
-              affiliationSelectedIndex =
-                  data.indexWhere((element) => element.id?.cdId == instTypeCd);
+              affiliationSelectedIndex = data.indexWhere((element) => element.id?.cdId == instTypeCd);
             }
             return SingleChildScrollView(
               child: Column(
@@ -89,9 +84,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                   FormField(
                     initialValue: instTypeCd,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: (value) => value == null || value.isEmpty
-                        ? '소속기관 유형을 선택해주세요.'
-                        : null,
+                    validator: (value) => value == null || value.isEmpty ? '소속기관 유형을 선택해주세요.' : null,
                     builder: (field) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -102,12 +95,11 @@ class _JobRoleState extends ConsumerState<JobRole> {
                               vertical: 12,
                             ),
                             itemCount: data.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               mainAxisSpacing: 12,
-                              crossAxisSpacing: 16,
-                              childAspectRatio: 3 / 1,
+                              crossAxisSpacing: 24,
+                              childAspectRatio: 2.5,
                             ),
                             itemBuilder: (context, index) => Affiliation(
                               title: data[index].cdNm ?? '',
@@ -117,8 +109,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                                 () {
                                   affiliationSelectedIndex = value ?? 0;
 
-                                  model.instTypeCd =
-                                      data[affiliationSelectedIndex].id?.cdId;
+                                  model.instTypeCd = data[affiliationSelectedIndex].id?.cdId;
 
                                   field.didChange(model.instTypeCd);
                                 },
@@ -138,16 +129,14 @@ class _JobRoleState extends ConsumerState<JobRole> {
                   FormField(
                     initialValue: jobCd,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: (value) =>
-                        value == null || value.isEmpty ? '권한그룹을 선택해주세요.' : null,
+                    validator: (value) => value == null || value.isEmpty ? '권한그룹을 선택해주세요.' : null,
                     builder: (field) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
                           height: 128 * 3 + 22,
                           child: GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: 16,
                               crossAxisSpacing: 16,
@@ -156,10 +145,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
                             itemBuilder: (context, index) => AuthorizationGroup(
                               selectedIndex: authGroupSelectedIndex,
                               index: index,
-                              disabledImage:
-                                  widget.authGroupDisabledImages[index],
-                              selectedImage:
-                                  widget.authGroupSelectedImages[index],
+                              disabledImage: widget.authGroupDisabledImages[index],
+                              selectedImage: widget.authGroupSelectedImages[index],
                               title: widget.authGroupTitles[index],
                               subTitle: widget.authGroupSubTitles[index],
                               onChanged: (value) => setState(
@@ -189,8 +176,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                   FormField(
                     initialValue: ocpCd,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: (value) =>
-                        value == null || value.isEmpty ? '권한을 선택해주세요.' : null,
+                    validator: (value) => value == null || value.isEmpty ? '권한을 선택해주세요.' : null,
                     builder: (field) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -201,15 +187,13 @@ class _JobRoleState extends ConsumerState<JobRole> {
                               vertical: 12,
                             ),
                             itemCount: widget.detailAuthTitles.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 1,
                               mainAxisSpacing: 12,
                               crossAxisSpacing: 16,
                               childAspectRatio: 8.75 / 1,
                             ),
-                            itemBuilder: (context, index) =>
-                                DetailAuthorization(
+                            itemBuilder: (context, index) => DetailAuthorization(
                               title: widget.detailAuthTitles[index],
                               subTitle: widget.detailAuthSubTitles[index],
                               index: index,
@@ -218,8 +202,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                                 () {
                                   detailAuthSelectedIndex = value ?? 0;
 
-                                  model.ocpCd = widget.detailAuthTitles[
-                                      detailAuthSelectedIndex];
+                                  model.ocpCd = widget.detailAuthTitles[detailAuthSelectedIndex];
 
                                   field.didChange(model.ocpCd);
                                 },
@@ -235,6 +218,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                       ],
                     ),
                   ),
+                  Gaps.v52
                 ],
               ),
             );

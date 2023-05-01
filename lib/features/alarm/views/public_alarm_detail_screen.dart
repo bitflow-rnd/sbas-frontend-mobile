@@ -122,7 +122,7 @@ class PublicAlarmDetailPageState extends State<PublicAlarmDetailPage> {
                       Text(
                         "첨부파일명.확장자",
                         style: CTS(
-                          color: Colors.blueAccent,
+                          color: Palette.mainColor,
                           fontSize: 12,
                         ),
                       ),
@@ -153,7 +153,7 @@ class PublicAlarmDetailPageState extends State<PublicAlarmDetailPage> {
                       Text(
                         "첨부파일명.확장자",
                         style: CTS(
-                          color: Colors.blueAccent,
+                          color: Palette.mainColor,
                           fontSize: 12,
                         ),
                       ),

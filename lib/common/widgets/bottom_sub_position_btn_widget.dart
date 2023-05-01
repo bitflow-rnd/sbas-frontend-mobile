@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/palette.dart';
 
 class BottomPositionedSubmitButton extends ConsumerWidget {
   const BottomPositionedSubmitButton({
@@ -8,30 +11,27 @@ class BottomPositionedSubmitButton extends ConsumerWidget {
     this.color,
     super.key,
   });
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) => Container(
-        color: Colors.blueAccent,
         child: InkWell(
           onTap: function,
           child: SafeArea(
             child: Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(
-                vertical: 16,
+              padding: EdgeInsets.symmetric(
+                vertical: 14.h,
               ),
-              decoration: BoxDecoration(
-                color: color ?? Colors.blueAccent,
-                borderRadius: BorderRadius.circular(
-                  6,
-                ),
-              ),
+              decoration: BoxDecoration(color: color ?? Palette.mainColor, borderRadius: BorderRadius.zero
+                  // borderRadius: BorderRadius.circular(
+                  //   6.r,
+                  // ),
+                  ),
               child: Text(
                 text,
-                style: const TextStyle(
+                style: CTS.bold(
                   color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
               ),
             ),

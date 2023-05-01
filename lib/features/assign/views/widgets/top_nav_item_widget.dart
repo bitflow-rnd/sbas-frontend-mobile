@@ -46,10 +46,10 @@ class _TopNavItemState extends State<TopNavItem> {
               Center(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: isSelected() ? Colors.blueAccent : Colors.transparent,
+                    color: isSelected() ? Palette.mainColor : Colors.transparent,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isSelected() ? Colors.blueAccent : Palette.greyText_60,
+                      color: isSelected() ? Palette.mainColor : Palette.greyText_60,
                       width: 1.2.r,
                       style: BorderStyle.solid,
                     ),

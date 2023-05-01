@@ -143,7 +143,7 @@ class MainDrawer extends ConsumerWidget {
                     margin: EdgeInsets.only(left: 8.w),
                     padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 4.h),
                     decoration: BoxDecoration(
-                      color: Colors.blueAccent,
+                      color: Palette.mainColor,
                       borderRadius: BorderRadius.circular(16.r),
                     ),
                     child: Text(

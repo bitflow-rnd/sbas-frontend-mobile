@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/util.dart';
 
@@ -21,8 +20,8 @@ class FindIdResult extends StatelessWidget {
               child: ShaderMask(
                 shaderCallback: (bounds) => RadialGradient(
                   colors: [
-                    Colors.blue.shade700,
-                    Colors.blue.shade300,
+                    Bitflow.myCustomMaterialColor.shade700,
+                    Bitflow.myCustomMaterialColor.shade300,
                   ],
                   center: Alignment.topLeft,
                   radius: 1,
@@ -92,7 +91,7 @@ class FindIdResult extends StatelessWidget {
                         vertical: 16.h,
                       ),
                       side: const BorderSide(
-                        color: Colors.blue,
+                        color: Palette.mainColor,
                       ),
                       foregroundColor: Palette.backgroundColor,
                       backgroundColor: Colors.white,
@@ -101,7 +100,7 @@ class FindIdResult extends StatelessWidget {
                       '로그인',
                       style: CTS(
                         fontSize: 16,
-                        color: Colors.blue,
+                        color: Palette.mainColor,
                       ),
                     ),
                   ),

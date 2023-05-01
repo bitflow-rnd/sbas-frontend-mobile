@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_number/mobile_number.dart';
+import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:telephony/telephony.dart';
@@ -37,52 +41,100 @@ class _RegInputState extends ConsumerState<RegInput> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        if (widget.title != "")
+          Row(
+            children: [
+              Text(
+                widget.title,
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                widget.isRequired ? '(필수)' : '',
+                style: CTS.bold(
+                  fontSize: 13,
+                  color: Palette.mainColor,
+                ),
+              ),
+            ],
+          ),
+        Gaps.v4,
         Row(
           children: [
-            Text(
-              widget.title,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 16,
+            Expanded(
+              child: TextFormField(
+                readOnly: isReadOnly,
+                keyboardType: widget.keyboardType,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                    RegExp(widget.regExp),
+                  ),
+                  FilteringTextInputFormatter.singleLineFormatter,
+                ],
+                onSaved: widget.onSaved,
+                maxLength: widget.maxLength,
+                validator: widget.validator,
+                controller: editingController,
+                decoration: InputDecoration(
+                  counterText: "",
+                  enabledBorder: _outlineInputBorder,
+                  focusedBorder: _outlineInputBorder,
+                  errorBorder: _outlineInputBorder,
+                  focusedErrorBorder: _outlineInputErrBorder,
+                  hintText: widget.hintText,
+                  hintStyle: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade400,
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 16.h,
+                    horizontal: 20.w,
+                  ),
+                ),
+                autovalidateMode: AutovalidateMode.always,
               ),
             ),
-            Text(
-              widget.isRequired ? '*' : '',
-              style: const TextStyle(
-                color: Colors.blue,
+            if (widget.title == "휴대폰번호")
+              Padding(
+                padding: EdgeInsets.only(left: 10.w),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16.h,
+                      horizontal: 36.w,
+                    ),
+                    backgroundColor: Palette.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    "인증",
+                    style: CTS(
+                      color: Palette.white,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
               ),
-            ),
+            if (widget.title == "")
+              Padding(
+                padding: EdgeInsets.only(left: 20.w),
+                child: Container(
+                  padding: EdgeInsets.only(top: 10.h, right: 12.w, bottom: 30.h),
+                  child: Text(
+                    "유효시간 02:59",
+                    style: CTS(
+                      color: Palette.red,
+                      fontSize: 11,
+                    ),
+                  ).c,
+                ),
+              ),
           ],
-        ),
-        Gaps.v4,
-        TextFormField(
-          readOnly: isReadOnly,
-          keyboardType: widget.keyboardType,
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(
-              RegExp(widget.regExp),
-            ),
-            FilteringTextInputFormatter.singleLineFormatter,
-          ],
-          onSaved: widget.onSaved,
-          maxLength: widget.maxLength,
-          validator: widget.validator,
-          controller: editingController,
-          decoration: InputDecoration(
-            enabledBorder: _outlineInputBorder,
-            focusedBorder: _outlineInputBorder,
-            errorBorder: _outlineInputBorder,
-            hintText: widget.hintText,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              color: Colors.grey.shade400,
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 18,
-              horizontal: 22,
-            ),
-          ),
-          autovalidateMode: AutovalidateMode.always,
         ),
         Gaps.v16,
       ],
@@ -177,8 +229,17 @@ class _RegInputState extends ConsumerState<RegInput> {
           style: BorderStyle.solid,
           color: Colors.grey.shade300,
         ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(10),
+        borderRadius: BorderRadius.all(
+          Radius.circular(4.r),
+        ),
+      );
+  InputBorder get _outlineInputErrBorder => OutlineInputBorder(
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          color: Palette.red,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(4.r),
         ),
       );
   late final editingController = TextEditingController(

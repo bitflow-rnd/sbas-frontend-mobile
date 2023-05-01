@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 
@@ -27,7 +28,7 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
           child: Text(
             error.toString(),
             style: const TextStyle(
-              color: Colors.lightBlueAccent,
+              color: Palette.mainColor,
             ),
           ),
         ),
@@ -39,11 +40,7 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
               child: FormField(
                 autovalidateMode: AutovalidateMode.always,
                 initialValue: ref.watch(selectedAgencyProvider).instNm,
-                validator: (value) => value == null ||
-                        value.isEmpty ||
-                        ref.watch(selectedAgencyProvider).instNm == null
-                    ? '소속기관을 선택해주세요.'
-                    : null,
+                validator: (value) => value == null || value.isEmpty || ref.watch(selectedAgencyProvider).instNm == null ? '소속기관을 선택해주세요.' : null,
                 builder: (field) => SizedBox(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,10 +85,8 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
                                   .toList(),
                               onChanged: (value) => setState(
                                 () {
-                                  final model =
-                                      ref.read(selectedAgencyProvider);
-                                  final selectedModel =
-                                      data.firstWhere((e) => e.id == value);
+                                  final model = ref.read(selectedAgencyProvider);
+                                  final selectedModel = data.firstWhere((e) => e.id == value);
 
                                   model.rgstUserId = selectedModel.rgstUserId;
                                   model.rgstDttm = selectedModel.rgstDttm;

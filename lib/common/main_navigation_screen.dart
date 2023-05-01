@@ -62,7 +62,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 2,
-            child: const PatientLookupScreen(
+            child: PatientLookupScreen(
               automaticallyImplyLeading: true,
             ),
           ),
@@ -114,7 +114,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const PatientLookupScreen(
+                    builder: (context) => PatientLookupScreen(
                       automaticallyImplyLeading: false,
                     ),
                   ),

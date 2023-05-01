@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/main/views/alert_settings_page.dart';
 import 'package:sbas/features/main/views/app_license_screen.dart';
 import 'package:sbas/features/main/views/app_permission_setting_screen.dart';
 import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
+//  import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -81,8 +83,30 @@ class _SettingPageState extends State<SettingPage> {
             child: Switch(
               key: ValueKey<bool>(true),
               value: true,
-              onChanged: (value) {},
-              activeColor: Colors.blueAccent,
+              onChanged: (value) async {
+                var res = await Common.showModal(
+                  context,
+                  Common.commonModal(
+                    context: context,
+                    mainText: "자동 로그인을 해제하시겠습니까?",
+                    imageWidget: Image.asset(
+                      "assets/auth_group/modal_check.png",
+                      width: 44.h,
+                    ),
+                    button1Function: () {
+                      Navigator.pop(context, true);
+                    },
+                    button2Function: () {
+                      Navigator.pop(context, false);
+                    },
+                    imageHeight: 44.h,
+                  ),
+                );
+                if (res) {
+                  //자동로그인 해제
+                }
+              },
+              activeColor: Palette.mainColor,
             ),
           ),
         ],
@@ -137,7 +161,7 @@ class _SettingPageState extends State<SettingPage> {
             child: Text(
               'v 1.2.2',
               style: CTS(
-                color: Colors.blueAccent,
+                color: Palette.mainColor,
                 fontSize: 13,
               ),
             ),
@@ -152,16 +176,23 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 )
               : InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    final String appStoreUrl = '<Your app store URL>';
+
+                    // if (await canLaunch(appStoreUrl)) {
+                    //   // Device is capable of launching the app store URL
+                    // } else {
+                    //   // Device is not capable of launching the app store URL
+                    // }
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-                    decoration: BoxDecoration(color: Colors.blueAccent, borderRadius: BorderRadius.circular(5.r)),
+                    decoration: BoxDecoration(color: Palette.mainColor, borderRadius: BorderRadius.circular(5.r)),
                     child: Text(
                       '업데이트',
-                      style: TextStyle(
+                      style: CTS(
                         color: Colors.white,
                         fontSize: 12,
-                        fontFamily: 'SpoqaHanSansNeo',
                       ),
                     ),
                   ),

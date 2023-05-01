@@ -1,7 +1,132 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
+
+Row myChatPhotoAttachedWidget(
+  TalkMsgModel input,
+  ScrollController scrollController,
+) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [
+      Text(
+        textAlign: TextAlign.right,
+        formatDateTime(input.updtDttm!),
+        style: CTS(fontSize: 12, color: Colors.grey),
+      ),
+      Gaps.h5,
+      Container(
+        constraints: const BoxConstraints(
+          maxWidth: 310,
+        ),
+        padding: const EdgeInsets.only(top: 10),
+        child: Container(
+          margin: const EdgeInsets.only(right: 15),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
+            color: const Color(0xfffff700).withOpacity(0.333),
+          ),
+          child: Column(
+            children: [
+              Image.asset(
+                "assets/auth_group/image_location_small.png",
+                height: 55.h,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    input.msg ?? '',
+                    textAlign: TextAlign.start,
+                    style: CTS(
+                      color: Colors.black,
+                      fontSize: 13,
+                    ),
+                  ),
+                  Gaps.h5,
+                  Text(
+                    '2.3MB',
+                    textAlign: TextAlign.start,
+                    style: CTS(
+                      color: Palette.greyText_60,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+Row myChatVideoAttachedWidget(
+  //video
+  TalkMsgModel input,
+  ScrollController scrollController,
+) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [
+      Text(
+        textAlign: TextAlign.right,
+        formatDateTime(input.updtDttm!),
+        style: CTS(fontSize: 12, color: Colors.grey),
+      ),
+      Gaps.h5,
+      Container(
+        constraints: const BoxConstraints(
+          maxWidth: 310,
+        ),
+        padding: const EdgeInsets.only(top: 10),
+        child: Container(
+          margin: const EdgeInsets.only(right: 15),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
+            color: const Color(0xfffff700).withOpacity(0.333),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.play_circle,
+                color: Palette.mainColor,
+              ),
+              Gaps.h5,
+              Text(
+                input.msg ?? '',
+                textAlign: TextAlign.start,
+                style: CTS(
+                  color: Colors.black,
+                  fontSize: 13,
+                ),
+              ),
+              Gaps.h5,
+              Text(
+                '2.3MB',
+                textAlign: TextAlign.start,
+                style: CTS(
+                  color: Palette.greyText_60,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
+}
 
 Row myChatWidget(
   TalkMsgModel input,
@@ -14,7 +139,7 @@ Row myChatWidget(
       Text(
         textAlign: TextAlign.right,
         formatDateTime(input.updtDttm!),
-        style: const TextStyle(fontSize: 8.0, color: Colors.grey),
+        style: CTS(fontSize: 12, color: Colors.grey),
       ),
       Gaps.h5,
       Container(
@@ -25,20 +150,18 @@ Row myChatWidget(
         child: Container(
           margin: const EdgeInsets.only(right: 15),
           padding: const EdgeInsets.all(10),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-                bottomLeft: Radius.circular(8)),
-            color: Color.fromARGB(255, 183, 225, 245),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
+            color: const Color(0xfffff700).withOpacity(0.333),
           ),
-          child: Text(input.msg ?? '',
-              textAlign: TextAlign.start,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontFamily: 'OverpassRegular',
-                  fontWeight: FontWeight.w300)),
+          child: Text(
+            input.msg ?? '',
+            textAlign: TextAlign.start,
+            style: CTS(
+              color: Colors.black,
+              fontSize: 13,
+            ),
+          ),
         ),
       ),
     ],

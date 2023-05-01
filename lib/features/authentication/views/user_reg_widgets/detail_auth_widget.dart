@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 
 class DetailAuthorization<T> extends ConsumerWidget {
   const DetailAuthorization({
@@ -27,26 +30,22 @@ class DetailAuthorization<T> extends ConsumerWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: index == selectedIndex
-                      ? Colors.transparent
-                      : Colors.grey.shade300,
+                  color: index == selectedIndex ? Colors.transparent : Colors.grey.shade300,
                 ),
                 borderRadius: BorderRadius.circular(
                   30,
                 ),
-                color: index == selectedIndex
-                    ? Colors.lightBlue
-                    : Colors.transparent,
+                color: index == selectedIndex ? Palette.mainColor : Colors.transparent,
               ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 22,
-                vertical: 8,
+              padding: EdgeInsets.symmetric(
+                horizontal: 18.w,
+                vertical: 8.h,
               ),
               child: Text(
                 title.length == 2 ? '$title   ' : title,
-                style: TextStyle(
+                style: CTS(
                   color: index == selectedIndex ? Colors.white : Colors.grey,
-                  fontSize: 16,
+                  fontSize: 13,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -54,9 +53,9 @@ class DetailAuthorization<T> extends ConsumerWidget {
             Gaps.h12,
             Text(
               subTitle,
-              style: const TextStyle(
+              style: CTS(
                 color: Colors.grey,
-                fontSize: 16,
+                fontSize: 13,
               ),
             ),
           ],

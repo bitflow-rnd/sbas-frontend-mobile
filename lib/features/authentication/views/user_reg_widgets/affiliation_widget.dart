@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/constants/extensions.dart';
+import 'package:sbas/constants/palette.dart';
 
 class Affiliation<T> extends ConsumerWidget {
   const Affiliation({
@@ -23,15 +25,12 @@ class Affiliation<T> extends ConsumerWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             border: Border.all(
-              color: index == selectedIndex
-                  ? Colors.transparent
-                  : Colors.grey.shade300,
+              color: index == selectedIndex ? Colors.transparent : Colors.grey.shade300,
             ),
             borderRadius: BorderRadius.circular(
               30,
             ),
-            color:
-                index == selectedIndex ? Colors.lightBlue : Colors.transparent,
+            color: index == selectedIndex ? Palette.mainColor : Colors.transparent,
           ),
           padding: const EdgeInsets.symmetric(
             horizontal: 12,
@@ -41,9 +40,9 @@ class Affiliation<T> extends ConsumerWidget {
             title,
             style: TextStyle(
               color: index == selectedIndex ? Colors.white : Colors.grey,
-              fontSize: 16,
+              fontSize: 12,
             ),
-          ),
+          ).c,
         ),
       );
 }

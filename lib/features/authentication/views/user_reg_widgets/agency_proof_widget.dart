@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/agency_proof_bloc.dart';
+import 'package:sbas/constants/palette.dart';
 
 class AgencyProof extends ConsumerStatefulWidget {
   AgencyProof({
@@ -26,24 +29,21 @@ class _AgencyProofState extends ConsumerState<AgencyProof> {
     return FormField(
       initialValue: image == null,
       autovalidateMode: AutovalidateMode.always,
-      validator: (value) => value == null || value
-          ? '※해당 기관 소속을 증명할 수 있는 명함 또는 신분증을 업로드해주세요.'
-          : null,
+      validator: (value) => value == null || value ? '※해당 기관 소속을 증명할 수 있는 명함 또는 신분증을 업로드해주세요.' : null,
       builder: (field) => ref.watch(proofProvider).when(
             loading: () => const SBASProgressIndicator(),
             error: (error, stackTrace) => Center(
               child: Text(
                 error.toString(),
                 style: const TextStyle(
-                  color: Colors.lightBlueAccent,
+                  color: Palette.mainColor,
                 ),
               ),
             ),
             data: (data) => GestureDetector(
               onTap: () async {
                 final image = await widget.picker.pickImage(
-                  source:
-                      isUsingCamera ? ImageSource.camera : ImageSource.gallery,
+                  source: isUsingCamera ? ImageSource.camera : ImageSource.gallery,
                   requestFullMetadata: false,
                 );
                 if (image != null) {
@@ -63,9 +63,10 @@ class _AgencyProofState extends ConsumerState<AgencyProof> {
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.grey.shade300,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(
-                            8,
+                            4.r,
                           ),
                         ),
                         child: image != null
@@ -83,8 +84,7 @@ class _AgencyProofState extends ConsumerState<AgencyProof> {
                           onPressed: () => setState(
                             () {
                               if (image == null) {
-                                ref.read(isUsingCameraProvider.notifier).state =
-                                    !isUsingCamera;
+                                ref.read(isUsingCameraProvider.notifier).state = !isUsingCamera;
                               } else {
                                 ref.read(imageProvider.notifier).state = null;
                               }
@@ -92,9 +92,7 @@ class _AgencyProofState extends ConsumerState<AgencyProof> {
                             },
                           ),
                           icon: Icon(
-                            image != null
-                                ? Icons.cancel_rounded
-                                : Icons.sync_rounded,
+                            image != null ? Icons.cancel_rounded : Icons.sync_rounded,
                             color: Colors.grey,
                           ),
                         ),
@@ -103,8 +101,14 @@ class _AgencyProofState extends ConsumerState<AgencyProof> {
                   ),
                   Gaps.v12,
                   if (field.hasError)
-                    FieldErrorText(
-                      field: field,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 24,
+                      ),
+                      child: Text(
+                        field.errorText!,
+                        style: CTS.medium(fontSize: 11, color: Palette.greyText_60),
+                      ),
                     )
                 ],
               ),
