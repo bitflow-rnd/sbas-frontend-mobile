@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +7,6 @@ import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/assign/views/widgets/card_item_widget.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_detail_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
@@ -21,8 +19,13 @@ class PatientLookupScreen extends ConsumerWidget {
     required this.automaticallyImplyLeading,
     super.key,
   });
-  List<String> dropdownList = ['최근등록순', '최근3개월', '최근1년'];
-  String selectedDropdown = '최근등록순';
+  final bool automaticallyImplyLeading;
+  final String selectedDropdown = '최근등록순';
+  final List<String> dropdownList = [
+    '최근등록순',
+    '최근3개월',
+    '최근1년',
+  ];
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
         backgroundColor: Palette.white,
@@ -56,9 +59,11 @@ class PatientLookupScreen extends ConsumerWidget {
           elevation: 0,
           centerTitle: true,
           backgroundColor: Colors.white,
-          leading: const BackButton(
-            color: Colors.black,
-          ),
+          leading: automaticallyImplyLeading
+              ? const BackButton(
+                  color: Colors.black,
+                )
+              : null,
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarBrightness: Brightness.light,
             statusBarColor: Colors.transparent,
@@ -108,13 +113,18 @@ class PatientLookupScreen extends ConsumerWidget {
                                                     height: 40.h,
                                                     width: 52.w,
                                                     decoration: BoxDecoration(
-                                                      color: Color(0xffecedef).withOpacity(0.6),
-                                                      borderRadius: BorderRadius.circular(6),
+                                                      color: const Color(
+                                                              0xffecedef)
+                                                          .withOpacity(0.6),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              6),
                                                     ),
                                                     child: Text(
                                                       '   전체',
                                                       style: CTS.bold(
-                                                        color: Palette.greyText_60,
+                                                        color:
+                                                            Palette.greyText_60,
                                                         fontSize: 11,
                                                       ),
                                                     ).c,
@@ -125,7 +135,9 @@ class PatientLookupScreen extends ConsumerWidget {
                                                   width: 52.w,
                                                   decoration: BoxDecoration(
                                                     color: Palette.mainColor,
-                                                    borderRadius: BorderRadius.circular(6),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6),
                                                   ),
                                                   child: Text(
                                                     '내조직',
@@ -167,14 +179,16 @@ class PatientLookupScreen extends ConsumerWidget {
                                               style: BorderStyle.solid,
                                               color: Colors.grey.shade300,
                                             ),
-                                            borderRadius: BorderRadius.circular(7.r),
+                                            borderRadius:
+                                                BorderRadius.circular(7.r),
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                               style: BorderStyle.solid,
                                               color: Colors.grey.shade300,
                                             ),
-                                            borderRadius: BorderRadius.circular(7.r),
+                                            borderRadius:
+                                                BorderRadius.circular(7.r),
                                           ),
                                         ),
                                       ),
@@ -196,7 +210,8 @@ class PatientLookupScreen extends ConsumerWidget {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     RichText(
                                       text: TextSpan(
@@ -206,13 +221,14 @@ class PatientLookupScreen extends ConsumerWidget {
                                           TextSpan(
                                             text: ' ${patient.length}',
                                             style: CTS.bold(
-                                              color: Color(0xFF00BFFF),
+                                              color: const Color(0xFF00BFFF),
                                             ),
                                             children: [
                                               TextSpan(
                                                 text: '명',
                                                 style: CTS.bold(
-                                                  color: Color(0xFF000000),
+                                                  color:
+                                                      const Color(0xFF000000),
                                                 ),
                                               ),
                                             ],
@@ -220,27 +236,37 @@ class PatientLookupScreen extends ConsumerWidget {
                                         ],
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       height: 32.h,
                                       width: 100.w,
                                       child: DropdownButtonFormField(
-                                        borderRadius: BorderRadius.circular(4.r),
+                                        borderRadius:
+                                            BorderRadius.circular(4.r),
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.symmetric(
                                             horizontal: 12.w,
                                             vertical: 4.h,
                                           ),
                                           enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: Palette.greyText_30, width: 1),
-                                            borderRadius: BorderRadius.circular(4.r),
+                                            borderSide: BorderSide(
+                                                color: Palette.greyText_30,
+                                                width: 1),
+                                            borderRadius:
+                                                BorderRadius.circular(4.r),
                                           ),
                                           border: OutlineInputBorder(
-                                            borderSide: BorderSide(color: Palette.greyText_30, width: 1),
-                                            borderRadius: BorderRadius.circular(4.r),
+                                            borderSide: BorderSide(
+                                                color: Palette.greyText_30,
+                                                width: 1),
+                                            borderRadius:
+                                                BorderRadius.circular(4.r),
                                           ),
                                           focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: Palette.greyText_30, width: 1),
-                                            borderRadius: BorderRadius.circular(4.r),
+                                            borderSide: BorderSide(
+                                                color: Palette.greyText_30,
+                                                width: 1),
+                                            borderRadius:
+                                                BorderRadius.circular(4.r),
                                           ),
                                         ),
                                         value: selectedDropdown,
@@ -249,7 +275,9 @@ class PatientLookupScreen extends ConsumerWidget {
                                             value: item,
                                             child: Text(
                                               item,
-                                              style: CTS(fontSize: 11, color: Palette.black),
+                                              style: CTS(
+                                                  fontSize: 11,
+                                                  color: Palette.black),
                                             ),
                                           );
                                         }).toList(),
@@ -294,7 +322,8 @@ class PatientLookupScreen extends ConsumerWidget {
                                   onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => PatientLookupDetailScreen(
+                                      builder: (context) =>
+                                          PatientLookupDetailScreen(
                                         patient: patient.list![1],
                                       ),
                                     ),
@@ -312,19 +341,26 @@ class PatientLookupScreen extends ConsumerWidget {
                                   onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => PatientLookupDetailScreen(
+                                      builder: (context) =>
+                                          PatientLookupDetailScreen(
                                         patient: patient.list![0],
                                       ),
                                     ),
                                   ),
                                   child: PaitentCardItem(
-                                      patientAge: '88', patientName: '김*준', hospital: "분당서울대병원", patientSex: '남', symbol: '    입원    ', color: Colors.red),
+                                      patientAge: '88',
+                                      patientName: '김*준',
+                                      hospital: "분당서울대병원",
+                                      patientSex: '남',
+                                      symbol: '    입원    ',
+                                      color: Colors.red),
                                 ),
                                 GestureDetector(
                                   onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => PatientLookupDetailScreen(
+                                      builder: (context) =>
+                                          PatientLookupDetailScreen(
                                         patient: patient.list![3],
                                       ),
                                     ),
@@ -342,7 +378,8 @@ class PatientLookupScreen extends ConsumerWidget {
                                   onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => PatientLookupDetailScreen(
+                                      builder: (context) =>
+                                          PatientLookupDetailScreen(
                                         patient: patient.list![3],
                                       ),
                                     ),
@@ -384,6 +421,4 @@ class PatientLookupScreen extends ConsumerWidget {
           ),
         ),
       );
-
-  final bool automaticallyImplyLeading;
 }
