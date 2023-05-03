@@ -58,5 +58,18 @@ class V1Provider {
     throw ArgumentError();
   }
 
+  Future<void> sendPushMessage(String userId, String body, String token) async {
+    final client = Dio();
+
+    try {
+      client.options.contentType = 'application/json';
+
+      final res =
+          await client.postUri(Uri.parse('${dotenv.env['BASE_URL']}/send'));
+    } catch (e) {
+      print(e);
+    }
+  }
+
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1';
 }
