@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "805543879819",
-    "project_id": "bitflow-sbas",
-    "storage_bucket": "bitflow-sbas.appspot.com"
+    "project_number": "707204306778",
+    "project_id": "sbas-4c928",
+    "storage_bucket": "sbas-4c928.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:805543879819:android:1189977701537f3aa9e08e",
+        "mobilesdk_app_id": "1:707204306778:android:6762d9e9ce793101534563",
         "android_client_info": {
           "package_name": "com.bitflow.sbas"
         }
       },
       "oauth_client": [
         {
-          "client_id": "805543879819-s47rlbbik4cr2c7fq7hoflt5ju16fib3.apps.googleusercontent.com",
+          "client_id": "707204306778-v08g6l6pq7atnqf20lt8ls322s3f6r91.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyALLT_DC_0-6mnAFq8WfWrx4rgVtxEYtFs"
+          "current_key": "AIzaSyCkNyWnVzB1Hi19QXvgQ9dPZ6mhlGCXRhE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "805543879819-s47rlbbik4cr2c7fq7hoflt5ju16fib3.apps.googleusercontent.com",
+              "client_id": "707204306778-v08g6l6pq7atnqf20lt8ls322s3f6r91.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
