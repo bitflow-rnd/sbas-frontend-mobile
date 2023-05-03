@@ -42,9 +42,13 @@ dependencies:
   dio: ^5.1.1
 
   http: ^0.13.5
+  
+  firebase_core: ^2.10.0
+  firebase_messaging: ^14.4.1
 
   flutter_dotenv: ^5.0.2
   flutter_launcher_icons: ^0.13.0
+  flutter_local_notifications: ^14.0.0+1
   flutter_native_splash: ^2.2.19
   flutter_riverpod: ^2.3.1
 
