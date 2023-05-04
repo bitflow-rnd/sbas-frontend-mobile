@@ -5,37 +5,36 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/observer_widget.dart';
 import 'package:sbas/firebase_options.dart';
 import 'package:sbas/router.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sbas/util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Handling a background message ${message.messageId}');
-}
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async =>
+    onReceiveCloudMessage(message);
 
 Future main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-
-  print(fcmToken);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage.listen((event) {
-    print(event.notification?.title);
-  });
   FlutterNativeSplash.preserve(
     widgetsBinding: widgetsBinding,
   );
-  prefs = await SharedPreferences.getInstance();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen(onReceiveCloudMessage);
 
   await dotenv.load(
     fileName: '.env',
   );
+  WidgetsBinding.instance.addObserver(
+    SbasObserver(),
+  );
+  prefs = await SharedPreferences.getInstance();
+
   runApp(
     const ProviderScope(
       observers: [],

@@ -1,6 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sbas/common/api/v1_provider.dart';
 import 'package:sbas/common/main_navigation_screen.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
@@ -13,15 +15,21 @@ final routerProvider = Provider(
     redirect: (context, state) async {
       final isLoggedIn = await ref.read(authRepo).isLoggedIn;
 
+      if (isLoggedIn) {
+        final provider = V1Provider();
+        authToken = {
+          'Authorization': 'Bearer ${prefs.getString('auth_token')}}',
+        };
+        await provider.postAsync(
+            'admin/user/push-key',
+            toJson({
+              'id': prefs.getString('id'),
+              'pushKey': await FirebaseMessaging.instance.getToken()
+            }));
+      }
       FlutterNativeSplash.remove();
 
-      if (!isLoggedIn) {
-        return LogInScreen.routeUrl;
-      }
-      authToken = {
-        'Authorization': 'Bearer ${prefs.getString('auth_token')}}',
-      };
-      return null;
+      return isLoggedIn ? null : LogInScreen.routeUrl;
     },
     routes: [
       ShellRoute(
