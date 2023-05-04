@@ -2,12 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/features/lookup/api/private_patient_provider.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_list_model.dart';
 import 'package:sbas/features/lookup/providers/patient_provider.dart';
 import 'package:sbas/util.dart';
 
 class PatientRepository {
-  Future<PatientInfoModel> lookupPatientInfo() async =>
+  Future<PatientListModel> lookupPatientInfo() async =>
       await _privatePatientProvider.lookupPatientInfo();
 
   Future<dynamic> registerPatientInfo(Map<String, dynamic> map) async =>
