@@ -10,6 +10,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_detail_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_item_model.dart';
 import 'package:sbas/features/lookup/views/hospital_bed_request_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/bed_assign_history_card.dart';
@@ -18,7 +19,7 @@ import 'package:sbas/constants/palette.dart';
 
 class PatientLookupDetailScreen extends ConsumerWidget {
   PatientLookupDetailScreen({
-    required this.patient,
+    required this.model,
     super.key,
   });
   @override
@@ -88,16 +89,21 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                         RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                            text: '${patient.ptNm}',
+                            text: '${model.ptNm}',
                             style: CTS.bold(
                               fontSize: 15,
                               color: Colors.black,
                             ),
                             children: [
                               TextSpan(
-                                text: '(${getPatientInfo(patient)})', //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
+                                text: ''
+                                /*
+                                    '(${getPatientInfo(patient)})'
+                                     TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
+                                     */
+                                ,
                                 style: CTS(
-                                  color: Color(0xff333333),
+                                  color: const Color(0xff333333),
                                   fontSize: 10,
                                 ),
                               ),
@@ -151,7 +157,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                         Expanded(
                                           flex: 1,
                                           child: Text(
-                                            '${list[i]}',
+                                            list[i],
                                             style: CTS(
                                               color: Palette.greyText,
                                               fontSize: 13,
@@ -161,7 +167,9 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                         Expanded(
                                           flex: 3,
                                           child: Text(
-                                            getConvertPatientInfo(i, patient),
+                                            ''
+                                            //getConvertPatientInfo(i, patient)
+                                            ,
                                             style: CTS.medium(
                                               fontSize: 13,
                                             ),
@@ -180,7 +188,8 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                         vertical: 12.h,
                                       ),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
                                           Row(
                                             children: [
@@ -242,10 +251,12 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                 ),
                               ),
                             ),
-                            data: (history) => progress != 0 // has history 값에 따라 요소들 보여주거나 "병상배정이력이없습니다 출력"
+                            data: (history) => progress !=
+                                    0 // has history 값에 따라 요소들 보여주거나 "병상배정이력이없습니다 출력"
                                 ? SingleChildScrollView(
                                     child: Column(
-                                      children: [
+                                      children: const [
+                                        /*
                                         BedAssignHistoryCardItem(
                                           name: "칠곡경북대병원",
                                           disease: "코로나바이러스감염증-19",
@@ -285,6 +296,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                           ],
                                           patient: patient,
                                         ),
+                                        */
                                       ],
                                     ),
                                   )
@@ -323,10 +335,12 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                   : Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HospitalBedRequestScreen(
+                          builder: (context) =>
+                              const Placeholder() /* HospitalBedRequestScreen(
                           patient: patient,
                         ),
-                      ),
+                      */
+                          ),
                     ),
             ),
           ),
@@ -341,11 +355,13 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                 function: () async {
                   await Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => PatientRegScreen(
+                    MaterialPageRoute(builder: (context) => const Placeholder()
+                        /*
+                       PatientRegScreen(
                         patient: patient,
                       ),
-                    ),
+                      */
+                        ),
                   );
                   if (context.mounted) {
                     Navigator.pop(context);
@@ -371,5 +387,5 @@ class PatientLookupDetailScreen extends ConsumerWidget {
     '직업',
     '기저질환',
   ];
-  final Patient patient;
+  final PatientItemModel model;
 }

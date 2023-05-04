@@ -4,19 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/lookup/models/patient_item_model.dart';
 
 class PaitentCardItem extends StatelessWidget {
-  PaitentCardItem(
-      {super.key,
-      required this.patientName,
-      required this.patientSex,
-      required this.patientAge,
-      this.symbol,
-      required this.color,
-      this.hospital,
-      this.tagList});
-  String? hospital;
-  List<String>? tagList;
+  const PaitentCardItem({
+    super.key,
+    this.symbol,
+    required this.color,
+    required this.model,
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -54,7 +50,9 @@ class PaitentCardItem extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '$patientName ($patientSex/$patientAge세) ',
+                      ''
+                      //'$patientName ($patientSex/$patientAge세) '
+                      ,
                       style: CTS.bold(
                         color: Colors.black,
                         fontSize: 15,
@@ -84,6 +82,7 @@ class PaitentCardItem extends StatelessWidget {
                         : Container(),
                   ],
                 ),
+                /*
                 hospital != null ? Gaps.v4 : Container(),
                 hospital == null
                     ? Container()
@@ -95,6 +94,7 @@ class PaitentCardItem extends StatelessWidget {
                         ),
                         maxLines: 1,
                       ),
+                      */
                 Gaps.v4,
                 Text(
                   "대구광역시 북구 / 010-****-1234",
@@ -111,6 +111,7 @@ class PaitentCardItem extends StatelessWidget {
                   maxLines: 1,
                   // maxFontSize: 18,
                 ),
+                /*
                 tagList != null
                     ? Padding(
                         padding: EdgeInsets.symmetric(
@@ -141,6 +142,7 @@ class PaitentCardItem extends StatelessWidget {
                                     ))),
                       )
                     : Container()
+                    */
               ],
             ),
           ],
@@ -149,7 +151,7 @@ class PaitentCardItem extends StatelessWidget {
     );
   }
 
+  final PatientItemModel model;
   final Color color;
-  final String patientName, patientSex, patientAge;
   final String? symbol;
 }

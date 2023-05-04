@@ -4,17 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_list_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
-class PatientLookupBloc extends AsyncNotifier<PatientInfoModel> {
+class PatientLookupBloc extends AsyncNotifier<PatientListModel> {
   @override
-  FutureOr<PatientInfoModel> build() async {
+  FutureOr<PatientListModel> build() async {
     _patientRepository = ref.read(patientRepoProvider);
 
     return await refresh() ?? await _patientRepository.lookupPatientInfo();
   }
 
-  Future<PatientInfoModel?> refresh() async {
+  Future<PatientListModel?> refresh() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       return await _patientRepository.lookupPatientInfo();
@@ -75,14 +76,18 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 5:
-      text = patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? '';
+      text =
+          patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? '';
       break;
 
     case 6:
       final length = patient.telno?.length ?? 0;
 
       if (length > 0) {
-        text = patient.telno?.replaceRange(length - 4, length - 4, '-').replaceRange(length - 7, length - 7, '-') ?? '';
+        text = patient.telno
+                ?.replaceRange(length - 4, length - 4, '-')
+                .replaceRange(length - 7, length - 7, '-') ??
+            '';
       } else {
         text = '';
       }
@@ -129,6 +134,7 @@ String getDateTimeFormat(String? dt) {
   return DateFormat('yyyy년 MM월 dd일 HH시 mm분').format(dateTime ?? DateTime.now());
 }
 
-final patientLookupProvider = AsyncNotifierProvider<PatientLookupBloc, PatientInfoModel>(
+final patientLookupProvider =
+    AsyncNotifierProvider<PatientLookupBloc, PatientListModel>(
   () => PatientLookupBloc(),
 );
