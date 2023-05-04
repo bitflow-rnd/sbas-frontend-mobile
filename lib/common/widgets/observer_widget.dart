@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SbasObserver extends WidgetsBindingObserver {
@@ -23,5 +25,11 @@ class SbasObserver extends WidgetsBindingObserver {
     if (window.physicalSize.width > window.physicalSize.height) {
     } else {}
     if (window.viewInsets.bottom > 0) {}
+  }
+}
+
+void onReceiveCloudMessage(RemoteMessage message) {
+  if (kDebugMode) {
+    print(message.toMap());
   }
 }
