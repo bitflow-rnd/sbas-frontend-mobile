@@ -17,6 +17,7 @@ final routerProvider = Provider(
 
       if (isLoggedIn) {
         final provider = V1Provider();
+
         authToken = {
           'Authorization': 'Bearer ${prefs.getString('auth_token')}}',
         };
