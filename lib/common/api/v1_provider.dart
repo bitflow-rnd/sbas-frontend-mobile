@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sbas/util.dart';
 
 class V1Provider {
-  Future<Map<String, dynamic>> getAsync(String route) async {
+  Future<dynamic> getAsync(String route) async {
     final client = Dio();
 
     try {
@@ -14,6 +14,9 @@ class V1Provider {
       final res = await client.getUri(
         Uri.parse('$_baseUrl/$route'),
       );
+      if (kDebugMode) {
+        showToast(res.data['message']);
+      }
       if (res.statusCode == 200) {
         return res.data['result'];
       }
@@ -29,7 +32,7 @@ class V1Provider {
     throw ArgumentError();
   }
 
-  Future<Map<String, dynamic>> postAsync(String route, String json) async {
+  Future<dynamic> postAsync(String route, String json) async {
     final client = Dio();
 
     try {
@@ -40,6 +43,9 @@ class V1Provider {
         Uri.parse('$_baseUrl/$route'),
         data: json,
       );
+      if (kDebugMode) {
+        showToast(res.data['message']);
+      }
       if (res.statusCode == 200) {
         if (kDebugMode) {
           print(res.data);

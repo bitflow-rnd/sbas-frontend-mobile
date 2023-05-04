@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/find_id_screen.dart';
@@ -35,6 +36,12 @@ void showErrorSnack(
   }
 }
 
+void showToast(String msg) => Fluttertoast.showToast(
+      msg: msg,
+      backgroundColor: const Color(0xCF696969),
+      fontSize: 14,
+      toastLength: Toast.LENGTH_SHORT,
+    );
 void findId(BuildContext context) => Navigator.push(
       context,
       MaterialPageRoute(
@@ -47,7 +54,8 @@ Future setPassword(BuildContext context) async => await Navigator.push(
       builder: (context) => const SetPasswordScreen(),
     ));
 
-String format(int remainingTime) => Duration(seconds: remainingTime).toString().substring(2, 7);
+String format(int remainingTime) =>
+    Duration(seconds: remainingTime).toString().substring(2, 7);
 
 String toJson(Map<String, dynamic> map) => jsonEncode(map);
 
