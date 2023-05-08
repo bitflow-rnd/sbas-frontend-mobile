@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 extension TextExtension on Text {
   Center get c => Center(child: this);

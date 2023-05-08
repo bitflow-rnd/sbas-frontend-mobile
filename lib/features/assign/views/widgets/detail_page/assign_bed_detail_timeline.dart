@@ -13,6 +13,7 @@ import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approv
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_cancel_screen.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_go_home.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 import 'assign_bed_find_screen.dart';
 
@@ -38,7 +39,9 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                         padding: EdgeInsets.symmetric(horizontal: 32.w),
                         child: Column(children: [
                           Expanded(
-                            child: CustomPaint(painter: DashedLineVerticalPainter(), size: const Size(1, double.infinity)),
+                            child: CustomPaint(
+                                painter: DashedLineVerticalPainter(),
+                                size: const Size(1, double.infinity)),
                           ),
                         ]),
                       ),
@@ -228,7 +231,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                     dateTime: "오후 2시 33분",
                                     src: "timeline_go_home",
                                     by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
+                                    detail:
+                                        "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
                                     isBlue: true,
                                     isSelected: true),
                               ],
@@ -339,12 +343,17 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     }
   }
 
-  _showBottomSheet({required BuildContext context, String header = '배정 승인', String hintText = '메시지 입력', String btnText = '승인'}) async {
+  _showBottomSheet(
+      {required BuildContext context,
+      String header = '배정 승인',
+      String hintText = '메시지 입력',
+      String btnText = '승인'}) async {
     TextEditingController textEditingController = TextEditingController();
     final focusNode = FocusNode();
 
     // Call requestFocus() on the focus node when the bottom sheet is displayed
-    WidgetsBinding.instance.addPostFrameCallback((_) => focusNode.requestFocus());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => focusNode.requestFocus());
     return showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -359,14 +368,17 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             child: GestureDetector(
               onTap: () {
                 FocusScopeNode currentFocus = FocusScope.of(context);
-                if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                if (!currentFocus.hasPrimaryFocus &&
+                    currentFocus.focusedChild != null) {
                   currentFocus.focusedChild?.unfocus();
                 }
               },
               child: Container(
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: Container(
-                  padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
+                  padding:
+                      EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -414,7 +426,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                 padding: EdgeInsets.symmetric(vertical: 16.h),
                                 child: Text(
                                   btnText,
-                                  style: CTS(color: Palette.white, fontSize: 13),
+                                  style:
+                                      CTS(color: Palette.white, fontSize: 13),
                                 ),
                               ),
                               onPressed: () {
@@ -435,7 +448,11 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
         });
   }
 
-  Widget _bottomer({String lBtnText = '배정 붏가', String rBtnText = "승인", required Function lBtnFunc, required Function rBtnFunc}) {
+  Widget _bottomer(
+      {String lBtnText = '배정 붏가',
+      String rBtnText = "승인",
+      required Function lBtnFunc,
+      required Function rBtnFunc}) {
     return Row(
       children: [
         Expanded(
@@ -500,7 +517,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           Container(
             color: Palette.greyText_20,
             margin: EdgeInsets.all(2.r),
-            child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
+            child: Image.asset("assets/auth_group/image_location_small.png",
+                width: 42.h),
           ),
           Expanded(
               child: TextField(
@@ -508,7 +526,10 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             onChanged: (value) {
               // setState(() {});
             },
-            decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+            decoration: InputDecoration(
+                hintText: '메세지 입력',
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
           )),
           InkWell(
             onTap: () {},
@@ -541,7 +562,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             Expanded(
               child: Container(
                 margin: EdgeInsets.only(left: 12.w),
-                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                padding: EdgeInsets.only(
+                    left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(12.r)),
@@ -578,7 +600,11 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     );
   }
 
-  Widget suspendCard({required String title, required String src, String? detail, bool isSelected = true}) {
+  Widget suspendCard(
+      {required String title,
+      required String src,
+      String? detail,
+      bool isSelected = true}) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.only(left: 16.w, right: 24.w),
@@ -591,7 +617,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             Expanded(
               child: Container(
                 margin: EdgeInsets.only(left: 12.w),
-                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                padding: EdgeInsets.only(
+                    left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: isSelected
@@ -664,7 +691,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             Expanded(
               child: Container(
                 margin: EdgeInsets.only(left: 12.w),
-                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                padding: EdgeInsets.only(
+                    left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: isSelected
@@ -718,9 +746,12 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 8.h),
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                       decoration: BoxDecoration(
-                        color: isBlue ? Palette.mainColor.withOpacity(0.16) : Color(0xff676a7a).withOpacity(0.12),
+                        color: isBlue
+                            ? Palette.mainColor.withOpacity(0.16)
+                            : const Color(0xff676a7a).withOpacity(0.12),
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                       child: Text(

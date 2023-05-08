@@ -7,6 +7,7 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedFindScreen extends StatefulWidget {
   AssignBedFindScreen({
@@ -49,7 +50,8 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
-              _header(widget.patient.ptNm ?? '', "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
+              _header(widget.patient.ptNm ?? '',
+                  "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
               Divider(color: Palette.greyText_20, height: 1),
 
               Padding(
@@ -59,7 +61,9 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                     Gaps.v16,
                     Row(
                       children: [
-                        Text('출발지', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
+                        Text('출발지',
+                            style: CTS.medium(
+                                color: Palette.greyText, fontSize: 13)),
                         Gaps.h20,
                         Expanded(
                           child: Container(
@@ -87,8 +91,11 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                               color: Palette.mainColor,
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
-                            child: Text('주소검색', style: CTS.medium(color: Palette.white, fontSize: 13)),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.w, vertical: 12.h),
+                            child: Text('주소검색',
+                                style: CTS.medium(
+                                    color: Palette.white, fontSize: 13)),
                           ),
                         )
                       ],
@@ -96,9 +103,13 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                     Gaps.v16,
                     Row(
                       children: [
-                        Text('환자유형', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
+                        Text('환자유형',
+                            style: CTS.medium(
+                                color: Palette.greyText, fontSize: 13)),
                         Gaps.h8,
-                        Expanded(child: rowMultiSelectButton(['임산부', '음압격리', '투석'], ['임산부'])),
+                        Expanded(
+                            child: rowMultiSelectButton(
+                                ['임산부', '음압격리', '투석'], ['임산부'])),
                       ],
                     ),
                     isSearchDetailOpen
@@ -107,33 +118,57 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                               Gaps.v16,
                               Row(
                                 children: [
-                                  Text('                 ', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
+                                  Text('                 ',
+                                      style: CTS.medium(
+                                          color: Palette.greyText,
+                                          fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(child: rowMultiSelectButton(['인공호흡', '신생아', '어린이', '수술'], ['어린이'])),
+                                  Expanded(
+                                      child: rowMultiSelectButton(
+                                          ['인공호흡', '신생아', '어린이', '수술'],
+                                          ['어린이'])),
                                 ],
                               ),
                               Gaps.v16,
                               Row(
                                 children: [
-                                  Text('기저질환', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
+                                  Text('기저질환',
+                                      style: CTS.medium(
+                                          color: Palette.greyText,
+                                          fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(child: rowMultiSelectButton(['고혈압', '정신질환', '관절염'], ['고혈압', '관절염'])),
+                                  Expanded(
+                                      child: rowMultiSelectButton(
+                                          ['고혈압', '정신질환', '관절염'],
+                                          ['고혈압', '관절염'])),
                                 ],
                               ),
                               Gaps.v16,
                               Row(
                                 children: [
-                                  Text('중증도    ', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
+                                  Text('중증도    ',
+                                      style: CTS.medium(
+                                          color: Palette.greyText,
+                                          fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(child: rowMultiSelectButton(['중증', '준중증', '준등중', '미분류'], ['준등중'])),
+                                  Expanded(
+                                      child: rowMultiSelectButton(
+                                          ['중증', '준중증', '준등중', '미분류'],
+                                          ['준등중'])),
                                 ],
                               ),
                               Gaps.v16,
                               Row(
                                 children: [
-                                  Text('병상유형', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
+                                  Text('병상유형',
+                                      style: CTS.medium(
+                                          color: Palette.greyText,
+                                          fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(child: rowMultiSelectButton(['음압격리', '일반격리', '기타'], ['음압격리', '일반격리'])),
+                                  Expanded(
+                                      child: rowMultiSelectButton(
+                                          ['음압격리', '일반격리', '기타'],
+                                          ['음압격리', '일반격리'])),
                                 ],
                               ),
                             ],
@@ -145,13 +180,15 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                         IconButton(
                           splashRadius: 10.r,
                           padding: EdgeInsets.zero, // 패딩 설정
-                          constraints: BoxConstraints(),
+                          constraints: const BoxConstraints(),
                           onPressed: () {
                             setState(() {
                               isSearchDetailOpen = !isSearchDetailOpen;
                             });
                           },
-                          icon: Icon(!isSearchDetailOpen ? Icons.arrow_drop_down : Icons.arrow_drop_up),
+                          icon: Icon(!isSearchDetailOpen
+                              ? Icons.arrow_drop_down
+                              : Icons.arrow_drop_up),
                         ),
                       ],
                     ),
@@ -170,16 +207,22 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                         Text.rich(
                           TextSpan(
                             children: [
-                              TextSpan(text: '총', style: CTS.bold(color: Colors.black)),
-                              TextSpan(text: ' 15', style: CTS.bold(color: Palette.mainColor)),
-                              TextSpan(text: '개', style: CTS.bold(color: Colors.black)),
+                              TextSpan(
+                                  text: '총',
+                                  style: CTS.bold(color: Colors.black)),
+                              TextSpan(
+                                  text: ' 15',
+                                  style: CTS.bold(color: Palette.mainColor)),
+                              TextSpan(
+                                  text: '개',
+                                  style: CTS.bold(color: Colors.black)),
                             ],
                           ),
                           style: CTS.bold(
                             color: Colors.black,
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         dropdownButton(
                           ['최신순', '등록순'],
                           '최신순',
@@ -254,7 +297,8 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset("assets/message/hospital_icon.png", width: 36.w, height: 36.h),
+            Image.asset("assets/message/hospital_icon.png",
+                width: 36.w, height: 36.h),
             Gaps.h8,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +314,8 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                     ),
                     Gaps.h8,
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                       decoration: BoxDecoration(
                         color: Palette.red.withOpacity(0.12),
                         borderRadius: BorderRadius.circular(11),
@@ -302,7 +347,8 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(right: 4.w),
-                      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
                       decoration: BoxDecoration(
                         color: Palette.greyText_20,
                         borderRadius: BorderRadius.circular(4),
@@ -317,7 +363,8 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                     ),
                     Container(
                       margin: EdgeInsets.only(right: 4.w),
-                      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
                       decoration: BoxDecoration(
                         color: Palette.greyText_20,
                         borderRadius: BorderRadius.circular(4),
@@ -334,14 +381,16 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                 )
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.location_on_sharp, color: Palette.mainColor, size: 20.h),
-                    Text('4.3km', style: CTS(color: Palette.mainColor, fontSize: 12)),
+                    Icon(Icons.location_on_sharp,
+                        color: Palette.mainColor, size: 20.h),
+                    Text('4.3km',
+                        style: CTS(color: Palette.mainColor, fontSize: 12)),
                   ],
                 ),
                 Gaps.v8,
@@ -351,9 +400,12 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                       height: 24.h,
                       width: 24.h,
                       decoration: BoxDecoration(
-                          color: _isSelected ? Palette.mainColor : Palette.white,
+                          color:
+                              _isSelected ? Palette.mainColor : Palette.white,
                           borderRadius: BorderRadius.circular(4),
-                          border: !_isSelected ? Border.all(color: Palette.greyText_20, width: 1) : null),
+                          border: !_isSelected
+                              ? Border.all(color: Palette.greyText_20, width: 1)
+                              : null),
                       child: _isSelected
                           ? Icon(
                               Icons.check,
@@ -404,7 +456,7 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                     TextSpan(
                       text: detail, //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
                       style: CTS(
-                        color: Color(0xff333333),
+                        color: const Color(0xff333333),
                         fontSize: 10,
                       ),
                     ),
@@ -483,9 +535,12 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
             children: [
               for (var i in list)
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 12.w),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 5.h, horizontal: 12.w),
                   decoration: BoxDecoration(
-                    color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
+                    color: !selectList.contains(i)
+                        ? Colors.white
+                        : Palette.mainColor,
                     border: Border.all(
                       color: Palette.greyText_20,
                       width: 1,
@@ -495,7 +550,9 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                   child: Text(i,
                       style: CTS.bold(
                         fontSize: 13,
-                        color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
+                        color: selectList.contains(i)
+                            ? Palette.white
+                            : Palette.greyText_60,
                       )),
                 )
             ],

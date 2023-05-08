@@ -10,6 +10,7 @@ import 'package:sbas/features/assign/views/widgets/top_navbar_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_search_widget.dart';
 import 'package:sbas/features/assign_request/assign_request_screen.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedScreen extends ConsumerWidget {
   const AssignBedScreen({
@@ -26,7 +27,7 @@ class AssignBedScreen extends ConsumerWidget {
 // 이송중
 // 입원
       Patient(
-        id: "PT00000055",
+        ptId: "PT00000055",
         ptNm: "달나라",
         gndr: "F",
         rrno1: "310301", //주민번호 앞자리
@@ -34,7 +35,7 @@ class AssignBedScreen extends ConsumerWidget {
         bedStatNm: "승인대기",
       ),
       Patient(
-        id: "PT00000055",
+        ptId: "PT00000055",
         ptNm: "달나라",
         gndr: "F",
         rrno1: "310301", //주민번호 앞자리
@@ -42,7 +43,7 @@ class AssignBedScreen extends ConsumerWidget {
         bedStatNm: "배정대기",
       ),
       Patient(
-        id: "PT00000055",
+        ptId: "PT00000055",
         ptNm: "달나라",
         gndr: "F",
         rrno1: "310301", //주민번호 앞자리
@@ -50,7 +51,7 @@ class AssignBedScreen extends ConsumerWidget {
         bedStatNm: "이송대기",
       ),
       Patient(
-        id: "PT00000055",
+        ptId: "PT00000055",
         ptNm: "달나라",
         gndr: "F",
         rrno1: "310301", //주민번호 앞자리
@@ -58,7 +59,7 @@ class AssignBedScreen extends ConsumerWidget {
         bedStatNm: "이송중",
       ),
       Patient(
-        id: "PT00000055",
+        ptId: "PT00000055",
         ptNm: "달나라",
         gndr: "F",
         rrno1: "310301", //주민번호 앞자리
@@ -108,7 +109,7 @@ class AssignBedScreen extends ConsumerWidget {
                       fontSize: 15,
                     ),
                     children: [
-                      WidgetSpan(
+                      const WidgetSpan(
                         child: Gaps.h1,
                       ),
                       TextSpan(
@@ -145,19 +146,35 @@ class AssignBedScreen extends ConsumerWidget {
                       //   color: Colors.green,
                       //   patient: tempPaitentList[2],
                       // ),
-                      CardItem(patient: tempPaitentList[0], color: Color(0xFF7767cc)), //승인대기
-                      CardItem(patient: tempPaitentList[1], color: Color(0xFF4caff1)), //배정대기
-                      CardItem(patient: tempPaitentList[2], color: Palette.primary, hospital: "분당 서울대 병원"), //  '이송대기',
-                      CardItem(patient: tempPaitentList[3], color: Palette.primary, hospital: "분당 서울대 병원"), // '  이송중  ',
-                      CardItem(patient: tempPaitentList[4], color: Palette.red), //// symbol: '    입원    ',
+                      CardItem(
+                          patient: tempPaitentList[0],
+                          color: const Color(0xFF7767cc)), //승인대기
+                      CardItem(
+                          patient: tempPaitentList[1],
+                          color: const Color(0xFF4caff1)), //배정대기
+                      CardItem(
+                          patient: tempPaitentList[2],
+                          color: Palette.primary,
+                          hospital: "분당 서울대 병원"), //  '이송대기',
+                      CardItem(
+                          patient: tempPaitentList[3],
+                          color: Palette.primary,
+                          hospital: "분당 서울대 병원"), // '  이송중  ',
+                      CardItem(
+                          patient: tempPaitentList[4],
+                          color: Palette.red), //// symbol: '    입원    ',
                     ]),
                   ),
                   Column(
                     children: [
-                      Spacer(),
+                      const Spacer(),
                       BottomSubmitBtn(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const AssignBedRequestScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AssignBedRequestScreen()));
                         },
                         text: '병상요청',
                       ),

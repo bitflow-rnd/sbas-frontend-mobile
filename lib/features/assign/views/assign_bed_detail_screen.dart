@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
@@ -9,9 +8,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_move_detail.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_paitent_info.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_timeline.dart';
-import 'package:sbas/features/assign/views/widgets/top_nav_item_widget.dart';
-import 'package:sbas/features/authentication/views/user_reg_widgets/top_nav_req_item_widget.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 import 'widgets/detail_page/assign_bed_detail_disease_info.dart';
 
@@ -73,7 +70,8 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
-              _header(widget.patient.ptNm ?? '', "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
+              _header(widget.patient.ptNm ?? '',
+                  "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
               Divider(
                 color: Palette.greyText_20,
                 height: 1,
@@ -84,7 +82,8 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16.w, vertical: 10.h),
                       child: Padding(
                         padding: EdgeInsets.only(top: 6.h),
                         child: Row(
@@ -114,7 +113,7 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
                         Container(
                           height: 6.h,
                           decoration: BoxDecoration(
-                            color: Color(0xffecedef),
+                            color: const Color(0xffecedef),
                             borderRadius: BorderRadius.circular(3),
                           ),
                         ),
@@ -142,7 +141,8 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
                   ],
                 ),
               ),
-              if (_selectedIndex == 0) AssignBedDetailTimeLine(patient: widget.patient),
+              if (_selectedIndex == 0)
+                AssignBedDetailTimeLine(patient: widget.patient),
               if (_selectedIndex == 1)
                 AssignBedDetailPaitentInfo(
                   patient: tempPaitent,
@@ -151,7 +151,9 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
                 AssignBedDetailDiseaseInfo(
                   patient: tempPaitent,
                 ),
-              if (_selectedIndex == 3) const AssignBedMoveDetialInfo(type: "병원-집") //집-병원 또는 null 로 하면 집-병원 으로 젼환가능
+              if (_selectedIndex == 3)
+                const AssignBedMoveDetialInfo(
+                    type: "병원-집") //집-병원 또는 null 로 하면 집-병원 으로 젼환가능
             ],
           ),
         ));
@@ -186,7 +188,7 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
                     TextSpan(
                       text: detail, //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
                       style: CTS(
-                        color: Color(0xff333333),
+                        color: const Color(0xff333333),
                         fontSize: 10,
                       ),
                     ),
@@ -212,7 +214,7 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
     rgstDttm: "2023-04-11T06:12:03.709296Z",
     updtUserId: "cyberprophet",
     updtDttm: "2023-04-11T08:31:22.296640Z",
-    id: "PT00000055",
+    ptId: "PT00000055",
     ptNm: "달나라",
     gndr: "F",
     rrno1: "310301",

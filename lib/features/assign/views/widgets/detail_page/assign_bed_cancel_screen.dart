@@ -7,6 +7,7 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedCancelScreen extends StatefulWidget {
   AssignBedCancelScreen({
@@ -23,6 +24,7 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
   List<String> list = ['의료기관명', '메시지'];
   List<String> hintList = ['칠곡경북대병원', '메시지 입력'];
   // 이부분 의료기관명 readonly 로 들어갈부분.
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<Object>(
         stream: null,
@@ -54,7 +56,8 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
                   onTap: () => FocusScope.of(context).unfocus(),
                   child: Column(
                     children: [
-                      _header(widget.patient.ptNm ?? '', "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
+                      _header(widget.patient.ptNm ?? '',
+                          "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
                       Divider(
                         color: Palette.greyText_20,
                         height: 1,
@@ -70,14 +73,17 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
                                   children: [
                                     _getTitle(list[0], false),
                                     Gaps.v16,
-                                    _getTextInputField(hint: hintList[0], isFixed: true),
+                                    _getTextInputField(
+                                        hint: hintList[0], isFixed: true),
                                     Gaps.v28,
                                     //
 
                                     _getTitle('불가 사유', true),
                                     Gaps.v16,
                                     //
-                                    rowMultiSelectButton(['병상부족', '정신이상자 수용 불가', '투석장비없음'], ['병상부족']),
+                                    rowMultiSelectButton(
+                                        ['병상부족', '정신이상자 수용 불가', '투석장비없음'],
+                                        ['병상부족']),
                                     Gaps.v28,
                                     //
                                     _getTitle(list[1], true),
@@ -119,9 +125,12 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
             children: [
               for (var i in list)
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
                   decoration: BoxDecoration(
-                    color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
+                    color: !selectList.contains(i)
+                        ? Colors.white
+                        : Palette.mainColor,
                     border: Border.all(
                       color: Palette.greyText_20,
                       width: 1,
@@ -131,7 +140,9 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
                   child: Text(i,
                       style: CTS.bold(
                         fontSize: 13,
-                        color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
+                        color: selectList.contains(i)
+                            ? Palette.white
+                            : Palette.greyText_60,
                       )),
                 )
             ],
@@ -142,7 +153,11 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
   }
 
   Widget _getTextInputField(
-      {bool isFixed = false, required String hint, TextInputType type = TextInputType.text, int? maxLines, List<TextInputFormatter>? inputFormatters}) {
+      {bool isFixed = false,
+      required String hint,
+      TextInputType type = TextInputType.text,
+      int? maxLines,
+      List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
       decoration: !isFixed
           ? getInputDecoration(hint)
@@ -283,7 +298,7 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
                     TextSpan(
                       text: detail, //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
                       style: CTS(
-                        color: Color(0xff333333),
+                        color: const Color(0xff333333),
                         fontSize: 10,
                       ),
                     ),

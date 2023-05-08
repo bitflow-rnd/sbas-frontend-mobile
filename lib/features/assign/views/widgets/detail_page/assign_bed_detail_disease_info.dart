@@ -5,7 +5,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
-
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedDetailDiseaseInfo extends ConsumerWidget {
   AssignBedDetailDiseaseInfo({
@@ -84,7 +84,8 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                     Expanded(
                                       child: Column(
                                         // mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             list1[i].split(",")[_],
@@ -94,7 +95,9 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                             ),
                                           ),
                                           Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 8.h),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 0.w,
+                                                  vertical: 8.h),
                                               child: Text(
                                                 '2023.01.01',
                                                 style: CTS.medium(
@@ -128,7 +131,11 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
             ],
           ),
 
-          Container(margin: EdgeInsets.symmetric(horizontal: 24.w), height: 1.h, width: double.infinity, color: Palette.greyText_20), //divider
+          Container(
+              margin: EdgeInsets.symmetric(horizontal: 24.w),
+              height: 1.h,
+              width: double.infinity,
+              color: Palette.greyText_20), //divider
 
           //second column
           Column(
@@ -160,7 +167,8 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                               for (var disease = 0; disease < 3; disease++)
                                 Container(
                                   margin: EdgeInsets.only(right: 8.w),
-                                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12.w, vertical: 4.h),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     border: Border.all(
@@ -171,7 +179,9 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                   ),
                                   child: Text(
                                     '기저질환',
-                                    style: CTS.medium(fontSize: 13, color: Palette.greyText_80),
+                                    style: CTS.medium(
+                                        fontSize: 13,
+                                        color: Palette.greyText_80),
                                     textAlign: TextAlign.end,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -184,7 +194,11 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                 ),
             ],
           ),
-          Container(margin: EdgeInsets.symmetric(horizontal: 24.w), height: 1.h, width: double.infinity, color: Palette.greyText_20), //divider
+          Container(
+              margin: EdgeInsets.symmetric(horizontal: 24.w),
+              height: 1.h,
+              width: double.infinity,
+              color: Palette.greyText_20), //divider
           //EmrCategory
           Gaps.v12,
           Padding(
@@ -202,7 +216,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                         fontSize: 13,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       '중증',
                       style: CTS.medium(
@@ -219,12 +233,14 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.w, vertical: 24.h),
                         child: Column(
                           children: [
                             for (var i = 1; i < 4; i++)
                               Padding(
-                                padding: EdgeInsets.only(top: i != 1 ? 12.h : 0),
+                                padding:
+                                    EdgeInsets.only(top: i != 1 ? 12.h : 0),
                                 child: Row(
                                   children: [
                                     Text(
@@ -234,7 +250,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                         fontSize: 13,
                                       ),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                       '123',
                                       style: CTS.medium(
@@ -253,12 +269,14 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.w, vertical: 24.h),
                         child: Column(
                           children: [
                             for (var i = 4; i < EmrCategory.length; i++)
                               Padding(
-                                padding: EdgeInsets.only(top: i != 4 ? 12.h : 0),
+                                padding:
+                                    EdgeInsets.only(top: i != 4 ? 12.h : 0),
                                 child: Row(
                                   children: [
                                     Text(
@@ -268,7 +286,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                         fontSize: 13,
                                       ),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                       '333',
                                       style: CTS.medium(
@@ -291,7 +309,11 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
             ),
           ),
 
-          Container(margin: EdgeInsets.symmetric(horizontal: 24.w), height: 1.h, width: double.infinity, color: Palette.greyText_20), //divider
+          Container(
+              margin: EdgeInsets.symmetric(horizontal: 24.w),
+              height: 1.h,
+              width: double.infinity,
+              color: Palette.greyText_20), //divider
           Column(
             children: [
               for (int i = 0; i < list2.length; i++)
@@ -309,7 +331,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                           fontSize: 13,
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         getList2Value(i, patient),
                         style: CTS.medium(
@@ -329,7 +351,11 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
             child: Row(
               children: [
                 for (int i = 0; i < 3; i++)
-                  Expanded(child: Container(padding: EdgeInsets.symmetric(horizontal: 8.w), child: Image.asset("assets/auth_group/image_location.png")))
+                  Expanded(
+                      child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: Image.asset(
+                              "assets/auth_group/image_location.png")))
               ],
             ),
           ),

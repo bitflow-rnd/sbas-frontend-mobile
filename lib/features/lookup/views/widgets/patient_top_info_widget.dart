@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class PatientTopInfo extends StatelessWidget {
   const PatientTopInfo({
@@ -36,20 +36,21 @@ class PatientTopInfo extends StatelessWidget {
                       RichText(
                         text: TextSpan(
                           text: '${patient?.ptNm}',
-                          style: CTS(
-                            fontSize: 16,
+                          style: CTS.bold(
+                            fontSize: 15,
                             color: Colors.black,
                           ),
                           children: [
                             TextSpan(
                               text: '[${getPatientInfo(patient!)}]',
                               style: CTS(
-                                color: Colors.grey,
+                                color: const Color(0xff333333),
                                 fontSize: 10,
                               ),
                             ),
                           ],
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Gaps.v4,
                       Text(

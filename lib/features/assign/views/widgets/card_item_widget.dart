@@ -6,7 +6,7 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/assign_bed_detail_screen.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class CardItem extends StatelessWidget {
   CardItem({
@@ -29,7 +29,7 @@ class CardItem extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>  AssignBedDetailScreen(patient: patient),
+                builder: (context) => AssignBedDetailScreen(patient: patient),
               ));
         },
         child: Container(
