@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sbas/constants/common.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/blocs/talk_room_bloc.dart';
@@ -29,6 +29,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
   late final TalkRoomBloc _talkRoomBloc;
   late final TextEditingController _messageController;
   late final ScrollController _scrollController;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -130,14 +131,17 @@ class _ChattingScreenState extends State<ChattingScreen> {
         child: Row(
           children: [
             InkWell(
-              onTap: () {
-                //모달사용방법. :  Common.showModal(context, Common.commonModal(context: context, mainText: "text"));
-                //23.04.29. 하진우
+              onTap: () async {
+                // Choose the file (image) from gallery
+                final XFile? file =
+                    await _picker.pickImage(source: ImageSource.gallery);
+                _talkRoomBloc.uploadFile(file);
               },
               child: Container(
                 color: Palette.greyText_20,
                 margin: EdgeInsets.all(2.r),
-                child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
+                child: Image.asset("assets/auth_group/image_location_small.png",
+                    width: 42.h),
               ),
             ),
             Expanded(
@@ -146,7 +150,10 @@ class _ChattingScreenState extends State<ChattingScreen> {
               onChanged: (value) {
                 setState(() {});
               },
-              decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+              decoration: InputDecoration(
+                  hintText: '메세지 입력',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
             )),
             InkWell(
               onTap: _messageController.text.trim().isEmpty

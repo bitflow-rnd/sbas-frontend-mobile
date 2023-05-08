@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:dio/dio.dart' as dio;
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
 import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
+import 'package:sbas/util.dart' as util;
 import 'package:web_socket_channel/io.dart';
 
 class TalkRoomBloc {
@@ -11,8 +15,11 @@ class TalkRoomBloc {
   final TalkRoomsProvider provider;
   final _chatDetailListController = StreamController<List<TalkMsgModel>>();
 
-  TalkRoomBloc(
-      {required this.userId, required this.tkrmId, required this.provider}) {
+  TalkRoomBloc({
+    required this.userId,
+    required this.tkrmId,
+    required this.provider,
+  }) {
     _fetchChattingRoom();
   }
 
@@ -51,6 +58,40 @@ class TalkRoomBloc {
     channel.sink.add(message);
   }
 
+  Future<void> uploadFile(XFile? file) async {
+    var client = dio.Dio();
+    var uploadFile = await dio.MultipartFile.fromFile(
+      file!.path,
+      filename: file.name,
+    );
+    try {
+      client.options.contentType = 'multipart/form-data';
+      client.options.headers = util.authToken;
+
+      final res = await client.postUri(
+        Uri.parse('$_baseUrl/upload'),
+        data: dio.FormData.fromMap(
+          {
+            'param1': '',
+            'param2': uploadFile,
+          },
+        ),
+      );
+      if (res.statusCode == 200) {
+        var attcId = res.data['result'];
+        sendMessage('attcId:$attcId');
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+  }
+
   @override
   void dispose() {
     channel.sink.close();
@@ -58,4 +99,5 @@ class TalkRoomBloc {
   }
 
   final String _wsUrl = '${dotenv.env['WS_URL']}/chat-rooms';
+  final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/common';
 }
