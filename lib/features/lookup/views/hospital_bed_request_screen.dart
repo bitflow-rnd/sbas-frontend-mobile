@@ -9,7 +9,7 @@ import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/hospital_bed_request_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/infectious_disease_widget.dart';
@@ -73,7 +73,7 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                       width: width,
                       child: SeverelyDisease(
                         formKey: formKey,
-                        ptId: patient?.id ?? '',
+                        ptId: patient?.ptId ?? '',
                       ),
                     ),
                   )
@@ -92,7 +92,9 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                       width: width * 0.5,
                       child: BottomSubmitBtn(
                         text: order == -1 ? '취소' : '이전',
-                        onPressed: () => order == -1 ? Navigator.pop(context) : ref.read(orderOfRequestProvider.notifier).state--,
+                        onPressed: () => order == -1
+                            ? Navigator.pop(context)
+                            : ref.read(orderOfRequestProvider.notifier).state--,
                       ),
                     ),
                     SizedBox(
@@ -103,10 +105,14 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                           final index = ref.read(orderOfRequestProvider);
 
                           if (index == -1) {
-                            ref.read(infectiousDiseaseProvider.notifier).registry(patient?.id ?? '');
+                            ref
+                                .read(infectiousDiseaseProvider.notifier)
+                                .registry(patient?.ptId ?? '');
                           }
                           if (index == 0) {
-                            ref.read(severelyDiseaseProvider.notifier).registry(patient?.id ?? '');
+                            ref
+                                .read(severelyDiseaseProvider.notifier)
+                                .registry(patient?.ptId ?? '');
                           }
                           if (index == 1) {
                             Navigator.pop(context);

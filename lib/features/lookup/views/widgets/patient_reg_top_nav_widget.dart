@@ -38,9 +38,8 @@ class PatientRegTopNav extends ConsumerWidget {
         Stack(
           children: [
             Align(
-              // heightFactor: 14,
               child: Container(
-                width: width * 1.2,
+                width: width * 1.15,
                 height: 6.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(
@@ -51,7 +50,6 @@ class PatientRegTopNav extends ConsumerWidget {
               ),
             ),
             AnimatedAlign(
-              // heightFactor: 14,
               alignment: Alignment(
                 -0.5 * x,
                 0,

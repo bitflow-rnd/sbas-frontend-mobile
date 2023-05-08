@@ -9,17 +9,16 @@ import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_detail_bloc.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
-import 'package:sbas/features/lookup/models/patient_item_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/views/hospital_bed_request_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
-import 'package:sbas/features/lookup/views/widgets/bed_assign_history_card.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/constants/palette.dart';
 
 class PatientLookupDetailScreen extends ConsumerWidget {
   PatientLookupDetailScreen({
-    required this.model,
+    required this.patient,
+    required this.age,
     super.key,
   });
   @override
@@ -89,19 +88,14 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                         RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                            text: '${model.ptNm}',
+                            text: '${patient.ptNm}',
                             style: CTS.bold(
                               fontSize: 15,
                               color: Colors.black,
                             ),
                             children: [
                               TextSpan(
-                                text: ''
-                                /*
-                                    '(${getPatientInfo(patient)})'
-                                     TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
-                                     */
-                                ,
+                                text: '',
                                 style: CTS(
                                   color: const Color(0xff333333),
                                   fontSize: 10,
@@ -167,9 +161,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                         Expanded(
                                           flex: 3,
                                           child: Text(
-                                            ''
-                                            //getConvertPatientInfo(i, patient)
-                                            ,
+                                            getConvertPatientInfo(i, patient),
                                             style: CTS.medium(
                                               fontSize: 13,
                                             ),
@@ -202,7 +194,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                               ),
                                               Gaps.h10,
                                               Text(
-                                                "남",
+                                                patient.gndr ?? '',
                                                 style: CTS.medium(
                                                   fontSize: 13,
                                                 ),
@@ -224,7 +216,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                               ),
                                               Gaps.h10,
                                               Text(
-                                                "30세",
+                                                '$age세',
                                                 style: CTS.medium(
                                                   fontSize: 13,
                                                 ),
@@ -251,9 +243,8 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                 ),
                               ),
                             ),
-                            data: (history) => progress !=
-                                    0 // has history 값에 따라 요소들 보여주거나 "병상배정이력이없습니다 출력"
-                                ? SingleChildScrollView(
+                            data:
+                                (history) => /* SingleChildScrollView(
                                     child: Column(
                                       children: const [
                                         /*
@@ -300,25 +291,27 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                       ],
                                     ),
                                   )
-                                : Center(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          'assets/lookup/history_icon.png',
-                                          height: 128.h,
-                                        ),
-                                        const AutoSizeText(
-                                          '병상 배정 이력이 없습니다.',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey,
-                                          ),
-                                          maxLines: 1,
-                                          maxFontSize: 22,
-                                        ),
-                                      ],
-                                    ),
+                                :
+                                */
+                                    Center(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/lookup/history_icon.png',
+                                    height: 128.h,
                                   ),
+                                  const AutoSizeText(
+                                    '병상 배정 이력이 없습니다.',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey,
+                                    ),
+                                    maxLines: 1,
+                                    maxFontSize: 22,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                 ),
               ),
@@ -335,12 +328,10 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                   : Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              const Placeholder() /* HospitalBedRequestScreen(
+                        builder: (context) => HospitalBedRequestScreen(
                           patient: patient,
                         ),
-                      */
-                          ),
+                      ),
                     ),
             ),
           ),
@@ -355,13 +346,11 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                 function: () async {
                   await Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Placeholder()
-                        /*
-                       PatientRegScreen(
+                    MaterialPageRoute(
+                      builder: (context) => PatientRegScreen(
                         patient: patient,
                       ),
-                      */
-                        ),
+                    ),
                   );
                   if (context.mounted) {
                     Navigator.pop(context);
@@ -374,7 +363,6 @@ class PatientLookupDetailScreen extends ConsumerWidget {
     );
   }
 
-  final hasHistory = false;
   final List<String> list = [
     '환자이름',
     '주민등록번호',
@@ -387,5 +375,6 @@ class PatientLookupDetailScreen extends ConsumerWidget {
     '직업',
     '기저질환',
   ];
-  final PatientItemModel model;
+  final Patient patient;
+  final int age;
 }

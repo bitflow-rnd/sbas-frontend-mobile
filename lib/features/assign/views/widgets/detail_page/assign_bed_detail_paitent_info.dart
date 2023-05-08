@@ -8,6 +8,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedDetailPaitentInfo extends ConsumerWidget {
   AssignBedDetailPaitentInfo({
@@ -46,7 +47,7 @@ class AssignBedDetailPaitentInfo extends ConsumerWidget {
                       Expanded(
                         flex: 1,
                         child: Text(
-                          '${list[i]}',
+                          list[i],
                           style: CTS(
                             color: Palette.greyText,
                             fontSize: 13,
@@ -70,7 +71,8 @@ class AssignBedDetailPaitentInfo extends ConsumerWidget {
                                 children: [
                                   // for(int j=0;j<patient.disease.length;j++)
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12.w, vertical: 4.h),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       border: Border.all(
@@ -82,7 +84,9 @@ class AssignBedDetailPaitentInfo extends ConsumerWidget {
                                     child: Text(
                                       "고지혈증",
                                       // patient.disease[j].diseaseName,
-                                      style: CTS(fontSize: 13, color: Palette.greyText_80),
+                                      style: CTS(
+                                          fontSize: 13,
+                                          color: Palette.greyText_80),
                                       textAlign: TextAlign.end,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,

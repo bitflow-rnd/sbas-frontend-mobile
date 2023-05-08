@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/find_id_screen.dart';
@@ -53,6 +54,39 @@ Future setPassword(BuildContext context) async => await Navigator.push(
     MaterialPageRoute(
       builder: (context) => const SetPasswordScreen(),
     ));
+
+Color getStateColor(String? code) {
+  switch (code) {
+    case 'BAST0001':
+      return const Color(0xFF00FF00);
+    case 'BAST0002':
+      return const Color(0xFF0000FF);
+    case 'BAST0003':
+      return const Color(0xFF00BFFF);
+    case 'BAST0004':
+      return const Color(0xFF000080);
+    case 'BAST0005':
+      return const Color(0xFF696969);
+  }
+  return const Color(0xFFFFFF00);
+}
+
+String getPhoneFormat(String? mpno) {
+  if (mpno == null || mpno.isEmpty) {
+    return '';
+  }
+  return mpno
+      .replaceRange(3, 3, '-')
+      .replaceRange(8, 8, '-')
+      .replaceRange(4, 8, '****');
+}
+
+String getDateTimeFormat(String dt) {
+  final dateTime = DateTime.tryParse(dt)?.add(const Duration(
+    hours: 9,
+  ));
+  return DateFormat('yyyy년 MM월 dd일 HH시 mm분').format(dateTime ?? DateTime.now());
+}
 
 String format(int remainingTime) =>
     Duration(seconds: remainingTime).toString().substring(2, 7);

@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_list_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
 class PatientLookupBloc extends AsyncNotifier<PatientListModel> {
@@ -25,22 +23,6 @@ class PatientLookupBloc extends AsyncNotifier<PatientListModel> {
   }
 
   late final PatientRepository _patientRepository;
-}
-
-Color? getStateColor(bool backgroudColor, String? code) {
-  switch (code) {
-    case 'BAST0001':
-      return backgroudColor ? const Color(0x1C00FF00) : const Color(0xFF00FF00);
-    case 'BAST0002':
-      return backgroudColor ? const Color(0x1C0000FF) : const Color(0xFF0000FF);
-    case 'BAST0003':
-      return backgroudColor ? const Color(0x1C00BFFF) : const Color(0xFF00BFFF);
-    case 'BAST0004':
-      return backgroudColor ? const Color(0x1C000080) : const Color(0xFF000080);
-    case 'BAST0005':
-      return backgroudColor ? const Color(0x1C696969) : const Color(0xFF696969);
-  }
-  return backgroudColor ? const Color(0x1CFFFF00) : const Color(0xFFFFFF00);
 }
 
 int getAge(Patient? patient) {
@@ -102,7 +84,7 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 9:
-      text = '기저질환';
+      text = '';
       break;
   }
   return text;
@@ -123,15 +105,6 @@ String getAddress(Patient? patient) {
     '-****-',
   );
   return '${address?[0]} ${address?[1]} / $phone';
-}
-
-String getDateTimeFormat(String? dt) {
-  final dateTime = DateTime.tryParse(dt ?? '')?.add(
-    const Duration(
-      hours: 9,
-    ),
-  );
-  return DateFormat('yyyy년 MM월 dd일 HH시 mm분').format(dateTime ?? DateTime.now());
 }
 
 final patientLookupProvider =

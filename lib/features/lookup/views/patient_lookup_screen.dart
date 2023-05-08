@@ -7,12 +7,14 @@ import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_detail_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_list_card_item.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
+import 'package:sbas/util.dart';
 
 class PatientLookupScreen extends ConsumerWidget {
   PatientLookupScreen({
@@ -234,17 +236,27 @@ class PatientLookupScreen extends ConsumerWidget {
                         child: ListView.builder(
                           itemCount: patient.count,
                           itemBuilder: (context, index) => GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PatientLookupDetailScreen(
-                                  model: patient.items[index],
+                            onTap: () async {
+                              final patientInfo = await ref
+                                  .read(patientInfoProvider.notifier)
+                                  .getAsync(patient.items[index].ptId);
+
+                              // ignore: use_build_context_synchronously
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => PatientLookupDetailScreen(
+                                    patient: patientInfo,
+                                    age: patient.items[index].age ?? 0,
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                             child: PaitentCardItem(
                               model: patient.items[index],
-                              color: Colors.green,
+                              color: getStateColor(
+                                patient.items[index].statCd,
+                              ),
                             ),
                           ),
                         ),

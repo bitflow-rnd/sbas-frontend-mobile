@@ -5,6 +5,11 @@ class PatientItemModel {
   String? gndr;
   String? dstr1Cd;
   String? dstr2Cd;
+  String? dstr1CdNm;
+  String? dstr2CdNm;
+  String? mpno;
+  String? hospId;
+  String? hospNm;
   String? telno;
   String? natiCd;
   String? statCd;
@@ -26,9 +31,29 @@ class PatientItemModel {
     this.statCdNm,
     this.updtDttm,
     this.age,
+    this.dstr1CdNm,
+    this.dstr2CdNm,
+    this.mpno,
+    this.hospId,
+    this.hospNm,
     required this.tagList,
   });
   PatientItemModel.fromJson(Map<String, dynamic> json) {
+    if (json["dstr1CdNm"] is String) {
+      dstr1CdNm = json["dstr1CdNm"];
+    }
+    if (json["dstr2CdNm"] is String) {
+      dstr2CdNm = json["dstr2CdNm"];
+    }
+    if (json["mpno"] is String) {
+      mpno = json["mpno"];
+    }
+    if (json["hospId"] is String) {
+      hospId = json["hospId"];
+    }
+    if (json["hospNm"] is String) {
+      hospNm = json["hospNm"];
+    }
     if (json["ptId"] is String) {
       ptId = json["ptId"];
     }
@@ -85,6 +110,11 @@ class PatientItemModel {
     data["updtDttm"] = updtDttm;
     data["age"] = age;
     data["tagList"] = tagList;
+    data['dstr1CdNm'] = dstr1CdNm;
+    data['dstr2CdNm'] = dstr2CdNm;
+    data['mpno'] = mpno;
+    data['hospId'] = hospId;
+    data['hospNm'] = hospNm;
 
     return data;
   }

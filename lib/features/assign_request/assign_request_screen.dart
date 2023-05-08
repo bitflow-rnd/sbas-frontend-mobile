@@ -17,6 +17,7 @@ import 'package:sbas/features/assign_request/view/assign_request_departure_info_
 import 'package:sbas/features/assign_request/view/assign_request_disease_info_input.dart';
 
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 
@@ -95,11 +96,13 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16.w, vertical: 10.h),
                             child: Padding(
                               padding: EdgeInsets.only(top: 6.h),
                               child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: List.generate(
                                     5,
                                     (index) => InkWell(
@@ -131,12 +134,13 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                                 height: 6.h,
                                 width: 0.22.sw * 5,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffecedef),
+                                  color: const Color(0xffecedef),
                                   borderRadius: BorderRadius.circular(3),
                                 ),
                               ),
                               AnimatedContainer(
-                                padding: EdgeInsets.only(left: 0.22.sw * _selectedIndex + 16.w),
+                                padding: EdgeInsets.only(
+                                    left: 0.22.sw * _selectedIndex + 16.w),
                                 duration: const Duration(
                                   milliseconds: 200,
                                 ),
@@ -162,7 +166,8 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
               if (_selectedIndex == 0) //역학조사서
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
+                    padding:
+                        EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
                     child: const PatientRegReport(),
                   ),
                 ),
@@ -172,9 +177,12 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                   padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
                   child: PatientRegInfoV2(formKey: GlobalKey<FormState>()),
                 )),
-              if (_selectedIndex == 2) AssignReqDiseaseInfoInputScreen(), //감염병정보
-              if (_selectedIndex == 3) AssignReqCriticalAttackInputScreen(), //중증정보
-              if (_selectedIndex == 4) AssignReqDepatureInfoInputScreen(), //출발정보
+              if (_selectedIndex == 2)
+                AssignReqDiseaseInfoInputScreen(), //감염병정보
+              if (_selectedIndex == 3)
+                AssignReqCriticalAttackInputScreen(), //중증정보
+              if (_selectedIndex == 4)
+                AssignReqDepatureInfoInputScreen(), //출발정보
               _bottomer(),
             ],
           ),
@@ -280,9 +288,10 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                         ),
                         children: [
                           TextSpan(
-                            text: detail, //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
+                            text:
+                                detail, //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
                             style: CTS(
-                              color: Color(0xff333333),
+                              color: const Color(0xff333333),
                               fontSize: 10,
                             ),
                           ),
@@ -308,7 +317,7 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
     rgstDttm: "2023-04-11T06:12:03.709296Z",
     updtUserId: "cyberprophet",
     updtDttm: "2023-04-11T08:31:22.296640Z",
-    id: "PT00000055",
+    ptId: "PT00000055",
     ptNm: "달나라",
     gndr: "F",
     rrno1: "310301",

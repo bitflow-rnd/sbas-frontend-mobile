@@ -7,6 +7,7 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedApproveScreen extends StatefulWidget {
   AssignBedApproveScreen({
@@ -21,8 +22,16 @@ class AssignBedApproveScreen extends StatefulWidget {
 class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
   @override
   List<String> list = ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
-  List<String> hintList = ['칠곡경북대병원', '병실번호', '진료과 이름', '담당의 이름', '의료진 연락처 입력', '메시지 입력'];
+  List<String> hintList = [
+    '칠곡경북대병원',
+    '병실번호',
+    '진료과 이름',
+    '담당의 이름',
+    '의료진 연락처 입력',
+    '메시지 입력'
+  ];
   // 이부분 의료기관명 readonly 로 들어갈부분.
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<Object>(
         stream: null,
@@ -54,7 +63,8 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
                   onTap: () => FocusScope.of(context).unfocus(),
                   child: Column(
                     children: [
-                      _header(widget.patient.ptNm ?? '', "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
+                      _header(widget.patient.ptNm ?? '',
+                          "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
                       Divider(
                         color: Palette.greyText_20,
                         height: 1,
@@ -71,7 +81,8 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
                                     children: [
                                       _getTitle(list[i], false),
                                       Gaps.v16,
-                                      _getTextInputField(hint: hintList[i], isFixed: i == 0),
+                                      _getTextInputField(
+                                          hint: hintList[i], isFixed: i == 0),
                                       Gaps.v28,
                                     ],
                                   )
@@ -98,7 +109,11 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
   }
 
   Widget _getTextInputField(
-      {bool isFixed = false, required String hint, TextInputType type = TextInputType.text, int? maxLines, List<TextInputFormatter>? inputFormatters}) {
+      {bool isFixed = false,
+      required String hint,
+      TextInputType type = TextInputType.text,
+      int? maxLines,
+      List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
       decoration: !isFixed
           ? getInputDecoration(hint)
@@ -239,7 +254,7 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
                     TextSpan(
                       text: detail, //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
                       style: CTS(
-                        color: Color(0xff333333),
+                        color: const Color(0xff333333),
                         fontSize: 10,
                       ),
                     ),
