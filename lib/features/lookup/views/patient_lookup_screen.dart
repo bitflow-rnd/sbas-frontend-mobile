@@ -13,6 +13,7 @@ import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_list_card_item.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
+import 'package:sbas/util.dart';
 
 class PatientLookupScreen extends ConsumerWidget {
   PatientLookupScreen({
@@ -244,7 +245,9 @@ class PatientLookupScreen extends ConsumerWidget {
                             ),
                             child: PaitentCardItem(
                               model: patient.items[index],
-                              color: Colors.green,
+                              color: getStateColor(
+                                patient.items[index].statCd,
+                              ),
                             ),
                           ),
                         ),
