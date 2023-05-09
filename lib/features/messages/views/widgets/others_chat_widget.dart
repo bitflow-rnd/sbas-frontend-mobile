@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
-
-import '../../../../common/bitflow_theme.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 
 Row othersChatWidget(
   TalkMsgModel input,
@@ -45,7 +44,10 @@ Row othersChatWidget(
                   margin: const EdgeInsets.only(right: 5),
                   padding: const EdgeInsets.all(10),
                   decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(8), topRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(8),
+                        topRight: Radius.circular(8),
+                        bottomLeft: Radius.circular(8)),
                     color: Colors.white,
                   ),
                   child: Text(

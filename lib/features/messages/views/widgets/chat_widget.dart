@@ -18,12 +18,8 @@ ListView chatWidget(
       return Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         child: isMyMessage
-            ? chat.attcId == null
-                ? myChatWidget(chat, scrollController)
-                : myChatPhotoAttachedWidget(chat, scrollController)
-            : chat.attcId == null
-                ? othersChatWidget(chat, scrollController)
-                : myChatPhotoAttachedWidget(chat, scrollController),
+            ? myChatWidget(chat, scrollController)
+            : othersChatWidget(chat, scrollController),
       );
     },
   );
