@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
@@ -175,6 +176,25 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     if (state.hasValue) {}
   }
 
+  Future<void> setAddress(Kpostal postal) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      _patientInfoModel.bascAddr = postal.roadAddress;
+      _patientInfoModel.zip = postal.postCode;
+
+      return _patientInfoModel;
+    });
+  }
+
+  Future<void> setSurvivalStatus(String status) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      _patientInfoModel.dethYn = status == '생존' ? 'N' : 'Y';
+
+      return _patientInfoModel;
+    });
+  }
+
   String? get sex => _patientInfoModel.gndr;
 
   String get age {
@@ -190,6 +210,10 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
 
     return (difference.inDays ~/ 365.25).toString();
   }
+
+  String get address => _patientInfoModel.bascAddr ?? '';
+
+  int get isSurvivalStatus => _patientInfoModel.dethYn == 'Y' ? 1 : 0;
 
   void overrideInfo(Patient patient) {
     _patientInfoModel.addr = patient.addr;
@@ -382,7 +406,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         return r'[가-힝|ㄱ-ㅎ|ㆍ|ᆢ]';
 
       case 2:
-        return r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|ㆍ|ᆢ]';
+        return r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|\s|ㆍ|ᆢ]';
 
       case 4:
         return r'[A-Z|a-z|-|가-힝|ㄱ-ㅎ|ㆍ|ᆢ]';

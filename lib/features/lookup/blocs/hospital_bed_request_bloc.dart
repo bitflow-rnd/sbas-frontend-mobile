@@ -21,7 +21,7 @@ class HospitalBedRequest extends AsyncNotifier<EpidemiologicalReportModel> {
         }
       }
     }
-    return EpidemiologicalReportModel.empty();
+    return EpidemiologicalReportModel();
   }
 
   late final PatientRepository _patientRepository;
