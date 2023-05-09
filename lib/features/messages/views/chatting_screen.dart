@@ -30,6 +30,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
   late final TextEditingController _messageController;
   late final ScrollController _scrollController;
   final ImagePicker _picker = ImagePicker();
+  late bool _isButtonEnabled;
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
     );
     _messageController = TextEditingController();
     _scrollController = ScrollController();
+    _isButtonEnabled = false;
   }
 
   @override
@@ -93,7 +95,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
           Expanded(
             child: StreamBuilder<List<TalkMsgModel>>(
               stream: _talkRoomBloc.chatDetailListStream,
-              builder: (context, snapshot) {
+              builder: (_, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -127,54 +129,56 @@ class _ChattingScreenState extends State<ChattingScreen> {
       data: IconThemeData(
         color: Theme.of(context).colorScheme.secondary,
       ),
-      child: Container(
-        child: Row(
-          children: [
-            InkWell(
-              onTap: () async {
-                // Choose the file (image) from gallery
-                final XFile? file =
-                    await _picker.pickImage(source: ImageSource.gallery);
-                _talkRoomBloc.uploadFile(file);
-              },
-              child: Container(
-                color: Palette.greyText_20,
-                margin: EdgeInsets.all(2.r),
-                child: Image.asset("assets/auth_group/image_location_small.png",
-                    width: 42.h),
-              ),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () async {
+              // Choose the file (image) from gallery
+              final XFile? file =
+                  await _picker.pickImage(source: ImageSource.gallery);
+              _talkRoomBloc.uploadFile(file);
+            },
+            child: Container(
+              color: Palette.greyText_20,
+              margin: EdgeInsets.all(2.r),
+              child: Image.asset("assets/auth_group/image_location_small.png",
+                  width: 42.h),
             ),
-            Expanded(
-                child: TextField(
-              controller: _messageController,
-              onChanged: (value) {
-                setState(() {});
-              },
-              decoration: InputDecoration(
-                  hintText: '메세지 입력',
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
-            )),
-            InkWell(
-              onTap: _messageController.text.trim().isEmpty
-                  ? null
-                  : () {
-                      _talkRoomBloc.sendMessage(_messageController.text);
-                      _messageController.clear();
-                    },
-              child: Container(
-                color: Palette.mainColor,
+          ),
+          Expanded(
+              child: TextField(
+            controller: _messageController,
+            onChanged: (value) {
+              setState(() {});
+              _isButtonEnabled = value.trim().isNotEmpty;
+            },
+            decoration: InputDecoration(
+                hintText: '메세지 입력',
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+          )),
+          InkWell(
+            onTap: _isButtonEnabled
+                ? () {
+                    _talkRoomBloc.sendMessage(_messageController.text);
+                    _messageController.clear();
+                    setState(() {
+                      _isButtonEnabled = false;
+                    });
+                  }
+                : null,
+            child: Container(
+                color:
+                    _isButtonEnabled ? Palette.mainColor : Palette.greyText_30,
                 padding: EdgeInsets.all(12.r),
                 margin: EdgeInsets.all(2.r),
                 child: Icon(
                   Icons.send,
                   color: Palette.white,
                   size: 20.h,
-                ),
-              ),
-            )
-          ],
-        ),
+                )),
+          )
+        ],
       ),
     );
   }

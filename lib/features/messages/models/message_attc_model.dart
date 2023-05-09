@@ -1,13 +1,13 @@
-class BaseAttcModel {
+class MessageAttcModel {
   String? fileTypeCd;
   String? file;
 
-  BaseAttcModel({
+  MessageAttcModel({
     this.fileTypeCd,
     this.file,
   });
 
-  BaseAttcModel.fromJson(Map<String, dynamic> json) {
+  MessageAttcModel.fromJson(Map<String, dynamic> json) {
     if (json["fileTypeCd"] is String) {
       fileTypeCd = json["fileTypeCd"];
     }
