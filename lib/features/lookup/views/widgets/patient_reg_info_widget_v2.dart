@@ -3,11 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/util.dart';
 import 'package:sbas/constants/palette.dart';
 
@@ -28,7 +27,8 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
     '직업',
   ];
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => PatientRegInfoV2State();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      PatientRegInfoV2State();
 
   final GlobalKey<FormState> formKey;
 }
@@ -36,6 +36,158 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
 class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
   bool init = true;
 
+  Widget _inputResidentRegistrationNumber(
+    PatientRegisterPresenter vm,
+    PatientRegInfoModel report,
+    int index,
+  ) =>
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: TextFormField(
+              decoration: getInputDecoration(
+                '${widget.list[index]} 입력',
+              ),
+              controller: TextEditingController(
+                text: vm.getTextEditingController(index, report),
+              ),
+              onSaved: (newValue) =>
+                  vm.setTextEditingController(index, newValue),
+              onChanged: (value) => ref
+                  .read(patientRegProvider.notifier)
+                  .setTextEditingController(index, value),
+              validator: (value) => vm.isValid(index, value),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                  RegExp(vm.getRegExp(index)),
+                ),
+                FilteringTextInputFormatter.singleLineFormatter,
+              ],
+              keyboardType: vm.getKeyboardType(index),
+              autovalidateMode: AutovalidateMode.always,
+              maxLength: vm.getMaxLength(index),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 24.h),
+            height: 1.h,
+            width: 4.w,
+            color: Palette.greyText_60,
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: TextFormField(
+                    decoration: getInputDecoration(''),
+                    controller: TextEditingController(
+                      text: vm.getTextEditingController(index + 100, report),
+                    ),
+                    onSaved: (newValue) =>
+                        vm.setTextEditingController(index + 100, newValue),
+                    onChanged: (value) => ref
+                        .read(patientRegProvider.notifier)
+                        .setTextEditingController(index + 100, value),
+                    validator: (value) => vm.isValid(index + 100, value),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp(vm.getRegExp(index + 100)),
+                      ),
+                      FilteringTextInputFormatter.singleLineFormatter,
+                    ],
+                    keyboardType: vm.getKeyboardType(index + 100),
+                    autovalidateMode: AutovalidateMode.always,
+                    maxLength: vm.getMaxLength(index + 100),
+                  ),
+                ),
+                Row(
+                  children: [
+                    for (var k = 0; k < 5; k++)
+                      Container(
+                        height: 8.h,
+                        width: 8.w,
+                        margin: EdgeInsets.only(
+                          top: 20.h,
+                          left: 8.w,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(
+                            99,
+                          ),
+                        ),
+                      ),
+                    Gaps.h32
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
+      );
+  Widget _inputGender(PatientRegisterPresenter vm) => Column(
+        children: [
+          getSubTitlt('성별', true),
+          Gaps.v8,
+          Container(
+            padding: EdgeInsets.only(left: 20.w, top: 12.h, bottom: 12.h),
+            decoration: BoxDecoration(
+              color: const Color(0xffecedef).withOpacity(0.2),
+              border: Border.all(
+                color: Palette.greyText_20,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(4.r),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  (vm.sex ?? '') == 'M' ? '남자' : '여자',
+                  style: CTS(fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+  Widget _inputAge(PatientRegisterPresenter vm) => Column(
+        children: [
+          getSubTitlt('나이', true),
+          Gaps.v8,
+          Container(
+            padding: EdgeInsets.only(
+                left: 20.w, top: 12.h, bottom: 12.h, right: 12.w),
+            decoration: BoxDecoration(
+              color: const Color(0xffecedef).withOpacity(0.2),
+              border: Border.all(
+                color: Palette.greyText_20,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(4.r),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  vm.age,
+                  style: CTS(fontSize: 13),
+                ),
+                const Spacer(),
+                Text(
+                  '세',
+                  style: CTS(
+                    color: Palette.greyText,
+                    fontSize: 13,
+                    fontFamily: 'SpoqaHanSansNeo',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
   @override
   Widget build(BuildContext context) {
     final vm = ref.read(patientRegProvider.notifier);
@@ -63,7 +215,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                         children: [
                           i != 3
                               ? getSubTitlt(
-                                  '${widget.list[i]}',
+                                  widget.list[i],
                                   i > 5,
                                 )
                               : Container(),
@@ -75,13 +227,18 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                           if (i != 1 && i != 3 && i != 4)
                             TextFormField(
                               decoration: getInputDecoration(
-                                i == 8 ? '직업을 알 수 있는 경우 기재' : '${widget.list[i]} 입력',
+                                i == 8
+                                    ? '직업을 알 수 있는 경우 기재'
+                                    : '${widget.list[i]} 입력',
                               ),
                               controller: TextEditingController(
                                 text: vm.getTextEditingController(i, report),
                               ),
-                              onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-                              onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(i, value),
+                              onSaved: (newValue) =>
+                                  vm.setTextEditingController(i, newValue),
+                              onChanged: (value) => ref
+                                  .read(patientRegProvider.notifier)
+                                  .setTextEditingController(i, value),
                               validator: (value) => vm.isValid(i, value),
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
@@ -97,155 +254,16 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                           if (i == 1)
                             Column(
                               children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
-                                        decoration: getInputDecoration(
-                                          '${widget.list[i]}  입력',
-                                        ),
-                                        controller: TextEditingController(
-                                          text: vm.getTextEditingController(i, report),
-                                        ),
-                                        onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-                                        onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(i, value),
-                                        validator: (value) => vm.isValid(i, value),
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.allow(
-                                            RegExp(vm.getRegExp(i)),
-                                          ),
-                                          FilteringTextInputFormatter.singleLineFormatter,
-                                        ],
-                                        keyboardType: vm.getKeyboardType(i),
-                                        autovalidateMode: AutovalidateMode.always,
-                                        maxLength: vm.getMaxLength(i),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 24.h),
-                                      height: 1.h,
-                                      width: 4.w,
-                                      color: Palette.greyText_60,
-                                    ),
-                                    Expanded(
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: TextFormField(
-                                              decoration: getInputDecoration(
-                                                '${widget.list[i]} 입력',
-                                              ),
-                                              controller: TextEditingController(
-                                                text: vm.getTextEditingController(i, report),
-                                              ),
-                                              onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-                                              onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(i, value),
-                                              validator: (value) => vm.isValid(i, value),
-                                              inputFormatters: [
-                                                FilteringTextInputFormatter.allow(
-                                                  RegExp(vm.getRegExp(i)),
-                                                ),
-                                                FilteringTextInputFormatter.singleLineFormatter,
-                                              ],
-                                              keyboardType: vm.getKeyboardType(i),
-                                              autovalidateMode: AutovalidateMode.always,
-                                              maxLength: vm.getMaxLength(i),
-                                            ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              for (var k = 0; k < 5; k++)
-                                                Container(
-                                                  height: 8.h,
-                                                  width: 8.w,
-                                                  margin: EdgeInsets.only(
-                                                    top: 20.h,
-                                                    left: 8.w,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.black,
-                                                    borderRadius: BorderRadius.circular(
-                                                      99,
-                                                    ),
-                                                  ),
-                                                ),
-                                              Gaps.h32
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                _inputResidentRegistrationNumber(vm, report, i),
                                 Gaps.v14,
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: Column(
-                                        children: [
-                                          getSubTitlt('성별', true),
-                                          Gaps.v8,
-                                          Container(
-                                            padding: EdgeInsets.only(left: 20.w, top: 12.h, bottom: 12.h),
-                                            decoration: BoxDecoration(
-                                              color: Color(0xffecedef).withOpacity(0.2),
-                                              border: Border.all(
-                                                color: Palette.greyText_20,
-                                                width: 1,
-                                              ),
-                                              borderRadius: BorderRadius.circular(4.r),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  "남자",
-                                                  style: CTS(fontSize: 13),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                      child: _inputGender(vm),
                                     ),
                                     Gaps.h8,
                                     Expanded(
-                                      child: Column(
-                                        children: [
-                                          getSubTitlt('나이', true),
-                                          Gaps.v8,
-                                          Container(
-                                            padding: EdgeInsets.only(left: 20.w, top: 12.h, bottom: 12.h, right: 12.w),
-                                            decoration: BoxDecoration(
-                                              color: Color(0xffecedef).withOpacity(0.2),
-                                              border: Border.all(
-                                                color: Palette.greyText_20,
-                                                width: 1,
-                                              ),
-                                              borderRadius: BorderRadius.circular(4.r),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  "42",
-                                                  style: CTS(fontSize: 13),
-                                                ),
-                                                Spacer(),
-                                                Text(
-                                                  '세',
-                                                  style: CTS(
-                                                    color: Palette.greyText,
-                                                    fontSize: 13,
-                                                    fontFamily: 'SpoqaHanSansNeo',
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                      child: _inputAge(vm),
                                     ),
                                   ],
                                 ),
@@ -297,7 +315,6 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
         Gaps.v10
       ],
     );
-    ;
   }
 
   Widget addrInput() {
@@ -339,7 +356,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
         Row(
           children: [
             getSubTitlt(widget.list[3], false),
-            Spacer(),
+            const Spacer(),
             sliderRow(),
           ],
         ),
@@ -355,7 +372,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Color(0xffe4e4e4),
+            color: const Color(0xffe4e4e4),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Row(
@@ -364,8 +381,11 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
-                      child: Text(i, style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 28.w, vertical: 10.h),
+                      child: Text(i,
+                          style: CTS.bold(
+                              fontSize: 11, color: Colors.transparent)),
                     ),
                     Gaps.h1,
                   ],
@@ -380,13 +400,20 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        color: oneList[oneListSelected] == i ? Color(0xff538ef5) : Colors.transparent,
-                        borderRadius: oneList[oneListSelected] == i ? BorderRadius.circular(6) : null),
-                    padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
+                        color: oneList[oneListSelected] == i
+                            ? const Color(0xff538ef5)
+                            : Colors.transparent,
+                        borderRadius: oneList[oneListSelected] == i
+                            ? BorderRadius.circular(6)
+                            : null),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
                     child: Text(i,
                         style: CTS.bold(
                           fontSize: 11,
-                          color: oneList[oneListSelected] == i ? Palette.white : Palette.greyText_60,
+                          color: oneList[oneListSelected] == i
+                              ? Palette.white
+                              : Palette.greyText_60,
                         )),
                   ),
                   i != '기타'
@@ -394,7 +421,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                           height: 12,
                           width: 1,
                           decoration: BoxDecoration(
-                            color: Color(0xff676a7a).withOpacity(0.2),
+                            color: const Color(0xff676a7a).withOpacity(0.2),
                           ),
                         )
                       : Container(),
@@ -406,7 +433,11 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
     );
   }
 
-  Widget _getTextInputField({required String hint, TextInputType type = TextInputType.text, int? maxLines, List<TextInputFormatter>? inputFormatters}) {
+  Widget _getTextInputField(
+      {required String hint,
+      TextInputType type = TextInputType.text,
+      int? maxLines,
+      List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
       decoration: getInputDecoration(hint),
       controller: TextEditingController(
