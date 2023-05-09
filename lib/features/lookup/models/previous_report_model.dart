@@ -1,21 +1,18 @@
-class EpidemiologicalReportModel {
+class PreviousEpidemiologicalReportModel {
   String? rcptPhc;
   String? ptNm;
   String? rrno1;
   String? rrno2;
-  String? nokNm;
   String? gndr;
-  String? telno;
   String? dstr1Cd;
   String? dstr2Cd;
   String? baseAddr;
   String? dtlAddr;
   String? fullAddr;
-  String? mpno;
+  String? telno;
   String? diagNm;
   String? diagGrde;
   String? job;
-  String? cv19Symp;
   String? occrDt;
   String? diagDt;
   String? rptDt;
@@ -23,7 +20,6 @@ class EpidemiologicalReportModel {
   String? ptCatg;
   String? admsYn;
   String? dethYn;
-  String? rptType;
   String? rmk;
   String? instNm;
   String? instId;
@@ -31,25 +27,24 @@ class EpidemiologicalReportModel {
   String? instAddr;
   String? diagDrNm;
   String? rptChfNm;
+  String? cv19Symp;
 
-  EpidemiologicalReportModel({
+  PreviousEpidemiologicalReportModel({
+    this.cv19Symp,
     this.rcptPhc,
     this.ptNm,
     this.rrno1,
     this.rrno2,
-    this.nokNm,
     this.gndr,
-    this.telno,
     this.dstr1Cd,
     this.dstr2Cd,
     this.baseAddr,
     this.dtlAddr,
     this.fullAddr,
-    this.mpno,
+    this.telno,
     this.diagNm,
     this.diagGrde,
     this.job,
-    this.cv19Symp,
     this.occrDt,
     this.diagDt,
     this.rptDt,
@@ -57,7 +52,6 @@ class EpidemiologicalReportModel {
     this.ptCatg,
     this.admsYn,
     this.dethYn,
-    this.rptType,
     this.rmk,
     this.instNm,
     this.instId,
@@ -66,7 +60,38 @@ class EpidemiologicalReportModel {
     this.diagDrNm,
     this.rptChfNm,
   });
-  EpidemiologicalReportModel.fromJson(Map<String, dynamic> json) {
+  PreviousEpidemiologicalReportModel.empty()
+      : rcptPhc = '',
+        ptNm = '',
+        rrno1 = '',
+        rrno2 = '',
+        gndr = '',
+        dstr1Cd = '',
+        dstr2Cd = '',
+        baseAddr = '',
+        dtlAddr = '',
+        fullAddr = '',
+        telno = '',
+        diagNm = '',
+        diagGrde = '',
+        job = '',
+        occrDt = '',
+        diagDt = '',
+        rptDt = '',
+        dfdgExamRslt = '',
+        ptCatg = '',
+        admsYn = '',
+        dethYn = '',
+        rmk = '',
+        instNm = '',
+        instId = '',
+        instTelno = '',
+        instAddr = '',
+        diagDrNm = '',
+        cv19Symp = '',
+        rptChfNm = '';
+
+  PreviousEpidemiologicalReportModel.fromJson(Map<String, dynamic> json) {
     if (json["rcptPhc"] is String) {
       rcptPhc = json["rcptPhc"];
     }
@@ -79,14 +104,8 @@ class EpidemiologicalReportModel {
     if (json["rrno2"] is String) {
       rrno2 = json["rrno2"];
     }
-    if (json["nokNm"] is String) {
-      nokNm = json["nokNm"];
-    }
     if (json["gndr"] is String) {
       gndr = json["gndr"];
-    }
-    if (json["telno"] is String) {
-      telno = json["telno"];
     }
     if (json["dstr1Cd"] is String) {
       dstr1Cd = json["dstr1Cd"];
@@ -103,8 +122,8 @@ class EpidemiologicalReportModel {
     if (json["fullAddr"] is String) {
       fullAddr = json["fullAddr"];
     }
-    if (json["mpno"] is String) {
-      mpno = json["mpno"];
+    if (json["telno"] is String) {
+      telno = json["telno"];
     }
     if (json["diagNm"] is String) {
       diagNm = json["diagNm"];
@@ -114,9 +133,6 @@ class EpidemiologicalReportModel {
     }
     if (json["job"] is String) {
       job = json["job"];
-    }
-    if (json["cv19Symp"] is String) {
-      cv19Symp = json["cv19Symp"];
     }
     if (json["occrDt"] is String) {
       occrDt = json["occrDt"];
@@ -139,9 +155,6 @@ class EpidemiologicalReportModel {
     if (json["dethYn"] is String) {
       dethYn = json["dethYn"];
     }
-    if (json["rptType"] is String) {
-      rptType = json["rptType"];
-    }
     if (json["rmk"] is String) {
       rmk = json["rmk"];
     }
@@ -163,6 +176,9 @@ class EpidemiologicalReportModel {
     if (json["rptChfNm"] is String) {
       rptChfNm = json["rptChfNm"];
     }
+    if (json["cv19Symp"] is String) {
+      cv19Symp = json["cv19Symp"];
+    }
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -171,19 +187,16 @@ class EpidemiologicalReportModel {
     data["ptNm"] = ptNm;
     data["rrno1"] = rrno1;
     data["rrno2"] = rrno2;
-    data["nokNm"] = nokNm;
     data["gndr"] = gndr;
-    data["telno"] = telno;
     data["dstr1Cd"] = dstr1Cd;
     data["dstr2Cd"] = dstr2Cd;
     data["baseAddr"] = baseAddr;
     data["dtlAddr"] = dtlAddr;
     data["fullAddr"] = fullAddr;
-    data["mpno"] = mpno;
+    data["telno"] = telno;
     data["diagNm"] = diagNm;
     data["diagGrde"] = diagGrde;
     data["job"] = job;
-    data["cv19Symp"] = cv19Symp;
     data["occrDt"] = occrDt;
     data["diagDt"] = diagDt;
     data["rptDt"] = rptDt;
@@ -191,7 +204,6 @@ class EpidemiologicalReportModel {
     data["ptCatg"] = ptCatg;
     data["admsYn"] = admsYn;
     data["dethYn"] = dethYn;
-    data["rptType"] = rptType;
     data["rmk"] = rmk;
     data["instNm"] = instNm;
     data["instId"] = instId;
@@ -199,6 +211,7 @@ class EpidemiologicalReportModel {
     data["instAddr"] = instAddr;
     data["diagDrNm"] = diagDrNm;
     data["rptChfNm"] = rptChfNm;
+    data["cv19Symp"] = cv19Symp;
 
     return data;
   }

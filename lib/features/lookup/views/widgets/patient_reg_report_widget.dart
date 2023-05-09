@@ -34,9 +34,13 @@ class PatientRegReport extends ConsumerWidget {
                 children: [
                   WidgetSpan(
                     child: GestureDetector(
-                      onTap: () => ref.read(patientIsUploadProvider.notifier).state = !ref.read(patientIsUploadProvider),
+                      onTap: () => ref
+                          .read(patientIsUploadProvider.notifier)
+                          .state = !ref.read(patientIsUploadProvider),
                       child: Icon(
-                        ref.watch(patientIsUploadProvider) ? Icons.cancel_outlined : Icons.check_circle_outline_rounded,
+                        ref.watch(patientIsUploadProvider)
+                            ? Icons.cancel_outlined
+                            : Icons.check_circle_outline_rounded,
                         size: 20,
                         color: Colors.grey,
                       ),
@@ -105,20 +109,22 @@ class PatientRegReport extends ConsumerWidget {
                                 width: 44.h,
                               ),
                               imageHeight: 44.h,
-                              button1Function: () {
-                                Navigator.pop(context, true);
-                              },
-                              button2Function: () {
-                                Navigator.pop(context, false);
-                              },
+                              button1Function: () =>
+                                  Navigator.pop(context, false),
+                              button2Function: () =>
+                                  Navigator.pop(context, true),
                             ),
                           );
                           if (res) {
-                            ref.read(patientImageProvider.notifier).state = null;
+                            ref.read(patientImageProvider.notifier).state =
+                                null;
                             ref.read(patientAttcProvider.notifier).state = null;
-                            ref.read(patientIsUploadProvider.notifier).state = true;
+                            ref.read(patientIsUploadProvider.notifier).state =
+                                true;
+                            // ignore: use_build_context_synchronously
                             Common.showModal(
                               context,
+                              // ignore: use_build_context_synchronously
                               Common.commonModal(
                                 context: context,
                                 mainText: "역학조사서가 삭제 되었습니다.",

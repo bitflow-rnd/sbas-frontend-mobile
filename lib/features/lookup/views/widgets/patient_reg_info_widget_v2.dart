@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
@@ -26,6 +28,10 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
     '보호자 이름',
     '직업',
   ];
+  final oneList = [
+    '생존',
+    '사망',
+  ];
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       PatientRegInfoV2State();
@@ -34,8 +40,6 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
 }
 
 class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
-  bool init = true;
-
   Widget _inputResidentRegistrationNumber(
     PatientRegisterPresenter vm,
     PatientRegInfoModel report,
@@ -105,7 +109,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                 ),
                 Row(
                   children: [
-                    for (var k = 0; k < 5; k++)
+                    for (var k = 0; k < 6; k++)
                       Container(
                         height: 8.h,
                         width: 8.w,
@@ -120,7 +124,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                           ),
                         ),
                       ),
-                    Gaps.h32
+                    Gaps.h16,
                   ],
                 )
               ],
@@ -188,6 +192,132 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           ),
         ],
       );
+  Widget _addrInput(PatientRegisterPresenter vm) => Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  decoration: getInputDecoration("주소검색을 이용하여 입력"),
+                  controller: TextEditingController(text: vm.address),
+                  validator: (value) => null,
+                  readOnly: true,
+                  maxLines: 1,
+                ),
+              ),
+              InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => KpostalView(
+                      kakaoKey: dotenv.env['KAKAO'] ?? '',
+                      callback: (postal) => vm.setAddress(postal),
+                    ),
+                  ),
+                ),
+                child: Container(
+                  margin: EdgeInsets.only(left: 7.w),
+                  decoration: BoxDecoration(
+                    color: Palette.mainColor,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 28.w, vertical: 15.h),
+                  child: Text(
+                    "주소검색",
+                    style: CTS(
+                      fontSize: 13,
+                      color: Palette.white,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          Gaps.v10
+        ],
+      );
+  Widget _sliderRow(PatientRegisterPresenter vm) => Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xffe4e4e4),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Row(
+              children: [
+                for (var i in widget.oneList)
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 28.w, vertical: 10.h),
+                        child: Text(i,
+                            style: CTS.bold(
+                              fontSize: 11,
+                              color: Colors.transparent,
+                            )),
+                      ),
+                      Gaps.h1,
+                    ],
+                  )
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              for (var i in widget.oneList)
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => vm.setSurvivalStatus(i),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: widget.oneList[vm.isSurvivalStatus] == i
+                                ? const Color(0xff538ef5)
+                                : Colors.transparent,
+                            borderRadius:
+                                widget.oneList[vm.isSurvivalStatus] == i
+                                    ? BorderRadius.circular(6)
+                                    : null),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 28.w, vertical: 10.h),
+                        child: Text(i,
+                            style: CTS.bold(
+                              fontSize: 11,
+                              color: widget.oneList[vm.isSurvivalStatus] == i
+                                  ? Palette.white
+                                  : Palette.greyText_60,
+                            )),
+                      ),
+                    ),
+                    i != '기타'
+                        ? Container(
+                            height: 12,
+                            width: 1,
+                            decoration: BoxDecoration(
+                              color: const Color(0xff676a7a).withOpacity(0.2),
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+            ],
+          ),
+        ],
+      );
+  Widget _isAlive(PatientRegisterPresenter vm) => Column(
+        children: [
+          Row(
+            children: [
+              getSubTitlt(widget.list[3], false),
+              const Spacer(),
+              _sliderRow(vm),
+            ],
+          ),
+          Gaps.v12
+        ],
+      );
   @override
   Widget build(BuildContext context) {
     final vm = ref.read(patientRegProvider.notifier);
@@ -220,8 +350,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                                 )
                               : Container(),
                           Gaps.v4,
-                          if (i == 2) addrInput(),
-                          if (i == 3) isAlive(),
+                          if (i == 2) _addrInput(vm),
+                          if (i == 3) _isAlive(vm),
                           if (i == 4) nation(),
                           if (i == 4 && report.natiCd != 'KR') Gaps.v8,
                           if (i != 1 && i != 3 && i != 4)
@@ -309,150 +439,28 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                 ),
               ),
             ),
-            Expanded(child: _getTextInputField(hint: "직접입력")),
-          ],
-        ),
-        Gaps.v10
-      ],
-    );
-  }
-
-  Widget addrInput() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(child: _getTextInputField(hint: "기본주소 입력")),
-            InkWell(
-              onTap: () {
-                //주소검색 로직
-              },
-              child: Container(
-                margin: EdgeInsets.only(left: 7.w),
-                decoration: BoxDecoration(
-                  color: Palette.mainColor,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
-                child: Text(
-                  "주소검색",
-                  style: CTS(
-                    fontSize: 13,
-                    color: Palette.white,
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-        Gaps.v10
-      ],
-    );
-  }
-
-  Widget isAlive() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            getSubTitlt(widget.list[3], false),
-            const Spacer(),
-            sliderRow(),
-          ],
-        ),
-        Gaps.v12
-      ],
-    );
-  }
-
-  final oneList = ['생존', '사망'];
-  int oneListSelected = 0;
-  Widget sliderRow() {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xffe4e4e4),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Row(
-            children: [
-              for (var i in oneList)
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 28.w, vertical: 10.h),
-                      child: Text(i,
-                          style: CTS.bold(
-                              fontSize: 11, color: Colors.transparent)),
+            Expanded(
+              child: TextFormField(
+                decoration: getInputDecoration("주소검색을 이용하여 입력"),
+                controller: TextEditingController(
+                    // text: vm.init(i, widget.report),
                     ),
-                    Gaps.h1,
-                  ],
-                )
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            for (var i in oneList)
-              Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: oneList[oneListSelected] == i
-                            ? const Color(0xff538ef5)
-                            : Colors.transparent,
-                        borderRadius: oneList[oneListSelected] == i
-                            ? BorderRadius.circular(6)
-                            : null),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
-                    child: Text(i,
-                        style: CTS.bold(
-                          fontSize: 11,
-                          color: oneList[oneListSelected] == i
-                              ? Palette.white
-                              : Palette.greyText_60,
-                        )),
-                  ),
-                  i != '기타'
-                      ? Container(
-                          height: 12,
-                          width: 1,
-                          decoration: BoxDecoration(
-                            color: const Color(0xff676a7a).withOpacity(0.2),
-                          ),
-                        )
-                      : Container(),
-                ],
-              )
+                // onSaved: (newValue) => vm.setTextEditingController(i, newValue),
+                // onChanged: (value) => vm.setTextEditingController(i, value),
+                validator: (value) {
+                  return null;
+                },
+                inputFormatters: null,
+                autovalidateMode: AutovalidateMode.always,
+                keyboardType: null,
+                maxLines: null,
+                // maxLength: maxLength,
+              ),
+            ),
           ],
         ),
+        Gaps.v10
       ],
-    );
-  }
-
-  Widget _getTextInputField(
-      {required String hint,
-      TextInputType type = TextInputType.text,
-      int? maxLines,
-      List<TextInputFormatter>? inputFormatters}) {
-    return TextFormField(
-      decoration: getInputDecoration(hint),
-      controller: TextEditingController(
-          // text: vm.init(i, widget.report),
-          ),
-      // onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-      // onChanged: (value) => vm.setTextEditingController(i, value),
-      validator: (value) {
-        return null;
-      },
-      inputFormatters: inputFormatters,
-      autovalidateMode: AutovalidateMode.always,
-      keyboardType: type,
-      maxLines: maxLines,
-      // maxLength: maxLength,
     );
   }
 
