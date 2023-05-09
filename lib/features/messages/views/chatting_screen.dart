@@ -30,6 +30,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
   late final TextEditingController _messageController;
   late final ScrollController _scrollController;
   final ImagePicker _picker = ImagePicker();
+  late bool _isButtonEnabled;
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
     );
     _messageController = TextEditingController();
     _scrollController = ScrollController();
+    _isButtonEnabled = false;
   }
 
   @override
@@ -149,6 +151,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
               controller: _messageController,
               onChanged: (value) {
                 setState(() {});
+                _isButtonEnabled = value.trim().isNotEmpty;
               },
               decoration: InputDecoration(
                   hintText: '메세지 입력',
@@ -156,22 +159,26 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
             )),
             InkWell(
-              onTap: _messageController.text.trim().isEmpty
-                  ? null
-                  : () {
+              onTap: _isButtonEnabled
+                  ? () {
                       _talkRoomBloc.sendMessage(_messageController.text);
                       _messageController.clear();
-                    },
+                      setState(() {
+                        _isButtonEnabled = false;
+                      });
+                    }
+                  : null,
               child: Container(
-                color: Palette.mainColor,
-                padding: EdgeInsets.all(12.r),
-                margin: EdgeInsets.all(2.r),
-                child: Icon(
-                  Icons.send,
-                  color: Palette.white,
-                  size: 20.h,
-                ),
-              ),
+                  color: _isButtonEnabled
+                      ? Palette.mainColor
+                      : Palette.greyText_30,
+                  padding: EdgeInsets.all(12.r),
+                  margin: EdgeInsets.all(2.r),
+                  child: Icon(
+                    Icons.send,
+                    color: Palette.white,
+                    size: 20.h,
+                  )),
             )
           ],
         ),
