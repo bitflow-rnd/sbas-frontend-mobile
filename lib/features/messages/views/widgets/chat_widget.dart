@@ -21,7 +21,9 @@ ListView chatWidget(
             ? chat.attcId == null
                 ? myChatWidget(chat, scrollController)
                 : myChatPhotoAttachedWidget(chat, scrollController)
-            : othersChatWidget(chat, scrollController),
+            : chat.attcId == null
+                ? othersChatWidget(chat, scrollController)
+                : myChatPhotoAttachedWidget(chat, scrollController),
       );
     },
   );
