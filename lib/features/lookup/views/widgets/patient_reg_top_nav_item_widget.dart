@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/constants/palette.dart';
 
 class PatientTopNavtItem extends ConsumerWidget {
   const PatientTopNavtItem({
@@ -29,22 +26,6 @@ class PatientTopNavtItem extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Container(
-            //   padding: const EdgeInsets.all(
-            //     5,
-            //   ),
-            //   decoration: BoxDecoration(
-            //     shape: BoxShape.circle,
-            //     color: x == position ? Palette.mainColor : Colors.grey,
-            //   ),
-            //   child: Text(
-            //     index.toString(),
-            //     style: CTS(
-            //       color: Colors.white,
-            //     ),
-            //   ),
-            // ),
-            // Gaps.h2,
             Text(
               text,
               style: CTS.medium(

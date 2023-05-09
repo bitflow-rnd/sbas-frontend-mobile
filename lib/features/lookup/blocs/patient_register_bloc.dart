@@ -175,6 +175,22 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     if (state.hasValue) {}
   }
 
+  String? get sex => _patientInfoModel.gndr;
+
+  String get age {
+    String birthday;
+
+    if (_patientInfoModel.rrno2 == '3' || _patientInfoModel.rrno2 == '4') {
+      birthday = '20${_patientInfoModel.rrno1}';
+    } else {
+      birthday = '19${_patientInfoModel.rrno1}';
+    }
+    final difference = DateTime.now()
+        .difference(DateTime.tryParse(birthday) ?? DateTime.now());
+
+    return (difference.inDays ~/ 365.25).toString();
+  }
+
   void overrideInfo(Patient patient) {
     _patientInfoModel.addr = patient.addr;
     _patientInfoModel.dethYn = patient.dethYn;
@@ -201,6 +217,12 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
 
       case 1:
         _patientInfoModel.rrno1 = value;
+        return;
+
+      case 101:
+        _patientInfoModel.rrno2 = value;
+
+        _patientInfoModel.gndr = value == '1' || value == '3' ? 'M' : 'F';
         return;
 
       case 2:
@@ -245,6 +267,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       case 4:
       case 8:
         return 9;
+
+      case 101:
+        return 1;
     }
     return null;
   }
@@ -259,16 +284,16 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     return null;
   }
 
-  String getTextEditingController(
-    int index,
-    PatientRegInfoModel report,
-  ) {
+  String getTextEditingController(int index, PatientRegInfoModel report) {
     switch (index) {
       case 0:
         return report.ptNm ?? '';
 
       case 1:
         return report.rrno1 ?? '';
+
+      case 101:
+        return report.rrno2 ?? '';
 
       case 2:
         var address = '';
@@ -326,6 +351,14 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         }
         break;
 
+      case 101:
+        if (value == null ||
+            value.length != 1 ||
+            !RegExp(r'[1-4]').hasMatch(value)) {
+          return '주민번호를 정확히 입력하세요.';
+        }
+        break;
+
       case 2:
         if (value == null || value.isEmpty) {
           return '주소를 정확히 입력하세요.';
@@ -354,6 +387,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       case 4:
         return r'[A-Z|a-z|-|가-힝|ㄱ-ㅎ|ㆍ|ᆢ]';
 
+      case 101:
+        return r'[1-4]';
+
       case 1:
       case 5:
       case 6:
@@ -376,6 +412,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         return TextInputType.streetAddress;
 
       case 1:
+      case 101:
       case 5:
       case 6:
         return TextInputType.number;
