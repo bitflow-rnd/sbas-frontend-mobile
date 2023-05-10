@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
@@ -90,12 +89,7 @@ class PatientRegScreen extends ConsumerWidget {
                           ? _tryValidation()
                               ? () => ref
                                   .read(patientRegProvider.notifier)
-                                  .registry(
-                                      patient?.ptId,
-                                      ref
-                                          .read(agencyRegionProvider.notifier)
-                                          .list,
-                                      context)
+                                  .registry(patient?.ptId, context)
                               : null
                           : (patientImage != null
                               ? () => ref

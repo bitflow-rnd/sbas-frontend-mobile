@@ -24,31 +24,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     return _patientInfoModel;
   }
 
-  Future<void> registry(
-      String? id, List<BaseCodeModel> list, BuildContext context) async {
+  Future<void> registry(String? id, BuildContext context) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      String region = _patientInfoModel.dstr1Cd ?? '',
-          county = _patientInfoModel.dstr2Cd ?? '';
-
-      if (region.isNotEmpty && county.isNotEmpty) {
-        _patientInfoModel.bascAddr = '$region $county';
-      }
-      if (RegExp(r'^\d+$').hasMatch(region)) {
-        region = list.firstWhere((e) => e.id?.cdId == region).cdNm ?? '';
-      } else {
-        _patientInfoModel.dstr1Cd =
-            list.firstWhere((e) => e.cdNm == region).id?.cdId;
-      }
-      if (RegExp(r'^\d+$').hasMatch(county)) {
-        county = list.firstWhere((e) => e.id?.cdId == county).cdNm ?? '';
-      } else {
-        _patientInfoModel.dstr2Cd =
-            list.firstWhere((e) => e.cdNm == county).id?.cdId;
-      }
-      _patientInfoModel.addr =
-          '$region $county ${_patientInfoModel.addr?.trim()}';
-
       if (id == null) {
         await _patientRepository
             .registerPatientInfo(_patientInfoModel.toJson());
@@ -195,6 +173,18 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     });
   }
 
+  Future<void> setNation(PatientRegInfoModel report) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      report.natiCd = report.natiCd == 'KR' ? '' : 'KR';
+
+      _patientInfoModel.natiCd = report.natiCd;
+      _patientInfoModel.natiNm = report.natiCd == 'KR' ? '대한민국' : '';
+
+      return _patientInfoModel;
+    });
+  }
+
   String? get sex => _patientInfoModel.gndr;
 
   String get age {
@@ -250,11 +240,17 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         return;
 
       case 2:
-        _patientInfoModel.addr = value;
+        _patientInfoModel.detlAddr = value;
         return;
 
       case 3:
         _patientInfoModel.dethYn = value;
+        return;
+
+      case 4:
+        return;
+
+      case 104:
         return;
 
       case 5:
@@ -320,20 +316,15 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         return report.rrno2 ?? '';
 
       case 2:
-        var address = '';
-        final strArr = report.addr?.split(' ');
-
-        if (strArr != null && strArr.length > 3) {
-          for (int i = 2; i < strArr.length; i++) {
-            address += '${strArr[i]} ';
-          }
-        } else {
-          address = report.addr ?? '';
-        }
-        return address;
+        return report.detlAddr ?? '';
 
       case 3:
         return report.dethYn ?? '';
+
+      case 4:
+        report.natiNm = report.natiCd == 'KR' ? '대한민국' : '기타';
+
+        return report.natiNm ?? '';
 
       case 5:
         return report.mpno ?? '';

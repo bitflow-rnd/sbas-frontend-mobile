@@ -318,6 +318,58 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           Gaps.v12
         ],
       );
+  Widget _nation(PatientRegInfoModel report, PatientRegisterPresenter vm) =>
+      Column(
+        children: [
+          Row(
+            children: [
+              InkWell(
+                onTap: () => vm.setNation(report),
+                child: Container(
+                  margin: EdgeInsets.only(right: 7.w),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Palette.greyText_20,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 28.w, vertical: 13.5.h),
+                  child: Text(
+                    vm.getTextEditingController(4, report),
+                    style: CTS(
+                      fontSize: 13,
+                      color: Palette.greyText,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TextFormField(
+                  decoration:
+                      getInputDecoration(report.natiCd == 'KR' ? '' : '직접입력'),
+                  controller: TextEditingController(
+                    text: vm.getTextEditingController(104, report),
+                  ),
+                  onSaved: (newValue) =>
+                      vm.setTextEditingController(104, newValue),
+                  onChanged: (value) => vm.setTextEditingController(104, value),
+                  validator: (value) {
+                    return null;
+                  },
+                  inputFormatters: null,
+                  autovalidateMode: AutovalidateMode.always,
+                  keyboardType: TextInputType.streetAddress,
+                  maxLines: 1,
+                  readOnly: report.natiCd == 'KR',
+                ),
+              ),
+            ],
+          ),
+          Gaps.v10
+        ],
+      );
   @override
   Widget build(BuildContext context) {
     final vm = ref.read(patientRegProvider.notifier);
@@ -352,14 +404,16 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                           Gaps.v4,
                           if (i == 2) _addrInput(vm),
                           if (i == 3) _isAlive(vm),
-                          if (i == 4) nation(),
+                          if (i == 4) _nation(report, vm),
                           if (i == 4 && report.natiCd != 'KR') Gaps.v8,
                           if (i != 1 && i != 3 && i != 4)
                             TextFormField(
                               decoration: getInputDecoration(
                                 i == 8
                                     ? '직업을 알 수 있는 경우 기재'
-                                    : '${widget.list[i]} 입력',
+                                    : i == 2
+                                        ? '나머지 ${widget.list[i]} 입력'
+                                        : '${widget.list[i]} 입력',
                               ),
                               controller: TextEditingController(
                                 text: vm.getTextEditingController(i, report),
@@ -410,75 +464,4 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
       ),
     );
   }
-
-  Widget nation() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            InkWell(
-              onTap: () {
-                //국적선택 로직
-              },
-              child: Container(
-                margin: EdgeInsets.only(right: 7.w),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Palette.greyText_20,
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
-                child: Text(
-                  "대한민국",
-                  style: CTS(
-                    fontSize: 13,
-                    color: Palette.greyText,
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: TextFormField(
-                decoration: getInputDecoration("주소검색을 이용하여 입력"),
-                controller: TextEditingController(
-                    // text: vm.init(i, widget.report),
-                    ),
-                // onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-                // onChanged: (value) => vm.setTextEditingController(i, value),
-                validator: (value) {
-                  return null;
-                },
-                inputFormatters: null,
-                autovalidateMode: AutovalidateMode.always,
-                keyboardType: null,
-                maxLines: null,
-                // maxLength: maxLength,
-              ),
-            ),
-          ],
-        ),
-        Gaps.v10
-      ],
-    );
-  }
-
-  InputBorder get _inputBorder => OutlineInputBorder(
-        borderSide: BorderSide(
-          style: BorderStyle.solid,
-          color: Colors.grey.shade300,
-        ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(
-            8,
-          ),
-        ),
-      );
-  InputDecoration get _inputDecoration => InputDecoration(
-        enabledBorder: _inputBorder,
-        focusedBorder: _inputBorder,
-        counterText: "",
-        contentPadding: const EdgeInsets.all(0),
-      );
 }
