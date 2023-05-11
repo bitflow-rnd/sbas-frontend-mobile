@@ -10,6 +10,7 @@ import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/hospital_bed_request_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/infectious_disease_widget.dart';
@@ -115,6 +116,10 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                                 .registry(patient?.ptId ?? '');
                           }
                           if (index == 1) {
+                            ref
+                                .read(originInfoProvider.notifier)
+                                .registry(patient?.ptId ?? '');
+
                             Navigator.pop(context);
 
                             context.goNamed(AssignBedScreen.routeName);
