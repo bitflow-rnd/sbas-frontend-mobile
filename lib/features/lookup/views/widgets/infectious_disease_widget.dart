@@ -171,7 +171,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                               FilteringTextInputFormatter.allow(
                                 RegExp(i == 4
                                     ? r'[0-9|.-]'
-                                    : r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|ㆍ|ᆢ]'),
+                                    : r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|\s|ㆍ|ᆢ]'),
                               ),
                               FilteringTextInputFormatter.singleLineFormatter,
                             ],

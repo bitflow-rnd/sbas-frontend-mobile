@@ -73,7 +73,9 @@ class V1Provider {
       final res =
           await client.postUri(Uri.parse('${dotenv.env['BASE_URL']}/send'));
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 

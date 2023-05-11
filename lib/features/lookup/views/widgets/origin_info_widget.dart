@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kpostal/kpostal.dart';
+import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
+import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 
 class OriginInfomation extends ConsumerStatefulWidget {
   OriginInfomation({
@@ -51,227 +56,299 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
             vertical: 12,
           ),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (int i = 0; i < widget._subTitles.length; i++)
-                  Column(
+            child: ref.watch(originInfoProvider).when(
+                  loading: () => const SBASProgressIndicator(),
+                  error: (error, stackTrace) => Center(
+                    child: Text(
+                      error.toString(),
+                      style: CTS(
+                        color: Palette.mainColor,
+                      ),
+                    ),
+                  ),
+                  data: (origin) => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${i + 1}.${widget._subTitles[i]}',
-                        style: const TextStyle(
-                          color: Color(0xFF808080),
-                          fontSize: 18,
-                        ),
-                      ),
-                      if (i == 0)
-                        Row(
+                      for (int i = 0; i < widget._subTitles.length; i++)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            for (int i = 0; i < widget._classification.length; i++)
-                              _initClassification(widget._classification[i], _selectedOriginIndex, i, () => setState(() => _selectedOriginIndex = i)),
-                          ],
-                        )
-                      else if (i == 1)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.5 - 18,
-                                child: _selectLocalGovernment(),
+                            Text(
+                              '${i + 1}.${widget._subTitles[i]}',
+                              style: const TextStyle(
+                                color: Color(0xFF808080),
+                                fontSize: 18,
                               ),
-                              Gaps.v4,
-                              const Text(
-                                '※병상배정 지자체 선택',
-                                style: TextStyle(
-                                  color: Color(0xFF4CAFF1),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                            ),
+                            if (i == 0)
+                              Row(
+                                children: [
+                                  for (int i = 0;
+                                      i < widget._classification.length;
+                                      i++)
+                                    _initClassification(
+                                        widget._classification[i],
+                                        _selectedOriginIndex,
+                                        i, () async {
+                                      _selectedOriginIndex = await ref
+                                          .read(originInfoProvider.notifier)
+                                          .setOriginIndex(i);
+                                    }),
+                                ],
+                              )
+                            else if (i == 1)
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                              0.5 -
+                                          18,
+                                      child: _selectLocalGovernment(
+                                          origin.reqDstr1Cd),
+                                    ),
+                                    Gaps.v4,
+                                    const Text(
+                                      '※병상배정 지자체 선택',
+                                      style: TextStyle(
+                                        color: Color(0xFF4CAFF1),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      if (i == 0)
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 7,
-                              child: _initTextField(true),
-                            ),
-                            Gaps.h6,
-                            Expanded(
-                              flex: 3,
-                              child: _initSearchBtn(),
-                            ),
+                            if (i == 0)
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 7,
+                                    child: _initTextField(i, true),
+                                  ),
+                                  Gaps.h6,
+                                  Expanded(
+                                    flex: 3,
+                                    child: _initSearchBtn(),
+                                  ),
+                                ],
+                              ),
+                            if (i == 0) Gaps.v8,
+                            if (i == 0) _initTextField(i + 100, true),
+                            Gaps.v36,
                           ],
                         ),
-                      if (i == 0) Gaps.v8,
-                      if (i == 0) _initTextField(true),
-                      Gaps.v36,
-                    ],
-                  ),
-                if (_selectedOriginIndex == 0)
-                  for (int i = 0; i < widget._homeTitles.length; i++)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${i + 3}.${widget._homeTitles[i]}',
-                          style: const TextStyle(
-                            color: Color(0xFF808080),
-                            fontSize: 18,
-                          ),
-                        ),
-                        Gaps.v4,
-                        _initTextField(true),
-                        Gaps.v36,
-                      ],
-                    )
-                else if (_selectedOriginIndex == 1)
-                  for (int i = 0; i < widget._hospitalTitles.length; i++)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${i + 3}.${widget._hospitalTitles[i]}',
-                          style: const TextStyle(
-                            color: Color(0xFF808080),
-                            fontSize: 18,
-                          ),
-                        ),
-                        Gaps.v4,
-                        if (i < 3)
-                          _initTextField(true)
-                        else if (i == 3)
-                          Row(
+                      if (_selectedOriginIndex == 0)
+                        for (int i = 0; i < widget._homeTitles.length; i++)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              for (int i = 0; i < widget._assignedToTheFloorTitles.length; i++)
-                                _initClassification(widget._assignedToTheFloorTitles[i], assignedToTheFloor, i, () => setState(() => assignedToTheFloor = i)),
+                              Text(
+                                '${i + 3}.${widget._homeTitles[i]}',
+                                style: const TextStyle(
+                                  color: Color(0xFF808080),
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Gaps.v4,
+                              _initTextField(i + 103, true),
+                              Gaps.v36,
                             ],
                           )
-                        else if (i == 4)
-                          _initTextField(false),
-                        Gaps.v36,
-                      ],
-                    ),
-              ],
-            ),
-          ),
-        ),
-      );
-  Widget _selectLocalGovernment() => ref.watch(agencyRegionProvider).when(
-        loading: () => const SBASProgressIndicator(),
-        error: (error, stackTrace) => Center(
-          child: Text(
-            error.toString(),
-            style: const TextStyle(
-              color: Palette.mainColor,
-            ),
-          ),
-        ),
-        data: (region) => InputDecorator(
-          decoration: _inputDecoration,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 14,
-              horizontal: 8,
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                hint: const SizedBox(
-                  width: 150,
-                  child: Text(
-                    '시/도 선택',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
+                      else if (_selectedOriginIndex == 1)
+                        for (int i = 0; i < widget._hospitalTitles.length; i++)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${i + 3}.${widget._hospitalTitles[i]}',
+                                style: const TextStyle(
+                                  color: Color(0xFF808080),
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Gaps.v4,
+                              if (i < 3)
+                                _initTextField(i, true)
+                              else if (i == 3)
+                                Row(
+                                  children: [
+                                    for (int i = 0;
+                                        i <
+                                            widget._assignedToTheFloorTitles
+                                                .length;
+                                        i++)
+                                      _initClassification(
+                                          widget._assignedToTheFloorTitles[i],
+                                          assignedToTheFloor,
+                                          i,
+                                          () => setState(
+                                              () => assignedToTheFloor = i)),
+                                  ],
+                                )
+                              else if (i == 4)
+                                _initTextField(i, false),
+                              Gaps.v36,
+                            ],
+                          ),
+                    ],
                   ),
                 ),
-                isDense: true,
-                isExpanded: true,
-                items: region
-                    .where((e) => e.id?.cdGrpId == 'SIDO')
-                    .map(
-                      (e) => DropdownMenuItem(
-                        alignment: Alignment.center,
-                        value: e.cdNm,
-                        child: SizedBox(
-                          width: 150,
-                          child: Text(
-                            e.cdNm ?? '',
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {},
+          ),
+        ),
+      );
+  Widget _selectLocalGovernment(String? code) =>
+      ref.watch(agencyRegionProvider).when(
+            loading: () => const SBASProgressIndicator(),
+            error: (error, stackTrace) => Center(
+              child: Text(
+                error.toString(),
+                style: const TextStyle(
+                  color: Palette.mainColor,
+                ),
               ),
             ),
+            data: (region) => InputDecorator(
+              decoration: _inputDecoration,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 14,
+                  horizontal: 8,
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    hint: const SizedBox(
+                      width: 150,
+                      child: Text(
+                        '시/도 선택',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    isDense: true,
+                    isExpanded: true,
+                    items: region
+                        .where((e) => e.id?.cdGrpId == 'SIDO')
+                        .map(
+                          (e) => DropdownMenuItem(
+                            alignment: Alignment.center,
+                            value: e.cdNm,
+                            child: SizedBox(
+                              width: 150,
+                              child: Text(
+                                e.cdNm ?? '',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null && value.isNotEmpty) {
+                        final selectRegion =
+                            region.firstWhere((e) => e.cdNm == value).id?.cdId;
+
+                        if (selectRegion != null && selectRegion.isNotEmpty) {
+                          ref
+                              .read(originInfoProvider.notifier)
+                              .selectLocalGovernment(selectRegion);
+                        }
+                      }
+                    },
+                    value: region
+                        .firstWhere(
+                          (e) => e.id?.cdId == code,
+                          orElse: () => BaseCodeModel(),
+                        )
+                        .cdNm,
+                  ),
+                ),
+              ),
+            ),
+          );
+  Widget _initTextField(int index, bool isSingleLine) {
+    final notifier = ref.watch(originInfoProvider.notifier);
+
+    return TextFormField(
+      decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(4),
           ),
         ),
-      );
-  Widget _initTextField(bool isSingleLine) => TextFormField(
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              style: BorderStyle.solid,
-              color: Colors.grey.shade300,
-            ),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(4),
-            ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              style: BorderStyle.solid,
-              color: Colors.grey.shade300,
-            ),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(4),
-            ),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              style: BorderStyle.solid,
-              color: Colors.grey.shade300,
-            ),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(4),
-            ),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 18,
-            horizontal: 22,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(4),
           ),
         ),
-        inputFormatters: [
-          if (isSingleLine)
-            FilteringTextInputFormatter.allow(
-              RegExp(r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|ㆍ|ᆢ]'),
-            ),
-          if (isSingleLine) FilteringTextInputFormatter.singleLineFormatter,
-        ],
-        validator: (value) {
-          return null;
-        },
-        onSaved: (newValue) {
-          if (newValue != null && newValue.isNotEmpty) {}
-        },
-        autovalidateMode: AutovalidateMode.always,
-        maxLines: isSingleLine ? 1 : null,
-        keyboardType: isSingleLine ? TextInputType.streetAddress : TextInputType.multiline,
-        textInputAction: isSingleLine ? null : TextInputAction.newline,
-      );
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(4),
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 18,
+          horizontal: 22,
+        ),
+        hintStyle: TextStyle(
+          fontSize: 16,
+          color: Colors.grey.shade400,
+        ),
+        hintText: notifier.getHintText(index),
+      ),
+      inputFormatters: [
+        if (isSingleLine)
+          FilteringTextInputFormatter.allow(
+            RegExp(r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|\s|ㆍ|ᆢ]'),
+          ),
+        if (isSingleLine) FilteringTextInputFormatter.singleLineFormatter,
+      ],
+      validator: (value) {
+        return null;
+      },
+      onChanged: (value) => notifier.onChanged(index, value),
+      autovalidateMode: AutovalidateMode.always,
+      maxLines: isSingleLine ? 1 : null,
+      keyboardType:
+          isSingleLine ? TextInputType.streetAddress : TextInputType.multiline,
+      textInputAction: isSingleLine ? null : TextInputAction.newline,
+      controller: TextEditingController(
+        text: notifier.getText(index),
+      ),
+      readOnly: index == 0,
+    );
+  }
+
   Widget _initSearchBtn() => TextButton(
-        onPressed: () {},
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => KpostalView(
+              kakaoKey: dotenv.env['KAKAO'] ?? '',
+              callback: (postal) =>
+                  ref.read(originInfoProvider.notifier).setAddress(postal),
+            ),
+          ),
+        ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(const Color(0xFF538EF5)),
           minimumSize: MaterialStateProperty.all(
@@ -282,7 +359,7 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
           ),
         ),
         child: const Text(
-          '우편번호 검색',
+          '주소검색',
           style: TextStyle(
             color: Color(0xFFECEDEF),
             fontWeight: FontWeight.bold,
@@ -290,7 +367,9 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
           ),
         ),
       );
-  Widget _initClassification(String title, int selectedIndex, int index, Function() func) => GestureDetector(
+  Widget _initClassification(
+          String title, int selectedIndex, int index, Function() func) =>
+      GestureDetector(
         onTap: func,
         child: Container(
           alignment: Alignment.center,
@@ -304,8 +383,13 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
             right: 12,
           ),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, style: selectedIndex == index ? BorderStyle.none : BorderStyle.solid),
-            color: selectedIndex == index ? Palette.mainColor : Colors.transparent,
+            border: Border.all(
+                color: Colors.grey,
+                style: selectedIndex == index
+                    ? BorderStyle.none
+                    : BorderStyle.solid),
+            color:
+                selectedIndex == index ? Palette.mainColor : Colors.transparent,
             borderRadius: BorderRadius.circular(
               18,
             ),
