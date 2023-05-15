@@ -110,6 +110,7 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
       case 0:
         _patientDiseaseModel.rcptPhc ??= report.rcptPhc;
         _patientDiseaseModel.admsYn ??= report.admsYn;
+        _patientDiseaseModel.diagNm ??= report.diagNm;
 
         return _patientDiseaseModel.rcptPhc;
 

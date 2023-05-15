@@ -1,28 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/common/main_drawer.dart';
-import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_move.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_screen.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_cancel_screen.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_go_home.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
-
-import 'assign_bed_find_screen.dart';
+import 'package:sbas/features/assign/model/assign_item_model.dart';
 
 class AssignBedDetailTimeLine extends ConsumerWidget {
   const AssignBedDetailTimeLine({
     super.key,
-    required this.patient,
+    required this.model,
   });
-  final Patient patient;
+  final AssignItemModel model;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
@@ -56,7 +47,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                         //
                         //timeline_suspend //  원형 점
                         children: [
-                          if (patient.bedStatNm == '승인대기')
+                          if (model.bedStatCdNm == '승인대기')
                             Column(
                               children: [
                                 completeCard(
@@ -85,7 +76,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                          if (patient.bedStatNm == '배정대기')
+                          if (model.bedStatCdNm == '배정대기')
                             Column(
                               children: [
                                 completeCard(
@@ -117,7 +108,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                          if (patient.bedStatNm == '이송대기')
+                          if (model.bedStatCdNm == '이송대기')
                             Column(
                               children: [
                                 completeCard(
@@ -151,7 +142,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                          if (patient.bedStatNm == '이송중')
+                          if (model.bedStatCdNm == '이송중')
                             Column(
                               children: [
                                 completeCard(
@@ -190,7 +181,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                          if (patient.bedStatNm == '입원')
+                          if (model.bedStatCdNm == '입원')
                             Column(
                               children: [
                                 completeCard(
@@ -245,7 +236,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               ),
             ),
           ),
-          _whichBottomer(patient.bedStatNm ?? '', context)
+          //_whichBottomer(model.statCdNm?? '', context)
         ],
       ),
     );
@@ -256,6 +247,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
 // 이송대기
 // 이송중
 // 입원
+/*
 
   Widget _whichBottomer(String type, BuildContext context) {
     switch (type) {
@@ -276,7 +268,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AssignBedFindScreen(
-                      patient: patient,
+                      patient:model,
                     ),
                   ),
                 );
@@ -342,6 +334,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
         return Container();
     }
   }
+  */
 
   _showBottomSheet(
       {required BuildContext context,
