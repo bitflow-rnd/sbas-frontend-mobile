@@ -18,7 +18,6 @@ class InfectiousDiseaseModel {
   String? instAddr;
   String? diagDrNm;
   String? rptChfNm;
-
   String? esvyAttcId;
   String? instBascAddr;
   String? instDetlAddr;

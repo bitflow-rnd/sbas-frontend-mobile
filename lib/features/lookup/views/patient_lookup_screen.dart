@@ -329,4 +329,6 @@ class PatientLookupScreen extends ConsumerWidget {
         ),
         body: _getGestureDetector(context, ref),
       );
+  static const String routeName = 'lookup';
+  static const String routeUrl = '/lookup';
 }

@@ -7,6 +7,7 @@ import 'package:sbas/common/main_navigation_screen.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
+import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 import 'package:sbas/util.dart';
 
 final routerProvider = Provider(
@@ -34,12 +35,7 @@ final routerProvider = Provider(
     },
     routes: [
       ShellRoute(
-        builder: (context, state, child) {
-          /*
-            TODO ref.read(notificationsProvider(context));
-          */
-          return child;
-        },
+        builder: (context, state, child) => child,
         routes: [
           GoRoute(
             name: LogInScreen.routeName,
@@ -54,13 +50,19 @@ final routerProvider = Provider(
             ),
           ),
           GoRoute(
+            name: PatientLookupScreen.routeName,
+            path: PatientLookupScreen.routeUrl,
+            builder: (context, state) => PatientLookupScreen(
+              automaticallyImplyLeading: false,
+            ),
+          ),
+          GoRoute(
             name: MainNavigationScreen.routeName,
             path: '/:tab(home|assign|lookup|message)',
             builder: (context, state) {
               final tab = state.params['tab']!;
-              return MainNavigationScreen(
-                tab: tab,
-              );
+
+              return MainNavigationScreen(tab: tab);
             },
           ),
         ],

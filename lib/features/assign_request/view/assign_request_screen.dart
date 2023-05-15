@@ -1,27 +1,18 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_disease_info.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_move_detail.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_paitent_info.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_timeline.dart';
 import 'package:sbas/features/assign_request/view/assign_request_critical_attack_input.dart';
 import 'package:sbas/features/assign_request/view/assign_request_departure_info_input.dart';
 import 'package:sbas/features/assign_request/view/assign_request_disease_info_input.dart';
 
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
-import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 
-import '../lookup/views/widgets/patient_reg_report_widget.dart';
+import '../../lookup/views/widgets/patient_reg_report_widget.dart';
 
 class AssignBedRequestScreen extends StatefulWidget {
   const AssignBedRequestScreen({

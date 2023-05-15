@@ -37,7 +37,7 @@ class PatientTopInfo extends StatelessWidget {
                         text: TextSpan(
                           text: '${patient?.ptNm}',
                           style: CTS.bold(
-                            fontSize: 15,
+                            fontSize: 16,
                             color: Colors.black,
                           ),
                           children: [
@@ -45,12 +45,13 @@ class PatientTopInfo extends StatelessWidget {
                               text: '[${getPatientInfo(patient!)}]',
                               style: CTS(
                                 color: const Color(0xff333333),
-                                fontSize: 10,
+                                fontSize: 8,
                               ),
                             ),
                           ],
                         ),
                         overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                       Gaps.v4,
                       Text(

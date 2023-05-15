@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_move_detail.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_paitent_info.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_timeline.dart';
@@ -13,11 +13,12 @@ import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'widgets/detail_page/assign_bed_detail_disease_info.dart';
 
 class AssignBedDetailScreen extends StatefulWidget {
-  AssignBedDetailScreen({
+  const AssignBedDetailScreen({
     super.key,
-    required this.patient,
+    required this.model,
   });
-  Patient patient;
+  final AssignItemModel model;
+
   @override
   State<AssignBedDetailScreen> createState() => _AssignBedDetailState();
 }
@@ -70,8 +71,8 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
-              _header(widget.patient.ptNm ?? '',
-                  "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
+              _header(widget.model.ptNm ?? '',
+                  "(${widget.model.gndr} / ${widget.model.age}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
               Divider(
                 color: Palette.greyText_20,
                 height: 1,
@@ -142,7 +143,9 @@ class _AssignBedDetailState extends State<AssignBedDetailScreen> {
                 ),
               ),
               if (_selectedIndex == 0)
-                AssignBedDetailTimeLine(patient: widget.patient),
+                AssignBedDetailTimeLine(
+                  model: widget.model,
+                ),
               if (_selectedIndex == 1)
                 AssignBedDetailPaitentInfo(
                   patient: tempPaitent,
