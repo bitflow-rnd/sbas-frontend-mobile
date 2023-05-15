@@ -5,8 +5,9 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 
 class TopSearch extends StatefulWidget {
-  const TopSearch({super.key});
-
+  const TopSearch({
+    super.key,
+  });
   @override
   State<TopSearch> createState() => _TopSearchState();
 }
@@ -16,7 +17,7 @@ class _TopSearchState extends State<TopSearch> {
   String selectedDropdown = '최근1개월';
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 40.h,
       child: Form(
         child: Row(
@@ -70,15 +71,18 @@ class _TopSearchState extends State<TopSearch> {
                     vertical: 4.h,
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Palette.greyText_20, width: 1),
+                    borderSide:
+                        BorderSide(color: Palette.greyText_20, width: 1),
                     borderRadius: BorderRadius.circular(4.r),
                   ),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Palette.greyText_20, width: 1),
+                    borderSide:
+                        BorderSide(color: Palette.greyText_20, width: 1),
                     borderRadius: BorderRadius.circular(4.r),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Palette.greyText_20, width: 1),
+                    borderSide:
+                        BorderSide(color: Palette.greyText_20, width: 1),
                     borderRadius: BorderRadius.circular(4.r),
                   ),
                 ),

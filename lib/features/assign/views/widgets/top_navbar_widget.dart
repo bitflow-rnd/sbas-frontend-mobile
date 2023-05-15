@@ -3,17 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/widgets/top_nav_item_widget.dart';
 
-class TopNavbar extends StatefulWidget {
-  const TopNavbar({super.key});
-
-  @override
-  State<TopNavbar> createState() => TopNavbarState();
-}
-
-class TopNavbarState extends State<TopNavbar> {
+class TopNavbar extends StatelessWidget {
+  const TopNavbar({
+    super.key,
+    required this.x,
+    required this.count,
+  });
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width - 24.w;
+    final width = MediaQuery.of(context).size.width - 24.w;
 
     return Stack(
       children: [
@@ -27,7 +25,7 @@ class TopNavbarState extends State<TopNavbar> {
             milliseconds: 200,
           ),
           child: Container(
-            width: width * 0.19,
+            width: width * 0.17.w,
             height: 6.h,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.zero,
@@ -35,36 +33,45 @@ class TopNavbarState extends State<TopNavbar> {
             ),
           ),
         ),
-        const TopNavItem(
+        TopNavItem(
           text: '병상요청',
-          x: -1,
-          // width: 0.3.sw,
+          x: -1.0,
+          width: width,
+          isSelected: x == -1.0,
+          count: count,
         ),
-        const TopNavItem(
+        TopNavItem(
           text: '병상배정',
           x: -0.5,
-          // width: 0.3.sw,
+          width: width,
+          isSelected: x == -0.5,
+          count: count,
         ),
-        const TopNavItem(
+        TopNavItem(
           text: '배차',
-          // width: 0.2.sw,
           x: 0,
+          width: width,
+          isSelected: x == 0,
+          count: count,
         ),
-        const TopNavItem(
+        TopNavItem(
           text: '입퇴원',
-          // width: 0.3.sw,
           x: 0.5,
+          width: width,
+          isSelected: x == 0.5,
+          count: count,
         ),
-        const TopNavItem(
-          // width: 0.3.sw,
+        TopNavItem(
           text: '완료',
           x: 1.0,
+          width: width,
+          isSelected: x == 1.0,
+          count: count,
         ),
       ],
     );
   }
 
-  late double width;
-
-  double x = -1;
+  final double x;
+  final int count;
 }

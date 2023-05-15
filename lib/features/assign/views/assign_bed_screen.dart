@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
@@ -11,7 +10,6 @@ import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/views/widgets/card_item_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_navbar_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_search_widget.dart';
-import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/util.dart';
 
@@ -57,7 +55,10 @@ class AssignBedScreen extends ConsumerWidget {
                     SizedBox(height: 10.h),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.r),
-                      child: const TopNavbar(),
+                      child: TopNavbar(
+                        x: list.x,
+                        count: list.count ?? 0,
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
@@ -121,17 +122,12 @@ class AssignBedScreen extends ConsumerWidget {
                             children: [
                               const Spacer(),
                               BottomSubmitBtn(
-                                onPressed: () async {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => PatientRegScreen(),
-                                    ),
-                                  );
-                                  // ignore: use_build_context_synchronously
-                                  context
-                                      .goNamed(PatientLookupScreen.routeName);
-                                },
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PatientRegScreen(),
+                                  ),
+                                ),
                                 text: '병상요청',
                               ),
                             ],

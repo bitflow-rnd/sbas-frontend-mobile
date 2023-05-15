@@ -6,7 +6,6 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/messages/views/direct_message_screen.dart';
 
 final selecteItemProvider0 = StateProvider((ref) => 0);
 final selecteItemProvider1 = StateProvider((ref) => 0);
@@ -61,12 +60,14 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
                 //
                 _getTitle(list[1], true),
                 Gaps.v16,
-                rowSelectButton(['전원요청', '원내배졍'], selected0, ref, selecteItemProvider0),
+                rowSelectButton(
+                    ['전원요청', '원내배졍'], selected0, ref, selecteItemProvider0),
                 Gaps.v28,
                 //
                 _getTitle(list[2], false),
                 Gaps.v16,
-                rowSelectButton(['병원', '자택', '기타'], selected1, ref, selecteItemProvider1),
+                rowSelectButton(
+                    ['병원', '자택', '기타'], selected1, ref, selecteItemProvider1),
                 Gaps.v16,
                 twelve(),
                 Gaps.v28,
@@ -92,7 +93,8 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
                           //
                           _getTitle(list[6], false),
                           Gaps.v16,
-                          _getTextInputField(hint: hintTextList[6], maxLines: 6),
+                          _getTextInputField(
+                              hint: hintTextList[6], maxLines: 6),
                           Gaps.v28,
                         ],
                       )
@@ -116,7 +118,8 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
                           //
                           _getTitle(list[6], false),
                           Gaps.v16,
-                          _getTextInputField(hint: hintTextList[6], maxLines: 6),
+                          _getTextInputField(
+                              hint: hintTextList[6], maxLines: 6),
                           Gaps.v28,
                         ],
                       )
@@ -173,9 +176,12 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
             children: [
               for (var i in list)
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
                   decoration: BoxDecoration(
-                    color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
+                    color: !selectList.contains(i)
+                        ? Colors.white
+                        : Palette.mainColor,
                     border: Border.all(
                       color: Palette.greyText_20,
                       width: 1,
@@ -185,7 +191,9 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
                   child: Text(i,
                       style: CTS.bold(
                         fontSize: 13,
-                        color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
+                        color: selectList.contains(i)
+                            ? Palette.white
+                            : Palette.greyText_60,
                       )),
                 )
             ],
@@ -206,7 +214,7 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
         Row(
           children: [
             Expanded(
-              child: Container(
+              child: SizedBox(
                 height: 48.h,
                 child: DropdownButtonFormField(
                   borderRadius: BorderRadius.circular(4.r),
@@ -252,7 +260,7 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Color(0xffe4e4e4),
+            color: const Color(0xffe4e4e4),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Row(
@@ -264,7 +272,9 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
                     children: [
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Text(i, style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                        child: Text(i,
+                            style: CTS.bold(
+                                fontSize: 11, color: Colors.transparent)),
                       ),
                       Gaps.h1,
                     ],
@@ -290,13 +300,19 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
                         child: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: list[selected] == i ? const Color(0xff538ef5) : Colors.transparent,
-                              borderRadius: list[selected] == i ? BorderRadius.circular(6) : null),
+                              color: list[selected] == i
+                                  ? const Color(0xff538ef5)
+                                  : Colors.transparent,
+                              borderRadius: list[selected] == i
+                                  ? BorderRadius.circular(6)
+                                  : null),
                           padding: EdgeInsets.symmetric(vertical: 10.h),
                           child: Text(i,
                               style: CTS.bold(
                                 fontSize: 11,
-                                color: list[selected] == i ? Palette.white : Palette.greyText_60,
+                                color: list[selected] == i
+                                    ? Palette.white
+                                    : Palette.greyText_60,
                               )),
                         ),
                       ),
@@ -305,7 +321,7 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
                               height: 12,
                               width: 1,
                               decoration: BoxDecoration(
-                                color: Color(0xff676a7a).withOpacity(0.2),
+                                color: const Color(0xff676a7a).withOpacity(0.2),
                               ),
                             )
                           : Container(),
@@ -319,7 +335,11 @@ class AssignReqDepatureInfoInputScreen extends ConsumerWidget {
     );
   }
 
-  Widget _getTextInputField({required String hint, TextInputType type = TextInputType.text, int? maxLines, List<TextInputFormatter>? inputFormatters}) {
+  Widget _getTextInputField(
+      {required String hint,
+      TextInputType type = TextInputType.text,
+      int? maxLines,
+      List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
       decoration: getInputDecoration(hint),
       controller: TextEditingController(
