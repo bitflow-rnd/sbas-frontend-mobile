@@ -44,7 +44,19 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
 
       if (index != 1) {
         _model.inhpAsgnYn = 'N';
-      } else {}
+      }
+      return _model;
+    });
+    if (state.hasError) {}
+
+    return index;
+  }
+
+  Future<int> setAssignedToTheFloor(int index) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      _model.inhpAsgnYn = index == 0 ? 'N' : 'Y';
+
       return _model;
     });
     if (state.hasError) {}
@@ -76,7 +88,17 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
         return _model.nok2Telno;
 
       case 105:
+      case 1007:
         return _model.msg;
+
+      case 1003:
+        return _model.deptNm;
+
+      case 1004:
+        return _model.spclNm;
+
+      case 1005:
+        return _model.chrgTelno;
     }
     return '';
   }
@@ -107,7 +129,20 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
         break;
 
       case 105:
+      case 1007:
         _model.msg = text;
+        break;
+
+      case 1003:
+        _model.deptNm = text;
+        break;
+
+      case 1004:
+        _model.spclNm = text;
+        break;
+
+      case 1005:
+        _model.chrgTelno = text;
         break;
     }
   }

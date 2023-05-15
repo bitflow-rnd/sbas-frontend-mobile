@@ -87,13 +87,14 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                                       i < widget._classification.length;
                                       i++)
                                     _initClassification(
-                                        widget._classification[i],
-                                        _selectedOriginIndex,
-                                        i, () async {
-                                      _selectedOriginIndex = await ref
-                                          .read(originInfoProvider.notifier)
-                                          .setOriginIndex(i);
-                                    }),
+                                      widget._classification[i],
+                                      _selectedOriginIndex,
+                                      i,
+                                      () async => _selectedOriginIndex =
+                                          await ref
+                                              .read(originInfoProvider.notifier)
+                                              .setOriginIndex(i),
+                                    ),
                                 ],
                               )
                             else if (i == 1)
@@ -172,9 +173,9 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                                 ),
                               ),
                               Gaps.v4,
-                              if (i < 3)
-                                _initTextField(i, true)
-                              else if (i == 3)
+                              if (i != 3)
+                                _initTextField(i + 3 + 1000, i != 4)
+                              else
                                 Row(
                                   children: [
                                     for (int i = 0;
@@ -183,15 +184,17 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                                                 .length;
                                         i++)
                                       _initClassification(
-                                          widget._assignedToTheFloorTitles[i],
-                                          assignedToTheFloor,
-                                          i,
-                                          () => setState(
-                                              () => assignedToTheFloor = i)),
+                                        widget._assignedToTheFloorTitles[i],
+                                        _assignedToTheFloor,
+                                        i,
+                                        () async => _assignedToTheFloor =
+                                            await ref
+                                                .read(
+                                                    originInfoProvider.notifier)
+                                                .setAssignedToTheFloor(i),
+                                      ),
                                   ],
-                                )
-                              else if (i == 4)
-                                _initTextField(i, false),
+                                ),
                               Gaps.v36,
                             ],
                           ),
@@ -421,5 +424,5 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
         focusedBorder: _inputBorder,
         contentPadding: const EdgeInsets.all(0),
       );
-  int _selectedOriginIndex = -1, assignedToTheFloor = -1;
+  int _selectedOriginIndex = -1, _assignedToTheFloor = -1;
 }
