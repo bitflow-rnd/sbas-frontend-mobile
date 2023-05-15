@@ -6,7 +6,6 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/messages/views/direct_message_screen.dart';
 
 final selecteItemProvider0 = StateProvider((ref) => 0);
 final selecteItemProvider1 = StateProvider((ref) => 0);
@@ -64,12 +63,14 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
               children: [
                 _getTitle(list[0], true),
                 Gaps.v16,
-                rowSelectButton(['직접선택', '생체정보분석', '미분류'], selected0, ref, selecteItemProvider0),
+                rowSelectButton(['직접선택', '생체정보분석', '미분류'], selected0, ref,
+                    selecteItemProvider0),
                 Gaps.v16,
                 selected0 == 0
                     ? Column(
                         children: [
-                          rowSelectButton(['중증', '준중증', '준등중'], selected1, ref, selecteItemProvider1),
+                          rowSelectButton(['중증', '준중증', '준등중'], selected1, ref,
+                              selecteItemProvider1),
                         ],
                       )
                     : selected0 == 1
@@ -84,10 +85,17 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
                                 children: [
                                   Text(
                                     '의식상태',
-                                    style: CTS(color: Palette.greyText, fontSize: 13),
+                                    style: CTS(
+                                        color: Palette.greyText, fontSize: 13),
                                   ),
                                   const Spacer(),
-                                  SizedBox(width: 110.h, child: rowSelectButton(['명료', '비명료'], selected4, ref, selecteItemProvider4)),
+                                  SizedBox(
+                                      width: 110.h,
+                                      child: rowSelectButton(
+                                          ['명료', '비명료'],
+                                          selected4,
+                                          ref,
+                                          selecteItemProvider4)),
                                 ],
                               ),
                               Gaps.v8,
@@ -95,10 +103,17 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
                                 children: [
                                   Text(
                                     '의식상태',
-                                    style: CTS(color: Palette.greyText, fontSize: 13),
+                                    style: CTS(
+                                        color: Palette.greyText, fontSize: 13),
                                   ),
                                   const Spacer(),
-                                  SizedBox(width: 110.h, child: rowSelectButton(['비투여', '투여'], selected5, ref, selecteItemProvider5)),
+                                  SizedBox(
+                                      width: 110.h,
+                                      child: rowSelectButton(
+                                          ['비투여', '투여'],
+                                          selected5,
+                                          ref,
+                                          selecteItemProvider5)),
                                 ],
                               ),
                               SizedBox(height: 300.h, child: row2()),
@@ -109,22 +124,41 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
                 //요청병상유형
                 _getTitle(list[1], true),
                 Gaps.v16,
-                rowSelectButton(['일반격리', '음압격리', '미분류'], selected2, ref, selecteItemProvider2),
+                rowSelectButton(['일반격리', '음압격리', '미분류'], selected2, ref,
+                    selecteItemProvider2),
                 Gaps.v28,
                 //DNR 동의 여부
                 _getTitle(list[2], true),
                 Gaps.v16,
-                rowSelectButton(['미분류', '동의', '비동의'], selected3, ref, selecteItemProvider3),
+                rowSelectButton(
+                    ['미분류', '동의', '비동의'], selected3, ref, selecteItemProvider3),
                 Gaps.v28,
                 //환자유형(다중선택)
                 _getTitle(list[3], true),
                 Gaps.v16,
-                rowMultiSelectButton(['임산부', '투석', '수술', '신생아', '유아', '인공호흡기 사용', '적극적치료요쳥'], ['임산부']),
+                rowMultiSelectButton(
+                    ['임산부', '투석', '수술', '신생아', '유아', '인공호흡기 사용', '적극적치료요쳥'],
+                    ['임산부']),
                 Gaps.v28,
                 //기저질환(다중선택)
                 _getTitle(list[3], true),
                 Gaps.v16,
-                rowMultiSelectButton(['고혈압', '당뇨', '고지혈증', '  심혈관  ', '뇌혈관', '암', '만성폐질환', '폐렴', '신장질환', '결핵', '천식등알레르기', '면역력저하자'], ['고혈압']),
+                rowMultiSelectButton([
+                  '고혈압',
+                  '당뇨',
+                  '고지혈증',
+                  '  심혈관  ',
+                  '뇌혈관',
+                  '암',
+                  '만성폐질환',
+                  '폐렴',
+                  '신장질환',
+                  '결핵',
+                  '천식등알레르기',
+                  '면역력저하자'
+                ], [
+                  '고혈압'
+                ]),
                 Gaps.v16,
                 _getTextInputField(hint: "기타 직접입력"),
                 Gaps.v28,
@@ -142,7 +176,11 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
           childAspectRatio: 1.57,
         ),
         itemBuilder: (context, index) => Padding(
-          padding: EdgeInsets.only(top: 12.h, bottom: 12.h, right: index % 2 == 0 ? 6.w : 0, left: index % 2 == 1 ? 6.w : 0), //왼쪽 줄, 오른쪽 줄 위젯 안쪽만 패딩줌.
+          padding: EdgeInsets.only(
+              top: 12.h,
+              bottom: 12.h,
+              right: index % 2 == 0 ? 6.w : 0,
+              left: index % 2 == 1 ? 6.w : 0), //왼쪽 줄, 오른쪽 줄 위젯 안쪽만 패딩줌.
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -156,7 +194,8 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
                       child: InkWell(
                         onTap: () {},
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 5.h, horizontal: 16.w),
                           decoration: BoxDecoration(
                             color: Palette.white,
                             border: Border.all(
@@ -183,6 +222,8 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
                         FilteringTextInputFormatter.singleLineFormatter,
                       ],
                       validator: (value) {
+                        return null;
+
                         // if (value != null && value.isNotEmpty && (int.tryParse(value) is int || double.tryParse(value) is double)) {
                         //   return null;
                         // }
@@ -232,9 +273,12 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
             children: [
               for (var i in list)
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
                   decoration: BoxDecoration(
-                    color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
+                    color: !selectList.contains(i)
+                        ? Colors.white
+                        : Palette.mainColor,
                     border: Border.all(
                       color: Palette.greyText_20,
                       width: 1,
@@ -244,7 +288,9 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
                   child: Text(i,
                       style: CTS.bold(
                         fontSize: 13,
-                        color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
+                        color: selectList.contains(i)
+                            ? Palette.white
+                            : Palette.greyText_60,
                       )),
                 )
             ],
@@ -259,7 +305,7 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Color(0xffe4e4e4),
+            color: const Color(0xffe4e4e4),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Row(
@@ -271,7 +317,9 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
                     children: [
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Text(i, style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                        child: Text(i,
+                            style: CTS.bold(
+                                fontSize: 11, color: Colors.transparent)),
                       ),
                       Gaps.h1,
                     ],
@@ -297,13 +345,19 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
                         child: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: list[selected] == i ? const Color(0xff538ef5) : Colors.transparent,
-                              borderRadius: list[selected] == i ? BorderRadius.circular(6) : null),
+                              color: list[selected] == i
+                                  ? const Color(0xff538ef5)
+                                  : Colors.transparent,
+                              borderRadius: list[selected] == i
+                                  ? BorderRadius.circular(6)
+                                  : null),
                           padding: EdgeInsets.symmetric(vertical: 10.h),
                           child: Text(i,
                               style: CTS.bold(
                                 fontSize: 11,
-                                color: list[selected] == i ? Palette.white : Palette.greyText_60,
+                                color: list[selected] == i
+                                    ? Palette.white
+                                    : Palette.greyText_60,
                               )),
                         ),
                       ),
@@ -312,7 +366,7 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
                               height: 12,
                               width: 1,
                               decoration: BoxDecoration(
-                                color: Color(0xff676a7a).withOpacity(0.2),
+                                color: const Color(0xff676a7a).withOpacity(0.2),
                               ),
                             )
                           : Container(),
@@ -326,7 +380,11 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
     );
   }
 
-  Widget _getTextInputField({required String hint, TextInputType type = TextInputType.text, int? maxLength, List<TextInputFormatter>? inputFormatters}) {
+  Widget _getTextInputField(
+      {required String hint,
+      TextInputType type = TextInputType.text,
+      int? maxLength,
+      List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
       decoration: getInputDecoration(hint),
       controller: TextEditingController(
@@ -357,7 +415,9 @@ class AssignReqCriticalAttackInputScreen extends ConsumerWidget {
             (title == '환자 유형' || title == '기저 질환') ? '(다중선택)' : '(필수)',
             style: CTS.medium(
               fontSize: 13,
-              color: (title == '환자 유형' || title == '기저 질환') ? Colors.grey.shade600 : Palette.mainColor,
+              color: (title == '환자 유형' || title == '기저 질환')
+                  ? Colors.grey.shade600
+                  : Palette.mainColor,
             ),
           ),
         ],

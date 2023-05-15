@@ -5,14 +5,13 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/assign_request/view/assign_request_critical_attack_input.dart';
-import 'package:sbas/features/assign_request/view/assign_request_departure_info_input.dart';
-import 'package:sbas/features/assign_request/view/assign_request_disease_info_input.dart';
+import 'package:sbas/features/assign/views/widgets/request/assign_request_critical_attack_input.dart';
+import 'package:sbas/features/assign/views/widgets/request/assign_request_departure_info_input.dart';
+import 'package:sbas/features/assign/views/widgets/request/assign_request_disease_info_input.dart';
 
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
-
-import '../../lookup/views/widgets/patient_reg_report_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 
 class AssignBedRequestScreen extends StatefulWidget {
   const AssignBedRequestScreen({
@@ -259,45 +258,37 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
             width: 36.h,
           ),
           Gaps.h8,
-          tempPaitent == null //신규환자등록 or 역학조사서로부터 환자정보 가져온 케이스 구분
-              ? Text(
-                  '신규 환자 등록',
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: name,
                   style: CTS.bold(
-                    fontSize: 16,
+                    fontSize: 15,
+                    color: Colors.black,
                   ),
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        text: name,
-                        style: CTS.bold(
-                          fontSize: 15,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text:
-                                detail, //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
-                            style: CTS(
-                              color: const Color(0xff333333),
-                              fontSize: 10,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Gaps.v4,
-                    const Text(
-                      '#temp',
-                      style: TextStyle(
-                        color: Palette.mainColor,
+                    TextSpan(
+                      text: detail, //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
+                      style: CTS(
+                        color: const Color(0xff333333),
+                        fontSize: 10,
                       ),
                     ),
                   ],
-                )
+                ),
+              ),
+              Gaps.v4,
+              const Text(
+                '#temp',
+                style: TextStyle(
+                  color: Palette.mainColor,
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

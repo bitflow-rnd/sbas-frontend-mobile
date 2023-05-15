@@ -241,16 +241,17 @@ class PatientLookupScreen extends ConsumerWidget {
                                   .read(patientInfoProvider.notifier)
                                   .getAsync(patient.items[index].ptId);
 
-                              // ignore: use_build_context_synchronously
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => PatientLookupDetailScreen(
-                                    patient: patientInfo,
-                                    age: patient.items[index].age ?? 0,
+                              if (context.mounted) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => PatientLookupDetailScreen(
+                                      patient: patientInfo,
+                                      age: patient.items[index].age ?? 0,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              }
                             },
                             child: PaitentCardItem(
                               model: patient.items[index],

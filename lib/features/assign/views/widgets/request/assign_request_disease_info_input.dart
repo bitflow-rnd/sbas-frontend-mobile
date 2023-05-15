@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/common/models/base_code_model.dart';
-import 'package:sbas/common/widgets/field_error_widget.dart';
-import 'package:sbas/common/widgets/progress_indicator_widget.dart';
-import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
-import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
-import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
 class AssignReqDiseaseInfoInputScreen extends ConsumerWidget {
   AssignReqDiseaseInfoInputScreen({
@@ -96,7 +87,7 @@ class AssignReqDiseaseInfoInputScreen extends ConsumerWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Color(0xffe4e4e4),
+            color: const Color(0xffe4e4e4),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Row(
@@ -105,8 +96,11 @@ class AssignReqDiseaseInfoInputScreen extends ConsumerWidget {
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
-                      child: Text(i, style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 28.w, vertical: 10.h),
+                      child: Text(i,
+                          style: CTS.bold(
+                              fontSize: 11, color: Colors.transparent)),
                     ),
                     Gaps.h1,
                   ],
@@ -121,13 +115,20 @@ class AssignReqDiseaseInfoInputScreen extends ConsumerWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        color: oneList[oneListSelected] == i ? Color(0xff538ef5) : Colors.transparent,
-                        borderRadius: oneList[oneListSelected] == i ? BorderRadius.circular(6) : null),
-                    padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
+                        color: oneList[oneListSelected] == i
+                            ? const Color(0xff538ef5)
+                            : Colors.transparent,
+                        borderRadius: oneList[oneListSelected] == i
+                            ? BorderRadius.circular(6)
+                            : null),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
                     child: Text(i,
                         style: CTS.bold(
                           fontSize: 11,
-                          color: oneList[oneListSelected] == i ? Palette.white : Palette.greyText_60,
+                          color: oneList[oneListSelected] == i
+                              ? Palette.white
+                              : Palette.greyText_60,
                         )),
                   ),
                   i != '기타'
@@ -135,7 +136,7 @@ class AssignReqDiseaseInfoInputScreen extends ConsumerWidget {
                           height: 12,
                           width: 1,
                           decoration: BoxDecoration(
-                            color: Color(0xff676a7a).withOpacity(0.2),
+                            color: const Color(0xff676a7a).withOpacity(0.2),
                           ),
                         )
                       : Container(),
@@ -157,7 +158,7 @@ class AssignReqDiseaseInfoInputScreen extends ConsumerWidget {
         Row(
           children: [
             Expanded(
-              child: Container(
+              child: SizedBox(
                 height: 48.h,
                 child: DropdownButtonFormField(
                   borderRadius: BorderRadius.circular(4.r),
@@ -283,7 +284,11 @@ class AssignReqDiseaseInfoInputScreen extends ConsumerWidget {
     }
   }
 
-  Widget _getTextInputField({required String hint, TextInputType type = TextInputType.text, int? maxLength, List<TextInputFormatter>? inputFormatters}) {
+  Widget _getTextInputField(
+      {required String hint,
+      TextInputType type = TextInputType.text,
+      int? maxLength,
+      List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
       decoration: getInputDecoration(hint),
       controller: TextEditingController(
@@ -317,7 +322,7 @@ class AssignReqDiseaseInfoInputScreen extends ConsumerWidget {
               color: title == '입원여부' ? Palette.mainColor : Colors.grey.shade600,
             ),
           ),
-          if (title == '발병일') Spacer(),
+          if (title == '발병일') const Spacer(),
           if (title == "발병일")
             InkWell(
               onTap: () {},
