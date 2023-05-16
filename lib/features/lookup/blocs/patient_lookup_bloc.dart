@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/lookup/models/patient_list_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
+import 'package:sbas/util.dart';
 
 class PatientLookupBloc extends AsyncNotifier<PatientListModel> {
   @override
@@ -23,14 +24,6 @@ class PatientLookupBloc extends AsyncNotifier<PatientListModel> {
   }
 
   late final PatientRepository _patientRepository;
-}
-
-int getAge(Patient? patient) {
-  final birth = int.tryParse(patient?.rrno1?.substring(0, 2) ?? '') ?? 0;
-
-  final year = (int.tryParse(patient?.rrno2 ?? '') ?? 0) > 2 ? 2000 : 1900;
-
-  return DateTime.now().year - year - birth + 1;
 }
 
 String getConvertPatientInfo(int index, Patient patient) {

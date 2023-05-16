@@ -57,7 +57,7 @@ class AssignBedScreen extends ConsumerWidget {
                       padding: EdgeInsets.symmetric(horizontal: 16.r),
                       child: TopNavbar(
                         x: list.x,
-                        count: list.count ?? 0,
+                        list: ref.watch(assignCountProvider),
                       ),
                     ),
                     Padding(
@@ -104,7 +104,7 @@ class AssignBedScreen extends ConsumerWidget {
                               bottom: 46.h,
                             ),
                             child: ListView.separated(
-                              itemCount: list.count ?? 0,
+                              itemCount: list.count,
                               padding: EdgeInsets.symmetric(
                                 vertical: 8.r,
                                 horizontal: 16.r,

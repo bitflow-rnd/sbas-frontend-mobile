@@ -7,7 +7,7 @@ class TopNavbar extends StatelessWidget {
   const TopNavbar({
     super.key,
     required this.x,
-    required this.count,
+    required this.list,
   });
   @override
   Widget build(BuildContext context) {
@@ -38,40 +38,40 @@ class TopNavbar extends StatelessWidget {
           x: -1.0,
           width: width,
           isSelected: x == -1.0,
-          count: count,
+          count: list[0],
         ),
         TopNavItem(
           text: '병상배정',
           x: -0.5,
           width: width,
           isSelected: x == -0.5,
-          count: count,
+          count: list[1],
         ),
         TopNavItem(
           text: '배차',
           x: 0,
           width: width,
           isSelected: x == 0,
-          count: count,
+          count: list[2],
         ),
         TopNavItem(
           text: '입퇴원',
           x: 0.5,
           width: width,
           isSelected: x == 0.5,
-          count: count,
+          count: list[3],
         ),
         TopNavItem(
           text: '완료',
           x: 1.0,
           width: width,
           isSelected: x == 1.0,
-          count: count,
+          count: list[4],
         ),
       ],
     );
   }
 
   final double x;
-  final int count;
+  final List<int> list;
 }

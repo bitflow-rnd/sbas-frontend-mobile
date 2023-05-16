@@ -1,12 +1,12 @@
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 
 class AssignListModel {
-  int? count;
+  late int count;
   late double x;
   late List<AssignItemModel> items;
 
   AssignListModel({
-    this.count,
+    required this.count,
     required this.x,
     required this.items,
   });
