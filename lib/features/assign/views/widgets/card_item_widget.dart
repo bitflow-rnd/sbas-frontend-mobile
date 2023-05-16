@@ -1,29 +1,36 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/views/assign_bed_detail_screen.dart';
+import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 
-class CardItem extends StatelessWidget {
+class CardItem extends ConsumerWidget {
   const CardItem({
     super.key,
     required this.model,
     required this.color,
   });
   @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AssignBedDetailScreen(
-                model: model,
+  Widget build(BuildContext context, WidgetRef ref) => InkWell(
+        onTap: () async {
+          final patient =
+              await ref.read(patientInfoProvider.notifier).getAsync(model.ptId);
+
+          if (context.mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AssignBedDetailScreen(
+                  model: patient,
+                ),
               ),
-            ),
-          );
+            );
+          }
         },
         child: Container(
           padding: EdgeInsets.symmetric(
@@ -80,7 +87,10 @@ class CardItem extends StatelessWidget {
                             ),
                             child: Text(
                               model.bedStatCdNm ?? '',
-                              style: CTS.bold(color: color, fontSize: 12),
+                              style: CTS.bold(
+                                color: color,
+                                fontSize: 12,
+                              ),
                               maxLines: 1,
                             ),
                           ),

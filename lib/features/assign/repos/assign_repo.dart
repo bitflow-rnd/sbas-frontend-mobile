@@ -3,8 +3,10 @@ import 'package:sbas/features/assign/api/assign_provider.dart';
 import 'package:sbas/features/assign/model/assign_list_model.dart';
 
 class AssignRepository {
-  Future<AssignListModel> lookupPatientInfo(String code) async =>
-      AssignListModel.fromJson(await _patientProvider.lookupPatientInfo(code));
+  Future<List<AssignListModel>> lookupPatientInfo() async =>
+      (await _patientProvider.lookupPatientInfo())
+          .map((e) => AssignListModel.fromJson(e))
+          .toList();
 
   final _patientProvider = AssignProvider();
 }

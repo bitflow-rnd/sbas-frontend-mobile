@@ -9,43 +9,41 @@ class AssignBedPresenter extends AsyncNotifier<AssignListModel> {
   FutureOr<AssignListModel> build() async {
     _patientRepository = ref.read(assignRepoProvider);
 
-    final model = await _patientRepository.lookupPatientInfo('BAST0003');
+    final list = await _patientRepository.lookupPatientInfo();
+    final assignCountState = ref.read(assignCountProvider.notifier).state;
 
-    model.x = -1;
+    list[0].x = -1;
 
-    return model;
+    for (int i = 0; i < list.length; i++) {
+      assignCountState[i] = list[i].count;
+    }
+    _list = list[0];
+
+    return _list;
   }
 
   Future<void> setTopNavItem(double x) async {
     state = await AsyncValue.guard(() async {
-      final model = await _patientRepository.lookupPatientInfo(getCode(x));
+      final list = await _patientRepository.lookupPatientInfo();
+      final assignCountState = ref.read(assignCountProvider.notifier).state;
+      final index = (x * 2).toInt() + 2;
 
-      model.x = x;
+      list[index].x = x;
 
-      return model;
+      for (int i = 0; i < list.length; i++) {
+        assignCountState[i] = list[i].count;
+      }
+      _list = list[index];
+
+      return _list;
     });
     if (state.hasError) {}
   }
 
-  String getCode(double x) {
-    if (x == -1) {
-      return 'BAST0003';
-    }
-    if (x == -0.5) {
-      return 'BAST0005';
-    }
-    if (x == 0) {
-      return 'BAST0006';
-    }
-    if (x == 0.5) {
-      return 'BAST0007';
-    }
-    if (x == 1) {
-      return 'BAST0007';
-    }
-    return '';
-  }
+  List<String>? getTagList(String? ptId) =>
+      _list.items.firstWhere((e) => e.ptId == ptId).tagList;
 
+  late AssignListModel _list;
   late final AssignRepository _patientRepository;
 }
 
@@ -53,3 +51,4 @@ final assignBedProvider =
     AsyncNotifierProvider<AssignBedPresenter, AssignListModel>(
   () => AssignBedPresenter(),
 );
+final assignCountProvider = StateProvider((ref) => <int>[0, 0, 0, 0, 0]);

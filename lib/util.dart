@@ -8,6 +8,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/find_id_screen.dart';
 import 'package:sbas/features/authentication/views/set_password_screen.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void showErrorSnack(
@@ -57,9 +58,9 @@ Future setPassword(BuildContext context) async => await Navigator.push(
 
 Color getStateColor(String? code) {
   switch (code) {
-    case 'BAST0001':
+    case 'BAST0007':
       return const Color(0xFF00FF00);
-    case 'BAST0002':
+    case 'BAST0006':
       return const Color(0xFF0000FF);
     case 'BAST0003':
       return const Color(0xFF00BFFF);
@@ -68,7 +69,15 @@ Color getStateColor(String? code) {
     case 'BAST0005':
       return const Color(0xFF696969);
   }
-  return const Color(0xFFFFFF00);
+  return const Color(0xFF8B8000);
+}
+
+int getAge(Patient? patient) {
+  final birth = int.tryParse(patient?.rrno1?.substring(0, 2) ?? '') ?? 0;
+
+  final year = (int.tryParse(patient?.rrno2 ?? '') ?? 0) > 2 ? 2000 : 1900;
+
+  return DateTime.now().year - year - birth + 1;
 }
 
 String getPhoneFormat(String? mpno) {
