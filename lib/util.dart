@@ -69,7 +69,7 @@ Color getStateColor(String? code) {
     case 'BAST0005':
       return const Color(0xFF696969);
   }
-  return const Color(0xFFFFFF00);
+  return const Color(0xFF8B8000);
 }
 
 int getAge(Patient? patient) {

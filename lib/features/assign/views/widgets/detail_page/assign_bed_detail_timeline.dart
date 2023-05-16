@@ -28,32 +28,33 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   children: [
                     dateFragment("2023년 2월 28일"),
                     IntrinsicHeight(
-                      child: Stack(children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 32.w),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: CustomPaint(
-                                  painter: DashedLineVerticalPainter(),
-                                  size: const Size(1, double.infinity),
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 32.w),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: CustomPaint(
+                                    painter: DashedLineVerticalPainter(),
+                                    size: const Size(1, double.infinity),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          // timeline_approved
-                          // timeline_bed_assign_complete
-                          // timeline_go_hosipital_complete
-                          // timeline_move_complete
-                          // timeline_refused
-                          // timeline_go_home
-                          //
-                          //timeline_suspend //  원형 점
-                          children: [
-                            if (patient.bedStatNm == '승인대기')
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            // timeline_approved
+                            // timeline_bed_assign_complete
+                            // timeline_go_hosipital_complete
+                            // timeline_move_complete
+                            // timeline_refused
+                            // timeline_go_home
+                            //
+                            //timeline_suspend //  원형 점
+                            children: [
+                              //if (patient.bedStatNm == '승인대기')
                               Column(
                                 children: [
                                   completeCard(
@@ -82,167 +83,168 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                   ),
                                 ],
                               ),
-                            if (patient.bedStatNm == '배정대기')
-                              Column(
-                                children: [
-                                  completeCard(
-                                    title: "승인",
-                                    dateTime: "오후 2시 33분",
-                                    src: "timeline_approved",
-                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "병상배정이 완료되었습니다.",
-                                  ),
-                                  completeCard(
-                                    title: "배정불가",
-                                    dateTime: "오후 2시 33분",
-                                    src: "timeline_refused",
-                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "병상배정이 완료되었습니다.",
-                                  ),
-                                  suspendCard(
-                                    title: "배정대기(읍압격리)",
-                                    src: "timeline_suspend",
-                                    detail: "대구 칠곡경북대병원/감염내과/김감염",
-                                  ),
-                                  closedCard(
-                                    title: "이송",
-                                    src: "timeline_bed_assign_complete",
-                                  ),
-                                  closedCard(
-                                    title: "입원",
-                                    src: "timeline_bed_assign_complete",
-                                  ),
-                                ],
-                              ),
-                            if (patient.bedStatNm == '이송대기')
-                              Column(
-                                children: [
-                                  completeCard(
-                                    title: "승인",
-                                    dateTime: "오후 2시 33분",
-                                    src: "timeline_approved",
-                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "병상배정이 완료되었습니다.",
-                                  ),
-                                  completeCard(
-                                    title: "배정불가",
-                                    dateTime: "오후 2시 33분",
-                                    src: "timeline_refused",
-                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "가능한 음압격리 병실이 없습니다.",
-                                  ),
-                                  completeCard(
-                                      title: "배정완료",
+                              if (patient.bedStatNm == '배정대기')
+                                Column(
+                                  children: [
+                                    completeCard(
+                                      title: "승인",
                                       dateTime: "오후 2시 33분",
-                                      src: "timeline_bed_assign_complete",
-                                      by: "대구의료원 / 신경내과 / 강성일",
-                                      detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
-                                  suspendCard(
-                                    title: "이송대기",
-                                    src: "timeline_suspend",
-                                    // detail: "",
-                                  ),
-                                  closedCard(
-                                    title: "입원",
-                                    src: "timeline_go_hosipital_complete",
-                                  ),
-                                ],
-                              ),
-                            if (patient.bedStatNm == '이송중')
-                              Column(
-                                children: [
-                                  completeCard(
-                                    title: "승인",
-                                    dateTime: "오후 2시 33분",
-                                    src: "timeline_approved",
-                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "병상배정이 완료되었습니다.",
-                                  ),
-                                  completeCard(
-                                    title: "배정불가",
-                                    dateTime: "오후 2시 33분",
-                                    src: "timeline_refused",
-                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "가능한 음압격리 병실이 없습니다.",
-                                  ),
-                                  completeCard(
-                                      title: "배정완료",
-                                      dateTime: "오후 2시 33분",
-                                      src: "timeline_bed_assign_complete",
-                                      by: "대구의료원 / 신경내과 / 강성일",
-                                      detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
-                                  completeCard(
-                                      title: "이송중",
-                                      dateTime: "오후 2시 33분",
-                                      src: "timeline_suspend",
-                                      by: "대구광역시 중부 대명 구급 / 신채호 외 2명",
-                                      isBlue: true,
-                                      isSelected: true,
-                                      detail: "128라5431 / 128km / 예상 24분"),
-                                  suspendCard(
-                                    title: "입원",
-                                    detail: "대구 칠곡경북대병원 / 감염내과 / 김감염",
-                                    src: "timeline_go_hosipital_complete",
-                                    isSelected: false,
-                                  ),
-                                ],
-                              ),
-                            if (patient.bedStatNm == '입원')
-                              Column(
-                                children: [
-                                  completeCard(
-                                    title: "승인",
-                                    dateTime: "오후 2시 33분",
-                                    src: "timeline_approved",
-                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "병상배정이 완료되었습니다.",
-                                  ),
-                                  completeCard(
-                                    title: "배정불가",
-                                    dateTime: "오후 2시 33분",
-                                    src: "timeline_refused",
-                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "가능한 음압격리 병실이 없습니다.",
-                                  ),
-                                  completeCard(
-                                      title: "배정완료",
-                                      dateTime: "오후 2시 33분",
-                                      src: "timeline_bed_assign_complete",
-                                      by: "대구의료원 / 신경내과 / 강성일",
-                                      detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
-                                  completeCard(
-                                      title: "이송완료",
-                                      dateTime: "오후 2시 33분",
-                                      src: "timeline_move_complete",
-                                      by: "대구광역시 중부 대명 구급 / 신채호 외 2명",
-                                      detail: "128라5431 / 128km / 예상 24분"),
-                                  completeCard(
-                                    title: "입원완료",
-                                    dateTime: "오후 2시 33분",
-                                    src: "timeline_go_hosipital_complete",
-                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "병상배정이 완료되었습니다.",
-                                  ),
-                                  completeCard(
-                                      title: "귀가요청",
-                                      dateTime: "오후 2시 33분",
-                                      src: "timeline_go_home",
+                                      src: "timeline_approved",
                                       by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                      detail:
-                                          "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
-                                      isBlue: true,
-                                      isSelected: true),
-                                ],
-                              ),
-                          ],
-                        ),
-                      ]),
+                                      detail: "병상배정이 완료되었습니다.",
+                                    ),
+                                    completeCard(
+                                      title: "배정불가",
+                                      dateTime: "오후 2시 33분",
+                                      src: "timeline_refused",
+                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                      detail: "병상배정이 완료되었습니다.",
+                                    ),
+                                    suspendCard(
+                                      title: "배정대기(읍압격리)",
+                                      src: "timeline_suspend",
+                                      detail: "대구 칠곡경북대병원/감염내과/김감염",
+                                    ),
+                                    closedCard(
+                                      title: "이송",
+                                      src: "timeline_bed_assign_complete",
+                                    ),
+                                    closedCard(
+                                      title: "입원",
+                                      src: "timeline_bed_assign_complete",
+                                    ),
+                                  ],
+                                ),
+                              if (patient.bedStatNm == '이송대기')
+                                Column(
+                                  children: [
+                                    completeCard(
+                                      title: "승인",
+                                      dateTime: "오후 2시 33분",
+                                      src: "timeline_approved",
+                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                      detail: "병상배정이 완료되었습니다.",
+                                    ),
+                                    completeCard(
+                                      title: "배정불가",
+                                      dateTime: "오후 2시 33분",
+                                      src: "timeline_refused",
+                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                      detail: "가능한 음압격리 병실이 없습니다.",
+                                    ),
+                                    completeCard(
+                                        title: "배정완료",
+                                        dateTime: "오후 2시 33분",
+                                        src: "timeline_bed_assign_complete",
+                                        by: "대구의료원 / 신경내과 / 강성일",
+                                        detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
+                                    suspendCard(
+                                      title: "이송대기",
+                                      src: "timeline_suspend",
+                                      // detail: "",
+                                    ),
+                                    closedCard(
+                                      title: "입원",
+                                      src: "timeline_go_hosipital_complete",
+                                    ),
+                                  ],
+                                ),
+                              if (patient.bedStatNm == '이송중')
+                                Column(
+                                  children: [
+                                    completeCard(
+                                      title: "승인",
+                                      dateTime: "오후 2시 33분",
+                                      src: "timeline_approved",
+                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                      detail: "병상배정이 완료되었습니다.",
+                                    ),
+                                    completeCard(
+                                      title: "배정불가",
+                                      dateTime: "오후 2시 33분",
+                                      src: "timeline_refused",
+                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                      detail: "가능한 음압격리 병실이 없습니다.",
+                                    ),
+                                    completeCard(
+                                        title: "배정완료",
+                                        dateTime: "오후 2시 33분",
+                                        src: "timeline_bed_assign_complete",
+                                        by: "대구의료원 / 신경내과 / 강성일",
+                                        detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
+                                    completeCard(
+                                        title: "이송중",
+                                        dateTime: "오후 2시 33분",
+                                        src: "timeline_suspend",
+                                        by: "대구광역시 중부 대명 구급 / 신채호 외 2명",
+                                        isBlue: true,
+                                        isSelected: true,
+                                        detail: "128라5431 / 128km / 예상 24분"),
+                                    suspendCard(
+                                      title: "입원",
+                                      detail: "대구 칠곡경북대병원 / 감염내과 / 김감염",
+                                      src: "timeline_go_hosipital_complete",
+                                      isSelected: false,
+                                    ),
+                                  ],
+                                ),
+                              if (patient.bedStatNm == '입원')
+                                Column(
+                                  children: [
+                                    completeCard(
+                                      title: "승인",
+                                      dateTime: "오후 2시 33분",
+                                      src: "timeline_approved",
+                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                      detail: "병상배정이 완료되었습니다.",
+                                    ),
+                                    completeCard(
+                                      title: "배정불가",
+                                      dateTime: "오후 2시 33분",
+                                      src: "timeline_refused",
+                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                      detail: "가능한 음압격리 병실이 없습니다.",
+                                    ),
+                                    completeCard(
+                                        title: "배정완료",
+                                        dateTime: "오후 2시 33분",
+                                        src: "timeline_bed_assign_complete",
+                                        by: "대구의료원 / 신경내과 / 강성일",
+                                        detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
+                                    completeCard(
+                                        title: "이송완료",
+                                        dateTime: "오후 2시 33분",
+                                        src: "timeline_move_complete",
+                                        by: "대구광역시 중부 대명 구급 / 신채호 외 2명",
+                                        detail: "128라5431 / 128km / 예상 24분"),
+                                    completeCard(
+                                      title: "입원완료",
+                                      dateTime: "오후 2시 33분",
+                                      src: "timeline_go_hosipital_complete",
+                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                      detail: "병상배정이 완료되었습니다.",
+                                    ),
+                                    completeCard(
+                                        title: "귀가요청",
+                                        dateTime: "오후 2시 33분",
+                                        src: "timeline_go_home",
+                                        by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                        detail:
+                                            "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
+                                        isBlue: true,
+                                        isSelected: true),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-            _whichBottomer(patient.bedStatNm ?? '', context),
+            _whichBottomer('승인대기', context), //patient.bedStatNm ?? ''
           ],
         ),
       );
@@ -344,97 +346,96 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => focusNode.requestFocus());
     return showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-          // <-- SEE HERE
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(24.r),
-          ),
+      context: context,
+      shape: RoundedRectangleBorder(
+        // <-- SEE HERE
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(24.r),
         ),
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return SingleChildScrollView(
-            child: GestureDetector(
-              onTap: () {
-                FocusScopeNode currentFocus = FocusScope.of(context);
-                if (!currentFocus.hasPrimaryFocus &&
-                    currentFocus.focusedChild != null) {
-                  currentFocus.focusedChild?.unfocus();
-                }
-              },
+      ),
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus &&
+                  currentFocus.focusedChild != null) {
+                currentFocus.focusedChild?.unfocus();
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Container(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Container(
-                  padding:
-                      EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            header,
-                            style: CTS.medium(
-                              fontSize: 15,
-                            ),
+                padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          header,
+                          style: CTS.medium(
+                            fontSize: 15,
                           ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.close,
-                              weight: 24.h,
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.close,
+                            weight: 24.h,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 3,
+                          child: TextField(
+                              focusNode: focusNode,
+                              controller: textEditingController,
+                              decoration: InputDecoration(
+                                hintText: hintText,
+                                enabledBorder: _outlineInputBorder,
+                                focusedBorder: _outlineInputBorder,
+                                errorBorder: _outlineInputBorder,
+                              )),
+                        ),
+                        Gaps.h8,
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16.h),
+                              child: Text(
+                                btnText,
+                                style: CTS(color: Palette.white, fontSize: 13),
+                              ),
                             ),
                             onPressed: () {
-                              Navigator.pop(context);
+                              String text = textEditingController.text;
+                              // Perform action with the entered text here
+                              return Navigator.pop(context, text);
                             },
                           ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 3,
-                            child: TextField(
-                                focusNode: focusNode,
-                                controller: textEditingController,
-                                decoration: InputDecoration(
-                                  hintText: hintText,
-                                  enabledBorder: _outlineInputBorder,
-                                  focusedBorder: _outlineInputBorder,
-                                  errorBorder: _outlineInputBorder,
-                                )),
-                          ),
-                          Gaps.h8,
-                          Expanded(
-                            flex: 1,
-                            child: ElevatedButton(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 16.h),
-                                child: Text(
-                                  btnText,
-                                  style:
-                                      CTS(color: Palette.white, fontSize: 13),
-                                ),
-                              ),
-                              onPressed: () {
-                                String text = textEditingController.text;
-                                // Perform action with the entered text here
-                                return Navigator.pop(context, text);
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget _bottomer(

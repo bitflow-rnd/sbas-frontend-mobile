@@ -17,7 +17,9 @@ class AssignBedPresenter extends AsyncNotifier<AssignListModel> {
     for (int i = 0; i < list.length; i++) {
       assignCountState[i] = list[i].count;
     }
-    return list[0];
+    _list = list[0];
+
+    return _list;
   }
 
   Future<void> setTopNavItem(double x) async {
@@ -31,11 +33,17 @@ class AssignBedPresenter extends AsyncNotifier<AssignListModel> {
       for (int i = 0; i < list.length; i++) {
         assignCountState[i] = list[i].count;
       }
-      return list[index];
+      _list = list[index];
+
+      return _list;
     });
     if (state.hasError) {}
   }
 
+  List<String>? getTagList(String? ptId) =>
+      _list.items.firstWhere((e) => e.ptId == ptId).tagList;
+
+  late AssignListModel _list;
   late final AssignRepository _patientRepository;
 }
 

@@ -39,7 +39,7 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 2:
-      text = patient.addr ?? '';
+      text = patient.bascAddr ?? '';
       break;
 
     case 3:
