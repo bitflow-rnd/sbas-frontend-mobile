@@ -54,35 +54,35 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                             //
                             //timeline_suspend //  원형 점
                             children: [
-                              //if (patient.bedStatNm == '승인대기')
-                              Column(
-                                children: [
-                                  completeCard(
-                                    title: "승인",
-                                    dateTime: "오후 2시 33분",
-                                    src: "timeline_approved",
-                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                    detail: "병상배정이 완료되었습니다.",
-                                  ),
-                                  suspendCard(
-                                    title: "승인대기",
-                                    src: "timeline_suspend",
-                                    detail: "대구광역시 병상배정반",
-                                  ),
-                                  closedCard(
-                                    title: "승인대기",
-                                    src: "timeline_bed_assign_complete",
-                                  ),
-                                  closedCard(
-                                    title: "이송",
-                                    src: "timeline_bed_assign_complete",
-                                  ),
-                                  closedCard(
-                                    title: "입원",
-                                    src: "timeline_bed_assign_complete",
-                                  ),
-                                ],
-                              ),
+                              if (patient.bedStatNm == '승인대기')
+                                Column(
+                                  children: [
+                                    completeCard(
+                                      title: "전원요청",
+                                      dateTime: "오후 2시 33분",
+                                      src: "timeline_approved",
+                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                      detail: "병상배정이 완료되었습니다.",
+                                    ),
+                                    suspendCard(
+                                      title: "승인대기",
+                                      src: "timeline_suspend",
+                                      detail: "대구광역시 병상배정반",
+                                    ),
+                                    closedCard(
+                                      title: "승인대기",
+                                      src: "timeline_bed_assign_complete",
+                                    ),
+                                    closedCard(
+                                      title: "이송",
+                                      src: "timeline_bed_assign_complete",
+                                    ),
+                                    closedCard(
+                                      title: "입원",
+                                      src: "timeline_bed_assign_complete",
+                                    ),
+                                  ],
+                                ),
                               if (patient.bedStatNm == '배정대기')
                                 Column(
                                   children: [
@@ -115,40 +115,40 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                     ),
                                   ],
                                 ),
-                              if (patient.bedStatNm == '이송대기')
-                                Column(
-                                  children: [
-                                    completeCard(
-                                      title: "승인",
+                              //if (patient.bedStatNm == '이송대기')
+                              Column(
+                                children: [
+                                  completeCard(
+                                    title: "승인",
+                                    dateTime: "오후 2시 33분",
+                                    src: "timeline_approved",
+                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                    detail: "병상배정이 완료되었습니다.",
+                                  ),
+                                  completeCard(
+                                    title: "배정불가",
+                                    dateTime: "오후 2시 33분",
+                                    src: "timeline_refused",
+                                    by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                    detail: "가능한 음압격리 병실이 없습니다.",
+                                  ),
+                                  completeCard(
+                                      title: "배정완료",
                                       dateTime: "오후 2시 33분",
-                                      src: "timeline_approved",
-                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                      detail: "병상배정이 완료되었습니다.",
-                                    ),
-                                    completeCard(
-                                      title: "배정불가",
-                                      dateTime: "오후 2시 33분",
-                                      src: "timeline_refused",
-                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                      detail: "가능한 음압격리 병실이 없습니다.",
-                                    ),
-                                    completeCard(
-                                        title: "배정완료",
-                                        dateTime: "오후 2시 33분",
-                                        src: "timeline_bed_assign_complete",
-                                        by: "대구의료원 / 신경내과 / 강성일",
-                                        detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
-                                    suspendCard(
-                                      title: "이송대기",
-                                      src: "timeline_suspend",
-                                      // detail: "",
-                                    ),
-                                    closedCard(
-                                      title: "입원",
-                                      src: "timeline_go_hosipital_complete",
-                                    ),
-                                  ],
-                                ),
+                                      src: "timeline_bed_assign_complete",
+                                      by: "대구의료원 / 신경내과 / 강성일",
+                                      detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
+                                  suspendCard(
+                                    title: "이송대기",
+                                    src: "timeline_suspend",
+                                    // detail: "",
+                                  ),
+                                  closedCard(
+                                    title: "입원",
+                                    src: "timeline_go_hosipital_complete",
+                                  ),
+                                ],
+                              ),
                               if (patient.bedStatNm == '이송중')
                                 Column(
                                   children: [
