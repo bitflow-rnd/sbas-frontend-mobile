@@ -4,14 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
 
 class AssignBedDetailDiseaseInfo extends ConsumerWidget {
   AssignBedDetailDiseaseInfo({
     super.key,
-    required this.patient,
+    required this.ptId,
+    required this.diseaseInfo,
   });
-  final Patient patient;
+  final String? ptId;
+  final PatientDiseaseInfoModel diseaseInfo;
   final List<String> list1 = [
     '담당보건소',
     '코로나19증상 및 징후',
@@ -21,7 +23,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
     '환자등 분류',
     '비고',
   ];
-  final List<String> disaeasePatientType = [
+  final List<String> diseasePatientType = [
     "기저질환",
     "환자유형",
   ];
@@ -76,7 +78,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                             : Expanded(
                                 child: Row(
                                   children: [
-                                    for (int _ = 0; _ < 3; _++)
+                                    for (int j = 0; j < 3; j++)
                                       Expanded(
                                         child: Column(
                                           // mainAxisAlignment: MainAxisAlignment.start,
@@ -84,7 +86,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              list1[i].split(",")[_],
+                                              list1[i].split(",")[j],
                                               style: CTS(
                                                 color: Palette.greyText,
                                                 fontSize: 13,
@@ -96,7 +98,8 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                                 vertical: 8.h,
                                               ),
                                               child: Text(
-                                                '2023.01.01',
+                                                getList1Value(i, diseaseInfo), // 발병일, 진단일, 신고일
+                                                // "aaaaa",
                                                 style: CTS.medium(fontSize: 13),
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
@@ -112,7 +115,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                             ? Expanded(
                                 flex: 3,
                                 child: Text(
-                                  getList1Value(i, patient),
+                                  getList1Value(i, diseaseInfo),
                                   style: CTS.medium(fontSize: 13),
                                   textAlign: TextAlign.end,
                                   maxLines: 2,
@@ -136,7 +139,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
             //second column
             Column(
               children: [
-                for (int i = 0; i < disaeasePatientType.length; i++)
+                for (int i = 0; i < diseasePatientType.length; i++)
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 20.w,
@@ -147,7 +150,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                         Expanded(
                           flex: 1,
                           child: Text(
-                            disaeasePatientType[i],
+                            diseasePatientType[i],
                             style: CTS(
                               color: Palette.greyText,
                               fontSize: 13,
@@ -219,7 +222,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                       ),
                       const Spacer(),
                       Text(
-                        '중증',
+                        getEmrCategory(0, diseaseInfo),
                         style: CTS.medium(fontSize: 13),
                         textAlign: TextAlign.end,
                         maxLines: 2,
@@ -253,7 +256,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                       ),
                                       const Spacer(),
                                       Text(
-                                        '123',
+                                        getEmrCategory(i, diseaseInfo),
                                         style: CTS.medium(fontSize: 13),
                                         textAlign: TextAlign.end,
                                         maxLines: 2,
@@ -290,7 +293,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                       ),
                                       const Spacer(),
                                       Text(
-                                        '333',
+                                        getEmrCategory(i, diseaseInfo),
                                         style: CTS.medium(fontSize: 13),
                                         textAlign: TextAlign.end,
                                         maxLines: 2,
@@ -333,7 +336,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                         ),
                         const Spacer(),
                         Text(
-                          getList2Value(i, patient),
+                          getList2Value(i, diseaseInfo),
                           style: CTS.medium(fontSize: 13),
                           textAlign: TextAlign.end,
                           maxLines: 2,
@@ -367,8 +370,9 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
     );
   }
 
-  String getList1Value(int index, Patient patient) {
+  String getList1Value(int index, PatientDiseaseInfoModel diseaseInfo) {
     String text = '';
+    String defaultText = '-';
 // '담당보건소',
 //  '코로나19증상 및 징후',
 //  '확진검사결과',
@@ -381,76 +385,110 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
     text = "Data has to be here";
     switch (index) {
       case 0:
-        text = "대구 북구 보건소";
+        text = diseaseInfo.rcptPhc ?? defaultText;
         break;
 
       case 1:
-        text = '코로나19감염병';
+        text = diseaseInfo.diagNm ?? defaultText;
         break;
 
       case 2:
-        text = '양성';
+        text = diseaseInfo.dfdgExamRslt ?? defaultText;
         break;
 
       case 3:
-        text = "2급";
+        text = diseaseInfo.diagGrde ?? defaultText;
         break;
 
       case 4:
-        text = "2023.01.02";
+        text = "2023.06.02";
         break;
 
       case 5:
-        text = "환자";
+        text = diseaseInfo.ptCatg ?? defaultText;
         break;
 
       case 6:
-        text = "PCR";
+        text = diseaseInfo.rmk ?? defaultText;
         break;
     }
     return text;
   }
 
-  String getList2Value(int index, Patient patient) {
+  String getList2Value(int index, PatientDiseaseInfoModel diseaseInfo) {
     var text = '';
+    var defaultText = '-';
 
     switch (index) {
       case 0:
-        text = "알수없음";
+        text = diseaseInfo.dnrAgreYn ?? defaultText;
         break;
 
       case 1:
-        text = '입원';
+        text = diseaseInfo.admsYn ?? defaultText;
         break;
 
       case 2:
-        text = 'A10378';
+        text = diseaseInfo.instNm ?? defaultText;
         break;
 
       case 3:
-        text = '칠곡경북대병원';
+        text = diseaseInfo.instId ?? defaultText;
         break;
 
       case 4:
-        text = "대구 북구 호국로 807";
+        text = "대구 북구 호국로 807"; //TODO 주소 길이 너무 길면 오류
         break;
 
       case 5:
-        text = "044-222-2222";
+        text = diseaseInfo.instTelno ?? defaultText;
         break;
 
       case 6:
-        text = "권승구";
+        text = diseaseInfo.diagDrNm ?? defaultText;
         break;
 
       case 7:
-        text = "이재용";
+        text = diseaseInfo.rptChfNm ?? defaultText;
         break;
 
       case 8:
-        text = "음압격리";
+        text = diseaseInfo.reqBedTypeNm ?? defaultText;
         break;
     }
+    return text;
+  }
+
+  String getEmrCategory(int index, PatientDiseaseInfoModel diseaseInfo) {
+    String text = '';
+    String defaultText = '-';
+
+    switch (index) {
+      case 0:
+        text = diseaseInfo.svrtTypeNms[0];
+        break;
+
+      case 1:
+        text = (diseaseInfo.bdtp ?? defaultText).toString();
+        break;
+
+      case 2:
+        text = (diseaseInfo.hr ?? defaultText).toString();
+        break;
+
+      case 3:
+        text = (diseaseInfo.resp ?? defaultText).toString();
+        break;
+
+      case 4:
+        text = (diseaseInfo.spo2 ?? defaultText).toString();
+        break;
+
+      case 5:
+        text = (diseaseInfo.sbp ?? defaultText).toString();
+        break;
+    }
+
     return text;
   }
 }

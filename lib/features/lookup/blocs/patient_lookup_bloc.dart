@@ -27,11 +27,11 @@ class PatientLookupBloc extends AsyncNotifier<PatientListModel> {
 }
 
 String getConvertPatientInfo(int index, Patient patient) {
-  String text = '';
+  String text = '-';
 
   switch (index) {
     case 0:
-      text = patient.ptNm ?? '';
+      text = patient.ptNm ?? text;
       break;
 
     case 1:
@@ -39,7 +39,7 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 2:
-      text = patient.bascAddr ?? '';
+      text = '${patient.bascAddr} ${patient.detlAddr}';
       break;
 
     case 3:
@@ -47,12 +47,12 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 4:
-      text = patient.natiCd == 'KR' ? '대한민국' : (patient.natiCd ?? '');
+      text = patient.natiCd == 'KR' ? '대한민국' : (patient.natiCd ?? text);
       break;
 
     case 5:
       text =
-          patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? '';
+          patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? text;
       break;
 
     case 6:
@@ -62,22 +62,20 @@ String getConvertPatientInfo(int index, Patient patient) {
         text = patient.telno
                 ?.replaceRange(length - 4, length - 4, '-')
                 .replaceRange(length - 7, length - 7, '-') ??
-            '';
-      } else {
-        text = '';
+            text;
       }
       break;
 
     case 7:
-      text = patient.nokNm ?? '';
+      text = patient.nokNm ?? text;
       break;
 
     case 8:
-      text = patient.job ?? '';
+      text = patient.job ?? text;
       break;
 
     case 9:
-      text = '';
+      text = '-';
       break;
   }
   return text;

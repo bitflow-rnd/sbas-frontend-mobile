@@ -55,7 +55,7 @@ class PatientTopInfo extends StatelessWidget {
                       ),
                       Gaps.v4,
                       Text(
-                        '#temp',
+                        '#중증#투석', //TODO 임시로 하드코딩 - 수정 필요
                         style: CTS(
                           color: Palette.mainColor,
                         ),

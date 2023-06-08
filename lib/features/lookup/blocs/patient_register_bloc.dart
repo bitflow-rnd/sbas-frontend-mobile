@@ -68,7 +68,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         _patientInfoModel.addr = report.baseAddr;
         _patientInfoModel.attcId = attcId;
         _patientInfoModel.gndr =
-            report.rrno2 == '1' || report.rrno2 == '3' ? 'M' : 'F';
+            report.rrno2 == '1' || report.rrno2 == '3' ? '남' : '여';
         _patientInfoModel.job = report.job;
         _patientInfoModel.ptNm = report.ptNm;
         _patientInfoModel.rrno1 = report.rrno1;
@@ -93,13 +93,13 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       if (_patientInfoModel.rrno1 != null) {
-        if (gender == 'F') {
+        if (gender == '여') {
           _patientInfoModel.rrno2 =
               '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) < 0
                   ? '2'
                   : '4';
         }
-        if (gender == 'M') {
+        if (gender == '남') {
           _patientInfoModel.rrno2 =
               '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) < 0
                   ? '1'
@@ -239,7 +239,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       case 101:
         _patientInfoModel.rrno2 = value;
 
-        _patientInfoModel.gndr = value == '1' || value == '3' ? 'M' : 'F';
+        _patientInfoModel.gndr = value == '1' || value == '3' ? '남' : '여';
         return;
 
       case 2:

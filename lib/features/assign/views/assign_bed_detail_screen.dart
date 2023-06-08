@@ -12,12 +12,16 @@ import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/util.dart';
 
+import '../../lookup/models/patient_disease_info_model.dart';
+
 class AssignBedDetailScreen extends ConsumerStatefulWidget {
   AssignBedDetailScreen({
     super.key,
     required this.model,
+    required this.patientDiseaseInfoModel,
   });
   final Patient model;
+  final PatientDiseaseInfoModel patientDiseaseInfoModel;
   final headerList = [
     "타임라인",
     "환자정보",
@@ -147,7 +151,7 @@ class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
               else if (_selectedIndex == 1)
                 AssignBedDetailPaitentInfo(patient: widget.model)
               else if (_selectedIndex == 2)
-                AssignBedDetailDiseaseInfo(patient: widget.model)
+                AssignBedDetailDiseaseInfo(ptId: widget.model.ptId, diseaseInfo: widget.patientDiseaseInfoModel)
               else if (_selectedIndex == 3)
                 /*집-병원 또는 null 로 하면 집-병원 으로 젼환가능*/
                 const AssignBedMoveDetialInfo(type: "병원-집")
@@ -192,7 +196,7 @@ class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
                 ),
                 Gaps.v4,
                 const Text(
-                  '#temp',
+                  '#중증#투석', //TODO 임시로 하드코딩 - 수정 필요
                   style: TextStyle(
                     color: Palette.mainColor,
                   ),

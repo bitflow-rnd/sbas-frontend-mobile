@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/features/lookup/api/private_patient_provider.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_list_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/providers/patient_provider.dart';
@@ -60,6 +61,10 @@ class PatientRepository {
   Future<dynamic> postRegOriginInfo(OriginInfoModel model) async =>
       await _privatePatientProvider.postRegOriginInfo(
         model.toJson(),
+      );
+  Future<PatientDiseaseInfoModel> getDiseaseInfo(String ptId) async =>
+      await _privatePatientProvider.getDiseaseInfo(
+        ptId,
       );
   final _patientProvider = PatientProvider();
   final _privatePatientProvider = PrivatePatientProvider();
