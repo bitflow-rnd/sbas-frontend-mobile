@@ -3,6 +3,8 @@ import 'package:sbas/features/lookup/models/patient_list_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/util.dart';
 
+import '../models/patient_disease_info_model.dart';
+
 class PrivatePatientProvider {
   Future<PatientListModel> lookupPatientInfo() async =>
       PatientListModel.fromJson(await _api.getAsync('$_privateRoute/search'));
@@ -12,6 +14,11 @@ class PrivatePatientProvider {
 
   Future<dynamic> postRegOriginInfo(Map<String, dynamic> map) async =>
       await _api.postAsync('$_privateRoute/regstrtpoint', toJson(map));
+
+  Future<PatientDiseaseInfoModel> getDiseaseInfo(String ptId) async =>
+      PatientDiseaseInfoModel.fromJson(
+          await _api.getAsync('$_privateRoute/disease-info/$ptId')
+      );
 
   final String _privateRoute = 'private/patient';
 
