@@ -96,7 +96,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                                 vertical: 8.h,
                                               ),
                                               child: Text(
-                                                '2023.01.01',
+                                                getList1Value(i, patient),
                                                 style: CTS.medium(fontSize: 13),
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
@@ -397,7 +397,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
         break;
 
       case 4:
-        text = "2023.01.02";
+        text = "2023.06.02";
         break;
 
       case 5:

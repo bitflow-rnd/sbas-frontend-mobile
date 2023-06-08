@@ -407,7 +407,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
                                           GestureDetector(
-                                            onTap: () => vm.uploadPatientGender('M'),
+                                            onTap: () => vm.uploadPatientGender('남'),
                                             child: const Text(
                                               '   남   ',
                                               style: TextStyle(
@@ -418,7 +418,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                             ),
                                           ),
                                           GestureDetector(
-                                            onTap: () => vm.uploadPatientGender('F'),
+                                            onTap: () => vm.uploadPatientGender('여'),
                                             child: const Text(
                                               '   여   ',
                                               style: TextStyle(
@@ -434,7 +434,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                     AnimatedAlign(
                                       heightFactor: 1.2,
                                       alignment: Alignment(
-                                        report.gndr == 'M' ? -1 : 1,
+                                        report.gndr == '남' ? -1 : 1,
                                         0,
                                       ),
                                       duration: const Duration(

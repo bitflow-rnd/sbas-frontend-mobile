@@ -115,7 +115,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                         width: 8.w,
                         margin: EdgeInsets.only(
                           top: 20.h,
-                          left: 8.w,
+                          left: 7.w,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.black,
@@ -149,7 +149,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
             child: Row(
               children: [
                 Text(
-                  (vm.sex ?? '') == 'M' ? '남자' : '여자',
+                  vm.sex ?? '',
                   style: CTS(fontSize: 13),
                 ),
               ],
