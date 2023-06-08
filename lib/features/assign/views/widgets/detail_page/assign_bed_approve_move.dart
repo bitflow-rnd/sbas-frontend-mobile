@@ -262,7 +262,7 @@ class _AssignBedApproveMoveScreenState
               ),
               Gaps.v4,
               const Text(
-                '#temp',
+                '#중증#투석',
                 style: TextStyle(
                   color: Palette.mainColor,
                 ),
