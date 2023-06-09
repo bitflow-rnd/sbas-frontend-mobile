@@ -97,6 +97,14 @@ String getDateTimeFormat(String dt) {
   return DateFormat('yyyy년 MM월 dd일 HH시 mm분').format(dateTime ?? DateTime.now());
 }
 
+//TODO 함수명 변경...
+String getTimeLineDateFormat(String dt) {
+  final dateTime = DateTime.tryParse(dt)?.add(const Duration(
+    hours: 9,
+  ));
+  return DateFormat('aa h시 mm분').format(dateTime ?? DateTime.now());
+}
+
 String format(int remainingTime) =>
     Duration(seconds: remainingTime).toString().substring(2, 7);
 

@@ -12,11 +12,17 @@ import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_cancel
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_find_screen.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_go_home.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
+
+import '../../../../../util.dart';
+import '../../../model/assign_item_model.dart';
 
 class AssignBedDetailTimeLine extends ConsumerWidget {
   const AssignBedDetailTimeLine({
     super.key,
     required this.patient,
+    required this.assignItem,
+    required this.timeLine,
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) => Expanded(
@@ -54,15 +60,15 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                             //
                             //timeline_suspend //  원형 점
                             children: [
-                              if (patient.bedStatNm == '승인대기')
+                              if (assignItem.bedStatCdNm == '승인대기')
                                 Column(
                                   children: [
                                     completeCard(
-                                      title: "전원요청",
-                                      dateTime: "오후 2시 33분",
+                                      title: timeLine.items[0].title ?? '',
+                                      dateTime: getTimeLineDateFormat(timeLine.items[0].updtDttm ?? ''),
                                       src: "timeline_approved",
-                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                      detail: "병상배정이 완료되었습니다.",
+                                      by: timeLine.items[0].by ?? '',
+                                      detail: timeLine.items[0].msg ?? '',
                                     ),
                                     suspendCard(
                                       title: "승인대기",
@@ -83,7 +89,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                     ),
                                   ],
                                 ),
-                              if (patient.bedStatNm == '배정대기')
+                              if (assignItem.bedStatCdNm == '배정대기')
                                 Column(
                                   children: [
                                     completeCard(
@@ -115,7 +121,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                     ),
                                   ],
                                 ),
-                              //if (patient.bedStatNm == '이송대기')
+                              if (patient.bedStatNm == '이송대기')
                               Column(
                                 children: [
                                   completeCard(
@@ -149,7 +155,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                   ),
                                 ],
                               ),
-                              if (patient.bedStatNm == '이송중')
+                              if (assignItem.bedStatCdNm == '이송중')
                                 Column(
                                   children: [
                                     completeCard(
@@ -188,7 +194,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                     ),
                                   ],
                                 ),
-                              if (patient.bedStatNm == '입원')
+                              if (assignItem.bedStatCdNm == '입원')
                                 Column(
                                   children: [
                                     completeCard(
@@ -806,6 +812,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
         ),
       );
   final Patient patient;
+  final AssignItemModel assignItem;
+  final PatientTimelineModel timeLine;
 }
 
 class DashedLineVerticalPainter extends CustomPainter {

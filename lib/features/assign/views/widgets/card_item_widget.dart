@@ -9,6 +9,7 @@ import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/views/assign_bed_detail_screen.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/patient_disease_info_presenter.dart';
+import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 
 class CardItem extends ConsumerWidget {
   const CardItem({
@@ -23,13 +24,17 @@ class CardItem extends ConsumerWidget {
               await ref.read(patientInfoProvider.notifier).getAsync(model.ptId);
           final diseaseInfo =
               await ref.read(patientDiseaseInfoProvider.notifier).getAsync(model.ptId);
+          final timeLine =
+              await ref.read(patientTimeLineProvider.notifier).getAsync(model.ptId, model.bdasSeq);
           if (context.mounted) {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => AssignBedDetailScreen(
                   model: patient,
-                  patientDiseaseInfoModel: diseaseInfo,
+                  assignItem: model,
+                  timeLine: timeLine,
+                  diseaseInfo: diseaseInfo,
                 ),
               ),
             );
