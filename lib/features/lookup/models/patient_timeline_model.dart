@@ -33,12 +33,14 @@ class TimeLine {
   String? by;
   String? updtDttm;
   String? msg;
+  String? timeLineStatus;
 
   TimeLine({
     this.title,
     this.by,
     this.updtDttm,
     this.msg,
+    this.timeLineStatus,
   });
 
   TimeLine.fromJson(Map<String, dynamic> json) {
@@ -54,6 +56,9 @@ class TimeLine {
     if (json["msg"] is String) {
       msg = json["msg"];
     }
+    if (json["timeLineStatus"] is String) {
+      timeLineStatus = json["timeLineStatus"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -63,6 +68,7 @@ class TimeLine {
     data["by"] = by;
     data["updtDttm"] = updtDttm;
     data["msg"] = msg;
+    data["timeLineStatus"] = timeLineStatus;
 
     return data;
   }

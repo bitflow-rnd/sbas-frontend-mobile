@@ -85,7 +85,7 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         // timeline_approved
                         // timeline_bed_assign_complete
-                        // timeline_go_hosipital_complete
+                        // timeline_go_hospital_complete
                         // timeline_move_complete
                         // timeline_refused
                         children: [
@@ -120,7 +120,7 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
                           moveCompleteCard(
                             title: "입원완료",
                             dateTime: "오후 2시 33분",
-                            src: "timeline_go_hosipital_complete",
+                            src: "timeline_go_hospital_complete",
                             by: "대구광역시 병상배정반 / 팀장 / 홍성수",
                             detail: "병상배정이 완료되었습니다.",
                           ),
