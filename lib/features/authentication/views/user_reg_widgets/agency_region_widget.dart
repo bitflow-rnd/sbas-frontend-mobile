@@ -68,7 +68,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                               isExpanded: true,
                               value: ref.watch(selectedRegionProvider).cdNm,
                               items: data
-                                  .where((e) => e.id?.cdGrpId == 'SIDO')
+                                  .where((e) => e.cdGrpId == 'SIDO')
                                   .map(
                                     (e) => DropdownMenuItem(
                                       alignment: Alignment.center,
@@ -91,16 +91,13 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
 
                                   ref.read(selectedCountyProvider).cdNm = null;
 
+                                  model.cdGrpId = selectedModel.cdGrpId;
                                   model.cdGrpNm = selectedModel.cdGrpNm;
+                                  model.cdId = selectedModel.cdId;
                                   model.cdNm = selectedModel.cdNm;
                                   model.cdSeq = selectedModel.cdSeq;
                                   model.cdVal = selectedModel.cdVal;
-                                  model.id = selectedModel.id;
-                                  model.rgstDttm = selectedModel.rgstDttm;
-                                  model.rgstUserId = selectedModel.rgstUserId;
                                   model.rmk = selectedModel.rmk;
-                                  model.updtDttm = selectedModel.updtDttm;
-                                  model.updtUserId = selectedModel.updtUserId;
 
                                   ref.read(agencyRegionProvider.notifier).exchangeTheCounty();
 
@@ -156,7 +153,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                               isExpanded: true,
                               value: ref.watch(selectedCountyProvider).cdNm,
                               items: data
-                                  .where((e) => e.id != null && e.id?.cdGrpId != null && e.id!.cdGrpId!.length > 4)
+                                  .where((e) => e.cdGrpId != null && e.cdGrpId!.length > 4)
                                   .map(
                                     (e) => DropdownMenuItem(
                                       alignment: Alignment.center,
@@ -182,16 +179,13 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                                   agency.instNm = null;
                                   agency.id = null;
 
+                                  model.cdGrpId = selectedModel.cdGrpId;
                                   model.cdGrpNm = selectedModel.cdGrpNm;
+                                  model.cdId = selectedModel.cdId;
                                   model.cdNm = selectedModel.cdNm;
                                   model.cdSeq = selectedModel.cdSeq;
                                   model.cdVal = selectedModel.cdVal;
-                                  model.id = selectedModel.id;
-                                  model.rgstDttm = selectedModel.rgstDttm;
-                                  model.rgstUserId = selectedModel.rgstUserId;
                                   model.rmk = selectedModel.rmk;
-                                  model.updtDttm = selectedModel.updtDttm;
-                                  model.updtUserId = selectedModel.updtUserId;
 
                                   ref.read(agencyDetailProvider.notifier).exchangeTheAgency();
 

@@ -75,7 +75,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
               authGroupSelectedIndex = widget.authGroupTitles.indexOf(jobCd);
             }
             if (instTypeCd != null && instTypeCd.isNotEmpty) {
-              affiliationSelectedIndex = data.indexWhere((element) => element.id?.cdId == instTypeCd);
+              affiliationSelectedIndex = data.indexWhere((element) => element.cdId == instTypeCd);
             }
             return SingleChildScrollView(
               child: Column(
@@ -109,7 +109,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                                 () {
                                   affiliationSelectedIndex = value ?? 0;
 
-                                  model.instTypeCd = data[affiliationSelectedIndex].id?.cdId;
+                                  model.instTypeCd = data[affiliationSelectedIndex].cdId;
 
                                   field.didChange(model.instTypeCd);
                                 },

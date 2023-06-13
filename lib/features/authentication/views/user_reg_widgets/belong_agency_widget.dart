@@ -131,7 +131,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
                             childAspectRatio: 2.15 / 1,
                           ),
                           itemBuilder: (context, index) {
-                            final id = data[index].id!.cdId!;
+                            final id = data[index].cdId!;
 
                             return PatientType(
                               id: id,

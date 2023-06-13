@@ -88,7 +88,7 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
         gridDelegate: sliverGridDelegate,
         itemBuilder: (context, index) => GestureDetector(
           onTap: () {
-            final key = model.toList()[index].id?.cdId;
+            final key = model.toList()[index].cdId;
 
             if (key != null && key.isNotEmpty) {
               final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
@@ -121,8 +121,8 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
             decoration: BoxDecoration(
               border: Border.all(
                   color: Colors.grey,
-                  style: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].id?.cdId] == true ? BorderStyle.none : BorderStyle.solid),
-              color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].id?.cdId] == true ? Palette.mainColor : Colors.transparent,
+                  style: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] == true ? BorderStyle.none : BorderStyle.solid),
+              color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] == true ? Palette.mainColor : Colors.transparent,
               borderRadius: BorderRadius.circular(
                 18,
               ),
@@ -130,7 +130,7 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
             child: Text(
               model.toList()[index].cdNm ?? '',
               style: TextStyle(
-                color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].id?.cdId] == true ? Colors.white : Colors.grey,
+                color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] == true ? Colors.white : Colors.grey,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
@@ -377,7 +377,7 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                 if (_selectedIndex != i) {
                   _selectedIndex = i;
                 }
-                final key = model.toList()[i].id?.cdId;
+                final key = model.toList()[i].cdId;
 
                 if (key != null && key.isNotEmpty) {
                   final isChecked =
@@ -455,7 +455,7 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: _initRowClassification(model
-                                    .where((e) => e.id?.cdGrpId == 'SVIP')),
+                                    .where((e) => e.cdGrpId == 'SVIP')),
                               ),
                               Gaps.v6,
                               if (_selectedIndex == 1 && _score == 0) _initBioInfo(),
@@ -496,12 +496,12 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                         if (i == 0)
                           SizedBox(
                             height: _getHeight(
-                              model.where((e) => e.id?.cdGrpId == 'PTTP'),
+                              model.where((e) => e.cdGrpId == 'PTTP'),
                               4,
                             ),
                             child: _initGridView(
                               i,
-                              model.where((e) => e.id?.cdGrpId == 'PTTP'),
+                              model.where((e) => e.cdGrpId == 'PTTP'),
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 4,
                                 childAspectRatio: 1.925,
@@ -511,12 +511,12 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                         else if (i == 1)
                           SizedBox(
                             height: _getHeight(
-                              model.where((e) => e.id?.cdGrpId == 'UDDS'),
+                              model.where((e) => e.cdGrpId == 'UDDS'),
                               3,
                             ),
                             child: _initGridView(
                               i,
-                              model.where((e) => e.id?.cdGrpId == 'UDDS'),
+                              model.where((e) => e.cdGrpId == 'UDDS'),
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
                                 childAspectRatio: 2.325,
@@ -526,12 +526,12 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                         else if (i == 2 && (_selectedIndex == 0 || _selectedIndex == 1))
                           SizedBox(
                             height: _getHeight(
-                              model.where((e) => e.id?.cdGrpId == 'SVTP'),
+                              model.where((e) => e.cdGrpId == 'SVTP'),
                               4,
                             ),
                             child: _initGridView(
                               i,
-                              model.where((e) => e.id?.cdGrpId == 'SVTP'),
+                              model.where((e) => e.cdGrpId == 'SVTP'),
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 4,
                                 childAspectRatio: 1.925,
@@ -541,12 +541,12 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                         else if (i == 3)
                           SizedBox(
                             height: _getHeight(
-                              model.where((e) => e.id?.cdGrpId == 'BDTP'),
+                              model.where((e) => e.cdGrpId == 'BDTP'),
                               4,
                             ),
                             child: _initGridView(
                               i,
-                              model.where((e) => e.id?.cdGrpId == 'BDTP'),
+                              model.where((e) => e.cdGrpId == 'BDTP'),
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 4,
                                 childAspectRatio: 1.925,
@@ -556,12 +556,12 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                         else if (i == 4)
                           SizedBox(
                             height: _getHeight(
-                              model.where((e) => e.id?.cdGrpId == 'DNRA'),
+                              model.where((e) => e.cdGrpId == 'DNRA'),
                               4,
                             ),
                             child: _initGridView(
                               i,
-                              model.where((e) => e.id?.cdGrpId == 'DNRA'),
+                              model.where((e) => e.cdGrpId == 'DNRA'),
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 4,
                                 childAspectRatio: 1.925,

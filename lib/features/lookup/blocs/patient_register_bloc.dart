@@ -116,7 +116,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   Future<void> updatePatientRegion(BaseCodeModel region) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _patientInfoModel.dstr1Cd = region.id?.cdId;
+      _patientInfoModel.dstr1Cd = region.cdId;
 
       return _patientInfoModel;
     });
@@ -127,7 +127,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   Future<void> updatePatientCounty(BaseCodeModel region) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _patientInfoModel.dstr2Cd = region.id?.cdId;
+      _patientInfoModel.dstr2Cd = region.cdId;
 
       return _patientInfoModel;
     });
@@ -298,8 +298,8 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   }
 
   String? findPatientAddress(List<BaseCodeModel> list, String? findValue) {
-    if (list.any((element) => element.id?.cdId == findValue)) {
-      return list.firstWhere((e) => e.id?.cdId == findValue).cdNm;
+    if (list.any((element) => element.cdId == findValue)) {
+      return list.firstWhere((e) => e.cdId == findValue).cdNm;
     }
     if (list.any((element) => element.cdNm == findValue)) {
       return findValue;

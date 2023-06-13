@@ -474,7 +474,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
   Widget timeLineBody(TimeLine timeLine) {
     switch (timeLine.timeLineStatus) {
       case "complete":
-        return completeCard(title: timeLine.title!, dateTime: getTimeLineDateFormat(timeLine.updtDttm ?? ''), src: getImageSrcBy(timeLine.title!), by: timeLine.by!, detail: timeLine.msg!);
+        return completeCard(title: timeLine.title ?? '', dateTime: getTimeLineDateFormat(timeLine.updtDttm ?? ''),
+            src: getImageSrcBy(timeLine.title ?? ''), by: timeLine.by ?? '', detail: timeLine.msg);
       case "suspend":
         return suspendCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!), detail: timeLine.by);
       case "closed":
@@ -647,7 +648,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     required String dateTime,
     required String src,
     required String by,
-    required String detail,
+    String? detail,
     bool isBlue = false,
     bool isSelected = false,
   }) =>
@@ -718,25 +719,26 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                           fontSize: 13,
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(top: 8.h),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 8.w, vertical: 4.h),
-                        decoration: BoxDecoration(
-                          color: isBlue
-                              ? Palette.mainColor.withOpacity(0.16)
-                              : const Color(0xff676a7a).withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
-                        child: Text(
-                          detail,
-                          style: CTS(
-                            color:
-                                isBlue ? Palette.mainColor : Palette.greyText,
-                            fontSize: 13,
+                      if (detail != null)
+                        Container(
+                          margin: EdgeInsets.only(top: 8.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8.w, vertical: 4.h),
+                          decoration: BoxDecoration(
+                            color: isBlue
+                                ? Palette.mainColor.withOpacity(0.16)
+                                : const Color(0xff676a7a).withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(4.r),
                           ),
-                        ),
-                      )
+                          child: Text(
+                            detail,
+                            style: CTS(
+                              color:
+                                  isBlue ? Palette.mainColor : Palette.greyText,
+                              fontSize: 13,
+                            ),
+                          ),
+                        )
                     ],
                   ),
                 ),

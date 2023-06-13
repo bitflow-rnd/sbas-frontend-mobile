@@ -14,10 +14,10 @@ class BelongAgencyBloc extends AsyncNotifier<List<BaseCodeModel>> {
     for (var e in list) {
       final map = ref.read(isCheckedProvider);
 
-      if (e.id == null || e.id?.cdId == null || e.id!.cdId!.isEmpty) {
+      if (e.cdId == null || e.cdId!.isEmpty) {
         continue;
       }
-      map[e.id!.cdId!] = false;
+      map[e.cdId!] = false;
     }
     return list;
   }

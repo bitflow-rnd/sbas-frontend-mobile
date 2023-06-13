@@ -1,50 +1,37 @@
 class BaseCodeModel {
-  String? rgstUserId;
-  String? rgstDttm;
-  String? updtUserId;
-  String? updtDttm;
-  Id? id;
+  String? cdGrpId;
   String? cdGrpNm;
+  String? cdId;
   String? cdNm;
-  dynamic cdVal;
+  String? cdVal;
   int? cdSeq;
   String? rmk;
 
   BaseCodeModel({
-    this.rgstUserId,
-    this.rgstDttm,
-    this.updtUserId,
-    this.updtDttm,
-    this.id,
+    this.cdGrpId,
     this.cdGrpNm,
+    this.cdId,
     this.cdNm,
     this.cdVal,
     this.cdSeq,
     this.rmk,
   });
   BaseCodeModel.fromJson(Map<String, dynamic> json) {
-    if (json["rgstUserId"] is String) {
-      rgstUserId = json["rgstUserId"];
-    }
-    if (json["rgstDttm"] is String) {
-      rgstDttm = json["rgstDttm"];
-    }
-    if (json["updtUserId"] is String) {
-      updtUserId = json["updtUserId"];
-    }
-    if (json["updtDttm"] is String) {
-      updtDttm = json["updtDttm"];
-    }
-    if (json["id"] is Map) {
-      id = json["id"] == null ? null : Id.fromJson(json["id"]);
+    if (json["cdGrpId"] is String) {
+      cdGrpId = json["cdGrpId"];
     }
     if (json["cdGrpNm"] is String) {
       cdGrpNm = json["cdGrpNm"];
     }
+    if (json["cdId"] is String) {
+      cdId = json["cdId"];
+    }
     if (json["cdNm"] is String) {
       cdNm = json["cdNm"];
     }
-    cdVal = json["cdVal"];
+    if (json["cdVal"] is String) {
+      cdVal = json["cdVal"];
+    }
     if (json["cdSeq"] is int) {
       cdSeq = json["cdSeq"];
     }
@@ -54,14 +41,9 @@ class BaseCodeModel {
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data["rgstUserId"] = rgstUserId;
-    data["rgstDttm"] = rgstDttm;
-    data["updtUserId"] = updtUserId;
-    data["updtDttm"] = updtDttm;
-    if (id != null) {
-      data["id"] = id?.toJson();
-    }
+    data["cdGrpId"] = cdGrpId;
     data["cdGrpNm"] = cdGrpNm;
+    data["cdId"] = cdId;
     data["cdNm"] = cdNm;
     data["cdVal"] = cdVal;
     data["cdSeq"] = cdSeq;

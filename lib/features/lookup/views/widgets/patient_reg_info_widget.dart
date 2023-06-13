@@ -109,7 +109,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                                         isDense: true,
                                                         isExpanded: true,
                                                         items: region
-                                                            .where((e) => e.id?.cdGrpId == 'SIDO')
+                                                            .where((e) => e.cdGrpId == 'SIDO')
                                                             .map(
                                                               (e) => DropdownMenuItem(
                                                                 alignment: Alignment.center,
@@ -184,7 +184,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                                                         isExpanded: true,
                                                         value: vm.findPatientAddress(region, report.dstr2Cd),
                                                         items: region
-                                                            .where((e) => e.id != null && e.id?.cdGrpId != null && e.id!.cdGrpId!.length > 4)
+                                                            .where((e) => e.cdGrpId != null && e.cdGrpId!.length > 4)
                                                             .map(
                                                               (e) => DropdownMenuItem(
                                                                 alignment: Alignment.center,
