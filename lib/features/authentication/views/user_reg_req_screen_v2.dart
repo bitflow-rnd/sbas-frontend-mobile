@@ -123,10 +123,11 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
     if (index == 1) {
       return const BelongAgency(
         titles: [
-          '담당지역',
+          '담당/근무지역',
           '소속기관',
-          '소속 증명 정보',
           '담당 환자 유형',
+          '직급',
+          '소속 증명 정보',
         ],
       );
     }
