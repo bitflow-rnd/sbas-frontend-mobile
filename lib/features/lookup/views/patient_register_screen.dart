@@ -54,14 +54,10 @@ class PatientRegScreen extends ConsumerWidget {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18,
-              ),
+            child: Form(
+              key: formKey,
               child: patientAttc != null
-                  ? PatientRegInfoV2(
-                      formKey: formKey,
-                    )
+                  ? PatientRegInfoV2()
                   : const PatientRegReport(),
             ),
           ),
@@ -116,7 +112,6 @@ class PatientRegScreen extends ConsumerWidget {
 
   bool _tryValidation() {
     bool isValid = formKey.currentState?.validate() ?? false;
-
     if (isValid) {
       formKey.currentState?.save();
     }

@@ -14,7 +14,6 @@ import 'package:sbas/constants/palette.dart';
 
 class PatientRegInfoV2 extends ConsumerStatefulWidget {
   PatientRegInfoV2({
-    required this.formKey,
     super.key,
   });
   final list = [
@@ -35,8 +34,6 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       PatientRegInfoV2State();
-
-  final GlobalKey<FormState> formKey;
 }
 
 class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
@@ -377,9 +374,11 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Form(
-        key: widget.formKey,
         autovalidateMode: AutovalidateMode.always,
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 18,
+          ),
           child: ref.watch(patientRegProvider).when(
                 loading: () => const SBASProgressIndicator(),
                 error: (error, stackTrace) => Center(

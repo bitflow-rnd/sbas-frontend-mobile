@@ -65,7 +65,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         final report = EpidemiologicalReportModel.fromJson(
           await _patientRepository.getOpticalCharacterRecognition(imageFile),
         );
-        _patientInfoModel.addr = report.baseAddr;
+        _patientInfoModel.bascAddr = report.baseAddr;
+        _patientInfoModel.detlAddr = report.dtlAddr;
+        _patientInfoModel.zip = report.zip;
         _patientInfoModel.attcId = attcId;
         _patientInfoModel.gndr =
             report.rrno2 == '1' || report.rrno2 == '3' ? '남' : '여';
@@ -76,7 +78,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         _patientInfoModel.dethYn = report.dethYn == '사망' ? 'Y' : 'N';
         _patientInfoModel.dstr1Cd = report.dstr1Cd;
         _patientInfoModel.dstr2Cd = report.dstr2Cd;
-        _patientInfoModel.mpno = report.telno;
+        _patientInfoModel.telno = report.telno;
+        _patientInfoModel.mpno = report.mpno;
+        _patientInfoModel.nokNm = report.nokNm;
         _patientInfoModel.natiCd = 'KR';
       } catch (exception) {
         if (kDebugMode) {
