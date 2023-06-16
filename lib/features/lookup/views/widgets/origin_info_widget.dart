@@ -8,6 +8,7 @@ import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 
@@ -105,12 +106,24 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery.of(context).size.width *
+                                                  0.5 -
+                                              30,
+                                          child: _selectLocalGovernment(
+                                              origin.reqDstr1Cd),
+                                        ),
+                                        Gaps.h4,
+                                        SizedBox(
+                                          width: MediaQuery.of(context).size.width *
                                               0.5 -
-                                          18,
-                                      child: _selectLocalGovernment(
-                                          origin.reqDstr1Cd),
+                                              12,
+                                          child: _selectLocalCounty(
+                                              origin.reqDstr1Cd),
+                                        ),
+                                      ],
                                     ),
                                     Gaps.v4,
                                     const Text(
@@ -276,6 +289,75 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
               ),
             ),
           );
+  Widget _selectLocalCounty(String? code) {
+      // print("${ref.watch(agencyRegionProvider.notifier).selectTheCounty(region)}");
+      return ref.watch(agencyRegionProvider).when(
+        loading: () => const SBASProgressIndicator(),
+        error: (error, stackTrace) => Center(
+          child: Text(
+            error.toString(),
+            style: const TextStyle(
+              color: Palette.mainColor,
+            ),
+          ),
+        ),
+        data: (region) => InputDecorator(
+          decoration: _inputDecoration,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 14,
+              horizontal: 8,
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                hint: const SizedBox(
+                  width: 150,
+                  child: Text(
+                    '시/구/군 선택',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                isDense: true,
+                isExpanded: true,
+                items: region
+                    .where((e) => e.cdId == code)
+                    .map(
+                      (e) => DropdownMenuItem(
+                    alignment: Alignment.center,
+                    value: ref.read(agencyRegionProvider.notifier).selectTheCounty(e),
+                    child: SizedBox(
+                      width: 150,
+                      child: Text(
+                        e.cdNm ?? '',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                )
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    final selectRegion =
+                        region.firstWhere((e) => e.cdNm == value).cdId;
+
+                    if (selectRegion != null && selectRegion.isNotEmpty) {
+                      ref
+                          .read(originInfoProvider.notifier)
+                          .selectLocalCounty(selectRegion);
+                    }
+                  }
+                },
+                value: '',
+              ),
+            ),
+          ),
+        ),
+      );
+  }
   Widget _initTextField(int index, bool isSingleLine) {
     final notifier = ref.watch(originInfoProvider.notifier);
 

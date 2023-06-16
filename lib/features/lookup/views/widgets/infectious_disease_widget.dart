@@ -357,7 +357,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                       .map(
                         (e) => DropdownMenuItem(
                           alignment: Alignment.center,
-                          value: e.cdNm,
+                          value: e.cdId,
                           child: SizedBox(
                             width: 150,
                             child: Text(
