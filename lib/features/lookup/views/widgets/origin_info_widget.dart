@@ -106,24 +106,9 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context).size.width *
-                                                  0.5 -
-                                              30,
-                                          child: _selectLocalGovernment(
-                                              origin.reqDstr1Cd),
-                                        ),
-                                        Gaps.h4,
-                                        SizedBox(
-                                          width: MediaQuery.of(context).size.width *
-                                              0.5 -
-                                              12,
-                                          child: _selectLocalCounty(
-                                              origin.reqDstr1Cd),
-                                        ),
-                                      ],
+                                    SizedBox(
+                                      child: _selectLocalCounty(
+                                          origin.reqDstr1Cd),
                                     ),
                                     Gaps.v4,
                                     const Text(
@@ -290,73 +275,184 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
             ),
           );
   Widget _selectLocalCounty(String? code) {
-      // print("${ref.watch(agencyRegionProvider.notifier).selectTheCounty(region)}");
-      return ref.watch(agencyRegionProvider).when(
-        loading: () => const SBASProgressIndicator(),
-        error: (error, stackTrace) => Center(
-          child: Text(
-            error.toString(),
-            style: const TextStyle(
-              color: Palette.mainColor,
-            ),
+    return ref.watch(agencyRegionProvider).when(
+      loading: () => const SBASProgressIndicator(),
+      error: (error, stackTrace) => Center(
+        child: Text(
+          error.toString(),
+          style: const TextStyle(
+            color: Palette.mainColor,
           ),
         ),
-        data: (region) => InputDecorator(
-          decoration: _inputDecoration,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 14,
-              horizontal: 8,
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                hint: const SizedBox(
-                  width: 150,
-                  child: Text(
-                    '시/구/군 선택',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                isDense: true,
-                isExpanded: true,
-                items: region
-                    .where((e) => e.cdId == code)
-                    .map(
-                      (e) => DropdownMenuItem(
-                    alignment: Alignment.center,
-                    value: ref.read(agencyRegionProvider.notifier).selectTheCounty(e),
-                    child: SizedBox(
-                      width: 150,
-                      child: Text(
-                        e.cdNm ?? '',
-                        textAlign: TextAlign.center,
+      ),
+      data: (data) => Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: FormField(
+              initialValue: ref.watch(selectedRegionProvider).cdNm,
+              builder: (field) => Column(
+                  children: [
+                    InputDecorator(
+                      decoration: _inputDecoration,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: 8,
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            hint: const SizedBox(
+                              width: 150,
+                              child: Text(
+                                '시/도 선택',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            isDense: true,
+                            isExpanded: true,
+                            value: ref.watch(selectedRegionProvider).cdNm,
+                            items: data
+                                .where((e) => e.cdGrpId == 'SIDO')
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                alignment: Alignment.center,
+                                value: e.cdNm,
+                                child: SizedBox(
+                                  width: 150,
+                                  child: Text(
+                                    e.cdNm ?? '',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            )
+                                .toList(),
+                            onChanged: (value) => setState(
+                                  () {
+                                final model = ref.read(selectedRegionProvider);
+
+                                final selectedModel = data.firstWhere((e) => value == e.cdNm);
+
+                                ref.read(selectedCountyProvider).cdNm = null;
+
+                                model.cdGrpId = selectedModel.cdGrpId;
+                                model.cdGrpNm = selectedModel.cdGrpNm;
+                                model.cdId = selectedModel.cdId;
+                                model.cdNm = selectedModel.cdNm;
+                                model.cdSeq = selectedModel.cdSeq;
+                                model.cdVal = selectedModel.cdVal;
+                                model.rmk = selectedModel.rmk;
+
+                                ref.read(agencyRegionProvider.notifier).exchangeTheCounty();
+
+                                if (selectedModel.cdId != null) {
+                                  ref.read(originInfoProvider.notifier).selectLocalGovernment(selectedModel.cdId?? '');
+                                }
+
+                                field.didChange(selectedModel.cdNm);
+                              },
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                )
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    final selectRegion =
-                        region.firstWhere((e) => e.cdNm == value).cdId;
+                  ],
+                ),
+            ),
+          ),
+          Gaps.h14,
+          Expanded(
+            flex: 1,
+            child: FormField(
+              initialValue: ref.watch(selectedCountyProvider).cdNm,
+              builder: (field) => SizedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InputDecorator(
+                      decoration: _inputDecoration,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: 8,
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            hint: const SizedBox(
+                              width: 150,
+                              child: Text(
+                                '시/구/군 선택',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            isDense: true,
+                            isExpanded: true,
+                            value: ref.watch(selectedCountyProvider).cdNm,
+                            items: data
+                                .where((e) => e.cdGrpId != null && e.cdGrpId!.length > 4)
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                alignment: Alignment.center,
+                                value: e.cdNm,
+                                child: SizedBox(
+                                  width: 150,
+                                  child: Text(
+                                    e.cdNm ?? '',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            )
+                                .toList(),
+                            onChanged: (value) => setState(
+                                  () {
+                                final model = ref.read(selectedCountyProvider);
 
-                    if (selectRegion != null && selectRegion.isNotEmpty) {
-                      ref
-                          .read(originInfoProvider.notifier)
-                          .selectLocalCounty(selectRegion);
-                    }
-                  }
-                },
-                value: '',
+                                final selectedModel = data.firstWhere((e) => value == e.cdNm);
+
+                                final agency = ref.watch(selectedAgencyProvider);
+
+                                agency.instNm = null;
+                                agency.id = null;
+
+                                model.cdGrpId = selectedModel.cdGrpId;
+                                model.cdGrpNm = selectedModel.cdGrpNm;
+                                model.cdId = selectedModel.cdId;
+                                model.cdNm = selectedModel.cdNm;
+                                model.cdSeq = selectedModel.cdSeq;
+                                model.cdVal = selectedModel.cdVal;
+                                model.rmk = selectedModel.rmk;
+
+                                if (selectedModel.cdId != null) {
+                                  ref.read(originInfoProvider.notifier).selectLocalCounty(selectedModel.cdId?? '');
+                                }
+
+                                ref.read(agencyDetailProvider.notifier).exchangeTheAgency();
+
+                                field.didChange(selectedModel.cdNm);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      );
+        ],
+      ),
+    );
   }
   Widget _initTextField(int index, bool isSingleLine) {
     final notifier = ref.watch(originInfoProvider.notifier);

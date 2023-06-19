@@ -33,7 +33,7 @@ class AgencyRegionBloc extends AsyncNotifier<List<BaseCodeModel>> {
 
   Future<void> selectTheCounty(BaseCodeModel region) async {
     list.removeWhere((e) => e.cdGrpId != null && e.cdGrpId!.length > 4);
-    print("selectTheCounty >>> ${region.cdId}");
+
     state = const AsyncLoading();
 
     state = await AsyncValue.guard<List<BaseCodeModel>>(
