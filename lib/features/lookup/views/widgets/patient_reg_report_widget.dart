@@ -20,6 +20,9 @@ class PatientRegReport extends ConsumerWidget {
     final ImagePicker picker = ImagePicker();
 
     return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 18,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

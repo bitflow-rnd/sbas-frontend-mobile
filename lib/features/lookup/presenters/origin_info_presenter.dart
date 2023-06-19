@@ -73,6 +73,15 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
     });
   }
 
+  Future<void> selectLocalCounty(String value) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      _model.reqDstr2Cd = value;
+
+      return _model;
+    });
+  }
+
   String? getText(int index) {
     switch (index) {
       case 0:

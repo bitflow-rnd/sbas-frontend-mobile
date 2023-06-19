@@ -10,7 +10,7 @@ class AssignBedMoveDetialInfo extends ConsumerWidget {
   const AssignBedMoveDetialInfo({super.key, this.type});
   final String? type;
   final String message =
-      "(남 / 88세 / 대구 북구 / 010-8833-1234)(남 / 88세 / 대구 북구 / 010-8833-1234)(남 / 88세 / 대구 북구 / 010-8833-1234)(남 / 88세 / 대구 북구 / 010-8833-1234)(남 / 88세 / 대구 북구 / 010-8833-1234)(남 / 88세 / 대구 북구 / 010-8833-1234)";
+      "메시지";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

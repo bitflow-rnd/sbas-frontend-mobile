@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sbas/constants/palette.dart';
 
+import '../../../assign/views/assign_bed_screen.dart';
+
 class Dashboard extends StatelessWidget {
   const Dashboard({
     super.key,
@@ -19,11 +21,14 @@ class Dashboard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
         splashColor: Colors.grey.shade300,
-        onTap: () {
-          if (kDebugMode) {
-            print(title);
-          }
-        },
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AssignBedScreen(
+              automaticallyImplyLeading: false,
+            ),
+          ),
+        ),
         child: Container(
           margin: edge,
           decoration: BoxDecoration(
