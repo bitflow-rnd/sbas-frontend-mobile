@@ -51,27 +51,3 @@ class BaseCodeModel {
     return data;
   }
 }
-
-class Id {
-  String? cdGrpId;
-  String? cdId;
-
-  Id({
-    this.cdGrpId,
-    this.cdId,
-  });
-  Id.fromJson(Map<String, dynamic> json) {
-    if (json["cdGrpId"] is String) {
-      cdGrpId = json["cdGrpId"];
-    }
-    if (json["cdId"] is String) {
-      cdId = json["cdId"];
-    }
-  }
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data["cdGrpId"] = cdGrpId;
-    data["cdId"] = cdId;
-    return data;
-  }
-}

@@ -31,6 +31,7 @@ class EpidemiologicalReportModel {
   String? instAddr;
   String? diagDrNm;
   String? rptChfNm;
+  String? zip;
 
   EpidemiologicalReportModel({
     this.rcptPhc,
@@ -65,6 +66,7 @@ class EpidemiologicalReportModel {
     this.instAddr,
     this.diagDrNm,
     this.rptChfNm,
+    this.zip,
   });
   EpidemiologicalReportModel.fromJson(Map<String, dynamic> json) {
     if (json["rcptPhc"] is String) {
@@ -163,6 +165,9 @@ class EpidemiologicalReportModel {
     if (json["rptChfNm"] is String) {
       rptChfNm = json["rptChfNm"];
     }
+    if (json["zip"] is String) {
+      zip = json["zip"];
+    }
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -199,6 +204,7 @@ class EpidemiologicalReportModel {
     data["instAddr"] = instAddr;
     data["diagDrNm"] = diagDrNm;
     data["rptChfNm"] = rptChfNm;
+    data["zip"] = zip;
 
     return data;
   }
