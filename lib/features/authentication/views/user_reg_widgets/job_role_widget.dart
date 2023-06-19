@@ -55,7 +55,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
 
     final instTypeCd = model.instTypeCd;
     final jobCd = model.jobCd;
-    final ocpCd = model.ocpCd;
+    final authCd = model.authCd;
 
     return ref.watch(jobRoleProvider).when(
           loading: () => const SBASProgressIndicator(),
@@ -68,8 +68,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
             ),
           ),
           data: (data) {
-            if (ocpCd != null && ocpCd.isNotEmpty) {
-              detailAuthSelectedIndex = widget.detailAuthTitles.indexOf(ocpCd);
+            if (authCd != null && authCd.isNotEmpty) {
+              detailAuthSelectedIndex = widget.detailAuthTitles.indexOf(authCd);
             }
             if (jobCd != null && jobCd.isNotEmpty) {
               authGroupSelectedIndex = widget.authGroupTitles.indexOf(jobCd);
@@ -174,7 +174,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                   ),
                   _getTitie(2),
                   FormField(
-                    initialValue: ocpCd,
+                    initialValue: authCd,
                     autovalidateMode: AutovalidateMode.always,
                     validator: (value) => value == null || value.isEmpty ? '권한을 선택해주세요.' : null,
                     builder: (field) => Column(
@@ -202,9 +202,9 @@ class _JobRoleState extends ConsumerState<JobRole> {
                                 () {
                                   detailAuthSelectedIndex = value ?? 0;
 
-                                  model.ocpCd = widget.detailAuthTitles[detailAuthSelectedIndex];
+                                  model.authCd = widget.detailAuthTitles[detailAuthSelectedIndex];
 
-                                  field.didChange(model.ocpCd);
+                                  field.didChange(model.authCd);
                                 },
                               ),
                             ),
