@@ -29,8 +29,8 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
       await _userRegRequestRepository.getBaseCode('DNRA'),
     );
     for (final e in _list) {
-      if (e.id != null && e.id!.cdId != null && e.id!.cdId!.isNotEmpty) {
-        ref.read(checkedSeverelyDiseaseProvider.notifier).state[e.id!.cdId!] =
+      if (e.cdId != null && e.cdId!.isNotEmpty) {
+        ref.read(checkedSeverelyDiseaseProvider.notifier).state[e.cdId!] =
             false;
       }
     }

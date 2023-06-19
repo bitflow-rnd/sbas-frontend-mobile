@@ -7,7 +7,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/views/alarm_screen.dart';
 import 'package:sbas/features/alarm/views/public_alarm_screen.dart';
-import 'package:sbas/features/dashboard/views/widgets/dashbord_widget.dart';
+import 'package:sbas/features/dashboard/views/widgets/dashboard_widget.dart';
 import 'package:sbas/util.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -64,7 +64,7 @@ class DashboardScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AutoSizeText(
-              '${prefs.getString('id')}님 안녕하세요!',
+              '${prefs.getString('userNm')}님 안녕하세요!',
               style: CTS.bold(
                 fontSize: 18,
               ),
@@ -92,21 +92,23 @@ class DashboardScreen extends ConsumerWidget {
                       flex: 1,
                       child: Row(
                         children: const [
-                          Dashbord(
+                          Dashboard(
                             title: '요청',
                             edge: EdgeInsets.only(
                               right: 6,
                               bottom: 6,
                             ),
                             path: 'request',
+                            count: 0,
                           ),
-                          Dashbord(
+                          Dashboard(
                             title: '승인',
                             edge: EdgeInsets.only(
                               left: 6,
                               bottom: 6,
                             ),
                             path: 'assign',
+                            count: 5,
                           ),
                         ],
                       ),
@@ -115,21 +117,23 @@ class DashboardScreen extends ConsumerWidget {
                       flex: 1,
                       child: Row(
                         children: const [
-                          Dashbord(
+                          Dashboard(
                             title: '이송',
                             edge: EdgeInsets.only(
                               top: 6,
                               right: 6,
                             ),
                             path: 'transfer',
+                            count: 3,
                           ),
-                          Dashbord(
+                          Dashboard(
                             title: '입원',
                             edge: EdgeInsets.only(
                               top: 6,
                               left: 6,
                             ),
                             path: 'hospitalization',
+                            count: 1,
                           ),
                         ],
                       ),

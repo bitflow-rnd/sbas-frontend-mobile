@@ -140,7 +140,7 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
                   enabledBorder: widget.inputBorder,
                   focusedBorder: widget.inputBorder,
                   contentPadding: const EdgeInsets.symmetric(
-                    vertical: 19,
+                    vertical: 16,
                     horizontal: 18,
                   ),
                   hintText: '소속기관명',

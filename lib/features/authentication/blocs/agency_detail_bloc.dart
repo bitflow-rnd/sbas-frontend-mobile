@@ -27,7 +27,7 @@ class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
       final user = ref.read(regUserProvider);
 
       list.addAll(await _infoInstRepository.getOrganCode(
-          user.instTypeCd ?? '', agency.id?.cdId ?? ''));
+          user.instTypeCd ?? '', agency.cdId ?? ''));
 
       return list;
     });

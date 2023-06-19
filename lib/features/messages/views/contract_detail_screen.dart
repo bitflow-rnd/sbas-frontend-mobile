@@ -55,7 +55,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
       ),
       body: Column(
         children: [
-          Image.asset("assets/message/hospital_image.png"),
+          Image.asset("assets/message/hospital_image_2.png"),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
             child: Row(

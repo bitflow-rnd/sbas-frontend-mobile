@@ -48,7 +48,7 @@ class TopNavbar extends StatelessWidget {
           count: list[1],
         ),
         TopNavItem(
-          text: '배차',
+          text: '이송',
           x: 0,
           width: width,
           isSelected: x == 0,

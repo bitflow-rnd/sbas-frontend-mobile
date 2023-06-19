@@ -3,12 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sbas/constants/palette.dart';
 
-class Dashbord extends StatelessWidget {
-  const Dashbord({
+class Dashboard extends StatelessWidget {
+  const Dashboard({
     super.key,
     required this.title,
     required this.edge,
     required this.path,
+    required this.count,
   });
 
   @override
@@ -72,8 +73,8 @@ class Dashbord extends StatelessWidget {
                     vertical: 6,
                     horizontal: 12,
                   ),
-                  child: const AutoSizeText(
-                    '25',
+                  child: AutoSizeText(
+                    count.toString(),
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
@@ -92,4 +93,5 @@ class Dashbord extends StatelessWidget {
 
   final String title, path;
   final EdgeInsets edge;
+  final int count;
 }

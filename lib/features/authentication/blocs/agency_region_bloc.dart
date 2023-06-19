@@ -15,7 +15,7 @@ class AgencyRegionBloc extends AsyncNotifier<List<BaseCodeModel>> {
   }
 
   Future<void> exchangeTheCounty() async {
-    list.removeWhere((e) => e.id != null && e.id?.cdGrpId != null && e.id!.cdGrpId!.length > 4);
+    list.removeWhere((e) => e.cdGrpId != null && e.cdGrpId!.length > 4);
 
     state = const AsyncLoading();
 
@@ -23,7 +23,7 @@ class AgencyRegionBloc extends AsyncNotifier<List<BaseCodeModel>> {
       () async {
         final region = ref.read(selectedRegionProvider);
 
-        list.addAll(await _userRegRequestRepository.getBaseCode('${region.id?.cdGrpId}${region.id?.cdId}'));
+        list.addAll(await _userRegRequestRepository.getBaseCode('${region.cdGrpId}${region.cdId}'));
 
         return list;
       },
@@ -32,13 +32,13 @@ class AgencyRegionBloc extends AsyncNotifier<List<BaseCodeModel>> {
   }
 
   Future<void> selectTheCounty(BaseCodeModel region) async {
-    list.removeWhere((e) => e.id != null && e.id?.cdGrpId != null && e.id!.cdGrpId!.length > 4);
+    list.removeWhere((e) => e.cdGrpId != null && e.cdGrpId!.length > 4);
 
     state = const AsyncLoading();
 
     state = await AsyncValue.guard<List<BaseCodeModel>>(
       () async {
-        list.addAll(await _userRegRequestRepository.getBaseCode('${region.id?.cdGrpId}${region.id?.cdId}'));
+        list.addAll(await _userRegRequestRepository.getBaseCode('${region.cdGrpId}${region.cdId}'));
 
         return list;
       },

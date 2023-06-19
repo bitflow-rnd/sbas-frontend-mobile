@@ -7,21 +7,27 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_disease_info.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_move_detail.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_paitent_info.dart';
+import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_patient_info.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_timeline.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/util.dart';
 
 import '../../lookup/models/patient_disease_info_model.dart';
+import '../model/assign_item_model.dart';
 
 class AssignBedDetailScreen extends ConsumerStatefulWidget {
   AssignBedDetailScreen({
     super.key,
     required this.model,
-    required this.patientDiseaseInfoModel,
+    required this.assignItem,
+    required this.timeLine,
+    required this.diseaseInfo,
   });
   final Patient model;
-  final PatientDiseaseInfoModel patientDiseaseInfoModel;
+  final AssignItemModel assignItem;
+  final PatientTimelineModel timeLine;
+  final PatientDiseaseInfoModel diseaseInfo;
   final headerList = [
     "타임라인",
     "환자정보",
@@ -147,11 +153,11 @@ class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
                 ),
               ),
               if (_selectedIndex == 0)
-                AssignBedDetailTimeLine(patient: widget.model)
+                AssignBedDetailTimeLine(patient: widget.model, assignItem: widget.assignItem, timeLine: widget.timeLine)
               else if (_selectedIndex == 1)
-                AssignBedDetailPaitentInfo(patient: widget.model)
+                AssignBedDetailPatientInfo(patient: widget.model)
               else if (_selectedIndex == 2)
-                AssignBedDetailDiseaseInfo(ptId: widget.model.ptId, diseaseInfo: widget.patientDiseaseInfoModel)
+                AssignBedDetailDiseaseInfo(ptId: widget.model.ptId, diseaseInfo: widget.diseaseInfo)
               else if (_selectedIndex == 3)
                 /*집-병원 또는 null 로 하면 집-병원 으로 젼환가능*/
                 const AssignBedMoveDetialInfo(type: "병원-집")

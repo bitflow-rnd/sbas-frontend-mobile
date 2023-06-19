@@ -115,7 +115,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                                       data: (region) => FormField(
                                         builder: (field) => _selectRegion(
                                           region.where(
-                                            (e) => e.id?.cdGrpId == 'SIDO',
+                                            (e) => e.cdGrpId == 'SIDO',
                                           ),
                                           field,
                                         ),
@@ -385,7 +385,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                     ref
                         .read(agencyDetailProvider.notifier)
                         .updatePublicHealthCenter(
-                          region.firstWhere((e) => e.cdNm == value).id?.cdId ??
+                          region.firstWhere((e) => e.cdNm == value).cdId ??
                               '',
                         );
                     field.didChange(value);

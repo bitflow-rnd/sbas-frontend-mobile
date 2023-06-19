@@ -9,8 +9,8 @@ import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/util.dart';
 
-class AssignBedDetailPaitentInfo extends ConsumerWidget {
-  AssignBedDetailPaitentInfo({
+class AssignBedDetailPatientInfo extends ConsumerWidget {
+  AssignBedDetailPatientInfo({
     super.key,
     required this.patient,
   });

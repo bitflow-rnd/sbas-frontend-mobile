@@ -7,17 +7,17 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 class PatientDiseaseInfoPresenter extends AsyncNotifier {
   @override
   FutureOr build() {
-    _repository = ref.read(patientRepoProvider);
+    _patientRepository = ref.read(patientRepoProvider);
   }
 
   Future<PatientDiseaseInfoModel> getAsync(String? ptId) async {
     if (ptId != null && ptId.isNotEmpty) {
-      return await _repository.getDiseaseInfo(ptId);
+      return await _patientRepository.getDiseaseInfo(ptId);
     }
     return PatientDiseaseInfoModel(undrDsesNms: [], ptTypeNms: [], svrtTypeNms: []);
   }
 
-  late final PatientRepository _repository;
+  late final PatientRepository _patientRepository;
 }
 
 final patientDiseaseInfoProvider = AsyncNotifierProvider<PatientDiseaseInfoPresenter, void>(

@@ -238,7 +238,7 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                     isDense: true,
                     isExpanded: true,
                     items: region
-                        .where((e) => e.id?.cdGrpId == 'SIDO')
+                        .where((e) => e.cdGrpId == 'SIDO')
                         .map(
                           (e) => DropdownMenuItem(
                             alignment: Alignment.center,
@@ -256,7 +256,7 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                     onChanged: (value) {
                       if (value != null && value.isNotEmpty) {
                         final selectRegion =
-                            region.firstWhere((e) => e.cdNm == value).id?.cdId;
+                            region.firstWhere((e) => e.cdNm == value).cdId;
 
                         if (selectRegion != null && selectRegion.isNotEmpty) {
                           ref
@@ -267,7 +267,7 @@ class _OriginInfomationState extends ConsumerState<OriginInfomation> {
                     },
                     value: region
                         .firstWhere(
-                          (e) => e.id?.cdId == code,
+                          (e) => e.cdId == code,
                           orElse: () => BaseCodeModel(),
                         )
                         .cdNm,
