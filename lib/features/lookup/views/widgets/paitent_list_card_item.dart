@@ -103,7 +103,7 @@ class PaitentCardItem extends StatelessWidget {
                     maxLines: 1,
                   ),
                   Container(
-                    height: 25.h,
+                    height: 30.h,
                     width: (MediaQuery.of(context).size.width / 2).w,
                     padding: EdgeInsets.symmetric(
                       vertical: 6.h,
@@ -113,7 +113,7 @@ class PaitentCardItem extends StatelessWidget {
                       itemCount: model.tagList.length,
                       itemBuilder: (_, index) => Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 1.h,
+                          vertical: 2.5.h,
                           horizontal: 6.w,
                         ),
                         margin: EdgeInsets.only(right: 8.w),
