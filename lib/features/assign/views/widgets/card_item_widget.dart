@@ -141,7 +141,7 @@ class CardItem extends ConsumerWidget {
                           itemCount: model.tagList?.length ?? 0,
                           itemBuilder: (context, index) => Container(
                             padding: EdgeInsets.symmetric(
-                              vertical: 4.h,
+                              vertical: 2.5.h,
                               horizontal: 6.w,
                             ),
                             decoration: BoxDecoration(

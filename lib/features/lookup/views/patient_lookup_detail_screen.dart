@@ -125,13 +125,18 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                   horizontal: 16,
                   vertical: 14,
                 ),
-                child: PatientRegTopNav(
-                  x: progress == 0 ? 1 : -1,
-                  items: const [
-                    '환자정보',
-                    '병상배정이력',
-                  ],
-                ),
+                child: GestureDetector(
+                  onTap: () => progress == 0 ?
+                    ref.read(patientProgressProvider.notifier).state++
+                    : ref.read(patientProgressProvider.notifier).state--,
+                  child: PatientRegTopNav(
+                    x: progress == 0 ? 1 : -1,
+                    items: const [
+                      '환자정보',
+                      '병상배정이력',
+                    ],
+                  ),
+                )
               ),
               Expanded(
                 child: SingleChildScrollView(

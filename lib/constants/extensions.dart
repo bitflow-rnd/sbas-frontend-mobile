@@ -15,6 +15,10 @@ extension PatientExtension on Patient {
   }
 
   String getSex() {
-    return gndr == 'M' ? '남' : '여';
+    return gndr ?? '';
+  }
+
+  String getPhoneNum() {
+    return mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? '';
   }
 }
