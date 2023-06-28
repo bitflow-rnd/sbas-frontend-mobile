@@ -6,6 +6,8 @@ import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/model/available_hospital_model.dart';
+import 'package:sbas/features/assign/presenters/available_hospital_presenter.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_move.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_screen.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_cancel_screen.dart';
@@ -84,41 +86,45 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                               if (assignItem.bedStatCdNm == '이송중')
                                 Column(
                                   children: [
-                                    completeCard(
-                                      title: "승인",
-                                      dateTime: "오후 2시 33분",
-                                      src: "timeline_approved",
-                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                      detail: "병상배정이 완료되었습니다.",
-                                    ),
-                                    completeCard(
-                                      title: "배정불가",
-                                      dateTime: "오후 2시 33분",
-                                      src: "timeline_refused",
-                                      by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                      detail: "가능한 음압격리 병실이 없습니다.",
-                                    ),
-                                    completeCard(
-                                        title: "배정완료",
-                                        dateTime: "오후 2시 33분",
-                                        src: "timeline_bed_assign_complete",
-                                        by: "대구의료원 / 신경내과 / 강성일",
-                                        detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
-                                    completeCard(
-                                        title: "이송중",
-                                        dateTime: "오후 2시 33분",
-                                        src: "timeline_suspend",
-                                        by: "대구광역시 중부 대명 구급 / 신채호 외 2명",
-                                        isBlue: true,
-                                        isSelected: true,
-                                        detail: "128라5431 / 128km / 예상 24분"),
-                                    suspendCard(
-                                      title: "입원",
-                                      detail: "대구 칠곡경북대병원 / 감염내과 / 김감염",
-                                      src: "timeline_go_hospital_complete",
-                                      isSelected: false,
-                                    ),
+                                    for (var i = 0; i < timeLine.count!; i++)
+                                      timeLineBody(timeLine.items[i]),
                                   ],
+                                  // children: [
+                                  //   completeCard(
+                                  //     title: "승인",
+                                  //     dateTime: "오후 2시 33분",
+                                  //     src: "timeline_approved",
+                                  //     by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  //     detail: "병상배정이 완료되었습니다.",
+                                  //   ),
+                                  //   completeCard(
+                                  //     title: "배정불가",
+                                  //     dateTime: "오후 2시 33분",
+                                  //     src: "timeline_refused",
+                                  //     by: "대구광역시 병상배정반 / 팀장 / 홍성수",
+                                  //     detail: "가능한 음압격리 병실이 없습니다.",
+                                  //   ),
+                                  //   completeCard(
+                                  //       title: "배정완료",
+                                  //       dateTime: "오후 2시 33분",
+                                  //       src: "timeline_bed_assign_complete",
+                                  //       by: "대구의료원 / 신경내과 / 강성일",
+                                  //       detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
+                                  //   completeCard(
+                                  //       title: "이송중",
+                                  //       dateTime: "오후 2시 33분",
+                                  //       src: "timeline_suspend",
+                                  //       by: "대구광역시 중부 대명 구급 / 신채호 외 2명",
+                                  //       isBlue: true,
+                                  //       isSelected: true,
+                                  //       detail: "128라5431 / 128km / 예상 24분"),
+                                  //   suspendCard(
+                                  //     title: "입원",
+                                  //     detail: "대구 칠곡경북대병원 / 감염내과 / 김감염",
+                                  //     src: "timeline_go_hospital_complete",
+                                  //     isSelected: false,
+                                  //   ),
+                                  // ],
                                 ),
                               if (assignItem.bedStatCdNm == '입원')
                                 Column(
@@ -176,23 +182,32 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 ),
               ),
             ),
-            _whichBottomer('승인대기', context), //patient.bedStatNm ?? ''
+            _whichBottomer(patient.bedStatNm?? '', context, ref), //patient.bedStatNm ?? ''
           ],
         ),
       );
-  Widget _whichBottomer(String type, BuildContext context) {
+  Widget _whichBottomer(String type, BuildContext context, WidgetRef ref) {
+    print("_whichBottomer >>>>>>>>>>>> ${patient.bedStatNm}");
     switch (type) {
       case '승인대기':
         return _bottomer(
             lBtnText: "배정 불가",
             rBtnText: "승인",
             lBtnFunc: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssignBedCancelScreen(
+                    patient: patient,
+                  ),
+                ),
+              );
             },
             rBtnFunc: () async {
               dynamic res = await _showBottomSheet(
                 context: context,
               );
+              var hospList = await ref.watch(availableHospitalProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq);
               if (res != null && context.mounted) {
                 //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
                 Navigator.push(
@@ -200,6 +215,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   MaterialPageRoute(
                     builder: (context) => AssignBedFindScreen(
                       patient: patient,
+                      bdasSeq: assignItem.bdasSeq,
+                      hospList: hospList,
                     ),
                   ),
                 );
@@ -300,7 +317,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Container(
-                padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
+                padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 350.h),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -475,7 +492,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     switch (timeLine.timeLineStatus) {
       case "complete":
         return completeCard(title: timeLine.title ?? '', dateTime: getTimeLineDateFormat(timeLine.updtDttm ?? ''),
-            src: getImageSrcBy(timeLine.title ?? ''), by: timeLine.by ?? '', detail: timeLine.msg);
+                              src: getImageSrcBy(timeLine.title ?? ''), by: timeLine.by ?? '', detail: timeLine.msg);
       case "suspend":
         return suspendCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!), detail: timeLine.by);
       case "closed":
@@ -499,7 +516,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
       case "배정거절":
         src = "timeline_refused";
         break;
-      case "이송":
+      case "이송": case "이송완료":
         src = "timeline_move_complete";
         break;
       case "입원":

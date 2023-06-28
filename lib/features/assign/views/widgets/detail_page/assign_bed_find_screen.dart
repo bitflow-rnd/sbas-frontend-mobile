@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
+import 'package:sbas/features/assign/model/available_hospital_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 
-class AssignBedFindScreen extends StatefulWidget {
+import '../../../presenters/available_hospital_presenter.dart';
+
+class AssignBedFindScreen extends ConsumerStatefulWidget {
   AssignBedFindScreen({
     super.key,
     required this.patient,
+    required this.bdasSeq,
+    required this.hospList,
   });
   Patient patient;
+  int? bdasSeq;
+  AvailableHospitalModel hospList;
   @override
-  State<AssignBedFindScreen> createState() => _AssignBedFindScreenState();
+  ConsumerState<AssignBedFindScreen> createState() => _AssignBedFindScreenState();
 }
 
-class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
+class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
   bool _isSelected = false;
   bool isSearchDetailOpen = false;
   @override
@@ -51,7 +58,7 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
           child: Column(
             children: [
               _header(widget.patient.ptNm ?? '',
-                  "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
+                  "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / ${widget.patient.getPhoneNum()})"), //pnum 등 분리필요
               Divider(color: Palette.greyText_20, height: 1),
 
               Padding(
@@ -211,7 +218,7 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                                   text: '총',
                                   style: CTS.bold(color: Colors.black)),
                               TextSpan(
-                                  text: ' 15',
+                                  text: ' ${widget.hospList.count}',
                                   style: CTS.bold(color: Palette.mainColor)),
                               TextSpan(
                                   text: '개',
@@ -236,7 +243,7 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      for (var i = 0; i < 5; i++) requestContainer(),
+                      for (var i = 0; i < widget.hospList.count!; i++) requestContainer(i),
                     ],
                   ),
                 ),
@@ -276,7 +283,7 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
         ));
   }
 
-  Widget requestContainer() {
+  Widget requestContainer(int idx) {
     return Container(
       margin: EdgeInsets.only(top: 8.h),
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
@@ -293,7 +300,9 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
         ],
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () async {
+          var list = await ref.watch(availableHospitalProvider.notifier).getAsync(widget.patient.ptId, widget.bdasSeq);
+        },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -306,7 +315,7 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                 Row(
                   children: [
                     Text(
-                      '경북대학교병원',
+                      '${widget.hospList.items[idx].hospNm}',
                       style: CTS.medium(
                         color: Colors.black,
                         fontSize: 15,
@@ -330,19 +339,26 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                     ),
                   ],
                 ),
-                Gaps.v8,
-                Row(
-                  children: [
-                    Text(
-                      '대구 북구 호국로 807',
-                      style: CTS(
-                        color: Palette.greyText_80,
-                        fontSize: 12,
-                      ),
+                // Gaps.v8,
+                SizedBox(
+                  width: 220,
+                  height: 30,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Text(
+                          '${widget.hospList.items[idx].addr}',
+                          style: CTS(
+                            color: Palette.greyText_80,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-                Gaps.v12,
+                Gaps.v4,
                 Row(
                   children: [
                     Container(
@@ -389,7 +405,7 @@ class _AssignBedFindScreenState extends State<AssignBedFindScreen> {
                   children: [
                     Icon(Icons.location_on_sharp,
                         color: Palette.mainColor, size: 20.h),
-                    Text('4.3km',
+                    Text('${widget.hospList.items[idx].distance}',
                         style: CTS(color: Palette.mainColor, fontSize: 12)),
                   ],
                 ),
