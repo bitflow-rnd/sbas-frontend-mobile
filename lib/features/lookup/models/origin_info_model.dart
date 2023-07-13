@@ -1,6 +1,5 @@
 class OriginInfoModel {
   String? ptId;
-  String? reqTypeCd;
   String? reqDstr1Cd;
   String? reqDstr2Cd;
   String? dprtDstrTypeCd;
@@ -9,7 +8,6 @@ class OriginInfoModel {
   String? dprtDstrZip;
   String? nok1Telno;
   String? nok2Telno;
-  String? dprtHospId;
   String? inhpAsgnYn;
   String? deptNm;
   String? spclNm;
@@ -18,7 +16,6 @@ class OriginInfoModel {
 
   OriginInfoModel({
     this.ptId,
-    this.reqTypeCd,
     this.reqDstr1Cd,
     this.reqDstr2Cd,
     this.dprtDstrTypeCd,
@@ -27,7 +24,6 @@ class OriginInfoModel {
     this.dprtDstrZip,
     this.nok1Telno,
     this.nok2Telno,
-    this.dprtHospId,
     this.inhpAsgnYn,
     this.deptNm,
     this.spclNm,
@@ -37,9 +33,6 @@ class OriginInfoModel {
   OriginInfoModel.fromJson(Map<String, dynamic> json) {
     if (json["ptId"] is String) {
       ptId = json["ptId"];
-    }
-    if (json["reqTypeCd"] is String) {
-      reqTypeCd = json["reqTypeCd"];
     }
     if (json["reqDstr1Cd"] is String) {
       reqDstr1Cd = json["reqDstr1Cd"];
@@ -65,9 +58,6 @@ class OriginInfoModel {
     if (json["nok2Telno"] is String) {
       nok2Telno = json["nok2Telno"];
     }
-    if (json["dprtHospId"] is String) {
-      dprtHospId = json["dprtHospId"];
-    }
     if (json["inhpAsgnYn"] is String) {
       inhpAsgnYn = json["inhpAsgnYn"];
     }
@@ -88,7 +78,6 @@ class OriginInfoModel {
     final Map<String, dynamic> data = <String, dynamic>{};
 
     data["ptId"] = ptId;
-    data["reqTypeCd"] = reqTypeCd;
     data["reqDstr1Cd"] = reqDstr1Cd;
     data["reqDstr2Cd"] = reqDstr2Cd;
     data["dprtDstrTypeCd"] = dprtDstrTypeCd;
@@ -97,7 +86,6 @@ class OriginInfoModel {
     data["dprtDstrZip"] = dprtDstrZip;
     data["nok1Telno"] = nok1Telno;
     data["nok2Telno"] = nok2Telno;
-    data["dprtHospId"] = dprtHospId;
     data["inhpAsgnYn"] = inhpAsgnYn;
     data["deptNm"] = deptNm;
     data["spclNm"] = spclNm;

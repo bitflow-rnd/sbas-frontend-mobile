@@ -18,7 +18,6 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       _model.ptId = ptId;
-      _model.reqTypeCd = 'RQTP0001';
 
       await _repository.postRegOriginInfo(_model);
 
