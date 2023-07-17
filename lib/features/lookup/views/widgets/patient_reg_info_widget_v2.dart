@@ -346,9 +346,9 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                 child: TextFormField(
                   decoration:
                       getInputDecoration(report.natiCd == 'NATI0001' ? '' : '직접입력'),
-                  // controller: TextEditingController(
-                  //   text: vm.getTextEditingController(104, report),
-                  // ),
+                  controller: TextEditingController(
+                    text: vm.getTextEditingController(104, report),
+                  ),
                   onSaved: (newValue) =>
                       vm.setTextEditingController(104, newValue),
                   onChanged: (value) => vm.setTextEditingController(104, value),

@@ -18,7 +18,7 @@ import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   @override
   FutureOr<PatientRegInfoModel> build() {
-    _patientInfoModel = PatientRegInfoModel.empty();
+    _patientInfoModel = PatientRegInfoModel();
     _regRepository = ref.read(userRegReqProvider);
     _patientRepository = ref.read(patientRepoProvider);
 
@@ -57,18 +57,16 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   Future<void> uploadImage(XFile imageFile) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final attcId = await _regRepository.uploadImage(imageFile);
-
-      ref.read(patientAttcProvider.notifier).state = attcId;
 
       try {
         final report = EpidemiologicalReportModel.fromJson(
           await _patientRepository.getOpticalCharacterRecognition(imageFile),
         );
+        ref.read(patientAttcProvider.notifier).state = report.attcId;
         _patientInfoModel.bascAddr = report.baseAddr;
         _patientInfoModel.detlAddr = report.dtlAddr;
         _patientInfoModel.zip = report.zip;
-        _patientInfoModel.attcId = attcId;
+        _patientInfoModel.attcId = report.attcId;
         _patientInfoModel.gndr =
             report.rrno2 == '1' || report.rrno2 == '3' ? '남' : '여';
         _patientInfoModel.job = report.job;
@@ -184,8 +182,10 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       report.natiCd = report.natiCd == 'NATI0001' ? 'NATI0002' : 'NATI0001';
+      report.natiNm = report.natiCd == 'NATI0001' ? '대한민국' : '';
 
       _patientInfoModel.natiCd = report.natiCd;
+      _patientInfoModel.natiNm = report.natiNm;
 
       return _patientInfoModel;
     });
@@ -227,6 +227,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     _patientInfoModel.attcId = patient.attcId;
     _patientInfoModel.nokNm = patient.nokNm;
     _patientInfoModel.picaVer = patient.picaVer;
+    _patientInfoModel.natiNm = patient.natiNm;
   }
 
   void setTextEditingController(int index, String? value) {
@@ -257,7 +258,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         return;
 
       case 104:
-        _patientInfoModel.natiNm = value;
+        _patientInfoModel.natiNm = value ?? '대한민국';
         return;
 
       case 5:
@@ -342,6 +343,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
 
       case 8:
         return report.job ?? '';
+
+      case 104:
+        return report.natiNm ?? '대한민국';
 
       default:
         return '';
