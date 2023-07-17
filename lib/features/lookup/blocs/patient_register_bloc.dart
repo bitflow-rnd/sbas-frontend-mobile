@@ -81,7 +81,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         _patientInfoModel.telno = report.telno;
         _patientInfoModel.mpno = report.mpno;
         _patientInfoModel.nokNm = report.nokNm;
-        _patientInfoModel.natiCd = 'KR';
+        _patientInfoModel.natiCd = report.natiCd;
       } catch (exception) {
         if (kDebugMode) {
           print(exception);
@@ -183,10 +183,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   Future<void> setNation(PatientRegInfoModel report) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      report.natiCd = report.natiCd == 'KR' ? '' : 'KR';
+      report.natiCd = report.natiCd == 'NATI0001' ? 'NATI0002' : 'NATI0001';
 
       _patientInfoModel.natiCd = report.natiCd;
-      _patientInfoModel.natiNm = report.natiCd == 'KR' ? '대한민국' : '';
 
       return _patientInfoModel;
     });
@@ -258,6 +257,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         return;
 
       case 104:
+        _patientInfoModel.natiNm = value;
         return;
 
       case 5:
@@ -329,9 +329,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         return report.dethYn ?? '';
 
       case 4:
-        report.natiNm = report.natiCd == 'KR' ? '대한민국' : '기타';
-
-        return report.natiNm ?? '';
+        return report.natiCd == 'NATI0001' ? '대한민국' : '기타';
 
       case 5:
         return report.mpno ?? '';
