@@ -47,7 +47,7 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 4:
-      text = patient.natiNm ?? text;
+      text = patient.natiNm ?? (patient.natiCd == 'NATI0001' ? '대한민국' : text);
       break;
 
     case 5:
