@@ -345,7 +345,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
               Expanded(
                 child: TextFormField(
                   decoration:
-                      getInputDecoration(report.natiCd == 'KR' ? '' : '직접입력'),
+                      getInputDecoration(report.natiCd == 'NATI0001' ? '' : '직접입력'),
                   controller: TextEditingController(
                     text: vm.getTextEditingController(104, report),
                   ),
@@ -359,7 +359,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                   autovalidateMode: AutovalidateMode.always,
                   keyboardType: TextInputType.streetAddress,
                   maxLines: 1,
-                  readOnly: report.natiCd == 'KR',
+                  readOnly: report.natiCd == 'NATI0001',
                 ),
               ),
             ],
@@ -404,7 +404,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                           if (i == 2) _addrInput(vm),
                           if (i == 3) _isAlive(vm),
                           if (i == 4) _nation(report, vm),
-                          if (i == 4 && report.natiCd != 'KR') Gaps.v8,
+                          if (i == 4 && report.natiCd != 'NATI0001') Gaps.v8,
                           if (i != 1 && i != 3 && i != 4)
                             TextFormField(
                               decoration: getInputDecoration(
