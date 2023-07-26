@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class SeverelyDiseaseModel {
   String? ptId;
   String? ptTypeCd;
@@ -7,6 +9,14 @@ class SeverelyDiseaseModel {
   String? dnrAgreYn;
   String? svrtIptTypeCd;
   String? svrtTypeCd;
+  String? avpuCd;
+  String? oxyYn;
+  double? bdtp;
+  double? spo2;
+  int? hr;
+  int? resp;
+  int? sbp;
+  int? newsScore;
   late List<String> pttp;
   late List<String> udds;
 
@@ -19,6 +29,14 @@ class SeverelyDiseaseModel {
     this.dnrAgreYn,
     this.svrtIptTypeCd,
     this.svrtTypeCd,
+    this.avpuCd,
+    this.oxyYn,
+    this.bdtp,
+    this.spo2,
+    this.hr,
+    this.resp,
+    this.sbp,
+    this.newsScore,
     required this.pttp,
     required this.udds,
   });
@@ -47,6 +65,30 @@ class SeverelyDiseaseModel {
     if (json["svrtTypeCd"] is String) {
       svrtTypeCd = json["svrtTypeCd"];
     }
+    if (json["avpuCd"] is String) {
+      avpuCd = json["avpuCd"];
+    }
+    if (json["oxyYn"] is String) {
+      oxyYn = json["oxyYn"];
+    }
+    if (json["bdtp"] is String) {
+      bdtp = json["bdtp"];
+    }
+    if (json["spo2"] is String) {
+      spo2 = json["spo2"];
+    }
+    if (json["hr"] is Int) {
+      hr = json["hr"];
+    }
+    if (json["resp"] is Int) {
+      resp = json["resp"];
+    }
+    if (json["sbp"] is Int) {
+      sbp = json["sbp"];
+    }
+    if (json["newsScore"] is Int) {
+      newsScore = json["newsScore"];
+    }
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -57,6 +99,14 @@ class SeverelyDiseaseModel {
     data["dnrAgreYn"] = dnrAgreYn;
     data["svrtIptTypeCd"] = svrtIptTypeCd;
     data["svrtTypeCd"] = svrtTypeCd;
+    data["avpuCd"] = avpuCd;
+    data["oxyYn"] = oxyYn;
+    data["bdtp"] = bdtp;
+    data["spo2"] = spo2;
+    data["hr"] = hr;
+    data["resp"] = resp;
+    data["sbp"] = sbp;
+    data["newsScore"] = newsScore;
 
     ptTypeCd = '';
     undrDsesCd = '';

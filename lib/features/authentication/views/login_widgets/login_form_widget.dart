@@ -28,7 +28,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             keyboardType: ref.read(loginProvider.notifier).isFirebaseAuth() ? TextInputType.emailAddress : TextInputType.text,
             inputFormatters: [
               FilteringTextInputFormatter.allow(
-                RegExp(ref.read(loginProvider.notifier).isFirebaseAuth() ? r'[a-z|A-Z|0-9|@.]' : r'[a-z|A-Z|0-9|@.-_]'),
+                RegExp(ref.read(loginProvider.notifier).isFirebaseAuth() ? r'[a-z|A-Z|0-9|@.]' : r'[a-z|A-Z|0-9|@.\-_]'),
               ),
               FilteringTextInputFormatter.singleLineFormatter,
             ],
