@@ -1,32 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_request_critical_attack_input.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_request_departure_info_input.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_request_disease_info_input.dart';
+import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 
-class AssignBedRequestScreen extends StatefulWidget {
-  const AssignBedRequestScreen({
+final selectedTabIndexProvider = StateProvider<int>((ref) => 0);
+final patientImageProvider = StateProvider<XFile?>((ref) => null);
+final patientAttcProvider = StateProvider<String?>((ref) => null);
+final patientIsUploadProvider = StateProvider<bool>((ref) => true);
+final assignNewBedProvider = AsyncNotifierProvider<AssignNewBedPresenter, PatientRegInfoModel>(
+  () => AssignNewBedPresenter(),
+);
+
+class AssignBedRequestScreen extends ConsumerWidget {
+  AssignBedRequestScreen({
+    this.patient,
     super.key,
   });
-  @override
-  State<AssignBedRequestScreen> createState() => _AssignBedRequestState();
-}
 
-class _AssignBedRequestState extends State<AssignBedRequestScreen> {
+  Patient? patient;
   List<String> headerList = ["역학조사서", "환자정보", "감염병정보", "중증정보", "출발정보"];
-  int _selectedIndex = 0;
   bool isRight = false;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    int _selectedIndex = ref.watch(selectedTabIndexProvider);
+    final patientImage = ref.watch(patientImageProvider);
+    final patientAttc = ref.watch(patientAttcProvider);
+    final patientIsUpload = ref.watch(patientIsUploadProvider);
+
     return Scaffold(
         backgroundColor: Palette.white,
         appBar: AppBar(
@@ -86,16 +104,17 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16.w, vertical: 10.h),
+                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                             child: Padding(
                               padding: EdgeInsets.only(top: 6.h),
                               child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: List.generate(
                                     5,
                                     (index) => InkWell(
+                                      onTap: () {
+                                        ref.read(selectedTabIndexProvider.notifier).update((state) => index);
+                                      },
                                       // onTap:
                                       // () {
                                       // setState(() {
@@ -129,8 +148,7 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                                 ),
                               ),
                               AnimatedContainer(
-                                padding: EdgeInsets.only(
-                                    left: 0.22.sw * _selectedIndex + 16.w),
+                                padding: EdgeInsets.only(left: 0.22.sw * _selectedIndex + 16.w),
                                 duration: const Duration(
                                   milliseconds: 200,
                                 ),
@@ -156,44 +174,33 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
               if (_selectedIndex == 0) //역학조사서
                 Expanded(
                   child: Padding(
-                    padding:
-                        EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
+                    padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
                     child: const PatientRegReport(),
                   ),
                 ),
               if (_selectedIndex == 1) //환자정보
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 24.h),
-                    child: PatientRegInfoV2(),
-                  )
-                ),
-              if (_selectedIndex == 2)
-                AssignReqDiseaseInfoInputScreen(), //감염병정보
-              if (_selectedIndex == 3)
-                AssignReqCriticalAttackInputScreen(), //중증정보
-              if (_selectedIndex == 4)
-                AssignReqDepatureInfoInputScreen(), //출발정보
-              _bottomer(),
+                    child: Padding(
+                  padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
+                  child: PatientRegInfoV2(),
+                )),
+              if (_selectedIndex == 2) AssignReqDiseaseInfoInputScreen(), //감염병정보
+              if (_selectedIndex == 3) AssignReqCriticalAttackInputScreen(), //중증정보
+              if (_selectedIndex == 4) AssignReqDepatureInfoInputScreen(), //출발정보
+              _bottomer(ref, _selectedIndex, patientImage, patientAttc, patientIsUpload, context),
             ],
           ),
         ));
   }
 
-  Widget _bottomer() {
+  Widget _bottomer(WidgetRef ref, int selectedIndex, patientImage, patientAttc, patientIsUpload, context) {
     return Row(
       children: [
-        _selectedIndex != 0
+        selectedIndex != 0
             ? Expanded(
                 child: InkWell(
                   onTap: () {
-                    if (_selectedIndex == 0) {
-                      Navigator.pop(context);
-                    } else {
-                      setState(() {
-                        _selectedIndex--;
-                      });
-                    }
+                    ref.read(selectedTabIndexProvider.notifier).update((state) => state - 1);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 11.h),
@@ -218,12 +225,28 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
         Expanded(
           child: InkWell(
             onTap: () {
-              if (_selectedIndex == 4) {
+              if (selectedIndex == 0) {
+                patientImage != null || !patientIsUpload
+                    ? patientAttc != null
+                        ? true
+                            ? () => ref.read(patientRegProvider.notifier).registry(patient?.ptId, context) //환자실등록
+                            // ? null
+                            : null
+                        : (patientImage != null
+                            ? () => ref.read(patientRegProvider.notifier).uploadImage(patientImage)
+                            : () {
+                                if (patient != null) {
+                                  ref.read(patientRegProvider.notifier).overrideInfo(patient!);
+                                }
+                                ref.read(patientAttcProvider.notifier).state = '';
+                              })
+                    : null;
+              }
+
+              if (selectedIndex == 4) {
                 //모두 작성 완료시 로직처리.
               } else {
-                setState(() {
-                  _selectedIndex++;
-                });
+                ref.read(selectedTabIndexProvider.notifier).update((state) => state + 1);
               }
             },
             child: Container(
@@ -232,7 +255,7 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
                 color: Palette.mainColor,
               ),
               child: Text(
-                _selectedIndex == 4 ? '요청 완료' : '다음',
+                selectedIndex == 4 ? '요청 완료' : '다음',
                 style: CTS(
                   color: Colors.white,
                   fontSize: 16,
@@ -295,7 +318,7 @@ class _AssignBedRequestState extends State<AssignBedRequestScreen> {
     );
   }
 
-  Patient tempPaitent = Patient(
+  PatientRegInfoModel tempPaitent = PatientRegInfoModel(
     rgstUserId: "cyberprophet",
     rgstDttm: "2023-04-11T06:12:03.709296Z",
     updtUserId: "cyberprophet",

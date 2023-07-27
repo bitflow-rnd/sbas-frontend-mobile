@@ -7,6 +7,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/assign/views/assign_request_screen.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_detail_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
@@ -121,23 +122,20 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                 height: 1,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
-                ),
-                child: GestureDetector(
-                  onTap: () => progress == 0 ?
-                    ref.read(patientProgressProvider.notifier).state++
-                    : ref.read(patientProgressProvider.notifier).state--,
-                  child: PatientRegTopNav(
-                    x: progress == 0 ? 1 : -1,
-                    items: const [
-                      '환자정보',
-                      '병상배정이력',
-                    ],
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
                   ),
-                )
-              ),
+                  child: GestureDetector(
+                    onTap: () => progress == 0 ? ref.read(patientProgressProvider.notifier).state++ : ref.read(patientProgressProvider.notifier).state--,
+                    child: PatientRegTopNav(
+                      x: progress == 0 ? 1 : -1,
+                      items: const [
+                        '환자정보',
+                        '병상배정이력',
+                      ],
+                    ),
+                  )),
               Expanded(
                 child: SingleChildScrollView(
                   child: progress == 0
@@ -185,8 +183,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                         vertical: 12.h,
                                       ),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                        mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
                                           Row(
                                             children: [
@@ -322,31 +319,30 @@ class PatientLookupDetailScreen extends ConsumerWidget {
               ),
             ],
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: BottomPositionedSubmitButton(
-              text: progress == 0 ? '다음' : '신규 병상 요청',
-              function: () => progress == 0
-                  ? ref.read(patientProgressProvider.notifier).state++
-                  : Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HospitalBedRequestScreen(
-                          patient: patient,
-                        ),
-                      ),
-                    ),
-            ),
-          ),
-          if (progress == 0)
+          // Positioned(
+          //   bottom: 0,
+          //   left: 0,
+          //   right: 0,
+          //   child: BottomPositionedSubmitButton(
+          //     text: progress == 0 ? '다음' : '신규 병상 요청',
+          //     function: () => progress == 0
+          //         ? ref.read(patientProgressProvider.notifier).state++
+          //         : Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //               builder: (context) => HospitalBedRequestScreen(
+          //                 patient: patient,
+          //               ),
+          //             ),
+          //           ),
+          //   ),
+          // ),
+          if (progress == 0) // 환자정보 - 수정
             Positioned(
-              bottom: 54,
+              bottom: 0,
               left: 0,
               right: 0,
               child: BottomPositionedSubmitButton(
-                color: Colors.green,
                 text: '수정',
                 function: () async {
                   await Navigator.push(
@@ -363,6 +359,23 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                 },
               ),
             )
+          else // 병상배정이력 - 병상요청
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: BottomPositionedSubmitButton(
+                text: '병상 요청',
+                function: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AssignBedRequestScreen(
+                      patient: patient,
+                    ),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );

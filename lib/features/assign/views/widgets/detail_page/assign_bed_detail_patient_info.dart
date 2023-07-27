@@ -40,8 +40,8 @@ class AssignBedDetailPatientInfo extends ConsumerWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 20.w,
-                      vertical: 12.h,
+                      horizontal: 20.h,
+                      vertical: 12.w,
                     ),
                     child: Row(
                       children: [
@@ -85,8 +85,7 @@ class AssignBedDetailPatientInfo extends ConsumerWidget {
                                           color: Palette.greyText_20,
                                           width: 1,
                                         ),
-                                        borderRadius:
-                                            BorderRadius.circular(13.5),
+                                        borderRadius: BorderRadius.circular(13.5),
                                       ),
                                       child: Text(
                                         tags?[index] ?? '',

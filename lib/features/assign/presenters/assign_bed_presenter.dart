@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/assign/model/assign_list_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
 
-class AssignBedPresenter extends AsyncNotifier<AssignListModel> {
+class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
   @override
   FutureOr<AssignListModel> build() async {
     _patientRepository = ref.read(assignRepoProvider);
@@ -40,15 +40,13 @@ class AssignBedPresenter extends AsyncNotifier<AssignListModel> {
     if (state.hasError) {}
   }
 
-  List<String>? getTagList(String? ptId) =>
-      _list.items.firstWhere((e) => e.ptId == ptId).tagList;
+  List<String>? getTagList(String? ptId) => _list.items.firstWhere((e) => e.ptId == ptId).tagList;
 
   late AssignListModel _list;
   late final AssignRepository _patientRepository;
 }
 
-final assignBedProvider =
-    AsyncNotifierProvider<AssignBedPresenter, AssignListModel>(
-  () => AssignBedPresenter(),
+final assignBedProvider = AsyncNotifierProvider<AssignBedListPresenter, AssignListModel>(
+  () => AssignBedListPresenter(),
 );
 final assignCountProvider = StateProvider((ref) => <int>[0, 0, 0, 0, 0]);

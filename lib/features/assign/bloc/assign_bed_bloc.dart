@@ -15,7 +15,7 @@ import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 
-class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
+class AssignNewBedPresenter extends AsyncNotifier<PatientRegInfoModel> {
   @override
   FutureOr<PatientRegInfoModel> build() {
     _patientInfoModel = PatientRegInfoModel();
@@ -436,8 +436,8 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   late final UserRegRequestRepository _regRepository;
 }
 
-final patientRegProvider = AsyncNotifierProvider<PatientRegisterPresenter, PatientRegInfoModel>(
-  () => PatientRegisterPresenter(),
+final assignBedProvider = AsyncNotifierProvider<AssignNewBedPresenter, PatientRegInfoModel>(
+  () => AssignNewBedPresenter(),
 );
 final patientImageProvider = StateProvider<XFile?>((ref) => null);
 final patientAttcProvider = StateProvider<String?>((ref) => null);

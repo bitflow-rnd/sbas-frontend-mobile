@@ -56,9 +56,7 @@ class PatientRegScreen extends ConsumerWidget {
           Expanded(
             child: Form(
               key: formKey,
-              child: patientAttc != null
-                  ? PatientRegInfoV2()
-                  : const PatientRegReport(),
+              child: patientAttc != null ? PatientRegInfoV2() : const PatientRegReport(),
             ),
           ),
           Row(
@@ -69,8 +67,7 @@ class PatientRegScreen extends ConsumerWidget {
                   text: patientAttc != null ? '이전' : '취소',
                   onPressed: patientAttc != null
                       ? () {
-                          ref.read(patientIsUploadProvider.notifier).state =
-                              true;
+                          ref.read(patientIsUploadProvider.notifier).state = true;
                           ref.read(patientAttcProvider.notifier).state = null;
                         }
                       : () => Navigator.pop(context),
@@ -83,22 +80,15 @@ class PatientRegScreen extends ConsumerWidget {
                   onPressed: patientImage != null || !patientIsUpload
                       ? patientAttc != null
                           ? _tryValidation()
-                              ? () => ref
-                                  .read(patientRegProvider.notifier)
-                                  .registry(patient?.ptId, context)
+                              ? () => ref.read(patientRegProvider.notifier).registry(patient?.ptId, context)//환자실등록
                               : null
                           : (patientImage != null
-                              ? () => ref
-                                  .read(patientRegProvider.notifier)
-                                  .uploadImage(patientImage)
+                              ? () => ref.read(patientRegProvider.notifier).uploadImage(patientImage)
                               : () {
                                   if (patient != null) {
-                                    ref
-                                        .read(patientRegProvider.notifier)
-                                        .overrideInfo(patient!);
+                                    ref.read(patientRegProvider.notifier).overrideInfo(patient!);
                                   }
-                                  ref.read(patientAttcProvider.notifier).state =
-                                      '';
+                                  ref.read(patientAttcProvider.notifier).state = '';
                                 })
                       : null,
                 ),
