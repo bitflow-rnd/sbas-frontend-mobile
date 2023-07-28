@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kpostal/kpostal.dart';
+import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
+import 'package:sbas/features/lookup/models/bed_assgin_request_model.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
@@ -19,7 +21,13 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
     state = await AsyncValue.guard(() async {
       _model.ptId = ptId;
 
-      await _repository.postRegOriginInfo(_model);
+      var severelyDiseaseModel = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel;
+
+      // await _repository.postRegOriginInfo(_model);
+
+      await _repository.postBedAssignRequest(BedAssignRequestModel(
+          severelyDiseaseModel,_model
+      ));
 
       return _model;
     });

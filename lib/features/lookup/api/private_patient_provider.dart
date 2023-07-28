@@ -13,6 +13,9 @@ class PrivatePatientProvider {
   Future<Patient> getPatientInfo(String ptId) async => Patient.fromJson(
       await _api.getAsync('$_privateRoute/basicinfo?ptId=$ptId'));
 
+  Future<dynamic> postBedAssignRequest(Map<String, dynamic> map) async =>
+      await _api.postAsync('$_privateRoute/bedassignreq', toJson(map));
+
   Future<dynamic> postRegOriginInfo(Map<String, dynamic> map) async =>
       await _api.postAsync('$_privateRoute/regstrtpoint', toJson(map));
 

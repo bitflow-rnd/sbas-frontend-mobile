@@ -113,7 +113,7 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                           if (index == 0) {
                             ref
                                 .read(severelyDiseaseProvider.notifier)
-                                .registry(patient?.ptId ?? '');
+                                .saveDiseaseInfo(patient?.ptId ?? '');
                           }
                           if (index == 1) {
                             ref
