@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/features/lookup/api/private_patient_provider.dart';
+import 'package:sbas/features/lookup/models/bed_assgin_request_model.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_list_model.dart';
@@ -58,6 +59,10 @@ class PatientRepository {
           image.path,
           filename: image.name,
         ),
+      );
+  Future<dynamic> postBedAssignRequest(BedAssignRequestModel model) async =>
+      await _privatePatientProvider.postBedAssignRequest(
+        model.toJson(),
       );
   Future<dynamic> postRegOriginInfo(OriginInfoModel model) async =>
       await _privatePatientProvider.postRegOriginInfo(

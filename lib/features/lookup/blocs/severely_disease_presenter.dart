@@ -83,9 +83,53 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
     if (state.hasError) {}
   }
 
+  Future<void> saveDiseaseInfo(String ptId) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final entries = ref.read(checkedSeverelyDiseaseProvider).entries;
+      var bioInfoModel = ref.read(bioInfoProvider.notifier).bioInfoModel;
+
+      severelyDiseaseModel = SeverelyDiseaseModel(
+        ptId: ptId,
+        dnrAgreYn: entries
+            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA')
+            .key,
+        reqBedTypeCd: entries
+            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP')
+            .key,
+        svrtTypeCd: entries
+            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP')
+            .key,
+        svrtIptTypeCd: entries
+            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP')
+            .key,
+        udds: entries
+            .where((e) => e.value && e.key.substring(0, 4) == 'UDDS')
+            .map<String>((e) => e.key)
+            .toList(),
+        pttp: entries
+            .where((e) => e.value && e.key.substring(0, 4) == 'PTTP')
+            .map<String>((e) => e.key)
+            .toList(),
+        avpuCd: bioInfoModel.avpu,
+        oxyYn: bioInfoModel.o2Apply,
+        bdtp: bioInfoModel.bdTemp,
+        spo2: bioInfoModel.spo2,
+        hr: bioInfoModel.pulse,
+        resp: bioInfoModel.breath,
+        sbp: bioInfoModel.sbp,
+        newsScore: bioInfoModel.score,
+      );
+
+      return _list;
+    });
+    if (state.hasError) {}
+  }
+
   late final List<BaseCodeModel> _list;
   late final PatientRepository _patientRepository;
   late final UserRegRequestRepository _userRegRequestRepository;
+  late final SeverelyDiseaseModel severelyDiseaseModel;
 }
 
 final severelyDiseaseProvider =
