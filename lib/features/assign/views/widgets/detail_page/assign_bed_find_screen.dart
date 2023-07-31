@@ -27,8 +27,9 @@ class AssignBedFindScreen extends ConsumerStatefulWidget {
 }
 
 class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
-  bool _isSelected = false;
   bool isSearchDetailOpen = false;
+  int? selectedIdx;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +59,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
           child: Column(
             children: [
               _header(widget.patient.ptNm ?? '',
-                  "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / ${widget.patient.getPhoneNum()})"), //pnum 등 분리필요
+                  "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / ${widget.patient.getAddr()}/ ${widget.patient.getPhoneNum()})"), //pnum 등 분리필요
               Divider(color: Palette.greyText_20, height: 1),
 
               Padding(
@@ -68,9 +69,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                     Gaps.v16,
                     Row(
                       children: [
-                        Text('출발지',
-                            style: CTS.medium(
-                                color: Palette.greyText, fontSize: 13)),
+                        Text('출발지', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                         Gaps.h20,
                         Expanded(
                           child: Container(
@@ -98,11 +97,8 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                               color: Palette.mainColor,
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.w, vertical: 12.h),
-                            child: Text('주소검색',
-                                style: CTS.medium(
-                                    color: Palette.white, fontSize: 13)),
+                            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
+                            child: Text('주소검색', style: CTS.medium(color: Palette.white, fontSize: 13)),
                           ),
                         )
                       ],
@@ -110,13 +106,9 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                     Gaps.v16,
                     Row(
                       children: [
-                        Text('환자유형',
-                            style: CTS.medium(
-                                color: Palette.greyText, fontSize: 13)),
+                        Text('환자유형', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                         Gaps.h8,
-                        Expanded(
-                            child: rowMultiSelectButton(
-                                ['임산부', '음압격리', '투석'], ['임산부'])),
+                        Expanded(child: rowMultiSelectButton(['임산부', '음압격리', '투석'], ['임산부'])),
                       ],
                     ),
                     isSearchDetailOpen
@@ -125,57 +117,33 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                               Gaps.v16,
                               Row(
                                 children: [
-                                  Text('                 ',
-                                      style: CTS.medium(
-                                          color: Palette.greyText,
-                                          fontSize: 13)),
+                                  Text('                 ', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(
-                                      child: rowMultiSelectButton(
-                                          ['인공호흡', '신생아', '어린이', '수술'],
-                                          ['어린이'])),
+                                  Expanded(child: rowMultiSelectButton(['인공호흡', '신생아', '어린이', '수술'], ['어린이'])),
                                 ],
                               ),
                               Gaps.v16,
                               Row(
                                 children: [
-                                  Text('기저질환',
-                                      style: CTS.medium(
-                                          color: Palette.greyText,
-                                          fontSize: 13)),
+                                  Text('기저질환', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(
-                                      child: rowMultiSelectButton(
-                                          ['고혈압', '정신질환', '관절염'],
-                                          ['고혈압', '관절염'])),
+                                  Expanded(child: rowMultiSelectButton(['고혈압', '정신질환', '관절염'], ['고혈압', '관절염'])),
                                 ],
                               ),
                               Gaps.v16,
                               Row(
                                 children: [
-                                  Text('중증도    ',
-                                      style: CTS.medium(
-                                          color: Palette.greyText,
-                                          fontSize: 13)),
+                                  Text('중증도    ', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(
-                                      child: rowMultiSelectButton(
-                                          ['중증', '준중증', '준등중', '미분류'],
-                                          ['준등중'])),
+                                  Expanded(child: rowMultiSelectButton(['중증', '준중증', '준등중', '미분류'], ['준등중'])),
                                 ],
                               ),
                               Gaps.v16,
                               Row(
                                 children: [
-                                  Text('병상유형',
-                                      style: CTS.medium(
-                                          color: Palette.greyText,
-                                          fontSize: 13)),
+                                  Text('병상유형', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(
-                                      child: rowMultiSelectButton(
-                                          ['음압격리', '일반격리', '기타'],
-                                          ['음압격리', '일반격리'])),
+                                  Expanded(child: rowMultiSelectButton(['음압격리', '일반격리', '기타'], ['음압격리', '일반격리'])),
                                 ],
                               ),
                             ],
@@ -193,9 +161,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                               isSearchDetailOpen = !isSearchDetailOpen;
                             });
                           },
-                          icon: Icon(!isSearchDetailOpen
-                              ? Icons.arrow_drop_down
-                              : Icons.arrow_drop_up),
+                          icon: Icon(!isSearchDetailOpen ? Icons.arrow_drop_down : Icons.arrow_drop_up),
                         ),
                       ],
                     ),
@@ -214,15 +180,9 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                         Text.rich(
                           TextSpan(
                             children: [
-                              TextSpan(
-                                  text: '총',
-                                  style: CTS.bold(color: Colors.black)),
-                              TextSpan(
-                                  text: ' ${widget.hospList.count}',
-                                  style: CTS.bold(color: Palette.mainColor)),
-                              TextSpan(
-                                  text: '개',
-                                  style: CTS.bold(color: Colors.black)),
+                              TextSpan(text: '총', style: CTS.bold(color: Colors.black)),
+                              TextSpan(text: ' ${widget.hospList.count}', style: CTS.bold(color: Palette.mainColor)),
+                              TextSpan(text: '개', style: CTS.bold(color: Colors.black)),
                             ],
                           ),
                           style: CTS.bold(
@@ -243,7 +203,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      for (var i = 0; i < widget.hospList.count!; i++) requestContainer(i),
+                      for (var i = 0; i < widget.hospList.count!; i++) requestContainer(i, selectedIdx),
                     ],
                   ),
                 ),
@@ -255,7 +215,8 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                       context: context,
                       header: '배정요청',
                     );
-                    if (res != '') {
+                    if (res != null && res != '') {
+                      // ignore: use_build_context_synchronously
                       Common.showModal(
                         context,
                         // ignore: use_build_context_synchronously
@@ -283,8 +244,9 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
         ));
   }
 
-  Widget requestContainer(int idx) {
+  Widget requestContainer(int idx, int? selectedIdx) {
     return Container(
+      // margin: EdgeInsets.only(top: 8.h, left: 12.w, right: 12.w),
       margin: EdgeInsets.only(top: 8.h),
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       decoration: BoxDecoration(
@@ -301,13 +263,12 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
       ),
       child: InkWell(
         onTap: () async {
-          var list = await ref.watch(availableHospitalProvider.notifier).getAsync(widget.patient.ptId, widget.bdasSeq);
+          // var list = await ref.watch(availableHospitalProvider.notifier).getAsync(widget.patient.ptId, widget.bdasSeq);
         },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset("assets/message/hospital_icon.png",
-                width: 36.w, height: 36.h),
+            Image.asset("assets/message/hospital_icon.png", width: 36.w, height: 36.h),
             Gaps.h8,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,8 +284,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                     ),
                     Gaps.h8,
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                      padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                       decoration: BoxDecoration(
                         color: Palette.red.withOpacity(0.12),
                         borderRadius: BorderRadius.circular(11),
@@ -363,8 +323,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(right: 4.w),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
                       decoration: BoxDecoration(
                         color: Palette.greyText_20,
                         borderRadius: BorderRadius.circular(4),
@@ -379,8 +338,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                     ),
                     Container(
                       margin: EdgeInsets.only(right: 4.w),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
                       decoration: BoxDecoration(
                         color: Palette.greyText_20,
                         borderRadius: BorderRadius.circular(4),
@@ -403,10 +361,8 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.location_on_sharp,
-                        color: Palette.mainColor, size: 20.h),
-                    Text('${widget.hospList.items[idx].distance}',
-                        style: CTS(color: Palette.mainColor, fontSize: 12)),
+                    Icon(Icons.location_on_sharp, color: Palette.mainColor, size: 20.h),
+                    Text('${widget.hospList.items[idx].distance}', style: CTS(color: Palette.mainColor, fontSize: 12)),
                   ],
                 ),
                 Gaps.v8,
@@ -416,13 +372,10 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                       height: 24.h,
                       width: 24.h,
                       decoration: BoxDecoration(
-                          color:
-                              _isSelected ? Palette.mainColor : Palette.white,
+                          color: selectedIdx == idx ? Palette.mainColor : Palette.white,
                           borderRadius: BorderRadius.circular(4),
-                          border: !_isSelected
-                              ? Border.all(color: Palette.greyText_20, width: 1)
-                              : null),
-                      child: _isSelected
+                          border: selectedIdx != idx ? Border.all(color: Palette.greyText_20, width: 1) : null),
+                      child: selectedIdx == idx
                           ? Icon(
                               Icons.check,
                               color: Palette.white,
@@ -430,9 +383,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                             )
                           : Container()),
                   onTap: () {
-                    setState(() {
-                      _isSelected = !_isSelected;
-                    });
+                    setIndex(idx);
                   },
                 ),
               ],
@@ -441,6 +392,12 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
         ),
       ),
     );
+  }
+
+  setIndex(int idx) {
+    setState(() {
+      selectedIdx = idx;
+    });
   }
 
   Widget _header(String name, String detail) {
@@ -551,12 +508,9 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
             children: [
               for (var i in list)
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 5.h, horizontal: 12.w),
+                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 12.w),
                   decoration: BoxDecoration(
-                    color: !selectList.contains(i)
-                        ? Colors.white
-                        : Palette.mainColor,
+                    color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
                     border: Border.all(
                       color: Palette.greyText_20,
                       width: 1,
@@ -566,9 +520,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                   child: Text(i,
                       style: CTS.bold(
                         fontSize: 13,
-                        color: selectList.contains(i)
-                            ? Palette.white
-                            : Palette.greyText_60,
+                        color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
                       )),
                 )
             ],

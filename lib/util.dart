@@ -84,17 +84,21 @@ String getPhoneFormat(String? mpno) {
   if (mpno == null || mpno.isEmpty) {
     return '';
   }
-  return mpno
-      .replaceRange(3, 3, '-')
-      .replaceRange(8, 8, '-')
-      .replaceRange(4, 8, '****');
+  return mpno.replaceRange(3, 3, '-').replaceRange(8, 8, '-').replaceRange(4, 8, '****');
 }
 
-String getDateTimeFormat(String dt) {
+String getDateTimeFormatFull(String dt) {
   final dateTime = DateTime.tryParse(dt)?.add(const Duration(
     hours: 9,
   ));
   return DateFormat('yyyy년 MM월 dd일 HH시 mm분').format(dateTime ?? DateTime.now());
+}
+
+String getDateTimeFormatDay(String dt) {
+  final dateTime = DateTime.tryParse(dt)?.add(const Duration(
+    hours: 9,
+  ));
+  return DateFormat('yyyy년 MM월 dd일').format(dateTime ?? DateTime.now());
 }
 
 //TODO 함수명 변경...
@@ -105,8 +109,7 @@ String getTimeLineDateFormat(String dt) {
   return DateFormat('aa h시 mm분').format(dateTime ?? DateTime.now());
 }
 
-String format(int remainingTime) =>
-    Duration(seconds: remainingTime).toString().substring(2, 7);
+String format(int remainingTime) => Duration(seconds: remainingTime).toString().substring(2, 7);
 
 String toJson(Map<String, dynamic> map) => jsonEncode(map);
 

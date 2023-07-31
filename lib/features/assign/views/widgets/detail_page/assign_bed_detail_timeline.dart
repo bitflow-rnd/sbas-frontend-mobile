@@ -34,7 +34,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    dateFragment("2023년 2월 28일"),
+                    dateFragment(getDateTimeFormatDay(assignItem.updtDttm!)),
                     IntrinsicHeight(
                       child: Stack(
                         children: [
@@ -65,29 +65,25 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                               if (assignItem.bedStatCdNm == '승인대기')
                                 Column(
                                   children: [
-                                    for (var i = 0; i < timeLine.count!; i++)
-                                      timeLineBody(timeLine.items[i]),
+                                    for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
                                   ],
                                 ),
                               if (assignItem.bedStatCdNm == '배정대기')
                                 Column(
                                   children: [
-                                    for (var i = 0; i < timeLine.count!; i++)
-                                      timeLineBody(timeLine.items[i]),
+                                    for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
                                   ],
                                 ),
                               if (assignItem.bedStatCdNm == '이송대기')
-                              Column(
-                                children: [
-                                  for (var i = 0; i < timeLine.count!; i++)
-                                    timeLineBody(timeLine.items[i]),
-                                ],
-                              ),
+                                Column(
+                                  children: [
+                                    for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
+                                  ],
+                                ),
                               if (assignItem.bedStatCdNm == '이송중')
                                 Column(
                                   children: [
-                                    for (var i = 0; i < timeLine.count!; i++)
-                                      timeLineBody(timeLine.items[i]),
+                                    for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
                                   ],
                                   // children: [
                                   //   completeCard(
@@ -167,8 +163,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                         dateTime: "오후 2시 33분",
                                         src: "timeline_go_home",
                                         by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                                        detail:
-                                            "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
+                                        detail: "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
                                         isBlue: true,
                                         isSelected: true),
                                   ],
@@ -182,7 +177,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 ),
               ),
             ),
-            _whichBottomer(patient.bedStatNm?? '', context, ref), //patient.bedStatNm ?? ''
+            _whichBottomer(patient.bedStatNm ?? '', context, ref), //patient.bedStatNm ?? ''
           ],
         ),
       );
@@ -207,17 +202,19 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               dynamic res = await _showBottomSheet(
                 context: context,
               );
-              var hospList = await ref.watch(availableHospitalProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq);
+              var hospList = await ref.watch(availableHospitalProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq); //병상요청시 가능한 병원 목록 조회
               if (res != null && context.mounted) {
                 //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => AssignBedFindScreen(
-                      patient: patient,
-                      bdasSeq: assignItem.bdasSeq,
-                      hospList: hospList,
-                    ),
+                        patient: patient,
+                        bdasSeq: assignItem.bdasSeq,
+                        // hospList: AvailableHospitalModel(items: [],ㅋ count: 0),
+                        hospList: hospList
+                        // hospList: AvailableHospitalModel(items: [], count: 0),
+                        ),
                   ),
                 );
               }
@@ -283,17 +280,12 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     }
   }
 
-  _showBottomSheet(
-      {required BuildContext context,
-      String header = '배정 승인',
-      String hintText = '메시지 입력',
-      String btnText = '승인'}) async {
+  _showBottomSheet({required BuildContext context, String header = '배정 승인', String hintText = '메시지 입력', String btnText = '승인'}) async {
     TextEditingController textEditingController = TextEditingController();
     final focusNode = FocusNode();
 
     // Call requestFocus() on the focus node when the bottom sheet is displayed
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => focusNode.requestFocus());
+    WidgetsBinding.instance.addPostFrameCallback((_) => focusNode.requestFocus());
     return showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -308,14 +300,12 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           child: GestureDetector(
             onTap: () {
               FocusScopeNode currentFocus = FocusScope.of(context);
-              if (!currentFocus.hasPrimaryFocus &&
-                  currentFocus.focusedChild != null) {
+              if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
                 currentFocus.focusedChild?.unfocus();
               }
             },
             child: Container(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Container(
                 padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 350.h),
                 child: Column(
@@ -387,11 +377,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     );
   }
 
-  Widget _bottomer(
-      {String lBtnText = '배정 붏가',
-      String rBtnText = "승인",
-      required Function lBtnFunc,
-      required Function rBtnFunc}) {
+  Widget _bottomer({String lBtnText = '배정 붏가', String rBtnText = "승인", required Function lBtnFunc, required Function rBtnFunc}) {
     return Row(
       children: [
         Expanded(
@@ -456,8 +442,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           Container(
             color: Palette.greyText_20,
             margin: EdgeInsets.all(2.r),
-            child: Image.asset("assets/auth_group/image_location_small.png",
-                width: 42.h),
+            child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
           ),
           Expanded(
               child: TextField(
@@ -465,10 +450,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             onChanged: (value) {
               // setState(() {});
             },
-            decoration: InputDecoration(
-                hintText: '메세지 입력',
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+            decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
           )),
           InkWell(
             onTap: () {},
@@ -491,8 +473,12 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
   Widget timeLineBody(TimeLine timeLine) {
     switch (timeLine.timeLineStatus) {
       case "complete":
-        return completeCard(title: timeLine.title ?? '', dateTime: getTimeLineDateFormat(timeLine.updtDttm ?? ''),
-                              src: getImageSrcBy(timeLine.title ?? ''), by: timeLine.by ?? '', detail: timeLine.msg);
+        return completeCard(
+            title: timeLine.title ?? '',
+            dateTime: getTimeLineDateFormat(timeLine.updtDttm ?? ''),
+            src: getImageSrcBy(timeLine.title ?? ''),
+            by: timeLine.by ?? '',
+            detail: timeLine.msg);
       case "suspend":
         return suspendCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!), detail: timeLine.by);
       case "closed":
@@ -510,13 +496,16 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     }
 
     switch (title) {
-      case "병상배정": case "승인": case "배정완료":
+      case "병상배정":
+      case "승인":
+      case "배정완료":
         src = "timeline_bed_assign_complete";
         break;
       case "배정거절":
         src = "timeline_refused";
         break;
-      case "이송": case "이송완료":
+      case "이송":
+      case "이송완료":
         src = "timeline_move_complete";
         break;
       case "입원":
@@ -601,15 +590,12 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           child: Row(
             children: [
               Column(
-                children: [
-                  imageIconFrag(imgSrc: src)
-                ],
+                children: [imageIconFrag(imgSrc: src)],
               ),
               Expanded(
                 child: Container(
                   margin: EdgeInsets.only(left: 12.w),
-                  padding: EdgeInsets.only(
-                      left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                  padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: isSelected
@@ -676,15 +662,12 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           child: Row(
             children: [
               Column(
-                children: [
-                  imageIconFrag(imgSrc: src)
-                ],
+                children: [imageIconFrag(imgSrc: src)],
               ),
               Expanded(
                 child: Container(
                   margin: EdgeInsets.only(left: 12.w),
-                  padding: EdgeInsets.only(
-                      left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                  padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: isSelected
@@ -739,19 +722,15 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                       if (detail != null)
                         Container(
                           margin: EdgeInsets.only(top: 8.h),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 8.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                           decoration: BoxDecoration(
-                            color: isBlue
-                                ? Palette.mainColor.withOpacity(0.16)
-                                : const Color(0xff676a7a).withOpacity(0.12),
+                            color: isBlue ? Palette.mainColor.withOpacity(0.16) : const Color(0xff676a7a).withOpacity(0.12),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           child: Text(
                             detail,
                             style: CTS(
-                              color:
-                                  isBlue ? Palette.mainColor : Palette.greyText,
+                              color: isBlue ? Palette.mainColor : Palette.greyText,
                               fontSize: 13,
                             ),
                           ),

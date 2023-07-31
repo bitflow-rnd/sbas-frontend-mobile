@@ -21,4 +21,20 @@ extension PatientExtension on Patient {
   String getPhoneNum() {
     return mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? '';
   }
+
+  String getAddr() {
+    if (bascAddr == null) return "";
+    List<String> addrList = bascAddr!.split(" ");
+    int index = addrList.indexWhere((element) => element.endsWith("구"));
+
+    if (index != -1) {
+      String res = '';
+      for (int i = 0; i < index + 1; i++) {
+        res += "${addrList[i]} ";
+      }
+      return res;
+    } else {
+      return "";
+    }
+  }
 }

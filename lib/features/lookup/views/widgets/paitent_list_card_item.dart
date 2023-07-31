@@ -95,7 +95,7 @@ class PaitentCardItem extends StatelessWidget {
                     maxLines: 1,
                   ),
                   Text(
-                    getDateTimeFormat(model.updtDttm ?? ''),
+                    getDateTimeFormatFull(model.updtDttm ?? ''),
                     style: CTS(
                       fontSize: 12,
                       color: Colors.grey,
