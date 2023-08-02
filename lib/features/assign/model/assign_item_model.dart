@@ -11,6 +11,7 @@ class AssignItemModel {
   String? bedStatCdNm;
   String? chrgInstNm;
   List<String>? tagList;
+  String? inhpAsgnYn;
 
   AssignItemModel({
     this.ptId,
@@ -25,6 +26,7 @@ class AssignItemModel {
     this.bedStatCdNm,
     this.tagList,
     this.chrgInstNm,
+    this.inhpAsgnYn,
   });
   AssignItemModel.fromJson(Map<String, dynamic> json) {
     if (json["chrgInstNm"] is String) {
@@ -61,8 +63,10 @@ class AssignItemModel {
       bedStatCdNm = json["bedStatCdNm"];
     }
     if (json["tagList"] is List) {
-      tagList =
-          json["tagList"] == null ? null : List<String>.from(json["tagList"]);
+      tagList = json["tagList"] == null ? null : List<String>.from(json["tagList"]);
+    }
+    if (json["inhpAsgnYn"] is String) {
+      inhpAsgnYn = json["inhpAsgnYn"];
     }
   }
   Map<String, dynamic> toJson() {
@@ -83,6 +87,7 @@ class AssignItemModel {
     if (tagList != null) {
       data["tagList"] = tagList;
     }
+    data["inhpAsgnYn"] = inhpAsgnYn;
     return data;
   }
 }

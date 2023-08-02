@@ -6,8 +6,11 @@ import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/api/assign_provider.dart';
 import 'package:sbas/features/assign/model/available_hospital_model.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/presenters/available_hospital_presenter.dart';
+
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_move.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_screen.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_cancel_screen.dart';
@@ -199,6 +202,46 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               );
             },
             rBtnFunc: () async {
+              String? res = await _showBottomSheet(
+                context: context,
+              );
+              if (res != null && context.mounted) {
+                //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
+
+                var postRes = await ref.watch(assignBedProvider.notifier).approveReq({
+//    {
+//     "ptId": "PT00000134",
+//     "bdasSeq": 266,
+//     "aprvYn": "Y",
+//     "negCd": null,
+//     "msg": "배정승인합니다.\n가용 병상 확인 부탁드립니다.",
+//     "reqHospIdList": [
+//         "HP00002944",
+//         "HP00065860",
+//         "HP00013438"
+//     ]
+// }
+                  "ptId": patient.ptId,
+                  "bdasSeq": assignItem.bdasSeq,
+                  "msg": res,
+                });
+              }
+            });
+      case '배정대기':
+        return _bottomer(
+            lBtnText: "배정 불가",
+            rBtnText: "배정 승인",
+            lBtnFunc: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssignBedCancelScreen(
+                    patient: patient,
+                  ),
+                ),
+              );
+            },
+            rBtnFunc: () async {
               dynamic res = await _showBottomSheet(
                 context: context,
               );
@@ -218,30 +261,6 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   ),
                 );
               }
-            });
-      case '배정대기':
-        return _bottomer(
-            lBtnText: "배정 불가",
-            rBtnText: "배정 승인",
-            lBtnFunc: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AssignBedCancelScreen(
-                    patient: patient,
-                  ),
-                ),
-              );
-            },
-            rBtnFunc: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AssignBedApproveScreen(
-                    patient: patient,
-                  ),
-                ),
-              );
             });
       case '이송대기':
         return Common.bottomer(

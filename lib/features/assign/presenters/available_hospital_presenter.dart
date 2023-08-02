@@ -17,7 +17,7 @@ class AvailableHospitalPresenter extends AsyncNotifier {
     }
     return AvailableHospitalModel(count: 0, items: []);
   }
-
+  
   late final AssignRepository _assignRepository;
 }
 

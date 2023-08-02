@@ -10,8 +10,6 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/available_hospital_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 
-import '../../../presenters/available_hospital_presenter.dart';
-
 class AssignBedFindScreen extends ConsumerStatefulWidget {
   AssignBedFindScreen({
     super.key,

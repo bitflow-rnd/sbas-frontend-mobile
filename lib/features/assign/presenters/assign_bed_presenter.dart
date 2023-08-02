@@ -22,6 +22,11 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
     return _list;
   }
 
+  Future<void> approveReq(Map<String, dynamic> map) async {
+    var res = await _patientRepository.postReqApprove(map);
+    if (res) return;
+  }
+
   Future<void> setTopNavItem(double x) async {
     state = await AsyncValue.guard(() async {
       final list = await _patientRepository.lookupPatientInfo();
