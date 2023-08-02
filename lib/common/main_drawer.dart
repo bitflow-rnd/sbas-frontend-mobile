@@ -5,6 +5,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/views/alarm_screen.dart';
 import 'package:sbas/features/alarm/views/public_alarm_screen.dart';
+import 'package:sbas/features/authentication/blocs/login_bloc.dart';
 import 'package:sbas/features/main/views/service_policy_screen.dart';
 import 'package:sbas/features/main/views/settings_screen.dart';
 import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
@@ -30,11 +31,16 @@ class MainDrawer extends ConsumerWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(
-                        'assets/message/doctor_icon.png',
-                        height: 44.h,
-                        width: 44.w,
-                        alignment: Alignment.topLeft,
+                      InkWell(
+                        onTap: () {
+                          ref.read(loginProvider.notifier).logout(context);
+                        },
+                        child: Image.asset(
+                          'assets/message/doctor_icon.png',
+                          height: 44.h,
+                          width: 44.w,
+                          alignment: Alignment.topLeft,
+                        ),
                       ),
                       SizedBox(width: 12.w),
                       Column(
@@ -192,3 +198,7 @@ class MainDrawer extends ConsumerWidget {
         builder: (context) => const SettingPage(),
       ));
 }
+
+final loginProvider = AsyncNotifierProvider<LoginBloc, void>(
+  () => LoginBloc(),
+);

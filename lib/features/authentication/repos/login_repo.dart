@@ -47,6 +47,11 @@ class LoginRepo {
     }
     return null;
   }
+
+  bool logout(UserModel user) {
+    prefs.remove('auth_token');
+    return true;
+  }
 }
 
 Token userToken = Token.empty();
