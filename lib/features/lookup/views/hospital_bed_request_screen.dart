@@ -93,9 +93,7 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                       width: width * 0.5,
                       child: BottomSubmitBtn(
                         text: order == -1 ? '취소' : '이전',
-                        onPressed: () => order == -1
-                            ? Navigator.pop(context)
-                            : ref.read(orderOfRequestProvider.notifier).state--,
+                        onPressed: () => order == -1 ? Navigator.pop(context) : ref.read(orderOfRequestProvider.notifier).state--,
                       ),
                     ),
                     SizedBox(
@@ -106,19 +104,13 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                           final index = ref.read(orderOfRequestProvider);
 
                           if (index == -1) {
-                            ref
-                                .read(infectiousDiseaseProvider.notifier)
-                                .registry(patient?.ptId ?? '');
+                            ref.read(infectiousDiseaseProvider.notifier).registry(patient?.ptId ?? '');
                           }
                           if (index == 0) {
-                            ref
-                                .read(severelyDiseaseProvider.notifier)
-                                .saveDiseaseInfo(patient?.ptId ?? '');
+                            ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patient?.ptId ?? '');
                           }
                           if (index == 1) {
-                            ref
-                                .read(originInfoProvider.notifier)
-                                .registry(patient?.ptId ?? '');
+                            ref.read(originInfoProvider.notifier).registry(patient?.ptId ?? '');
 
                             Navigator.pop(context);
 

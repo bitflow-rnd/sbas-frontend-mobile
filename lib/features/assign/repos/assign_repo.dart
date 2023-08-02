@@ -11,7 +11,7 @@ class AssignRepository {
 
   Future<AvailableHospitalModel> getAvalHospList(String ptId, int bdasSeq) async =>
       await _patientProvider.getAvalHospList(ptId, bdasSeq);
-  Future<bool> postReqApprove(Map<String, dynamic> map) async =>
+  Future<String> postReqApprove(Map<String, dynamic> map) async =>
       await _patientProvider.postReqApprove(map);
       
   final _patientProvider = AssignProvider();

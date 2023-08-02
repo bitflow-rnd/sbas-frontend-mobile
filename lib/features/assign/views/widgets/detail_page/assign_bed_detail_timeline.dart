@@ -209,22 +209,21 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
 
                 var postRes = await ref.watch(assignBedProvider.notifier).approveReq({
-//    {
-//     "ptId": "PT00000134",
-//     "bdasSeq": 266,
-//     "aprvYn": "Y",
-//     "negCd": null,
-//     "msg": "배정승인합니다.\n가용 병상 확인 부탁드립니다.",
-//     "reqHospIdList": [
-//         "HP00002944",
-//         "HP00065860",
-//         "HP00013438"
-//     ]
-// }
                   "ptId": patient.ptId,
                   "bdasSeq": assignItem.bdasSeq,
+                  "aprvYn": "Y",
+                  // "negCd": null,//불가사유 String
                   "msg": res,
+                  "reqHospIdList": [
+                    // "HP00002944",
+                    // "HP00065860",
+                    // "HP00013438",
+                  ]
                 });
+                if (postRes) {
+                  //승인성공
+                  await ref.watch(assignBedProvider.notifier).reloadPaitents(); // 리스트 갱신
+                }
               }
             });
       case '배정대기':

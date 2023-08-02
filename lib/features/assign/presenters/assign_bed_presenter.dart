@@ -22,9 +22,22 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
     return _list;
   }
 
-  Future<void> approveReq(Map<String, dynamic> map) async {
-    var res = await _patientRepository.postReqApprove(map);
-    if (res) return;
+  Future<void> reloadPaitents() async {
+    final list = await _patientRepository.lookupPatientInfo();
+    final assignCountState = ref.read(assignCountProvider.notifier).state;
+
+    list[0].x = -1;
+
+    for (int i = 0; i < list.length; i++) {
+      assignCountState[i] = list[i].count;
+    }
+    _list = list[0];
+  }
+
+  Future<bool> approveReq(Map<String, dynamic> map) async {
+    String res = await _patientRepository.postReqApprove(map);
+    if (res == "승인 성공") return true;
+    return false;
   }
 
   Future<void> setTopNavItem(double x) async {
