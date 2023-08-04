@@ -312,7 +312,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           top: Radius.circular(24.r),
         ),
       ),
-      isScrollControlled: true,
+      isScrollControlled: false,
       builder: (BuildContext context) {
         return SingleChildScrollView(
           child: GestureDetector(
@@ -325,7 +325,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             child: Container(
               padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Container(
-                padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 350.h),
+                padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -395,7 +395,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     );
   }
 
-  Widget _bottomer({String lBtnText = '배정 붏가', String rBtnText = "승인", required Function lBtnFunc, required Function rBtnFunc}) {
+  Widget _bottomer({String lBtnText = '배정 불가', String rBtnText = "승인", required Function lBtnFunc, required Function rBtnFunc}) {
     return Row(
       children: [
         Expanded(
@@ -408,8 +408,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
-                  color: Palette.greyText_80,
-                  width: 1,
+                  color: Palette.greyText_20,
+                  width: 0.25,
                 ),
               ),
               child: Text(

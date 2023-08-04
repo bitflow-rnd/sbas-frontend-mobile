@@ -97,42 +97,47 @@ class AssignBedScreen extends ConsumerWidget {
                       ),
                     ),
                     Expanded(
-                      child: Stack(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(
-                              bottom: 46.h,
-                            ),
-                            child: ListView.separated(
-                              itemCount: list.count,
-                              padding: EdgeInsets.symmetric(
-                                vertical: 8.r,
-                                horizontal: 16.r,
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          await ref.watch(assignBedProvider.notifier).reloadPaitents();
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(
+                                bottom: 46.h,
                               ),
-                              itemBuilder: (_, index) => CardItem(
-                                model: list.items[index],
-                                color: getStateColor(
-                                  list.items[index].bedStatCd,
+                              child: ListView.separated(
+                                itemCount: list.count,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 8.r,
+                                  horizontal: 16.r,
                                 ),
-                              ),
-                              separatorBuilder: (_, index) => Gaps.v8,
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              const Spacer(),
-                              BottomSubmitBtn(
-                                onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PatientRegScreen(),
+                                itemBuilder: (_, index) => CardItem(
+                                  model: list.items[index],
+                                  color: getStateColor(
+                                    list.items[index].bedStatCd,
                                   ),
                                 ),
-                                text: '병상요청',
+                                separatorBuilder: (_, index) => Gaps.v8,
                               ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            Column(
+                              children: [
+                                const Spacer(),
+                                BottomSubmitBtn(
+                                  onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PatientRegScreen(),
+                                    ),
+                                  ),
+                                  text: '병상요청',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
