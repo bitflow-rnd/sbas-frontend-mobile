@@ -186,12 +186,17 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
 
   String get age {
     String birthday;
-
-    if (_patientInfoModel.rrno2 == '3' || _patientInfoModel.rrno2 == '4') {
-      birthday = '20${_patientInfoModel.rrno1}';
+    if (_patientInfoModel.rrno1 != null) {
+      if (_patientInfoModel.rrno2 == '3' || _patientInfoModel.rrno2 == '4') {
+        //외국인등록번호 관련 출생년도 설정 필요.
+        birthday = '20${_patientInfoModel.rrno1}';
+      } else {
+        birthday = '19${_patientInfoModel.rrno1}';
+      }
     } else {
-      birthday = '19${_patientInfoModel.rrno1}';
+      birthday = '19700101';
     }
+
     final difference = DateTime.now().difference(DateTime.tryParse(birthday) ?? DateTime.now());
 
     return (difference.inDays ~/ 365.25).toString();

@@ -25,22 +25,22 @@ class UserRegRequestRepository {
     return await _userRegProvider.reqUserReg(model.toJson());
   }
 
-  Future<Map<String, dynamic>> confirm(
-      String phoneNumber, String authNumber) async {
+  Future<Map<String, dynamic>> confirm(String phoneNumber, String authNumber) async {
     return await _userRegProvider.confirm({
       'phoneNo': phoneNumber,
       'certNo': authNumber,
     });
   }
 
-  Future<List<BaseCodeModel>> getBaseCode(String route) async =>
-      await _baseCodeProvider.getBaseCode(route);
+  Future<List<BaseCodeModel>> getBaseCode(String route) async => await _baseCodeProvider.getBaseCode(route);
 
   Future<List<InfoInstModel>> getPublicHealthCenter(
     String dstrCd1,
   ) async =>
       await _baseOrganProvider.getOrganCode(
-        'instTypecd=ORGN0003&dstrCd1=$dstrCd1',
+        // 'instTypecd=ORGN0003&dstrCd1=$dstrCd1',
+        // ORGN003 으로 안나와서 002로 수정.
+        'instTypecd=ORGN0002&dstrCd1=$dstrCd1',
       );
   Future<List<InfoInstModel>> getOrganCode(
     String typeCd,
@@ -50,8 +50,7 @@ class UserRegRequestRepository {
         'instTypecd=$typeCd&dstrCd2=$dstrCd2',
       );
 
-  Future<String> uploadImage(XFile file) async =>
-      await _baseCodeProvider.uploadImage(
+  Future<String> uploadImage(XFile file) async => await _baseCodeProvider.uploadImage(
         await MultipartFile.fromFile(
           file.path,
           filename: file.name,

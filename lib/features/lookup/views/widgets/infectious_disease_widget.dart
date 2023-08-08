@@ -102,8 +102,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                             children: [
                               Expanded(
                                 child: ref.watch(agencyRegionProvider).when(
-                                      loading: () =>
-                                          const SBASProgressIndicator(),
+                                      loading: () => const SBASProgressIndicator(),
                                       error: (error, stackTrace) => Center(
                                         child: Text(
                                           error.toString(),
@@ -129,8 +128,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                               Gaps.h8,
                               Expanded(
                                 child: ref.watch(agencyDetailProvider).when(
-                                      loading: () =>
-                                          const SBASProgressIndicator(),
+                                      loading: () => const SBASProgressIndicator(),
                                       error: (error, stackTrace) => Center(
                                         child: Text(
                                           error.toString(),
@@ -140,9 +138,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                                         ),
                                       ),
                                       data: (publicHealthCenter) => FormField(
-                                        builder: (field) =>
-                                            _selectPublicHealthCenter(
-                                                publicHealthCenter, field),
+                                        builder: (field) => _selectPublicHealthCenter(publicHealthCenter, field),
                                         validator: (value) {
                                           return null;
                                         },
@@ -159,26 +155,20 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                             controller: TextEditingController(
                               text: vm.init(i, widget.report),
                             ),
-                            onSaved: (newValue) =>
-                                vm.setTextEditingController(i, newValue),
-                            onChanged: (value) =>
-                                vm.setTextEditingController(i, value),
+                            onSaved: (newValue) => vm.setTextEditingController(i, newValue),
+                            onChanged: (value) => vm.setTextEditingController(i, value),
                             validator: (value) {
                               if (i == 7) {}
                               return null;
                             },
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
-                                RegExp(i == 4
-                                    ? r'[0-9|.-]'
-                                    : r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|\s|ㆍ|ᆢ]'),
+                                RegExp(i == 4 ? r'[0-9|.-]' : r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|\s|ㆍ|ᆢ]'),
                               ),
                               FilteringTextInputFormatter.singleLineFormatter,
                             ],
                             autovalidateMode: AutovalidateMode.always,
-                            keyboardType: i == 4 || i == 11
-                                ? TextInputType.number
-                                : TextInputType.text,
+                            keyboardType: i == 4 || i == 11 ? TextInputType.number : TextInputType.text,
                             maxLength: i == 4 ? 10 : null,
                           )
                         else if (i == 7)
@@ -189,11 +179,10 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                               scrollDirection: Axis.horizontal,
                               itemCount: widget._status.length,
                               itemBuilder: (context, index) => GestureDetector(
-                                onTap: () =>
-                                    setState(() => vm.setTextEditingController(
-                                          i,
-                                          widget._status[index],
-                                        )),
+                                onTap: () => setState(() => vm.setTextEditingController(
+                                      i,
+                                      widget._status[index],
+                                    )),
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 8,
@@ -201,27 +190,18 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                                   ),
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      style: widget._status[index] ==
-                                              disease.admsYn
-                                          ? BorderStyle.none
-                                          : BorderStyle.solid,
+                                      style: widget._status[index] == disease.admsYn ? BorderStyle.none : BorderStyle.solid,
                                       color: Colors.grey,
                                     ),
                                     borderRadius: BorderRadius.circular(
                                       18,
                                     ),
-                                    color:
-                                        widget._status[index] == disease.admsYn
-                                            ? Palette.mainColor
-                                            : Colors.transparent,
+                                    color: widget._status[index] == disease.admsYn ? Palette.mainColor : Colors.transparent,
                                   ),
                                   child: Text(
                                     widget._status[index],
                                     style: TextStyle(
-                                      color: widget._status[index] ==
-                                              disease.admsYn
-                                          ? Colors.white
-                                          : Colors.grey,
+                                      color: widget._status[index] == disease.admsYn ? Colors.white : Colors.grey,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
                                     ),
@@ -236,16 +216,12 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                           InkWell(
                             onTap: () async {
                               final image = await picker.pickImage(
-                                source: kDebugMode
-                                    ? ImageSource.gallery
-                                    : ImageSource.camera,
+                                source: kDebugMode ? ImageSource.gallery : ImageSource.camera,
                                 preferredCameraDevice: CameraDevice.front,
                                 requestFullMetadata: false,
                               );
                               if (image != null) {
-                                ref
-                                    .read(infectiousImageProvider.notifier)
-                                    .state = image;
+                                ref.read(infectiousImageProvider.notifier).state = image;
                               }
                             },
                             child: Container(
@@ -255,8 +231,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                               alignment: Alignment.center,
                               child: Stack(
                                 children: [
-                                  if (patientImage != null &&
-                                      patientImage.path.isNotEmpty)
+                                  if (patientImage != null && patientImage.path.isNotEmpty)
                                     Image.file(
                                       File(patientImage.path),
                                     )
@@ -264,25 +239,15 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                                     Image.asset(
                                       'assets/auth_group/camera_location.png',
                                     ),
-                                  if (patientImage != null &&
-                                      patientImage.path.isNotEmpty)
+                                  if (patientImage != null && patientImage.path.isNotEmpty)
                                     Positioned(
                                       top: 0,
                                       right: 0,
                                       child: IconButton(
                                         onPressed: () {
-                                          ref
-                                              .read(infectiousImageProvider
-                                                  .notifier)
-                                              .state = null;
-                                          ref
-                                              .read(infectiousAttcProvider
-                                                  .notifier)
-                                              .state = null;
-                                          ref
-                                              .read(infectiousIsUploadProvider
-                                                  .notifier)
-                                              .state = true;
+                                          ref.read(infectiousImageProvider.notifier).state = null;
+                                          ref.read(infectiousAttcProvider.notifier).state = null;
+                                          ref.read(infectiousIsUploadProvider.notifier).state = true;
                                         },
                                         icon: Icon(
                                           Icons.cancel_sharp,
@@ -315,18 +280,14 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                                   controller: TextEditingController(
                                     text: vm.init(i + 100, widget.report),
                                   ),
-                                  onSaved: (newValue) =>
-                                      vm.setTextEditingController(
-                                          i + 100, newValue),
-                                  onChanged: (value) => vm
-                                      .setTextEditingController(i + 100, value),
+                                  onSaved: (newValue) => vm.setTextEditingController(i + 100, newValue),
+                                  onChanged: (value) => vm.setTextEditingController(i + 100, value),
                                   validator: (value) => null,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
                                       RegExp(r'[0-9|.-]'),
                                     ),
-                                    FilteringTextInputFormatter
-                                        .singleLineFormatter,
+                                    FilteringTextInputFormatter.singleLineFormatter,
                                   ],
                                   autovalidateMode: AutovalidateMode.always,
                                   keyboardType: TextInputType.number,
@@ -344,9 +305,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
         );
   }
 
-  Widget _selectRegion(
-          Iterable<BaseCodeModel> region, FormFieldState<Object?> field) =>
-      SizedBox(
+  Widget _selectRegion(Iterable<BaseCodeModel> region, FormFieldState<Object?> field) => SizedBox(
         child: Column(
           children: [
             InputDecorator(
@@ -382,11 +341,8 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
                   isDense: true,
                   isExpanded: true,
                   onChanged: (value) {
-                    ref
-                        .read(agencyDetailProvider.notifier)
-                        .updatePublicHealthCenter(
-                          region.firstWhere((e) => e.cdNm == value).cdId ??
-                              '',
+                    ref.read(agencyDetailProvider.notifier).updatePublicHealthCenter(
+                          region.firstWhere((e) => e.cdNm == value).cdId ?? '',
                         );
                     field.didChange(value);
                   },
@@ -402,9 +358,7 @@ class _InfectiousDiseaseState extends ConsumerState<InfectiousDisease> {
           ],
         ),
       );
-  Widget _selectPublicHealthCenter(
-          Iterable<InfoInstModel> center, FormFieldState<Object?> field) =>
-      SizedBox(
+  Widget _selectPublicHealthCenter(Iterable<InfoInstModel> center, FormFieldState<Object?> field) => SizedBox(
         child: Column(
           children: [
             InputDecorator(

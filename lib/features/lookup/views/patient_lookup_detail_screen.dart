@@ -7,7 +7,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/assign/views/assign_request_screen.dart';
+import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_detail_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
@@ -369,7 +369,8 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                 function: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AssignBedRequestScreen(
+                    builder: (context) => HospitalBedRequestScreenV2(
+                      // builder: (context) => HospitalBedRequestScreen(
                       patient: patient,
                     ),
                   ),

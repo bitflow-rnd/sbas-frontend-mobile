@@ -6,6 +6,7 @@ import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
@@ -56,7 +57,8 @@ class PatientRegScreen extends ConsumerWidget {
           Expanded(
             child: Form(
               key: formKey,
-              child: patientAttc != null ? PatientRegInfoV2() : const PatientRegReport(),
+              child: patientAttc != null ? PatientRegInfo(formKey: formKey) : const PatientRegReport(),
+              // child: patientAttc != null ? PatientRegInfoV2() : const PatientRegReport(),
             ),
           ),
           Row(
@@ -80,7 +82,7 @@ class PatientRegScreen extends ConsumerWidget {
                   onPressed: patientImage != null || !patientIsUpload
                       ? patientAttc != null
                           ? _tryValidation()
-                              ? () => ref.read(patientRegProvider.notifier).registry(patient?.ptId, context)//환자실등록
+                              ? () => ref.read(patientRegProvider.notifier).registry(patient?.ptId, context) //환자실등록
                               : null
                           : (patientImage != null
                               ? () => ref.read(patientRegProvider.notifier).uploadImage(patientImage)
