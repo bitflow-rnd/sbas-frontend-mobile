@@ -23,7 +23,7 @@ class BaseCodeProvider {
         return list;
       }
     } catch (exception) {
-      if (kDebugMode) {
+      if (kDebugMode) { 
         print({
           'exception': exception,
         });

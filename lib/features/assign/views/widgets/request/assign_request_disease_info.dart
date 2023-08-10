@@ -106,7 +106,7 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
                             ),
                             child: Column(
                               children: [
-                                _getTitle(widget.list[i], true),
+                                _getTitle(widget.list[i], true, vm),
                                 Gaps.v8,
                                 if (i == 0) //입원여부
                                   Stack(
@@ -344,7 +344,7 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
     );
   }
 
-  Widget _getTitle(String title, bool isRequired) => Row(
+  Widget _getTitle(String title, bool isRequired, InfectiousDiseaseBloc vm) => Row(
         children: [
           Text(
             title,
@@ -384,9 +384,20 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
                       height: 10.h,
                     ),
                     Gaps.h3,
-                    Text(
-                      '전체동일',
-                      style: CTS.medium(fontSize: 13, color: Palette.mainColor),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          String? r = vm.getOccrDt();
+                          if(r!=null && r.isNotEmpty){
+                            vm.setTextEditingController(6, r);
+                            vm.setTextEditingController(7, r);
+                          }
+                        });
+                      },
+                      child: Text(
+                        '전체동일',
+                        style: CTS.medium(fontSize: 13, color: Palette.mainColor),
+                      ),
                     ),
                   ],
                 ),
