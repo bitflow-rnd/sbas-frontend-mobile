@@ -11,9 +11,9 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
-import 'package:sbas/features/assign/views/widgets/request/assign_request_critical_attack_input.dart';
+import 'package:sbas/features/assign/views/widgets/request/assign_severely_diseaseV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_request_departure_info_input.dart';
-import 'package:sbas/features/assign/views/widgets/request/assign_request_disease_info.dart';
+import 'package:sbas/features/assign/views/widgets/request/assign_infectious_diseaseV2.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
@@ -28,6 +28,7 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/request_steps/severely_disease_widget.dart';
 
 final selectedTabIndexProvider = StateProvider<int>((ref) => 0);
 final patientImageProvider = StateProvider<XFile?>((ref) => null);
@@ -198,18 +199,22 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     Expanded(
                         child: Padding(
                       padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                      child: PatientRegInfo(formKey: GlobalKey<FormState>()),
+                      child: PatientRegInfo(formKey: formKey),
                       // child: PatientRegInfoV2(),
                     )),
 
-                  //상단 2개는 신규일때만 들어갈수있도록 해야함.
-                  //하단부 ConsumerStatefulWidget로 변경.
                   if (selectedIndex == 2)
                     InfectiousDiseaseV2(
                       formKey: formKey,
                       report: report,
                     ), //감염병정보
-                  if (selectedIndex == 3) AssignReqCriticalAttackInputScreen(), //중증정보
+                  //상단 2개는 신규일때만 들어갈수있도록 해야함.
+                  //하단부 ConsumerStatefulWidget로 변경.
+                  if (selectedIndex == 3)
+                    SeverelyDiseaseV2(
+                      formKey: formKey,
+                      ptId: patient!.ptId!,
+                    ), //중증정보
                   if (selectedIndex == 4) AssignReqDepatureInfoInputScreen(), //출발정보
                   _bottomer(ref, selectedIndex, patientImage, patientAttc, patientIsUpload, context),
                 ],

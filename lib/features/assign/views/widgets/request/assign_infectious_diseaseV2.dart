@@ -388,7 +388,7 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
                       onTap: () {
                         setState(() {
                           String? r = vm.getOccrDt();
-                          if(r!=null && r.isNotEmpty){
+                          if (r != null && r.isNotEmpty) {
                             vm.setTextEditingController(6, r);
                             vm.setTextEditingController(7, r);
                           }

@@ -44,9 +44,168 @@ class SeverelyDisease extends ConsumerStatefulWidget {
 }
 
 class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
-  Widget _initClassification(
-          String title, int selectedIndex, int index, Function() func) =>
-      GestureDetector(
+  @override
+  Widget build(BuildContext context) => ref.watch(severelyDiseaseProvider).when(
+        loading: () => const SBASProgressIndicator(),
+        error: (error, stackTrace) => Center(
+          child: Text(
+            error.toString(),
+            style: const TextStyle(
+              color: Palette.mainColor,
+            ),
+          ),
+        ),
+        data: (model) => GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 18,
+              vertical: 12,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (int i = 0; i < widget._subTitles.length; i++)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Gaps.v2,
+                        Text(
+                          '${i + 1}.${widget._subTitles[i]}',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18,
+                          ),
+                        ),
+                        if (i == 2)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: _initRowClassification(model.where((e) => e.cdGrpId == 'SVIP')),
+                              ),
+                              Gaps.v6,
+                              if (_selectedIndex == 1 && _score == 0) _initBioInfo(),
+                              if (_selectedIndex == 0 || _selectedIndex == 1)
+                                const Text(
+                                  '중증도 분석 결과',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              if (_selectedIndex == 1 && _score > 0)
+                                Column(
+                                  children: [
+                                    Gaps.v4,
+                                    Text(
+                                      'NEWS Score: $_score',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const Divider(
+                                      color: Colors.grey,
+                                    ),
+                                    const Text(
+                                      '※중증도 분석 A.I.시스템의 분석 값 입니다.',
+                                      style: TextStyle(
+                                        color: Palette.mainColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        if (i == 0)
+                          SizedBox(
+                            height: _getHeight(
+                              model.where((e) => e.cdGrpId == 'PTTP'),
+                              4,
+                            ),
+                            child: _initGridView(
+                              i,
+                              model.where((e) => e.cdGrpId == 'PTTP'),
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: 1.925,
+                              ),
+                            ),
+                          )
+                        else if (i == 1)
+                          SizedBox(
+                            height: _getHeight(
+                              model.where((e) => e.cdGrpId == 'UDDS'),
+                              3,
+                            ),
+                            child: _initGridView(
+                              i,
+                              model.where((e) => e.cdGrpId == 'UDDS'),
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                childAspectRatio: 2.325,
+                              ),
+                            ),
+                          )
+                        else if (i == 2 && (_selectedIndex == 0 || _selectedIndex == 1))
+                          SizedBox(
+                            height: _getHeight(
+                              model.where((e) => e.cdGrpId == 'SVTP'),
+                              4,
+                            ),
+                            child: _initGridView(
+                              i,
+                              model.where((e) => e.cdGrpId == 'SVTP'),
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: 1.925,
+                              ),
+                            ),
+                          )
+                        else if (i == 3)
+                          SizedBox(
+                            height: _getHeight(
+                              model.where((e) => e.cdGrpId == 'BDTP'),
+                              4,
+                            ),
+                            child: _initGridView(
+                              i,
+                              model.where((e) => e.cdGrpId == 'BDTP'),
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: 1.925,
+                              ),
+                            ),
+                          )
+                        else if (i == 4)
+                          SizedBox(
+                            height: _getHeight(
+                              model.where((e) => e.cdGrpId == 'DNRA'),
+                              4,
+                            ),
+                            child: _initGridView(
+                              i,
+                              model.where((e) => e.cdGrpId == 'DNRA'),
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: 1.925,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+  Widget _initClassification(String title, int selectedIndex, int index, Function() func) => GestureDetector(
         onTap: func,
         child: Container(
           alignment: Alignment.center,
@@ -380,22 +539,18 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
                 final key = model.toList()[i].cdId;
 
                 if (key != null && key.isNotEmpty) {
-                  final isChecked =
-                      ref.watch(checkedSeverelyDiseaseProvider)[key];
+                  final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
 
                   if (isChecked != null) {
                     setState(() {
-                      final state = ref
-                          .read(checkedSeverelyDiseaseProvider.notifier)
-                          .state;
+                      final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
 
                       if (state[key] == true) return;
 
                       state[key] = !isChecked;
 
                       for (var e in state.keys) {
-                        if (e.substring(0, 4) == key.substring(0, 4) &&
-                            e != key) {
+                        if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
                           state[e] = isChecked;
                         }
                       }
@@ -414,168 +569,6 @@ class _SeverelyDiseaseState extends ConsumerState<SeverelyDisease> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) => ref.watch(severelyDiseaseProvider).when(
-        loading: () => const SBASProgressIndicator(),
-        error: (error, stackTrace) => Center(
-          child: Text(
-            error.toString(),
-            style: const TextStyle(
-              color: Palette.mainColor,
-            ),
-          ),
-        ),
-        data: (model) => GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 18,
-              vertical: 12,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (int i = 0; i < widget._subTitles.length; i++)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Gaps.v2,
-                        Text(
-                          '${i + 1}.${widget._subTitles[i]}',
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 18,
-                          ),
-                        ),
-                        if (i == 2)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: _initRowClassification(model
-                                    .where((e) => e.cdGrpId == 'SVIP')),
-                              ),
-                              Gaps.v6,
-                              if (_selectedIndex == 1 && _score == 0) _initBioInfo(),
-                              if (_selectedIndex == 0 || _selectedIndex == 1)
-                                const Text(
-                                  '중증도 분석 결과',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              if (_selectedIndex == 1 && _score > 0)
-                                Column(
-                                  children: [
-                                    Gaps.v4,
-                                    Text(
-                                      'NEWS Score: $_score',
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const Divider(
-                                      color: Colors.grey,
-                                    ),
-                                    const Text(
-                                      '※중증도 분석 A.I.시스템의 분석 값 입니다.',
-                                      style: TextStyle(
-                                        color: Palette.mainColor,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                            ],
-                          ),
-                        if (i == 0)
-                          SizedBox(
-                            height: _getHeight(
-                              model.where((e) => e.cdGrpId == 'PTTP'),
-                              4,
-                            ),
-                            child: _initGridView(
-                              i,
-                              model.where((e) => e.cdGrpId == 'PTTP'),
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                childAspectRatio: 1.925,
-                              ),
-                            ),
-                          )
-                        else if (i == 1)
-                          SizedBox(
-                            height: _getHeight(
-                              model.where((e) => e.cdGrpId == 'UDDS'),
-                              3,
-                            ),
-                            child: _initGridView(
-                              i,
-                              model.where((e) => e.cdGrpId == 'UDDS'),
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                childAspectRatio: 2.325,
-                              ),
-                            ),
-                          )
-                        else if (i == 2 && (_selectedIndex == 0 || _selectedIndex == 1))
-                          SizedBox(
-                            height: _getHeight(
-                              model.where((e) => e.cdGrpId == 'SVTP'),
-                              4,
-                            ),
-                            child: _initGridView(
-                              i,
-                              model.where((e) => e.cdGrpId == 'SVTP'),
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                childAspectRatio: 1.925,
-                              ),
-                            ),
-                          )
-                        else if (i == 3)
-                          SizedBox(
-                            height: _getHeight(
-                              model.where((e) => e.cdGrpId == 'BDTP'),
-                              4,
-                            ),
-                            child: _initGridView(
-                              i,
-                              model.where((e) => e.cdGrpId == 'BDTP'),
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                childAspectRatio: 1.925,
-                              ),
-                            ),
-                          )
-                        else if (i == 4)
-                          SizedBox(
-                            height: _getHeight(
-                              model.where((e) => e.cdGrpId == 'DNRA'),
-                              4,
-                            ),
-                            child: _initGridView(
-                              i,
-                              model.where((e) => e.cdGrpId == 'DNRA'),
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                childAspectRatio: 1.925,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
   double _getHeight(Iterable<BaseCodeModel> model, int crossAxisCount) => (model.length / crossAxisCount + 1) * 54.h;
 
   int _selectedIndex = -1, _selectedStateIndex = -1, _selectedOxygenIndex = -1, _score = 0;
