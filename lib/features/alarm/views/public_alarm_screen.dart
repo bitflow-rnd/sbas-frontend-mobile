@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/views/public_alarm_detail_screen.dart';
+import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
 
 class PublicAlarmPage extends StatefulWidget {
   const PublicAlarmPage({super.key});
@@ -189,7 +190,7 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
                 '수신된 알림이 없습니다.',
                 style: CTS.medium(
                   fontSize: 15,
-                  color: const Color(0xff676a7a),
+                  color: Color(0xff676a7a),
                 ),
               ),
               SizedBox(
@@ -208,7 +209,7 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: ElevatedButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const PublicAlarmDetailPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PublicAlarmDetailPage()));
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
@@ -258,7 +259,7 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: CTS(
-                        color: const Color(0xff676a7a),
+                        color: Color(0xff676a7a),
                         fontSize: 13,
                       ),
                     ),
@@ -268,13 +269,13 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                           decoration: BoxDecoration(
-                            color: const Color(0xff676a7a).withOpacity(0.12),
+                            color: Color(0xff676a7a).withOpacity(0.12),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           child: Text(
                             type,
                             style: CTS(
-                              color: const Color(0xff676a7a),
+                              color: Color(0xff676a7a),
                               fontSize: 13,
                             ),
                           ),
@@ -298,7 +299,7 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
                         Text(
                           isRead ? "NEW" : "",
                           style: CTS.medium(
-                            color: const Color(0xff538ef5),
+                            color: Color(0xff538ef5),
                             fontSize: 12,
                           ),
                         ),

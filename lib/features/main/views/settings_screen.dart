@@ -6,6 +6,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/main/views/alert_settings_page.dart';
 import 'package:sbas/features/main/views/app_license_screen.dart';
 import 'package:sbas/features/main/views/app_permission_setting_screen.dart';
+import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
 //  import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {
@@ -78,9 +79,9 @@ class _SettingPageState extends State<SettingPage> {
           ),
           const Spacer(),
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
+            duration: Duration(milliseconds: 300),
             child: Switch(
-              key: const ValueKey<bool>(true),
+              key: ValueKey<bool>(true),
               value: true,
               onChanged: (value) async {
                 var res = await Common.showModal(
@@ -154,7 +155,7 @@ class _SettingPageState extends State<SettingPage> {
             padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
             margin: EdgeInsets.only(left: 10.w),
             decoration: BoxDecoration(
-              color: const Color(0xff538ef5).withOpacity(0.12),
+              color: Color(0xff538ef5).withOpacity(0.12),
               borderRadius: BorderRadius.circular(4.r),
             ),
             child: Text(
@@ -176,7 +177,7 @@ class _SettingPageState extends State<SettingPage> {
                 )
               : InkWell(
                   onTap: () {
-                    const String appStoreUrl = '<Your app store URL>';
+                    final String appStoreUrl = '<Your app store URL>';
 
                     // if (await canLaunch(appStoreUrl)) {
                     //   // Device is capable of launching the app store URL

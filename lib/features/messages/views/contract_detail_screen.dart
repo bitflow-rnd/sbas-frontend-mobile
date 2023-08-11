@@ -295,7 +295,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
               ],
             ),
           ),
-          const Spacer(),
+          Spacer(),
           Row(
             children: [
               Expanded(
@@ -341,11 +341,11 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
   }
 
   void _showBottomSheet(BuildContext context) {
-    TextEditingController textEditingController = TextEditingController();
-    final focusNode = FocusNode();
+    TextEditingController _textEditingController = TextEditingController();
+    final _focusNode = FocusNode();
 
     // Call requestFocus() on the focus node when the bottom sheet is displayed
-    WidgetsBinding.instance.addPostFrameCallback((_) => focusNode.requestFocus());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _focusNode.requestFocus());
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -398,8 +398,8 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                           Expanded(
                             flex: 3,
                             child: TextField(
-                                focusNode: focusNode,
-                                controller: textEditingController,
+                                focusNode: _focusNode,
+                                controller: _textEditingController,
                                 decoration: InputDecoration(
                                   hintText: '메시지 입력',
                                   enabledBorder: _outlineInputBorder,
@@ -419,7 +419,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                                 ),
                               ),
                               onPressed: () {
-                                String text = textEditingController.text;
+                                String text = _textEditingController.text;
                                 // Perform action with the entered text here
                                 Navigator.pop(context, text);
                               },

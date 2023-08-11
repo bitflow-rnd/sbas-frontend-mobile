@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
 
 class AlertSettingPage extends StatefulWidget {
   const AlertSettingPage({super.key});
@@ -25,17 +26,17 @@ class _AlertSettingPageState extends State<AlertSettingPage> {
         child: Column(children: [
           Container(
             height: 1.h,
-            color: const Color(0xff676a7a).withOpacity(0.2),
+            color: Color(0xff676a7a).withOpacity(0.2),
           ),
           alertDefaultRow(),
           Container(
             height: 1.h,
-            color: const Color(0xff676a7a).withOpacity(0.2),
+            color: Color(0xff676a7a).withOpacity(0.2),
           ),
           alertDefaultRow2(),
           Container(
             height: 1.h,
-            color: const Color(0xff676a7a).withOpacity(0.2),
+            color: Color(0xff676a7a).withOpacity(0.2),
           ),
         ]),
       ),
@@ -59,9 +60,9 @@ class _AlertSettingPageState extends State<AlertSettingPage> {
               ),
               const Spacer(),
               AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
+                duration: Duration(milliseconds: 300),
                 child: Switch(
-                  key: const ValueKey<bool>(true),
+                  key: ValueKey<bool>(true),
                   value: true,
                   onChanged: (value) {},
                   activeColor: Palette.mainColor,
@@ -137,9 +138,9 @@ class _AlertSettingPageState extends State<AlertSettingPage> {
               ),
               const Spacer(),
               AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
+                duration: Duration(milliseconds: 300),
                 child: Switch(
-                  key: const ValueKey<bool>(true),
+                  key: ValueKey<bool>(true),
                   value: true,
                   onChanged: (value) {},
                   activeColor: Palette.mainColor,

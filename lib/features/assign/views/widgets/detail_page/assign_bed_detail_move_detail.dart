@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
 class AssignBedMoveDetialInfo extends ConsumerWidget {
   const AssignBedMoveDetialInfo({super.key, this.type});
@@ -58,7 +59,7 @@ class AssignBedMoveDetialInfo extends ConsumerWidget {
                           fontSize: 13,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       Text(
                         _getListValue_1(i),
                         style: CTS.medium(

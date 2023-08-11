@@ -1,5 +1,7 @@
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
@@ -49,13 +51,13 @@ class PublicAlarmDetailPageState extends State<PublicAlarmDetailPage> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                 decoration: BoxDecoration(
-                  color: const Color(0xff676a7a).withOpacity(0.12),
+                  color: Color(0xff676a7a).withOpacity(0.12),
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Text(
                   type,
                   style: CTS(
-                    color: const Color(0xff676a7a),
+                    color: Color(0xff676a7a),
                     fontSize: 13,
                   ),
                 ),
@@ -73,7 +75,7 @@ class PublicAlarmDetailPageState extends State<PublicAlarmDetailPage> {
               Text(
                 isRead ? "NEW" : "",
                 style: CTS.medium(
-                  color: const Color(0xff538ef5),
+                  color: Color(0xff538ef5),
                   fontSize: 12,
                 ),
               ),

@@ -6,6 +6,7 @@ import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedCancelScreen extends StatefulWidget {

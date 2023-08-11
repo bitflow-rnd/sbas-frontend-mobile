@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
 
 class AppPermissionSettingPage extends StatefulWidget {
   const AppPermissionSettingPage({super.key});
@@ -27,7 +28,7 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(height: 1.h, color: const Color(0xff676a7a).withOpacity(0.2)),
+              Container(height: 1.h, color: Color(0xff676a7a).withOpacity(0.2)),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 42.h, horizontal: 50.w),
                 child: Image.asset("assets/login_logo.png"),
@@ -78,9 +79,9 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                         ),
                         const Spacer(),
                         AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
+                          duration: Duration(milliseconds: 300),
                           child: Switch(
-                            key: const ValueKey<bool>(true),
+                            key: ValueKey<bool>(true),
                             value: true,
                             onChanged: (value) {},
                             activeColor: Palette.mainColor,
@@ -88,7 +89,7 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                         ),
                       ],
                     ),
-                    Container(margin: EdgeInsets.symmetric(vertical: 20.h), height: 1.h, color: const Color(0xff676a7a).withOpacity(0.2)),
+                    Container(margin: EdgeInsets.symmetric(vertical: 20.h), height: 1.h, color: Color(0xff676a7a).withOpacity(0.2)),
                     Row(
                       children: [
                         Column(
@@ -114,9 +115,9 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                         ),
                         const Spacer(),
                         AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
+                          duration: Duration(milliseconds: 300),
                           child: Switch(
-                            key: const ValueKey<bool>(true),
+                            key: ValueKey<bool>(true),
                             value: true,
                             onChanged: (value) {},
                             activeColor: Palette.mainColor,

@@ -319,7 +319,8 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
       required int i,
       required InfectiousDiseaseBloc vm,
       TextInputType type = TextInputType.text,
-      int? maxLength}) {
+      int? maxLength,
+      List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
       decoration: getInputDecoration(hint),
       controller: TextEditingController(
@@ -483,7 +484,7 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
                             width: 150,
                             child: Text(
                               e.cdNm ?? '',
-                              style: const TextStyle(fontSize: 13, color: Palette.black),
+                              style: TextStyle(fontSize: 13, color: Palette.black),
                               textAlign: TextAlign.left,
                             ),
                           ),
@@ -534,7 +535,7 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
                             width: 150,
                             child: Text(
                               e.instNm ?? '',
-                              style: const TextStyle(fontSize: 13, color: Palette.black),
+                              style: TextStyle(fontSize: 13, color: Palette.black),
                               textAlign: TextAlign.left,
                             ),
                           ),

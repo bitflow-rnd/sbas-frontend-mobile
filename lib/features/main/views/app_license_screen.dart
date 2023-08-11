@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
 
 class AppLicensePage extends StatefulWidget {
   const AppLicensePage({super.key});
@@ -91,7 +92,7 @@ class _AppLicensePageState extends State<AppLicensePage> {
           Text(
             url,
             style: CTS(
-              color: const Color(0xff676a7a),
+              color: Color(0xff676a7a),
               fontSize: 13,
             ),
           ),
@@ -108,7 +109,7 @@ class _AppLicensePageState extends State<AppLicensePage> {
           Text(
             url2,
             style: CTS(
-              color: const Color(0xff676a7a),
+              color: Color(0xff676a7a),
               fontSize: 13,
             ),
           ),

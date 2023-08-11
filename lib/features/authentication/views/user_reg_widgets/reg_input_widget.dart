@@ -234,7 +234,7 @@ class _RegInputState extends ConsumerState<RegInput> {
         ),
       );
   InputBorder get _outlineInputErrBorder => OutlineInputBorder(
-        borderSide: const BorderSide(
+        borderSide: BorderSide(
           style: BorderStyle.solid,
           color: Palette.red,
         ),

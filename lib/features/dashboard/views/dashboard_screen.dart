@@ -6,6 +6,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/views/alarm_screen.dart';
+import 'package:sbas/features/alarm/views/public_alarm_screen.dart';
 import 'package:sbas/features/dashboard/views/widgets/dashboard_widget.dart';
 import 'package:sbas/util.dart';
 
@@ -79,10 +80,10 @@ class DashboardScreen extends ConsumerWidget {
               maxFontSize: 18,
             ),
             Gaps.v16,
-            const Expanded(
+            Expanded(
               flex: 1,
               child: Padding(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   vertical: 6,
                 ),
                 child: Column(
@@ -90,7 +91,7 @@ class DashboardScreen extends ConsumerWidget {
                     Expanded(
                       flex: 1,
                       child: Row(
-                        children: [
+                        children: const [
                           Dashboard(
                             title: '요청',
                             edge: EdgeInsets.only(
@@ -115,7 +116,7 @@ class DashboardScreen extends ConsumerWidget {
                     Expanded(
                       flex: 1,
                       child: Row(
-                        children: [
+                        children: const [
                           Dashboard(
                             title: '이송',
                             edge: EdgeInsets.only(
