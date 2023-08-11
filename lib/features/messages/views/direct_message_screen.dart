@@ -86,7 +86,7 @@ class DirectMessageScreen extends ConsumerWidget {
         ),
         body: Column(
           children: [
-            Container(
+            SizedBox(
               height: 82.h,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +105,7 @@ class DirectMessageScreen extends ConsumerWidget {
                                 child: Text(
                                   '연락처',
                                   style: CTS.medium(
-                                    color: Color(0xff676a7a),
+                                    color: const Color(0xff676a7a),
                                     fontSize: 13,
                                   ),
                                 ),
@@ -168,7 +168,7 @@ class DirectMessageScreen extends ConsumerWidget {
                                 height: 6.h,
                                 width: 200.w,
                                 decoration: BoxDecoration(
-                                  color: Color(0xFFecedef),
+                                  color: const Color(0xFFecedef),
                                   borderRadius: BorderRadius.circular(3),
                                 ),
                               ),
@@ -254,7 +254,7 @@ class DirectMessageScreen extends ConsumerWidget {
                                 height: 40.h,
                                 width: 45.w,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffecedef).withOpacity(0.6),
+                                  color: const Color(0xffecedef).withOpacity(0.6),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
@@ -414,7 +414,7 @@ class DirectMessageScreen extends ConsumerWidget {
                     Text(
                       header,
                       style: CTS.medium(
-                        color: Color(0xff676a7a),
+                        color: const Color(0xff676a7a),
                         fontSize: 13,
                       ),
                     ),
@@ -432,7 +432,7 @@ class DirectMessageScreen extends ConsumerWidget {
                         style: CTS.bold(color: Colors.white, fontSize: 10),
                       ).c,
                     ),
-                    Spacer(),
+                    const Spacer(),
                     if (hasOpen)
                       Icon(
                         Icons.keyboard_arrow_up_outlined,

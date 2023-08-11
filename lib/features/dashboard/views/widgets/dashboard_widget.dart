@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sbas/constants/palette.dart';
 
@@ -80,7 +79,7 @@ class Dashboard extends StatelessWidget {
                   ),
                   child: AutoSizeText(
                     count.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
                     ),

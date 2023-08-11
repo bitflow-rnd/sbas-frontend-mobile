@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
-import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
@@ -54,7 +53,7 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
                   vertical: 32.h,
                   horizontal: 24.w,
                 ),
-                child: TopNavbarRequest(),
+                child: const TopNavbarRequest(),
               ),
               Padding(
                 padding: EdgeInsets.only(

@@ -201,7 +201,7 @@ class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
                   ),
                 ),
                 Gaps.v4,
-                Text(
+                const Text(
                   // widget.model
                   '#중증#투석', //TODO 임시로 하드코딩 - 수정 필요
                   style: TextStyle(

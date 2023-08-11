@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/common.dart';
@@ -85,7 +84,7 @@ class PatientRegInfoModal {
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     border: Border.all(
-                                      color: Color(0xff676a7a),
+                                      color: const Color(0xff676a7a),
                                       width: 1.w,
                                     ),
                                     borderRadius: BorderRadius.circular(6.r),
@@ -98,7 +97,7 @@ class PatientRegInfoModal {
                                       padding: EdgeInsets.symmetric(vertical: 9.r),
                                       child: Text(
                                         "닫기",
-                                        style: CTS(color: Color(0xff676a7a), fontSize: 14),
+                                        style: CTS(color: const Color(0xff676a7a), fontSize: 14),
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                       ).c,

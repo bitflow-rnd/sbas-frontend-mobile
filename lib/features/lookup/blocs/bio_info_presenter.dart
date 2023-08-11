@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/lookup/models/bio_info_model.dart';
-import 'package:sbas/features/lookup/models/bio_info_registry_model.dart';
 import 'package:sbas/features/lookup/models/severely_disease_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 

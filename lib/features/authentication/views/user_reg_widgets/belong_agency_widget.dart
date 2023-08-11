@@ -27,7 +27,7 @@ class BelongAgency extends ConsumerStatefulWidget {
 }
 
 class _BelongAgencyState extends ConsumerState<BelongAgency> {
-  bool _isSelected = false;
+  final bool _isSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -248,7 +248,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: isSelected ? Palette.mainColor : Color(0xffecedef).withOpacity(0.6),
+          color: isSelected ? Palette.mainColor : const Color(0xffecedef).withOpacity(0.6),
           borderRadius: BorderRadius.circular(6),
         ),
         child: Text(

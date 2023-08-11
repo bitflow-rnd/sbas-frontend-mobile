@@ -1,14 +1,9 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
-import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/alarm/views/alarm_screen.dart';
-import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';

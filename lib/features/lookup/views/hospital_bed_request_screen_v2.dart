@@ -9,7 +9,6 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
-import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_severely_diseaseV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_request_departure_info_input.dart';
@@ -19,16 +18,13 @@ import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
-import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
-import 'package:sbas/features/lookup/views/widgets/request_steps/severely_disease_widget.dart';
 
 final patientImageProvider = StateProvider<XFile?>((ref) => null);
 final patientAttcProvider = StateProvider<String?>((ref) => null);

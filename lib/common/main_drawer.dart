@@ -3,13 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/alarm/views/alarm_screen.dart';
 import 'package:sbas/features/alarm/views/public_alarm_screen.dart';
 import 'package:sbas/features/authentication/blocs/login_bloc.dart';
 import 'package:sbas/features/main/views/service_policy_screen.dart';
 import 'package:sbas/features/main/views/settings_screen.dart';
 import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
-import 'package:sbas/features/messages/views/direct_message_screen.dart';
 
 import '../features/assign/views/assign_bed_screen.dart';
 
@@ -83,7 +81,7 @@ class MainDrawer extends ConsumerWidget {
                   _drawerItem("이송", "assets/auth_group/selected_request.png", 3, "", context, const AssignBedScreen(automaticallyImplyLeading: false)),
                   _drawerItem("입·퇴원", "assets/auth_group/selected_request.png", 1, "", context, const AssignBedScreen(automaticallyImplyLeading: false)),
                   Container(color: Palette.dividerGrey, height: 1.h),
-                  _drawerItem("공지사항", "assets/auth_group/selected_request.png", null, "", context, PublicAlarmPage()),
+                  _drawerItem("공지사항", "assets/auth_group/selected_request.png", null, "", context, const PublicAlarmPage()),
                   Container(color: Palette.dividerGrey, height: 1.h),
                   _drawerItem("내활동내역", "assets/auth_group/selected_request.png", null, "", context, const AssignBedScreen(automaticallyImplyLeading: false)),
                 ],

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedApproveMoveScreen extends StatefulWidget {
@@ -97,7 +95,7 @@ class _AssignBedApproveMoveScreenState extends State<AssignBedApproveMoveScreen>
                         Row(
                           children: [
                             _getTitle(list[3], false),
-                            Spacer(),
+                            const Spacer(),
                             carNumTag("54더1980"),
                             carNumTag("143호1927"),
                           ],
@@ -243,7 +241,7 @@ class _AssignBedApproveMoveScreenState extends State<AssignBedApproveMoveScreen>
                     TextSpan(
                       text: detail, //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
                       style: CTS(
-                        color: Color(0xff333333),
+                        color: const Color(0xff333333),
                         fontSize: 10,
                       ),
                     ),
