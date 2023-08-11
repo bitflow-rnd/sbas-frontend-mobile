@@ -27,8 +27,7 @@ class HospitalBedRequest extends AsyncNotifier<EpidemiologicalReportModel> {
   late final PatientRepository _patientRepository;
 }
 
-final requestBedProvider =
-    AsyncNotifierProvider<HospitalBedRequest, EpidemiologicalReportModel>(
+final requestBedProvider = AsyncNotifierProvider<HospitalBedRequest, EpidemiologicalReportModel>(
   () => HospitalBedRequest(),
 );
-final orderOfRequestProvider = StateProvider.autoDispose<int>((ref) => -1);
+final orderOfRequestProvider = StateProvider.autoDispose<int>((ref) => 0);

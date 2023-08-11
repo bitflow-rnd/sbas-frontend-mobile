@@ -3,18 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/lookup/blocs/bio_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
-
-final selecteItemProvider0 = StateProvider((ref) => 0);
-final selecteItemProvider1 = StateProvider((ref) => 0);
-final selecteItemProvider2 = StateProvider((ref) => 0);
-final selecteItemProvider3 = StateProvider((ref) => 0);
-final selecteItemProvider4 = StateProvider((ref) => 0);
-final selecteItemProvider5 = StateProvider((ref) => 0);
 
 class SeverelyDiseaseV2 extends ConsumerStatefulWidget {
   SeverelyDiseaseV2({
@@ -25,12 +20,12 @@ class SeverelyDiseaseV2 extends ConsumerStatefulWidget {
 
   final String ptId;
   final GlobalKey<FormState> formKey;
-  final List<String> list = [
-    '중증여부',
-    '요청병상유형',
-    'DNR 동의 여부',
-    '환자 유형',
-    '기저질환',
+  final List<String> _subTitles = [
+    '중증여부', //  2     : SVTP (cpGrpId)
+    '요청병상유형', //  3  : BDTP (cpGrpId)
+    'DNR 동의 여부', //4  : DNRA (cpGrpId)
+    '환자유형', //0    : PPTP (cpGrpId)
+    '기저질환', //1-    : UDDS (cpGrpId)
   ];
   final _labelTitles = [
     '체온(℃)',
@@ -48,20 +43,21 @@ class SeverelyDiseaseV2 extends ConsumerStatefulWidget {
     'mmHg',
     '',
   ];
+  final _classification = [
+    '명료',
+    '비명료',
+    '비투여',
+    '투여',
+  ];
 
   @override
   ConsumerState<SeverelyDiseaseV2> createState() => _SeverelyDiseaseV2State();
 }
 
 class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
+  int _selectedIndex = -1, _selectedStateIndex = -1, _selectedOxygenIndex = -1, _score = 0;
   @override
   Widget build(BuildContext context) {
-    final selected0 = ref.watch(selecteItemProvider0);
-    final selected1 = ref.watch(selecteItemProvider1);
-    final selected2 = ref.watch(selecteItemProvider2);
-    final selected3 = ref.watch(selecteItemProvider3);
-    final selected4 = ref.watch(selecteItemProvider4);
-    final selected5 = ref.watch(selecteItemProvider5);
     return ref.watch(severelyDiseaseProvider).when(
           loading: () => const SBASProgressIndicator(),
           error: (error, stackTrace) => Center(
@@ -72,257 +68,585 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
               ),
             ),
           ),
-          data: (model) => Form(
-            autovalidateMode: AutovalidateMode.always,
-            key: widget.formKey,
-            child: Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 14,
-                  horizontal: 18,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _getTitle(widget.list[0], true),
-                    Gaps.v16,
-                    rowSelectButton(['직접선택', '생체정보분석', '미분류'], selected0, ref, selecteItemProvider0),
-                    Gaps.v16,
-                    selected0 == 0
-                        ? Column(
-                            children: [
-                              rowSelectButton(['중증', '준중증', '준등중'], selected1, ref, selecteItemProvider1),
-                            ],
-                          )
-                        : selected0 == 1
-                            ? Column(
-                                children: [
-                                  Divider(
-                                    color: Palette.greyText_20,
-                                    height: 1.2,
+          data: (model) => Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                vertical: 14,
+                horizontal: 18,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (int i = 0; i < widget._subTitles.length; i++)
+                    if (i == 0)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _getTitle(widget._subTitles[i], true),
+                          Gaps.v16,
+                          _initRowClassification(model.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
+                          Gaps.v6,
+                          if (_selectedIndex == 1 && _score == 0) _initBioInfo(),
+                          if (_selectedIndex == 1)
+                            Column(
+                              children: [
+                                Gaps.v28,
+                                _getTitle("중증도 분석 결과", true),
+                              ],
+                            ),
+                          if (_selectedIndex == 1 && _score > 0)
+                            Column(
+                              children: [
+                                Gaps.v20,
+                                Text(
+                                  'NEWS Score: $_score',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  Gaps.v8,
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '의식상태',
-                                        style: CTS(color: Palette.greyText, fontSize: 13),
-                                      ),
-                                      const Spacer(),
-                                      SizedBox(width: 110.h, child: rowSelectButton(['명료', '비명료'], selected4, ref, selecteItemProvider4)),
-                                    ],
+                                ),
+                                const Divider(
+                                  color: Colors.grey,
+                                ),
+                                const Text(
+                                  '※중증도 분석 A.I.시스템의 분석 값 입니다.',
+                                  style: TextStyle(
+                                    color: Palette.mainColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  Gaps.v8,
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '의식상태',
-                                        style: CTS(color: Palette.greyText, fontSize: 13),
-                                      ),
-                                      const Spacer(),
-                                      SizedBox(width: 110.h, child: rowSelectButton(['비투여', '투여'], selected5, ref, selecteItemProvider5)),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                      height: 300.h,
-                                      child: GridView.builder(
-                                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 1.57,
-                                        ),
-                                        itemBuilder: (context, index) => Padding(
-                                          padding: EdgeInsets.only(
-                                              top: 12.h,
-                                              bottom: 12.h,
-                                              right: index % 2 == 0 ? 6.w : 0,
-                                              left: index % 2 == 1 ? 6.w : 0), //왼쪽 줄, 오른쪽 줄 위젯 안쪽만 패딩줌.
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                widget._labelTitles[index],
-                                                style: CTS.medium(color: Palette.greyText, fontSize: 13),
-                                              ),
-                                              Gaps.v8,
-                                              index == 5
-                                                  ? Expanded(
-                                                      child: InkWell(
-                                                        onTap: () {},
-                                                        child: Container(
-                                                          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
-                                                          decoration: BoxDecoration(
-                                                            color: Palette.white,
-                                                            border: Border.all(
-                                                              color: Palette.mainColor,
-                                                              width: 1,
-                                                            ),
-                                                            borderRadius: BorderRadius.circular(4.r),
-                                                          ),
-                                                          child: Text('분석',
-                                                              style: CTS.bold(
-                                                                fontSize: 13,
-                                                                color: Palette.mainColor,
-                                                              )).c,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : TextFormField(
-                                                      decoration: getInputDecoration(widget._labelTitlesHint[index]),
-                                                      keyboardType: TextInputType.number,
-                                                      inputFormatters: [
-                                                        FilteringTextInputFormatter.allow(
-                                                          RegExp(r'[0-9|.]'),
-                                                        ),
-                                                        FilteringTextInputFormatter.singleLineFormatter,
-                                                      ],
-                                                      validator: (value) {
-                                                        return null;
+                                ),
+                              ],
+                            ),
+                          if (_selectedIndex == 0 || _selectedIndex == 1)
+                            Column(
+                              children: [
+                                Gaps.v16,
+                                _initRowClassification(model.where((e) => e.cdGrpId == 'SVTP')),
+                                // 이부분도 디자인과 다름. 디자인상 중증/준중증/준등증 으로 되어있지만.
+                                //실제 SVTP 로 조회시 무증상~사망의 7개 나옴. 일단 디자인과 동일하게 구현.
+                                Gaps.v28
+                              ],
+                            ),
+                        ],
+                      )
+                    else if (i == 1)
+                      Column(
+                        children: [
+                          _getTitle(widget._subTitles[i], true),
+                          Gaps.v16,
+                          _initRowClassification(model.where((e) => e.cdGrpId == 'BDTP')),
+                        ],
+                      )
+                    else if (i == 2)
+                      Column(
+                        children: [
+                          Gaps.v28,
+                          _getTitle(widget._subTitles[i], true),
+                          Gaps.v16,
+                          _initRowClassification(model.where((e) => e.cdGrpId == 'DNRA')),
+                        ],
+                      )
+                    else if (i == 3)
+                      Column(
+                        children: [
+                          Gaps.v28,
+                          _getTitle(widget._subTitles[i], true),
+                          Gaps.v16,
+                          rowMultiSelectButton(model.where((e) => e.cdGrpId == 'PTTP'), i),
+                        ],
+                      )
+                    else if (i == 4)
+                      Column(
+                        children: [
+                          Gaps.v28,
+                          _getTitle(widget._subTitles[i], true),
+                          Gaps.v16,
+                          rowMultiSelectButton(model.where((e) => e.cdGrpId == 'UDDS'), i),
+                        ],
+                      )
+                  // Gaps.v28,
+                  // //요청병상유형
+                  // Gaps.v16,
 
-                                                        // if (value != null && value.isNotEmpty && (int.tryParse(value) is int || double.tryParse(value) is double)) {
-                                                        //   return null;
-                                                        // }
-                                                        // return '수치를 정확히 입력하세요.';
-                                                      },
-                                                      onSaved: (newValue) {
-                                                        if (newValue != null && newValue.isNotEmpty) {
-                                                          switch (index) {
-                                                            case 0:
-                                                              // model.bdTemp = double.tryParse(newValue);
-                                                              break;
-
-                                                            case 1:
-                                                              // model.pulse = int.tryParse(newValue);
-                                                              break;
-
-                                                            case 2:
-                                                              // model.breath = int.tryParse(newValue);
-                                                              break;
-
-                                                            case 3:
-                                                              // model.spo2 = double.tryParse(newValue);
-                                                              break;
-
-                                                            case 4:
-                                                              // model.sbp = int.tryParse(newValue);
-                                                              break;
-                                                          }
-                                                        }
-                                                      },
-                                                      autovalidateMode: AutovalidateMode.always,
-                                                    ),
-                                            ],
-                                          ),
-                                        ),
-                                        itemCount: widget._labelTitles.length,
-                                        physics: const NeverScrollableScrollPhysics(),
-                                      )),
-                                ],
-                              )
-                            : Container(),
-                    Gaps.v28,
-                    //요청병상유형
-                    _getTitle(widget.list[1], true),
-                    Gaps.v16,
-                    rowSelectButton(['일반격리', '음압격리', '미분류'], selected2, ref, selecteItemProvider2),
-                    Gaps.v28,
-                    //DNR 동의 여부
-                    _getTitle(widget.list[2], true),
-                    Gaps.v16,
-                    rowSelectButton(['미분류', '동의', '비동의'], selected3, ref, selecteItemProvider3),
-                    Gaps.v28,
-                    //환자유형(다중선택)
-                    _getTitle(widget.list[3], true),
-                    Gaps.v16,
-                    rowMultiSelectButton(['임산부', '투석', '수술', '신생아', '유아', '인공호흡기 사용', '적극적치료요쳥'], ['임산부']),
-                    Gaps.v28,
-                    //기저질환(다중선택)
-                    _getTitle(widget.list[3], true),
-                    Gaps.v16,
-                    rowMultiSelectButton(['고혈압', '당뇨', '고지혈증', '  심혈관  ', '뇌혈관', '암', '만성폐질환', '폐렴', '신장질환', '결핵', '천식등알레르기', '면역력저하자'], ['고혈압']),
-                    Gaps.v16,
-                    _getTextInputField(hint: "기타 직접입력"),
-                    Gaps.v28,
-                  ],
-                ),
+                  // Gaps.v28,
+                  // //DNR 동의 여부
+                  // _getTitle(widget._subTitles[2], true),
+                  // rowSelectButton(['미분류', '동의', '비동의'], selected3, ref, selecteItemProvider3),
+                  // Gaps.v28,
+                  // //환자유형(다중선택)
+                  // _getTitle(widget._subTitles[3], true),
+                  // Gaps.v16,
+                  // rowMultiSelectButton(['임산부', '투석', '수술', '신생아', '유아', '인공호흡기 사용', '적극적치료요쳥'], ['임산부']),
+                  // Gaps.v28,
+                  // //기저질환(다중선택)
+                  // _getTitle(widget._subTitles[3], true),
+                  // Gaps.v16,
+                  // rowMultiSelectButton(['고혈압', '당뇨', '고지혈증', '  심혈관  ', '뇌혈관', '암', '만성폐질환', '폐렴', '신장질환', '결핵', '천식등알레르기', '면역력저하자'], ['고혈압']),
+                  // Gaps.v16,
+                  // _getTextInputField(hint: "기타 직접입력"),
+                  // Gaps.v28,
+                ],
               ),
             ),
           ),
         );
   }
-}
 
-Widget rowMultiSelectButton(list, selectList) {
-  return Row(
-    children: [
-      Expanded(
-        child: Wrap(
-          spacing: 11.w,
-          runSpacing: 12.h,
-          direction: Axis.horizontal,
-          children: [
-            for (var i in list)
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
-                decoration: BoxDecoration(
-                  color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
-                  border: Border.all(
-                    color: Palette.greyText_20,
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(13.5.r),
+  Widget _initBioInfo() => ref.watch(bioInfoProvider).when(
+      loading: () => const SBASProgressIndicator(),
+      error: (error, stackTrace) => Center(
+            child: Text(
+              error.toString(),
+              style: const TextStyle(
+                color: Palette.mainColor,
+              ),
+            ),
+          ),
+      data: (bio) => Form(
+            key: widget.formKey,
+            child: Column(
+              children: [
+                Divider(
+                  color: Palette.greyText_20,
+                  height: 1.2,
                 ),
-                child: Text(i,
-                    style: CTS.bold(
-                      fontSize: 13,
-                      color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
-                    )),
+                Gaps.v8,
+                FormField(
+                  autovalidateMode: AutovalidateMode.always,
+                  builder: (field) => Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            '의식상태',
+                            style: CTS(color: Palette.greyText, fontSize: 13),
+                          ),
+                          const Spacer(),
+                          Stack(
+                            children: [
+                              Container(
+                                width: 110.w,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffe4e4e4),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Row(
+                                  children: [
+                                    for (int i = 0; i < 2; i++)
+                                      Expanded(
+                                        flex: 1,
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.symmetric(vertical: 10.h),
+                                              child: Text("", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                                            ),
+                                            Gaps.h1,
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  for (int i = 0; i < 2; i++)
+                                    _initClassification(
+                                      widget._classification[i],
+                                      _selectedStateIndex,
+                                      i,
+                                      () => setState(
+                                        () {
+                                          _selectedStateIndex = i;
+                                          bio.avpu = i == 0 ? 'A' : 'U';
+                                          field.didChange(bio.avpu);
+                                        },
+                                      ),
+                                    ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  validator: (value) => value != null ? null : '의식상태를 선택하세요.',
+                ),
+                Gaps.v8,
+                FormField(
+                  autovalidateMode: AutovalidateMode.always,
+                  validator: (value) => value != null ? null : '산소 투여 여부를 선택하세요.',
+                  builder: (field) => Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            '산소 투여 여부',
+                            style: CTS(color: Palette.greyText, fontSize: 13),
+                          ),
+                          const Spacer(),
+                          Stack(
+                            children: [
+                              Container(
+                                width: 110.w,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffe4e4e4),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Row(
+                                  children: [
+                                    for (int i = 0; i < 2; i++)
+                                      Expanded(
+                                        flex: 1,
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.symmetric(vertical: 10.h),
+                                              child: Text("", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                                            ),
+                                            Gaps.h1,
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  for (int i = 2; i < 4; i++)
+                                    _initClassification(
+                                      widget._classification[i],
+                                      _selectedOxygenIndex,
+                                      i,
+                                      () => setState(() {
+                                        _selectedOxygenIndex = i;
+                                        bio.o2Apply = i == 4 ? 'N' : 'Y';
+                                        field.didChange(bio.o2Apply);
+                                      }),
+                                    ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 300.h,
+                  child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.57,
+                    ),
+                    itemBuilder: (context, index) => Padding(
+                      padding:
+                          EdgeInsets.only(top: 12.h, bottom: 12.h, right: index % 2 == 0 ? 6.w : 0, left: index % 2 == 1 ? 6.w : 0), //왼쪽 줄, 오른쪽 줄 위젯 안쪽만 패딩줌.
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget._labelTitles[index],
+                            style: CTS.medium(color: Palette.greyText, fontSize: 13),
+                          ),
+                          Gaps.v8,
+                          index != 5
+                              ? TextFormField(
+                                  decoration: getInputDecoration(widget._labelTitlesHint[index]),
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9|.]'),
+                                    ),
+                                    FilteringTextInputFormatter.singleLineFormatter,
+                                  ],
+                                  validator: (value) {
+                                    if (value != null && value.isNotEmpty && (int.tryParse(value) is int || double.tryParse(value) is double)) {
+                                      return null;
+                                    }
+                                    return null;
+                                    // return '수치를 정확히 입력하세요.';
+                                  },
+                                  onSaved: (newValue) {
+                                    if (newValue != null && newValue.isNotEmpty) {
+                                      switch (index) {
+                                        case 0:
+                                          bio.bdTemp = double.tryParse(newValue);
+                                          break;
+                                        case 1:
+                                          bio.pulse = int.tryParse(newValue);
+                                          break;
+                                        case 2:
+                                          bio.breath = int.tryParse(newValue);
+                                          break;
+                                        case 3:
+                                          bio.spo2 = double.tryParse(newValue);
+                                          break;
+                                        case 4:
+                                          bio.sbp = int.tryParse(newValue);
+                                          break;
+                                      }
+                                    }
+                                  },
+                                  autovalidateMode: AutovalidateMode.always,
+                                )
+                              : Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      _submit();
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                                      decoration: BoxDecoration(
+                                        color: Palette.white,
+                                        border: Border.all(
+                                          color: Palette.mainColor,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4.r),
+                                      ),
+                                      child: Text('분석',
+                                          style: CTS.bold(
+                                            fontSize: 13,
+                                            color: Palette.mainColor,
+                                          )).c,
+                                    ),
+                                  ),
+                                )
+                        ],
+                      ),
+                    ),
+                    itemCount: widget._labelTitles.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                  ),
+                ),
+              ],
+            ),
+          ));
+
+  Future<void> _submit() async {
+    if (widget.formKey.currentState != null && widget.formKey.currentState!.validate()) {
+      widget.formKey.currentState!.save();
+
+      _score = await ref.read(bioInfoProvider.notifier).analyze(widget.ptId);
+    }
+  }
+
+  Widget _initRowClassification(Iterable<BaseCodeModel> model, {bool? isFirst = false}) {
+    var list = model.map((e) => e.cdNm).toList();
+    if (model.first.cdGrpId == 'SVTP') {
+      // list.add("중증");
+      // list.add("준중증");
+      // list.add("준등중");
+    } else {
+      if (list.length > 3) list = list.sublist(0, 3); // 기존 디자인과 다르기에 3개만 보여줌.
+    }
+
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: const Color(0xffe4e4e4),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Row(
+            children: [
+              for (int i = 0; i < list.length; i++)
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        child: Text(list[i] ?? "", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                      ),
+                      Gaps.h1,
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            for (int i = 0; i < list.length; i++)
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (isFirst == true && _selectedIndex != i) {
+                        _selectedIndex = i;
+                      }
+                      final key = model.toList()[i].cdId;
+
+                      if (key != null && key.isNotEmpty) {
+                        final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
+
+                        if (isChecked != null) {
+                          setState(() {
+                            final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
+
+                            if (state[key] == true) return;
+
+                            state[key] = !isChecked;
+
+                            for (var e in state.keys) {
+                              if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
+                                state[e] = isChecked;
+                              }
+                            }
+                          });
+                        }
+                      }
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? const Color(0xff538ef5) : Colors.transparent,
+                              borderRadius: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? BorderRadius.circular(6) : null),
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          child: Text(list[i] ?? '',
+                              style: CTS.bold(
+                                fontSize: 11,
+                                color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? Palette.white : Palette.greyText_60,
+                              )),
+                        ),
+                      ),
+                      list[i] != list.last
+                          ? Container(
+                              height: 12,
+                              width: 1,
+                              decoration: BoxDecoration(
+                                color: const Color(0xff676a7a).withOpacity(0.2),
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ),
               )
           ],
         ),
-      ),
-    ],
-  );
-}
+      ],
+    );
+  }
 
-Widget rowSelectButton(list, selected, WidgetRef ref, p) {
-  return Stack(
-    children: [
-      Container(
-        decoration: BoxDecoration(
-          color: const Color(0xffe4e4e4),
-          borderRadius: BorderRadius.circular(6),
+  Widget _initClassification(String title, int selectedIndex, int index, Function() func) => GestureDetector(
+        onTap: func,
+        child: Container(
+          width: 55.w,
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(vertical: 10.h),
+          decoration: BoxDecoration(
+              color: selectedIndex == index ? const Color(0xff538ef5) : Colors.transparent,
+              borderRadius: selectedIndex == index ? BorderRadius.circular(6) : null),
+          child: Text(title,
+              style: CTS.bold(
+                fontSize: 11,
+                color: index == selectedIndex ? Palette.white : Palette.greyText_60,
+              )),
         ),
-        child: Row(
+      );
+
+  Widget rowMultiSelectButton(Iterable<BaseCodeModel> model, int subIndex) {
+    return Row(
+      children: [
+        Expanded(
+          child: Wrap(
+              spacing: 11.w,
+              runSpacing: 12.h,
+              direction: Axis.horizontal,
+              children: List.generate(
+                model.length,
+                (index) => GestureDetector(
+                  onTap: () {
+                    final key = model.toList()[index].cdId;
+
+                    if (key != null && key.isNotEmpty) {
+                      final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
+
+                      if (isChecked != null) {
+                        setState(() {
+                          final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
+                          state[key] = !isChecked;
+                          //여러개 체크할수 있도록 수정
+                          // for (var e in state.keys) {
+                          //   if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
+                          //     state[e] = isChecked;
+                          //   }
+                          // }
+                        });
+                      }
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                    decoration: BoxDecoration(
+                      color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] != true ? Colors.white : Palette.mainColor,
+                      border: Border.all(
+                        color: Palette.greyText_20,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(13.5.r),
+                    ),
+                    child: Text(model.toList()[index].cdNm ?? '',
+                        style: CTS.bold(
+                          fontSize: 13,
+                          color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] == true ? Palette.white : Palette.greyText_60,
+                        )),
+                  ),
+                ),
+              )),
+        ),
+      ],
+    );
+  }
+
+  Widget rowSelectButton(list, selected, WidgetRef ref, p) {
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: const Color(0xffe4e4e4),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Row(
+            children: [
+              for (var i in list)
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        child: Text(i, style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                      ),
+                      Gaps.h1,
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+        Row(
           children: [
             for (var i in list)
               Expanded(
-                flex: 1,
-                child: Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      child: Text(i, style: CTS.bold(fontSize: 11, color: Colors.transparent)),
-                    ),
-                    Gaps.h1,
-                  ],
-                ),
-              ),
-          ],
-        ),
-      ),
-      Row(
-        children: [
-          for (var i in list)
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  print(i);
-                  selected = list.indexOf(i);
-                  ref.watch(p.notifier).state = selected;
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                child: InkWell(
+                  onTap: () {
+                    print(i);
+                    selected = list.indexOf(i);
+                    ref.watch(p.notifier).state = selected;
+                  },
+                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Expanded(
                       child: Container(
                         alignment: Alignment.center,
@@ -337,119 +661,110 @@ Widget rowSelectButton(list, selected, WidgetRef ref, p) {
                             )),
                       ),
                     ),
-                    i != list.last
-                        ? Container(
-                            height: 12,
-                            width: 1,
-                            decoration: BoxDecoration(
-                              color: const Color(0xff676a7a).withOpacity(0.2),
-                            ),
-                          )
-                        : Container(),
-                  ],
+                  ]),
                 ),
-              ),
-            )
-        ],
-      ),
-    ],
-  );
-}
-
-Widget _getTextInputField({required String hint, TextInputType type = TextInputType.text, int? maxLength, List<TextInputFormatter>? inputFormatters}) {
-  return TextFormField(
-    decoration: getInputDecoration(hint),
-    controller: TextEditingController(
-        // text: vm.init(i, widget.report),
-        ),
-    // onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-    // onChanged: (value) => vm.setTextEditingController(i, value),
-    validator: (value) {
-      return null;
-    },
-    inputFormatters: inputFormatters,
-    autovalidateMode: AutovalidateMode.always,
-    keyboardType: type,
-    maxLength: maxLength,
-  );
-}
-
-Widget _getTitle(String title, bool isRequired) => Row(
-      children: [
-        Text(
-          title,
-          style: CTS.medium(
-            color: Colors.grey.shade600,
-            fontSize: 13,
-          ),
-        ),
-        Text(
-          (title == '환자 유형' || title == '기저 질환') ? '(다중선택)' : '(필수)',
-          style: CTS.medium(
-            fontSize: 13,
-            color: (title == '환자 유형' || title == '기저 질환') ? Colors.grey.shade600 : Palette.mainColor,
-          ),
+              )
+          ],
         ),
       ],
     );
+  }
 
-InputDecoration getInputDecoration(String hintText) => InputDecoration(
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          style: BorderStyle.solid,
-          color: Colors.grey.shade300,
-        ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(4.r),
-        ),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          style: BorderStyle.solid,
-          color: Colors.grey.shade300,
-        ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(4.r),
-        ),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          style: BorderStyle.solid,
-          color: Colors.grey.shade300,
-        ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(4.r),
-        ),
-      ),
-      hintText: hintText,
-      hintStyle: TextStyle(
-        fontSize: 16,
-        color: Colors.grey.shade400,
-      ),
-      contentPadding: hintText == ""
-          ? EdgeInsets.symmetric(
-              horizontal: 12.w,
-              vertical: 14.h,
-            )
-          : const EdgeInsets.symmetric(
-              vertical: 18,
-              horizontal: 22,
+  Widget _getTextInputField({required String hint, TextInputType type = TextInputType.text, int? maxLength, List<TextInputFormatter>? inputFormatters}) {
+    return TextFormField(
+      decoration: getInputDecoration(hint),
+      controller: TextEditingController(
+          // text: vm.init(i, widget.report),
+          ),
+      // onSaved: (newValue) => vm.setTextEditingController(i, newValue),
+      // onChanged: (value) => vm.setTextEditingController(i, value),
+      validator: (value) {
+        return null;
+      },
+      inputFormatters: inputFormatters,
+      autovalidateMode: AutovalidateMode.always,
+      keyboardType: type,
+      maxLength: maxLength,
+    );
+  }
+
+  Widget _getTitle(String title, bool isRequired) => Row(
+        children: [
+          Text(
+            title,
+            style: CTS.medium(
+              color: Colors.grey.shade600,
+              fontSize: 13,
             ),
-    );
+          ),
+          Text(
+            (title == '환자 유형' || title == '기저 질환') ? '(다중선택)' : '(필수)',
+            style: CTS.medium(
+              fontSize: 13,
+              color: (title == '환자 유형' || title == '기저 질환') ? Colors.grey.shade600 : Palette.mainColor,
+            ),
+          ),
+        ],
+      );
 
-InputBorder get _inputBorder => OutlineInputBorder(
-      borderSide: BorderSide(
-        style: BorderStyle.solid,
-        color: Colors.grey.shade300,
-      ),
-      borderRadius: const BorderRadius.all(
-        Radius.circular(
-          8,
+  InputDecoration getInputDecoration(String hintText) => InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4.r),
+          ),
         ),
-      ),
-    );
-InputDecoration get _inputDecoration => InputDecoration(
-      enabledBorder: _inputBorder,
-      focusedBorder: _inputBorder,
-      contentPadding: const EdgeInsets.all(0),
-    );
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4.r),
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4.r),
+          ),
+        ),
+        hintText: hintText,
+        hintStyle: TextStyle(
+          fontSize: 16,
+          color: Colors.grey.shade400,
+        ),
+        contentPadding: hintText == ""
+            ? EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 14.h,
+              )
+            : const EdgeInsets.symmetric(
+                vertical: 18,
+                horizontal: 22,
+              ),
+      );
+
+  InputBorder get _inputBorder => OutlineInputBorder(
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          color: Colors.grey.shade300,
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(
+            8,
+          ),
+        ),
+      );
+  InputDecoration get _inputDecoration => InputDecoration(
+        enabledBorder: _inputBorder,
+        focusedBorder: _inputBorder,
+        contentPadding: const EdgeInsets.all(0),
+      );
+}

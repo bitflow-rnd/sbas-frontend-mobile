@@ -30,7 +30,6 @@ import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.da
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/request_steps/severely_disease_widget.dart';
 
-final selectedTabIndexProvider = StateProvider<int>((ref) => 0);
 final patientImageProvider = StateProvider<XFile?>((ref) => null);
 final patientAttcProvider = StateProvider<String?>((ref) => null);
 final patientIsUploadProvider = StateProvider<bool>((ref) => true);
@@ -52,8 +51,8 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     attcId = patient?.attcId ?? '';
+    final order = ref.watch(orderOfRequestProvider);
 
-    int selectedIndex = ref.watch(selectedTabIndexProvider);
     final patientImage = ref.watch(patientImageProvider);
     final patientAttc = ref.watch(patientAttcProvider);
     final patientIsUpload = ref.watch(patientIsUploadProvider);
@@ -136,8 +135,8 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                                         5,
                                         (index) => InkWell(
                                           onTap: () {
-                                            ref.read(selectedTabIndexProvider.notifier).update((state) => index);
-                                            //TODO :: 이동시 data 저장 로직 필요.
+                                            ref.read(orderOfRequestProvider.notifier).update((state) => index);
+                                            // TODO :: 이동시 data 저장 로직 필요.
                                           },
                                           child: SizedBox(
                                             width: 0.22.sw,
@@ -165,7 +164,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                                     ),
                                   ),
                                   AnimatedContainer(
-                                    padding: EdgeInsets.only(left: 0.22.sw * selectedIndex + 16.w),
+                                    padding: EdgeInsets.only(left: 0.22.sw * order + 16.w),
                                     duration: const Duration(
                                       milliseconds: 200,
                                     ),
@@ -188,14 +187,14 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  if (selectedIndex == 0) //역학조사서
+                  if (order == 0) //역학조사서
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
                         child: const PatientRegReport(),
                       ),
                     ),
-                  if (selectedIndex == 1) //환자정보
+                  if (order == 1) //환자정보
                     Expanded(
                         child: Padding(
                       padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
@@ -203,20 +202,20 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                       // child: PatientRegInfoV2(),
                     )),
 
-                  if (selectedIndex == 2)
+                  if (order == 2)
                     InfectiousDiseaseV2(
                       formKey: formKey,
                       report: report,
                     ), //감염병정보
                   //상단 2개는 신규일때만 들어갈수있도록 해야함.
                   //하단부 ConsumerStatefulWidget로 변경.
-                  if (selectedIndex == 3)
+                  if (order == 3)
                     SeverelyDiseaseV2(
                       formKey: formKey,
                       ptId: patient!.ptId!,
                     ), //중증정보
-                  if (selectedIndex == 4) AssignReqDepatureInfoInputScreen(), //출발정보
-                  _bottomer(ref, selectedIndex, patientImage, patientAttc, patientIsUpload, context),
+                  if (order == 4) AssignReqDepatureInfoInputScreen(), //출발정보
+                  _bottomer(ref, patientImage, patientAttc, patientIsUpload, context, hasPatient: patient != null),
                 ],
               ),
             ),
@@ -224,14 +223,16 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     );
   }
 
-  Widget _bottomer(WidgetRef ref, int selectedIndex, patientImage, patientAttc, patientIsUpload, context) {
+  Widget _bottomer(WidgetRef ref, patientImage, patientAttc, patientIsUpload, context, {required bool hasPatient}) {
+    final order = ref.watch(orderOfRequestProvider);
+
     return Row(
       children: [
-        selectedIndex != 0
+        order != 0
             ? Expanded(
                 child: InkWell(
                   onTap: () {
-                    ref.read(selectedTabIndexProvider.notifier).update((state) => state - 1);
+                    ref.read(orderOfRequestProvider.notifier).update((state) => state - 1);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 11.h),
@@ -256,12 +257,11 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
         Expanded(
           child: InkWell(
             onTap: () {
-              if (selectedIndex == 0) {
-                patientImage != null || !patientIsUpload
+              if (order == 0) {
+                patientImage != null || !patientIsUpload || hasPatient
                     ? patientAttc != null
-                        ? true
+                        ? _tryValidation()
                             ? () => ref.read(patientRegProvider.notifier).registry(patient?.ptId, context) //환자실등록
-                            // ? null
                             : null
                         : (patientImage != null
                             ? () => ref.read(patientRegProvider.notifier).uploadImage(patientImage)
@@ -273,23 +273,20 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                               })
                     : null;
               }
-              if (selectedIndex == 2) {
+              if (order == 2) {
                 ref.read(infectiousDiseaseProvider.notifier).registry(patient?.ptId ?? '');
               }
-              if (selectedIndex == 3) {
+              if (order == 3) {
                 ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patient?.ptId ?? '');
               }
 
-              if (selectedIndex == 4) {
+              if (order == 4) {
                 ref.read(originInfoProvider.notifier).registry(patient?.ptId ?? '');
-
                 Navigator.pop(context);
-
                 context.goNamed(AssignBedScreen.routeName);
-
                 return;
               } else {
-                ref.read(selectedTabIndexProvider.notifier).update((state) => state + 1);
+                ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
               }
             },
             child: Container(
@@ -298,7 +295,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 color: Palette.mainColor,
               ),
               child: Text(
-                selectedIndex == 4 ? '요청 완료' : '다음',
+                order == 4 ? '요청 완료' : '다음',
                 style: CTS(
                   color: Colors.white,
                   fontSize: 16,
@@ -309,6 +306,14 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  bool _tryValidation() {
+    bool isValid = formKey.currentState?.validate() ?? false;
+    if (isValid) {
+      formKey.currentState?.save();
+    }
+    return isValid;
   }
 
   Widget _header(Patient patient) {

@@ -98,6 +98,7 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
   }
 
   String? getOccrDt() => _patientDiseaseModel.occrDt;
+
   void setTextEditingController(int index, String? value) {
     switch (index) {
       case 0: //입원여부
