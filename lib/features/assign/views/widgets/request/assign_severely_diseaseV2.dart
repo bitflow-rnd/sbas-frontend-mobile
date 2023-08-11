@@ -164,28 +164,7 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                           Gaps.v16,
                           rowMultiSelectButton(model.where((e) => e.cdGrpId == 'UDDS'), i),
                         ],
-                      )
-                  // Gaps.v28,
-                  // //요청병상유형
-                  // Gaps.v16,
-
-                  // Gaps.v28,
-                  // //DNR 동의 여부
-                  // _getTitle(widget._subTitles[2], true),
-                  // rowSelectButton(['미분류', '동의', '비동의'], selected3, ref, selecteItemProvider3),
-                  // Gaps.v28,
-                  // //환자유형(다중선택)
-                  // _getTitle(widget._subTitles[3], true),
-                  // Gaps.v16,
-                  // rowMultiSelectButton(['임산부', '투석', '수술', '신생아', '유아', '인공호흡기 사용', '적극적치료요쳥'], ['임산부']),
-                  // Gaps.v28,
-                  // //기저질환(다중선택)
-                  // _getTitle(widget._subTitles[3], true),
-                  // Gaps.v16,
-                  // rowMultiSelectButton(['고혈압', '당뇨', '고지혈증', '  심혈관  ', '뇌혈관', '암', '만성폐질환', '폐렴', '신장질환', '결핵', '천식등알레르기', '면역력저하자'], ['고혈압']),
-                  // Gaps.v16,
-                  // _getTextInputField(hint: "기타 직접입력"),
-                  // Gaps.v28,
+                      ),
                 ],
               ),
             ),
@@ -355,6 +334,7 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                           Gaps.v8,
                           index != 5
                               ? TextFormField(
+                                  style: CTS.regular(fontSize: 13.sp, color: Palette.black),
                                   decoration: getInputDecoration(widget._labelTitlesHint[index]),
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
@@ -672,6 +652,7 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
 
   Widget _getTextInputField({required String hint, TextInputType type = TextInputType.text, int? maxLength, List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
+      style: CTS.medium(fontSize: 13.sp),
       decoration: getInputDecoration(hint),
       controller: TextEditingController(
           // text: vm.init(i, widget.report),
@@ -736,9 +717,9 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
           ),
         ),
         hintText: hintText,
-        hintStyle: TextStyle(
-          fontSize: 16,
-          color: Colors.grey.shade400,
+        hintStyle: CTS.regular(
+          fontSize: 13.sp,
+          color: Palette.greyText_60,
         ),
         contentPadding: hintText == ""
             ? EdgeInsets.symmetric(

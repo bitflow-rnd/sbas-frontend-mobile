@@ -162,9 +162,9 @@ InputDecoration getInputDecoration(String hintText) => InputDecoration(
         ),
       ),
       hintText: hintText,
-      hintStyle: TextStyle(
-        fontSize: 16,
-        color: Colors.grey.shade400,
+      hintStyle: CTS.regular(
+        fontSize: 13.sp,
+        color: Palette.greyText_60
       ),
       contentPadding: const EdgeInsets.symmetric(
         vertical: 18,

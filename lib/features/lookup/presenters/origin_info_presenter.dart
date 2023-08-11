@@ -25,9 +25,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
 
       // await _repository.postRegOriginInfo(_model);
 
-      await _repository.postBedAssignRequest(BedAssignRequestModel(
-          severelyDiseaseModel,_model
-      ));
+      await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _model));
 
       return _model;
     });
@@ -104,6 +102,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
         return _model.nok2Telno;
 
       case 105:
+        //메세지
       case 1007:
         return _model.msg;
 
@@ -122,10 +121,10 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   String? getHintText(int index) {
     switch (index) {
       case 0:
-        return '주소검색으로 입력';
+        return '기본 주소 입력';
 
       case 100:
-        return '나머지 주소입력';
+        return '상세 주소 입력';
     }
     return '';
   }
@@ -145,6 +144,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
         break;
 
       case 105:
+        //메세지
       case 1007:
         _model.msg = text;
         break;
@@ -167,7 +167,6 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   late final OriginInfoModel _model;
 }
 
-final originInfoProvider =
-    AsyncNotifierProvider<OriginInfoPresenter, OriginInfoModel>(
+final originInfoProvider = AsyncNotifierProvider<OriginInfoPresenter, OriginInfoModel>(
   () => OriginInfoPresenter(),
 );

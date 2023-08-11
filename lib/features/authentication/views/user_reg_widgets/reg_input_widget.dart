@@ -84,9 +84,9 @@ class _RegInputState extends ConsumerState<RegInput> {
                   errorBorder: _outlineInputBorder,
                   focusedErrorBorder: _outlineInputErrBorder,
                   hintText: widget.hintText,
-                  hintStyle: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey.shade400,
+                  hintStyle: CTS.regular(
+                    fontSize: 13.sp,
+                    color: Palette.greyText_60,
                   ),
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 16.h,

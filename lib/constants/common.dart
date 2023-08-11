@@ -53,9 +53,9 @@ class Common {
           ),
         ),
         hintText: hintText,
-        hintStyle: TextStyle(
-          fontSize: 16,
-          color: Colors.grey.shade400,
+        hintStyle: CTS.regular(
+          fontSize: 13.sp,
+          color: Palette.greyText_60,
         ),
         contentPadding: hintText == ""
             ? EdgeInsets.symmetric(

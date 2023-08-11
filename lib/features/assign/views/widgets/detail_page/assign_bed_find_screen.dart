@@ -557,6 +557,11 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
           ),
         ),
         hintText: hintText,
+
+        ///hintStyle: CTS.regular(
+        //   fontSize: 13.sp,
+        //   color: Palette.greyText_60,
+        // ),
         hintStyle: CTS.medium(
           fontSize: 11,
           color: Palette.greyText,

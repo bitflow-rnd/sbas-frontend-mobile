@@ -10,9 +10,9 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
-import 'package:sbas/features/assign/views/widgets/request/assign_severely_diseaseV2.dart';
-import 'package:sbas/features/assign/views/widgets/request/assign_request_departure_info_input.dart';
+import 'package:sbas/features/assign/views/widgets/request/assign_origin_infomationV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_infectious_diseaseV2.dart';
+import 'package:sbas/features/assign/views/widgets/request/assign_severely_diseaseV2.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
@@ -209,7 +209,10 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                       formKey: formKey,
                       ptId: patient!.ptId!,
                     ), //중증정보
-                  if (order == 4) AssignReqDepatureInfoInputScreen(), //출발정보
+                  if (order == 4)
+                    OriginInfomationV2(
+                      formKey: formKey,
+                    ), //출발정보
                   _bottomer(ref, patientImage, patientAttc, patientIsUpload, context, hasPatient: patient != null),
                 ],
               ),
