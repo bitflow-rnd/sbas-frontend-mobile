@@ -70,8 +70,10 @@ class V1Provider {
     try {
       client.options.contentType = 'application/json';
 
-      final res =
-          await client.postUri(Uri.parse('${dotenv.env['BASE_URL']}/send'));
+      final res = await client.postUri(Uri.parse('${dotenv.env['BASE_URL']}/send'));
+      if (kDebugMode) {
+        print(res.toString());
+      }
     } catch (e) {
       if (kDebugMode) {
         print(e);

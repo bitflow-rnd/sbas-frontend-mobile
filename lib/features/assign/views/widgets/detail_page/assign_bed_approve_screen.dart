@@ -6,21 +6,19 @@ import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedApproveScreen extends StatefulWidget {
-  AssignBedApproveScreen({
+  const AssignBedApproveScreen({
     super.key,
     required this.patient,
   });
-  Patient patient;
+  final Patient patient;
   @override
   State<AssignBedApproveScreen> createState() => _AssignBedApproveScreenState();
 }
 
 class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
-  @override
   List<String> list = ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
   List<String> hintList = ['칠곡경북대병원', '병실번호', '진료과 이름', '담당의 이름', '의료진 연락처 입력', '메시지 입력'];
   // 이부분 의료기관명 readonly 로 들어갈부분.

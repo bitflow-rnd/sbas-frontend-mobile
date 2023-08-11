@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/views/public_alarm_detail_screen.dart';
-import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
 
 class PublicAlarmPage extends StatefulWidget {
   const PublicAlarmPage({super.key});

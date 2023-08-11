@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedGoHome extends StatefulWidget {
-  AssignBedGoHome({
+  const AssignBedGoHome({
     super.key,
     required this.patient,
   });
-  Patient patient;
+  final Patient patient;
   @override
   State<AssignBedGoHome> createState() => _AssignBedGoHomeState();
 }
@@ -25,15 +22,7 @@ class _AssignBedGoHomeState extends State<AssignBedGoHome> {
   int selectedRadio = 0;
 
   List<String> list = ['의료기관명', '병실', '진료과', '병실', '담당의', '연락처', '메시지'];
-  List<String> hintList = [
-    '칠곡경북대병원',
-    '병실번호',
-    '진료과 입력',
-    '병실번호 입력',
-    '담당의 이름',
-    '의료진 연락처 입력',
-    '입원/퇴원/회송 사유 입력'
-  ];
+  List<String> hintList = ['칠곡경북대병원', '병실번호', '진료과 입력', '병실번호 입력', '담당의 이름', '의료진 연락처 입력', '입원/퇴원/회송 사유 입력'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,8 +61,7 @@ class _AssignBedGoHomeState extends State<AssignBedGoHome> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
-              _header(widget.patient.ptNm ?? '',
-                  "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
+              _header(widget.patient.ptNm ?? '', "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
               Divider(
                 color: Palette.greyText_20,
                 height: 1,
@@ -94,8 +82,7 @@ class _AssignBedGoHomeState extends State<AssignBedGoHome> {
                             children: [
                               _getTitle(list[i], false),
                               Gaps.v16,
-                              _getTextInputField(
-                                  hint: hintList[i], isFixed: i == 0),
+                              _getTextInputField(hint: hintList[i], isFixed: i == 0),
                               Gaps.v28,
                             ],
                           )
@@ -122,11 +109,7 @@ class _AssignBedGoHomeState extends State<AssignBedGoHome> {
   }
 
   Widget _getTextInputField(
-      {bool isFixed = false,
-      required String hint,
-      TextInputType type = TextInputType.text,
-      int? maxLines,
-      List<TextInputFormatter>? inputFormatters}) {
+      {bool isFixed = false, required String hint, TextInputType type = TextInputType.text, int? maxLines, List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
       decoration: !isFixed
           ? Common.getInputDecoration(hint)
@@ -271,9 +254,7 @@ class _AssignBedGoHomeState extends State<AssignBedGoHome> {
                     children: [
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Text(i,
-                            style: CTS.bold(
-                                fontSize: 11, color: Colors.transparent)),
+                        child: Text(i, style: CTS.bold(fontSize: 11, color: Colors.transparent)),
                       ),
                       Gaps.h1,
                     ],
@@ -300,19 +281,13 @@ class _AssignBedGoHomeState extends State<AssignBedGoHome> {
                         child: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: list[selectedRadio] == i
-                                  ? const Color(0xff538ef5)
-                                  : Colors.transparent,
-                              borderRadius: list[selectedRadio] == i
-                                  ? BorderRadius.circular(6)
-                                  : null),
+                              color: list[selectedRadio] == i ? const Color(0xff538ef5) : Colors.transparent,
+                              borderRadius: list[selectedRadio] == i ? BorderRadius.circular(6) : null),
                           padding: EdgeInsets.symmetric(vertical: 10.h),
                           child: Text(i,
                               style: CTS.bold(
                                 fontSize: 11,
-                                color: list[selectedRadio] == i
-                                    ? Palette.white
-                                    : Palette.greyText_60,
+                                color: list[selectedRadio] == i ? Palette.white : Palette.greyText_60,
                               )),
                         ),
                       ),

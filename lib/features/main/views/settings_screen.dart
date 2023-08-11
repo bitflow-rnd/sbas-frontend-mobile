@@ -6,7 +6,6 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/main/views/alert_settings_page.dart';
 import 'package:sbas/features/main/views/app_license_screen.dart';
 import 'package:sbas/features/main/views/app_permission_setting_screen.dart';
-import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
 //  import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {
@@ -177,7 +176,7 @@ class _SettingPageState extends State<SettingPage> {
                 )
               : InkWell(
                   onTap: () {
-                    final String appStoreUrl = '<Your app store URL>';
+                    // final String appStoreUrl = '<Your app store URL>';
 
                     // if (await canLaunch(appStoreUrl)) {
                     //   // Device is capable of launching the app store URL

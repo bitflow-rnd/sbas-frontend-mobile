@@ -4,24 +4,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/views/patient_bed_assign_detail_screen.dart';
-import 'package:sbas/main.dart';
 
 class BedAssignHistoryCardItem extends StatelessWidget {
-  BedAssignHistoryCardItem(
-      {super.key,
-      required this.name,
-      required this.disease,
-      required this.timestamp,
-      required this.count,
-      this.hospital,
-      this.tagList,
-      required this.patient});
-  String? hospital;
-  Patient patient;
-  List<String>? tagList;
+  const BedAssignHistoryCardItem({
+    super.key,
+    required this.name,
+    required this.disease,
+    required this.timestamp,
+    required this.count,
+    this.hospital,
+    this.tagList,
+    required this.patient,
+  });
+  final String? hospital;
+  final Patient patient;
+  final List<String>? tagList;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

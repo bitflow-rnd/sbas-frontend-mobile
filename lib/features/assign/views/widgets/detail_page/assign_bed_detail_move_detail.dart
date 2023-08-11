@@ -4,17 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 
 class AssignBedMoveDetialInfo extends ConsumerWidget {
   const AssignBedMoveDetialInfo({super.key, this.type});
   final String? type;
-  final String message =
-      "메시지";
+  final String message = "메시지";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String detailDest = '대구 북구 호암로 51 래미안아파트 113동 501호';
     List<String> list = [];
     if (type == "병원-집") {
       list = [

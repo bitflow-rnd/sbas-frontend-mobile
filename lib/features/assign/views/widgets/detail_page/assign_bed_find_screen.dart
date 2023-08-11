@@ -11,15 +11,15 @@ import 'package:sbas/features/assign/model/available_hospital_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedFindScreen extends ConsumerStatefulWidget {
-  AssignBedFindScreen({
+  const AssignBedFindScreen({
     super.key,
     required this.patient,
     required this.bdasSeq,
     required this.hospList,
   });
-  Patient patient;
-  int? bdasSeq;
-  AvailableHospitalModel hospList;
+  final Patient patient;
+  final int? bdasSeq;
+  final AvailableHospitalModel hospList;
   @override
   ConsumerState<AssignBedFindScreen> createState() => _AssignBedFindScreenState();
 }

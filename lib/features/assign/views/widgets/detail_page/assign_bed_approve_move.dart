@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedApproveMoveScreen extends StatefulWidget {
-  AssignBedApproveMoveScreen({
+  const AssignBedApproveMoveScreen({
     super.key,
     required this.patient,
   });
-  Patient patient;
+  final Patient patient;
   @override
   State<AssignBedApproveMoveScreen> createState() => _AssignBedApproveMoveScreenState();
 }

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({super.key});

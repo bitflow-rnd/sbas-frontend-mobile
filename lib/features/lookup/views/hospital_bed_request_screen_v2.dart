@@ -9,7 +9,6 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
-import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_severely_diseaseV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_request_departure_info_input.dart';
@@ -19,16 +18,12 @@ import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
-
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
-import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
-import 'package:sbas/features/lookup/views/widgets/request_steps/severely_disease_widget.dart';
 
 final patientImageProvider = StateProvider<XFile?>((ref) => null);
 final patientAttcProvider = StateProvider<String?>((ref) => null);
@@ -44,9 +39,9 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   });
 
   final formKey = GlobalKey<FormState>();
-  Patient? patient;
-  List<String> headerList = ["역학조사서", "환자정보", "감염병정보", "중증정보", "출발정보"];
-  bool isRight = false;
+  final Patient? patient;
+  final List<String> headerList = ["역학조사서", "환자정보", "감염병정보", "중증정보", "출발정보"];
+  final bool isRight = false;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -366,28 +361,28 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     );
   }
 
-  PatientRegInfoModel tempPaitent = PatientRegInfoModel(
-    rgstUserId: "cyberprophet",
-    rgstDttm: "2023-04-11T06:12:03.709296Z",
-    updtUserId: "cyberprophet",
-    updtDttm: "2023-04-11T08:31:22.296640Z",
-    ptId: "PT00000055",
-    ptNm: "달나라",
-    gndr: "F",
-    rrno1: "310301",
-    rrno2: "2",
-    dstr1Cd: "50",
-    dstr2Cd: "5013",
-    addr: "제주특별자치도 서귀포시 아우성",
-    telno: "04580808080",
-    natiCd: "KR",
-    picaVer: "",
-    dethYn: "N",
-    nokNm: "나라고",
-    mpno: "01021210909",
-    job: "머라고",
-    attcId: null,
-    bedStatCd: "BAST0001",
-    bedStatNm: "병상요청",
-  );
+  // PatientRegInfoModel tempPaitent = PatientRegInfoModel(
+  //   rgstUserId: "cyberprophet",
+  //   rgstDttm: "2023-04-11T06:12:03.709296Z",
+  //   updtUserId: "cyberprophet",
+  //   updtDttm: "2023-04-11T08:31:22.296640Z",
+  //   ptId: "PT00000055",
+  //   ptNm: "달나라",
+  //   gndr: "F",
+  //   rrno1: "310301",
+  //   rrno2: "2",
+  //   dstr1Cd: "50",
+  //   dstr2Cd: "5013",
+  //   addr: "제주특별자치도 서귀포시 아우성",
+  //   telno: "04580808080",
+  //   natiCd: "KR",
+  //   picaVer: "",
+  //   dethYn: "N",
+  //   nokNm: "나라고",
+  //   mpno: "01021210909",
+  //   job: "머라고",
+  //   attcId: null,
+  //   bedStatCd: "BAST0001",
+  //   bedStatNm: "병상요청",
+  // );
 }

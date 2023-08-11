@@ -3,15 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/alarm/views/alarm_screen.dart';
 import 'package:sbas/features/alarm/views/public_alarm_screen.dart';
+import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/authentication/blocs/login_bloc.dart';
 import 'package:sbas/features/main/views/service_policy_screen.dart';
 import 'package:sbas/features/main/views/settings_screen.dart';
 import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
-import 'package:sbas/features/messages/views/direct_message_screen.dart';
-
-import '../features/assign/views/assign_bed_screen.dart';
 
 class MainDrawer extends ConsumerWidget {
   const MainDrawer({super.key});

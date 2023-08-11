@@ -1,15 +1,9 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
-import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/alarm/views/alarm_screen.dart';
-import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
-import 'package:sbas/features/lookup/models/patient_info_model.dart';
-
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 
@@ -75,9 +69,7 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
                         padding: EdgeInsets.symmetric(horizontal: 32.w),
                         child: Column(children: [
                           Expanded(
-                            child: CustomPaint(
-                                painter: DashedLineVerticalPainter(),
-                                size: const Size(1, double.infinity)),
+                            child: CustomPaint(painter: DashedLineVerticalPainter(), size: const Size(1, double.infinity)),
                           ),
                         ]),
                       ),
@@ -138,12 +130,7 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
   }
 
   Widget moveCompleteCard(
-      {required String title,
-      required String dateTime,
-      required String src,
-      required String by,
-      required String detail,
-      bool isBlue = false}) {
+      {required String title, required String dateTime, required String src, required String by, required String detail, bool isBlue = false}) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.only(left: 16.w, right: 24.w),
@@ -157,8 +144,7 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
               flex: 7,
               child: Container(
                 margin: EdgeInsets.only(left: 12.w),
-                padding: EdgeInsets.only(
-                    left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(12.r)),
@@ -206,12 +192,9 @@ class PatientBedAssignDetailPage extends ConsumerWidget {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 8.h),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                       decoration: BoxDecoration(
-                        color: isBlue
-                            ? Palette.mainColor.withOpacity(0.16)
-                            : const Color(0xff676a7a).withOpacity(0.12),
+                        color: isBlue ? Palette.mainColor.withOpacity(0.16) : const Color(0xff676a7a).withOpacity(0.12),
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                       child: Text(
