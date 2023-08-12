@@ -80,9 +80,9 @@ class CTS extends TextStyle {
 
   CTS.thin({Color color = Colors.black, TextDecoration decoration = TextDecoration.none, double fontSize = 14, height})
       : this(decoration: decoration, color: color, fontSize: fontSize, fontWeight: FontWeight.w100, height: height);
-  CTS.regular({Color color = Colors.black, TextDecoration decoration = TextDecoration.none, double fontSize = 14, height})
-      : this(decoration: decoration, color: color, fontSize: fontSize, fontWeight: FontWeight.w300, height: height);
   CTS.light({Color color = Colors.black, TextDecoration decoration = TextDecoration.none, double fontSize = 14, height})
+      : this(decoration: decoration, color: color, fontSize: fontSize, fontWeight: FontWeight.w300, height: height);
+  CTS.regular({Color color = Colors.black, TextDecoration decoration = TextDecoration.none, double fontSize = 14, height})
       : this(decoration: decoration, color: color, fontSize: fontSize, fontWeight: FontWeight.w400, height: height);
   CTS.medium({Color color = Colors.black, TextDecoration decoration = TextDecoration.none, double fontSize = 14, height})
       : this(decoration: decoration, color: color, fontSize: fontSize, fontWeight: FontWeight.w500, height: height);

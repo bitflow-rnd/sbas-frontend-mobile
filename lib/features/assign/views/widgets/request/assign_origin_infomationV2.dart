@@ -10,12 +10,9 @@ import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/constants/palette.dart'; 
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
-
-final selecteItemProvider0 = StateProvider((ref) => 0);
-final selecteItemProvider1 = StateProvider((ref) => 0);
 
 class OriginInfomationV2 extends ConsumerStatefulWidget {
   OriginInfomationV2({
@@ -23,18 +20,6 @@ class OriginInfomationV2 extends ConsumerStatefulWidget {
     required this.formKey,
   });
   final GlobalKey<FormState> formKey;
-
-  final List<String> list = [
-    '배정요청지역',
-    '원내 배정 여부',
-    '환자 출발지',
-    '진료과',
-    '담당의',
-    '연락처',
-    '메시지',
-    '보호자 1 연락처',
-    '보호자 2 연락처',
-  ];
   final _homeTitles = [
     '보호자 1 연락처',
     '보호자 2 연락처',
@@ -46,17 +31,6 @@ class OriginInfomationV2 extends ConsumerStatefulWidget {
     '연락처',
     // '원내 배정 여부',
     '메세지',
-  ];
-  final hintTextList = [
-    '배정요청지역',
-    '원내 배정 여부',
-    '환자 출발지',
-    '진료과 입력',
-    '담당의 입력',
-    '연락처 입력',
-    '메시지 입력',
-    '보호자 1 연락처 입력',
-    '보호자 2 연락처 입력',
   ];
   final _subTitles = [
     '배정 요청 지역',
@@ -91,142 +65,153 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                   horizontal: 20.w,
                   vertical: 18.h,
                 ),
-                child: Column(children: [
-                  for (int i = 0; i < widget._subTitles.length; i++)
-                    if (i == 0)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _getTitle(widget.list[i], true),
-                          Gaps.v12,
-                          Row(
-                            children: [
-                              Expanded(
-                                child: ref.watch(agencyRegionProvider).when(
-                                      loading: () => const SBASProgressIndicator(),
-                                      error: (error, stackTrace) => Center(
-                                        child: Text(
-                                          error.toString(),
-                                          style: const TextStyle(
-                                            color: Palette.mainColor,
+                child: ref.watch(originInfoProvider).when(
+                      loading: () => const SBASProgressIndicator(),
+                      error: (error, stackTrace) => Center(
+                        child: Text(
+                          error.toString(),
+                          style: CTS(
+                            color: Palette.mainColor,
+                          ),
+                        ),
+                      ),
+                      data: (origin) => Column(children: [
+                        for (int i = 0; i < widget._subTitles.length; i++)
+                          if (i == 0)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _getTitle(widget._subTitles[i], true),
+                                Gaps.v12,
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ref.watch(agencyRegionProvider).when(
+                                            loading: () => const SBASProgressIndicator(),
+                                            error: (error, stackTrace) => Center(
+                                              child: Text(
+                                                error.toString(),
+                                                style: const TextStyle(
+                                                  color: Palette.mainColor,
+                                                ),
+                                              ),
+                                            ),
+                                            data: (region) => FormField(
+                                              builder: (field) => _selectRegion(
+                                                region.where(
+                                                  (e) => e.cdGrpId == 'SIDO',
+                                                ),
+                                                field,
+                                              ),
+                                              validator: (value) {
+                                                return null;
+                                              },
+                                              initialValue: ref.watch(selectedRegionProvider).cdNm,
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                      data: (region) => FormField(
-                                        builder: (field) => _selectRegion(
-                                          region.where(
-                                            (e) => e.cdGrpId == 'SIDO',
-                                          ),
-                                          field,
-                                        ),
-                                        validator: (value) {
-                                          return null;
-                                        },
-                                        initialValue: ref.watch(selectedRegionProvider).cdNm,
-                                      ),
                                     ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  "※ 병상배정 지자체 선택",
-                                  style: CTS(color: Palette.mainColor, fontSize: 12),
-                                ).c,
-                              )
-                            ],
-                          ),
-                          Text(
-                            "안내문구 노출 영역",
-                            style: CTS(color: Palette.red, fontSize: 11),
-                            textAlign: TextAlign.start,
-                          ),
-                          if (_selectedOriginIndex == 1) //병원 출발기준
+                                    Expanded(
+                                      child: Text(
+                                        "※ 병상배정 지자체 선택",
+                                        style: CTS(color: Palette.mainColor, fontSize: 12),
+                                      ).c,
+                                    )
+                                  ],
+                                ),
+                                Text(
+                                  "안내문구 노출 영역",
+                                  style: CTS(color: Palette.red, fontSize: 11),
+                                  textAlign: TextAlign.start,
+                                ),
+                                if (_selectedOriginIndex == 1) //병원 출발기준
+                                  Column(
+                                    children: [
+                                      Gaps.v28,
+                                      _getTitle("원내 배정 여부", true),
+                                      Gaps.v16,
+                                      _initRowClassification(
+                                        widget._assignedToTheFloorTitles,
+                                        true,
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                            )
+                          else if (i == 1)
                             Column(
                               children: [
                                 Gaps.v28,
-                                _getTitle("원내 배정 여부", true),
+                                _getTitle("환자 출발지", false),
                                 Gaps.v16,
                                 _initRowClassification(
-                                  widget._assignedToTheFloorTitles,
-                                  true,
+                                  widget._classification,
+                                  false,
                                 ),
                               ],
                             ),
-                        ],
-                      )
-                    else if (i == 1)
-                      Column(
-                        children: [
-                          Gaps.v28,
-                          _getTitle("환자 출발지", false),
-                          Gaps.v16,
-                          _initRowClassification(
-                            widget._classification,
-                            false,
-                          ),
-                        ],
-                      ),
-                  Column(
-                    children: [
-                      Gaps.v14,
-                      Row(
-                        children: [
-                          Expanded(child: _initTextField(0, true)),
-                          InkWell(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => KpostalView(
-                                  kakaoKey: dotenv.env['KAKAO'] ?? '',
-                                  callback: (postal) => ref.read(originInfoProvider.notifier).setAddress(postal),
-                                ),
-                              ),
+                        Column(
+                          children: [
+                            Gaps.v14,
+                            Row(
+                              children: [
+                                Expanded(child: _initTextField(0, true)),
+                                InkWell(
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => KpostalView(
+                                        kakaoKey: dotenv.env['KAKAO'] ?? '',
+                                        callback: (postal) => ref.read(originInfoProvider.notifier).setAddress(postal),
+                                      ),
+                                    ),
+                                  ),
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 7.w),
+                                    decoration: BoxDecoration(
+                                      color: Palette.mainColor,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
+                                    child: Text(
+                                      "주소검색",
+                                      style: CTS(
+                                        fontSize: 13,
+                                        color: Palette.white,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                            child: Container(
-                              margin: EdgeInsets.only(left: 7.w),
-                              decoration: BoxDecoration(
-                                color: Palette.mainColor,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
-                              child: Text(
-                                "주소검색",
-                                style: CTS(
-                                  fontSize: 13,
-                                  color: Palette.white,
-                                ),
-                              ),
+                            Gaps.v10,
+                            _initTextField(100, true),
+                            Gaps.v28,
+                          ],
+                        ),
+                        if (_selectedOriginIndex == 0)
+                          for (int i = 0; i < widget._homeTitles.length; i++)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _getTitle(widget._homeTitles[i], false),
+                                Gaps.v4,
+                                _initTextField(i + 103, true),
+                                Gaps.v36,
+                              ],
+                            )
+                        else if (_selectedOriginIndex == 1)
+                          for (int i = 0; i < widget._hospitalTitles.length; i++)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _getTitle(widget._hospitalTitles[i], false),
+                                Gaps.v8,
+                                _initTextField(i + 3 + 1000, false),
+                                Gaps.v36,
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                      Gaps.v10,
-                      _initTextField(100, true),
-                      Gaps.v28,
-                    ],
-                  ),
-                  if (_selectedOriginIndex == 0)
-                    for (int i = 0; i < widget._homeTitles.length; i++)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _getTitle(widget._homeTitles[i], false),
-                          Gaps.v4,
-                          _initTextField(i + 103, true),
-                          Gaps.v36,
-                        ],
-                      )
-                  else if (_selectedOriginIndex == 1)
-                    for (int i = 0; i < widget._hospitalTitles.length; i++)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _getTitle(widget._hospitalTitles[i], false),
-                          Gaps.v8,
-                          _initTextField(i + 3 + 1000, i != 4),
-                          Gaps.v36,
-                        ],
-                      ),
-                ]),
+                      ]),
+                    ),
               ),
             ],
           ),
@@ -236,8 +221,6 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
   }
 
   Widget _initRowClassification(List<String> list, bool isAssign) {
-    // list.add("중증");
-
     return Stack(
       children: [
         Container(
@@ -416,99 +399,6 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget rowSelectButton(list, selected, WidgetRef ref, p) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xffe4e4e4),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Row(
-            children: [
-              for (var i in list)
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Text(i, style: CTS.bold(fontSize: 11, color: Colors.transparent)),
-                      ),
-                      Gaps.h1,
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            for (var i in list)
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    print(i);
-                    selected = list.indexOf(i);
-                    ref.watch(p.notifier).state = selected;
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: list[selected] == i ? const Color(0xff538ef5) : Colors.transparent,
-                              borderRadius: list[selected] == i ? BorderRadius.circular(6) : null),
-                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                          child: Text(i,
-                              style: CTS.bold(
-                                fontSize: 11,
-                                color: list[selected] == i ? Palette.white : Palette.greyText_60,
-                              )),
-                        ),
-                      ),
-                      i != list.last
-                          ? Container(
-                              height: 12,
-                              width: 1,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff676a7a).withOpacity(0.2),
-                              ),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                ),
-              )
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _getTextInputField({required String hint, TextInputType type = TextInputType.text, int? maxLines, List<TextInputFormatter>? inputFormatters}) {
-    return TextFormField(
-      style: CTS.regular(fontSize: 13.sp, color: Palette.black),
-
-      decoration: getInputDecoration(hint),
-      controller: TextEditingController(
-          // text: vm.init(i, widget.report),
-          ),
-      // onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-      // onChanged: (value) => vm.setTextEditingController(i, value),
-      validator: (value) {
-        return null;
-      },
-      inputFormatters: inputFormatters,
-      autovalidateMode: AutovalidateMode.always,
-      keyboardType: type,
-      maxLines: maxLines,
-      // maxLength: maxLength,
     );
   }
 

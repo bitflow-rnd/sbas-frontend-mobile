@@ -102,8 +102,8 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
         return _model.nok2Telno;
 
       case 105:
-        //메세지
-      case 1007:
+      //메세지
+      case 1006:
         return _model.msg;
 
       case 1003:
@@ -125,6 +125,20 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
 
       case 100:
         return '상세 주소 입력';
+
+      case 103:
+        return '보호자 1 연락처 입력';
+      case 104:
+        return '보호자 2 연락처 입력';
+      case 105:
+      case 1006:
+        return '메세지 입력';
+      case 1003:
+        return '진료과 입력';
+      case 1004:
+        return '담당의 입력';
+      case 1005:
+        return '담당의 연락처 입력';
     }
     return '';
   }
@@ -144,7 +158,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
         break;
 
       case 105:
-        //메세지
+      //메세지
       case 1007:
         _model.msg = text;
         break;

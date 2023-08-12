@@ -283,7 +283,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 Navigator.pop(context);
                 context.goNamed(AssignBedScreen.routeName);
                 return;
-              } else {
+              } else if (order < 4) {
                 ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
               }
             },

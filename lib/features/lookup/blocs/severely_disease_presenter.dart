@@ -31,8 +31,7 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
     );
     for (final e in _list) {
       if (e.cdId != null && e.cdId!.isNotEmpty) {
-        ref.read(checkedSeverelyDiseaseProvider.notifier).state[e.cdId!] =
-            false;
+        ref.read(checkedSeverelyDiseaseProvider.notifier).state[e.cdId!] = false;
       }
     }
     _patientRepository = ref.read(patientRepoProvider);
@@ -48,26 +47,12 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
 
       await _patientRepository.regSevrInfo(SeverelyDiseaseModel(
         ptId: ptId,
-        dnrAgreYn: entries
-            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA')
-            .key,
-        reqBedTypeCd: entries
-            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP')
-            .key,
-        svrtTypeCd: entries
-            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP')
-            .key,
-        svrtIptTypeCd: entries
-            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP')
-            .key,
-        udds: entries
-            .where((e) => e.value && e.key.substring(0, 4) == 'UDDS')
-            .map<String>((e) => e.key)
-            .toList(),
-        pttp: entries
-            .where((e) => e.value && e.key.substring(0, 4) == 'PTTP')
-            .map<String>((e) => e.key)
-            .toList(),
+        dnrAgreYn: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA').key,
+        reqBedTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP').key,
+        svrtTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP').key,
+        svrtIptTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP').key,
+        udds: entries.where((e) => e.value && e.key.substring(0, 4) == 'UDDS').map<String>((e) => e.key).toList(),
+        pttp: entries.where((e) => e.value && e.key.substring(0, 4) == 'PTTP').map<String>((e) => e.key).toList(),
         avpuCd: bioInfoModel.avpu,
         oxyYn: bioInfoModel.o2Apply,
         bdtp: bioInfoModel.bdTemp,
@@ -91,26 +76,12 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
 
       severelyDiseaseModel = SeverelyDiseaseModel(
         ptId: ptId,
-        dnrAgreYn: entries
-            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA')
-            .key,
-        reqBedTypeCd: entries
-            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP')
-            .key,
-        svrtTypeCd: entries
-            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP')
-            .key,
-        svrtIptTypeCd: entries
-            .firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP')
-            .key,
-        udds: entries
-            .where((e) => e.value && e.key.substring(0, 4) == 'UDDS')
-            .map<String>((e) => e.key)
-            .toList(),
-        pttp: entries
-            .where((e) => e.value && e.key.substring(0, 4) == 'PTTP')
-            .map<String>((e) => e.key)
-            .toList(),
+        dnrAgreYn: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA').key,
+        reqBedTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP').key,
+        svrtTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP').key,
+        svrtIptTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP').key,
+        udds: entries.where((e) => e.value && e.key.substring(0, 4) == 'UDDS').map<String>((e) => e.key).toList(),
+        pttp: entries.where((e) => e.value && e.key.substring(0, 4) == 'PTTP').map<String>((e) => e.key).toList(),
         avpuCd: bioInfoModel.avpu,
         oxyYn: bioInfoModel.o2Apply,
         bdtp: bioInfoModel.bdTemp,
@@ -132,8 +103,7 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
   late final SeverelyDiseaseModel severelyDiseaseModel;
 }
 
-final severelyDiseaseProvider =
-    AsyncNotifierProvider<SeverelyDiseasePresenter, List<BaseCodeModel>>(
+final severelyDiseaseProvider = AsyncNotifierProvider<SeverelyDiseasePresenter, List<BaseCodeModel>>(
   () => SeverelyDiseasePresenter(),
 );
 final checkedSeverelyDiseaseProvider = StateProvider<Map<String, bool>>(
