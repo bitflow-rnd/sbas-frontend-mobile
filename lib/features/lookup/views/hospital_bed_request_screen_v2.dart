@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
@@ -17,12 +18,13 @@ import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
-import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
+import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 
 final patientImageProvider = StateProvider<XFile?>((ref) => null);
@@ -193,8 +195,8 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     Expanded(
                         child: Padding(
                       padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                      child: PatientRegInfo(formKey: formKey),
-                      // child: PatientRegInfoV2(),
+                      // child: PatientRegInfo(formKey: formKey),
+                      child: PatientRegInfoV2(),
                     )),
 
                   if (order == 2)
@@ -221,7 +223,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     );
   }
 
-  Widget _bottomer(WidgetRef ref, patientImage, patientAttc, patientIsUpload, context, {required bool hasPatient}) {
+  Widget _bottomer(WidgetRef ref, patientImage, patientAttc, patientIsUpload, BuildContext context, {required bool hasPatient}) {
     final order = ref.watch(orderOfRequestProvider);
 
     return Row(

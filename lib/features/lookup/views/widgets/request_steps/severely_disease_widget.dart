@@ -7,7 +7,7 @@ import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/bio_info_presenter.dart';
-import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
+import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/models/bio_info_model.dart';
 import 'package:sbas/constants/palette.dart';
 

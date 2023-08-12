@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kpostal/kpostal.dart';
-import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
+import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/models/bed_assgin_request_model.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
@@ -10,24 +10,24 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   @override
   FutureOr<OriginInfoModel> build() {
-    _model = OriginInfoModel();
+    _dprtInfo = OriginInfoModel();
     _repository = ref.read(patientRepoProvider);
 
-    return _model;
+    return _dprtInfo;
   }
 
   Future<void> registry(String ptId) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _model.ptId = ptId;
+      _dprtInfo.ptId = ptId;
 
       var severelyDiseaseModel = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel;
 
-      // await _repository.postRegOriginInfo(_model);
+      await _repository.postRegOriginInfo(_dprtInfo);
 
-      await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _model));
+      await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _dprtInfo));//실병상요청. 
 
-      return _model;
+      return _dprtInfo;
     });
     if (state.hasError) {}
   }
@@ -35,22 +35,22 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   Future<void> setAddress(Kpostal postal) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _model.dprtDstrBascAddr = postal.roadAddress;
-      _model.dprtDstrZip = postal.postCode;
+      _dprtInfo.dprtDstrBascAddr = postal.roadAddress;
+      _dprtInfo.dprtDstrZip = postal.postCode;
 
-      return _model;
+      return _dprtInfo;
     });
   }
 
   Future<int> setOriginIndex(int index) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _model.dprtDstrTypeCd = 'DPTP000${index + 1}';
+      _dprtInfo.dprtDstrTypeCd = 'DPTP000${index + 1}';
 
       if (index != 1) {
-        _model.inhpAsgnYn = 'N';
+        _dprtInfo.inhpAsgnYn = 'N';
       }
-      return _model;
+      return _dprtInfo;
     });
     if (state.hasError) {}
 
@@ -60,9 +60,9 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   Future<int> setAssignedToTheFloor(int index) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _model.inhpAsgnYn = index == 0 ? 'N' : 'Y';
+      _dprtInfo.inhpAsgnYn = index == 0 ? 'N' : 'Y';
 
-      return _model;
+      return _dprtInfo;
     });
     if (state.hasError) {}
 
@@ -72,48 +72,48 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   Future<void> selectLocalGovernment(String value) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _model.reqDstr1Cd = value;
+      _dprtInfo.reqDstr1Cd = value;
 
-      return _model;
+      return _dprtInfo;
     });
   }
 
   Future<void> selectLocalCounty(String value) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _model.reqDstr2Cd = value;
+      _dprtInfo.reqDstr2Cd = value;
 
-      return _model;
+      return _dprtInfo;
     });
   }
 
   String? getText(int index) {
     switch (index) {
       case 0:
-        return _model.dprtDstrBascAddr;
+        return _dprtInfo.dprtDstrBascAddr;
 
       case 100:
-        return _model.dprtDstrDetlAddr;
+        return _dprtInfo.dprtDstrDetlAddr;
 
       case 103:
-        return _model.nok1Telno;
+        return _dprtInfo.nok1Telno;
 
       case 104:
-        return _model.nok2Telno;
+        return _dprtInfo.nok2Telno;
 
       case 105:
       //메세지
       case 1006:
-        return _model.msg;
+        return _dprtInfo.msg;
 
       case 1003:
-        return _model.deptNm;
+        return _dprtInfo.deptNm;
 
       case 1004:
-        return _model.spclNm;
+        return _dprtInfo.spclNm;
 
       case 1005:
-        return _model.chrgTelno;
+        return _dprtInfo.chrgTelno;
     }
     return '';
   }
@@ -146,39 +146,39 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   void onChanged(int index, String text) {
     switch (index) {
       case 100:
-        _model.dprtDstrDetlAddr = text;
+        _dprtInfo.dprtDstrDetlAddr = text;
         break;
 
       case 103:
-        _model.nok1Telno = text;
+        _dprtInfo.nok1Telno = text;
         break;
 
       case 104:
-        _model.nok2Telno = text;
+        _dprtInfo.nok2Telno = text;
         break;
 
       case 105:
       //메세지
       case 1007:
-        _model.msg = text;
+        _dprtInfo.msg = text;
         break;
 
       case 1003:
-        _model.deptNm = text;
+        _dprtInfo.deptNm = text;
         break;
 
       case 1004:
-        _model.spclNm = text;
+        _dprtInfo.spclNm = text;
         break;
 
       case 1005:
-        _model.chrgTelno = text;
+        _dprtInfo.chrgTelno = text;
         break;
     }
   }
 
   late final PatientRepository _repository;
-  late final OriginInfoModel _model;
+  late final OriginInfoModel _dprtInfo;
 }
 
 final originInfoProvider = AsyncNotifierProvider<OriginInfoPresenter, OriginInfoModel>(

@@ -13,9 +13,7 @@ import 'package:sbas/util.dart';
 import 'package:sbas/constants/palette.dart';
 
 class PatientRegInfoV2 extends ConsumerStatefulWidget {
-  PatientRegInfoV2({
-    super.key,
-  });
+  PatientRegInfoV2({super.key});
   final list = [
     '환자이름',
     '주민등록번호',
@@ -32,8 +30,7 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
     '사망',
   ];
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      PatientRegInfoV2State();
+  ConsumerState<ConsumerStatefulWidget> createState() => PatientRegInfoV2State();
 }
 
 class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
@@ -53,11 +50,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
               controller: TextEditingController(
                 text: vm.getTextEditingController(index, report),
               ),
-              onSaved: (newValue) =>
-                  vm.setTextEditingController(index, newValue),
-              onChanged: (value) => ref
-                  .read(patientRegProvider.notifier)
-                  .setTextEditingController(index, value),
+              onSaved: (newValue) => vm.setTextEditingController(index, newValue),
+              onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(index, value),
               validator: (value) => vm.isValid(index, value),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
@@ -87,11 +81,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                     controller: TextEditingController(
                       text: vm.getTextEditingController(index + 100, report),
                     ),
-                    onSaved: (newValue) =>
-                        vm.setTextEditingController(index + 100, newValue),
-                    onChanged: (value) => ref
-                        .read(patientRegProvider.notifier)
-                        .setTextEditingController(index + 100, value),
+                    onSaved: (newValue) => vm.setTextEditingController(index + 100, newValue),
+                    onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(index + 100, value),
                     validator: (value) => vm.isValid(index + 100, value),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
@@ -159,8 +150,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           getSubTitlt('나이', true),
           Gaps.v8,
           Container(
-            padding: EdgeInsets.only(
-                left: 20.w, top: 12.h, bottom: 12.h, right: 12.w),
+            padding: EdgeInsets.only(left: 20.w, top: 12.h, bottom: 12.h, right: 12.w),
             decoration: BoxDecoration(
               color: const Color(0xffecedef).withOpacity(0.2),
               border: Border.all(
@@ -218,8 +208,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                     color: Palette.mainColor,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 28.w, vertical: 15.h),
+                  padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 15.h),
                   child: Text(
                     "주소검색",
                     style: CTS(
@@ -247,8 +236,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                   Row(
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 28.w, vertical: 10.h),
+                        padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
                         child: Text(i,
                             style: CTS.bold(
                               fontSize: 11,
@@ -270,21 +258,13 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                       onTap: () => vm.setSurvivalStatus(i),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: widget.oneList[vm.isSurvivalStatus] == i
-                                ? const Color(0xff538ef5)
-                                : Colors.transparent,
-                            borderRadius:
-                                widget.oneList[vm.isSurvivalStatus] == i
-                                    ? BorderRadius.circular(6)
-                                    : null),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 28.w, vertical: 10.h),
+                            color: widget.oneList[vm.isSurvivalStatus] == i ? const Color(0xff538ef5) : Colors.transparent,
+                            borderRadius: widget.oneList[vm.isSurvivalStatus] == i ? BorderRadius.circular(6) : null),
+                        padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
                         child: Text(i,
                             style: CTS.bold(
                               fontSize: 11,
-                              color: widget.oneList[vm.isSurvivalStatus] == i
-                                  ? Palette.white
-                                  : Palette.greyText_60,
+                              color: widget.oneList[vm.isSurvivalStatus] == i ? Palette.white : Palette.greyText_60,
                             )),
                       ),
                     ),
@@ -315,8 +295,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           Gaps.v12
         ],
       );
-  Widget _nation(PatientRegInfoModel report, PatientRegisterPresenter vm) =>
-      Column(
+  Widget _nation(PatientRegInfoModel report, PatientRegisterPresenter vm) => Column(
         children: [
           Row(
             children: [
@@ -331,8 +310,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                     ),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 28.w, vertical: 13.5.h),
+                  padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 13.5.h),
                   child: Text(
                     vm.getTextEditingController(4, report),
                     style: CTS(
@@ -344,13 +322,11 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
               ),
               Expanded(
                 child: TextFormField(
-                  decoration:
-                      getInputDecoration(report.natiCd == 'NATI0001' ? '' : '직접입력'),
+                  decoration: getInputDecoration(report.natiCd == 'NATI0001' ? '' : '직접입력'),
                   controller: TextEditingController(
                     text: vm.getTextEditingController(104, report),
                   ),
-                  onSaved: (newValue) =>
-                      vm.setTextEditingController(104, newValue),
+                  onSaved: (newValue) => vm.setTextEditingController(104, newValue),
                   onChanged: (value) => vm.setTextEditingController(104, value),
                   validator: (value) {
                     return null;
@@ -417,11 +393,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                               controller: TextEditingController(
                                 text: vm.getTextEditingController(i, report),
                               ),
-                              onSaved: (newValue) =>
-                                  vm.setTextEditingController(i, newValue),
-                              onChanged: (value) => ref
-                                  .read(patientRegProvider.notifier)
-                                  .setTextEditingController(i, value),
+                              onSaved: (newValue) => vm.setTextEditingController(i, newValue),
+                              onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(i, value),
                               validator: (value) => vm.isValid(i, value),
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(

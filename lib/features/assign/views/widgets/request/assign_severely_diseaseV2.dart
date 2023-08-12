@@ -9,7 +9,7 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/blocs/bio_info_presenter.dart';
-import 'package:sbas/features/lookup/blocs/severely_disease_presenter.dart';
+import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 
 class SeverelyDiseaseV2 extends ConsumerStatefulWidget {
   SeverelyDiseaseV2({
