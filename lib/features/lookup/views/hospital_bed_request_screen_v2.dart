@@ -195,8 +195,8 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     Expanded(
                         child: Padding(
                       padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                      // child: PatientRegInfo(formKey: formKey),
-                      child: PatientRegInfoV2(),
+                      child: PatientRegInfoV2(formKey: formKey),
+                      // child: PatientRegInfoV2(),
                     )),
 
                   if (order == 2)
@@ -204,7 +204,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                       formKey: formKey,
                       report: report,
                     ), //감염병정보
-                  //상단 2개는 신규일때만 들어갈수있도록 해야함.
+                  //상단 2개는 신규일때만 들어갈수있도록?!
                   //하단부 ConsumerStatefulWidget로 변경.
                   if (order == 3)
                     SeverelyDiseaseV2(

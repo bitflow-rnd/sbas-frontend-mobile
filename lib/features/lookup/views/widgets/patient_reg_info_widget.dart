@@ -32,8 +32,6 @@ class PatientRegInfo extends ConsumerStatefulWidget {
 }
 
 class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
-  bool init = true;
-
   @override
   Widget build(BuildContext context) {
     final vm = ref.read(patientRegProvider.notifier);

@@ -13,7 +13,8 @@ import 'package:sbas/util.dart';
 import 'package:sbas/constants/palette.dart';
 
 class PatientRegInfoV2 extends ConsumerStatefulWidget {
-  PatientRegInfoV2({super.key});
+  PatientRegInfoV2({super.key, required this.formKey});
+  final GlobalKey<FormState> formKey;
   final list = [
     '환자이름',
     '주민등록번호',
@@ -34,6 +35,101 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
 }
 
 class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
+  @override
+  Widget build(BuildContext context) {
+    final vm = ref.read(patientRegProvider.notifier);
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Form(
+        key: widget.formKey,
+        autovalidateMode: AutovalidateMode.always,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 18,
+          ),
+          child: ref.watch(patientRegProvider).when(
+                loading: () => const SBASProgressIndicator(),
+                error: (error, stackTrace) => Center(
+                  child: Text(
+                    error.toString(),
+                    style: CTS(
+                      color: Palette.mainColor,
+                    ),
+                  ),
+                ),
+                data: (report) => Column(
+                  children: [
+                    for (int i = 0; i < widget.list.length; i++)
+                      Column(
+                        children: [
+                          i != 3
+                              ? getSubTitlt(
+                                  widget.list[i],
+                                  i > 5,
+                                )
+                              : Container(),
+                          Gaps.v4,
+                          if (i == 2) _addrInput(vm),
+                          if (i == 3) _isAlive(vm),
+                          if (i == 4) _nation(report, vm),
+                          if (i == 4 && report.natiCd != 'NATI0001') Gaps.v8,
+                          if (i != 1 && i != 3 && i != 4)
+                            TextFormField(
+                              decoration: getInputDecoration(
+                                i == 8
+                                    ? '직업을 알 수 있는 경우 기재'
+                                    : i == 2
+                                        ? '나머지 ${widget.list[i]} 입력'
+                                        : '${widget.list[i]} 입력',
+                              ),
+                              controller: TextEditingController(
+                                text: vm.getTextEditingController(i, report),
+                              ),
+                              onSaved: (newValue) => vm.setTextEditingController(i, newValue),
+                              onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(i, value),
+                              validator: (value) => vm.isValid(i, value),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(vm.getRegExp(i)),
+                                ),
+                                FilteringTextInputFormatter.singleLineFormatter,
+                              ],
+                              keyboardType: vm.getKeyboardType(i),
+                              autovalidateMode: AutovalidateMode.always,
+                              maxLength: vm.getMaxLength(i),
+                            ),
+                          Gaps.v12,
+                          if (i == 1)
+                            Column(
+                              children: [
+                                _inputResidentRegistrationNumber(vm, report, i),
+                                Gaps.v14,
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: _inputGender(vm),
+                                    ),
+                                    Gaps.h8,
+                                    Expanded(
+                                      child: _inputAge(vm),
+                                    ),
+                                  ],
+                                ),
+                                Gaps.v32,
+                              ],
+                            ),
+                        ],
+                      ),
+                    Gaps.v20
+                  ],
+                ),
+              ),
+        ),
+      ),
+    );
+  }
+
   Widget _inputResidentRegistrationNumber(
     PatientRegisterPresenter vm,
     PatientRegInfoModel report,
@@ -343,97 +439,4 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           Gaps.v10
         ],
       );
-  @override
-  Widget build(BuildContext context) {
-    final vm = ref.read(patientRegProvider.notifier);
-
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Form(
-        autovalidateMode: AutovalidateMode.always,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 18,
-          ),
-          child: ref.watch(patientRegProvider).when(
-                loading: () => const SBASProgressIndicator(),
-                error: (error, stackTrace) => Center(
-                  child: Text(
-                    error.toString(),
-                    style: CTS(
-                      color: Palette.mainColor,
-                    ),
-                  ),
-                ),
-                data: (report) => Column(
-                  children: [
-                    for (int i = 0; i < widget.list.length; i++)
-                      Column(
-                        children: [
-                          i != 3
-                              ? getSubTitlt(
-                                  widget.list[i],
-                                  i > 5,
-                                )
-                              : Container(),
-                          Gaps.v4,
-                          if (i == 2) _addrInput(vm),
-                          if (i == 3) _isAlive(vm),
-                          if (i == 4) _nation(report, vm),
-                          if (i == 4 && report.natiCd != 'NATI0001') Gaps.v8,
-                          if (i != 1 && i != 3 && i != 4)
-                            TextFormField(
-                              decoration: getInputDecoration(
-                                i == 8
-                                    ? '직업을 알 수 있는 경우 기재'
-                                    : i == 2
-                                        ? '나머지 ${widget.list[i]} 입력'
-                                        : '${widget.list[i]} 입력',
-                              ),
-                              controller: TextEditingController(
-                                text: vm.getTextEditingController(i, report),
-                              ),
-                              onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-                              onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(i, value),
-                              validator: (value) => vm.isValid(i, value),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                  RegExp(vm.getRegExp(i)),
-                                ),
-                                FilteringTextInputFormatter.singleLineFormatter,
-                              ],
-                              keyboardType: vm.getKeyboardType(i),
-                              autovalidateMode: AutovalidateMode.always,
-                              maxLength: vm.getMaxLength(i),
-                            ),
-                          Gaps.v12,
-                          if (i == 1)
-                            Column(
-                              children: [
-                                _inputResidentRegistrationNumber(vm, report, i),
-                                Gaps.v14,
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: _inputGender(vm),
-                                    ),
-                                    Gaps.h8,
-                                    Expanded(
-                                      child: _inputAge(vm),
-                                    ),
-                                  ],
-                                ),
-                                Gaps.v32,
-                              ],
-                            ),
-                        ],
-                      ),
-                    Gaps.v20
-                  ],
-                ),
-              ),
-        ),
-      ),
-    );
-  }
 }
