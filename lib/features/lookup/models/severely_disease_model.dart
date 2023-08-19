@@ -130,4 +130,24 @@ class SeverelyDiseaseModel {
 
     return data;
   }
+
+  SeverelyDiseaseModel.empty()
+      : ptId = null,
+        ptTypeCd = null,
+        undrDsesCd = null,
+        undrDsesEtc = null,
+        reqBedTypeCd = null,
+        dnrAgreYn = null,
+        svrtIptTypeCd = null,
+        svrtTypeCd = null,
+        avpuCd = null,
+        oxyYn = null,
+        bdtp = null,
+        spo2 = null,
+        hr = null,
+        resp = null,
+        sbp = null,
+        newsScore = null,
+        pttp = [],
+        udds = [];
 }

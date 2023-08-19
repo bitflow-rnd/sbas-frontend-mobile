@@ -16,6 +16,7 @@ import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
+import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 
 class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
   InfectiousDiseaseV2({
@@ -505,6 +506,9 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
                     ref.read(agencyDetailProvider.notifier).updatePublicHealthCenter(
                           region.firstWhere((e) => e.cdId == value).cdId ?? '',
                         );
+                    ref.read(infectiousDiseaseProvider.notifier).updateRegion(
+                          region.firstWhere((e) => e.cdId == value).cdId ?? '',
+                        );
                     field.didChange(value);
                   },
                   value: field.value != '' ? field.value : null,
@@ -554,6 +558,9 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
                   isExpanded: true,
                   onChanged: (value) {
                     print(value);
+                    ref.read(infectiousDiseaseProvider.notifier).updateRegion(
+                          center.firstWhere((e) => e.instNm == value).instNm ?? '',
+                        );
                     field.didChange(value);
                   },
                   value: field.value != '' ? field.value : null,

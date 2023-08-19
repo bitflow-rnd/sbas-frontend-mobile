@@ -76,6 +76,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                           if (i == 4 && report.natiCd != 'NATI0001') Gaps.v8,
                           if (i != 1 && i != 3 && i != 4)
                             TextFormField(
+                              scrollPadding: EdgeInsets.only(bottom: 150),
                               decoration: getInputDecoration(
                                 i == 8
                                     ? '직업을 알 수 있는 경우 기재'
@@ -121,7 +122,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                             ),
                         ],
                       ),
-                    Gaps.v20
+                    Gaps.v20,
+                    SizedBox(height: MediaQuery.of(context).viewInsets.bottom), // Add this
                   ],
                 ),
               ),

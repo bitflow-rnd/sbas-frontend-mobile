@@ -36,19 +36,22 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
     if (state.hasValue) {}
   }
 
+  updateRegion(String? rcptPhc) {
+    _patientDiseaseModel.rcptPhc = rcptPhc;
+  }
+
   String? init(int index, EpidemiologicalReportModel report) {
     //V2 로 변경완료
     switch (index) {
       case 0: //입원여부
         _patientDiseaseModel.diagNm ??= report.diagNm; // 질병명
-        _patientDiseaseModel.rcptPhc ??= report.rcptPhc; // 수신보건소
         _patientDiseaseModel.rptType ??= report.rptType; // 신고구분
 
         //상기 3항목은 들어갈 곳이 없어서 여기서 초기화
         _patientDiseaseModel.admsYn ??= report.admsYn;
         return _patientDiseaseModel.admsYn;
       case 1: //보건소명 직접입력 //현재 보건소 선택결과 저장안됨.TODO
-        _patientDiseaseModel.rptType ??= report.rptType; //신고구분
+        _patientDiseaseModel.rcptPhc ??= report.rcptPhc; //신고구분
         return _patientDiseaseModel.rcptPhc;
       case 2: //코로나증상여부
         _patientDiseaseModel.cv19Symp ??= report.cv19Symp;

@@ -7,36 +7,36 @@ import 'package:sbas/features/lookup/blocs/bio_info_presenter.dart';
 import 'package:sbas/features/lookup/models/severely_disease_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
-class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
+class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
   @override
-  FutureOr<List<BaseCodeModel>> build() async {
+  FutureOr<SeverelyDiseaseModel> build() async {
     _userRegRequestRepository = ref.read(userRegReqProvider);
 
-    _list = await _userRegRequestRepository.getBaseCode('PTTP');
+    list = await _userRegRequestRepository.getBaseCode('PTTP');
 
-    _list.addAll(
+    list.addAll(
       await _userRegRequestRepository.getBaseCode('UDDS'),
     );
-    _list.addAll(
+    list.addAll(
       await _userRegRequestRepository.getBaseCode('SVTP'),
     );
-    _list.addAll(
+    list.addAll(
       await _userRegRequestRepository.getBaseCode('SVIP'),
     );
-    _list.addAll(
+    list.addAll(
       await _userRegRequestRepository.getBaseCode('BDTP'),
     );
-    _list.addAll(
+    list.addAll(
       await _userRegRequestRepository.getBaseCode('DNRA'),
     );
-    for (final e in _list) {
+    for (final e in list) {
       if (e.cdId != null && e.cdId!.isNotEmpty) {
         ref.read(checkedSeverelyDiseaseProvider.notifier).state[e.cdId!] = false;
       }
     }
     _patientRepository = ref.read(patientRepoProvider);
-
-    return _list;
+    severelyDiseaseModel = SeverelyDiseaseModel.empty();
+    return severelyDiseaseModel;
   }
 
   Future<void> registry(String ptId) async {
@@ -44,26 +44,24 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
     state = await AsyncValue.guard(() async {
       final entries = ref.read(checkedSeverelyDiseaseProvider).entries;
       var bioInfoModel = ref.read(bioInfoProvider.notifier).bioInfoModel;
+      severelyDiseaseModel.ptId = ptId;
+      severelyDiseaseModel.dnrAgreYn = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA').key;
+      severelyDiseaseModel.reqBedTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP').key;
+      severelyDiseaseModel.svrtTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP').key;
+      severelyDiseaseModel.svrtIptTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP').key;
+      severelyDiseaseModel.udds = entries.where((e) => e.value && e.key.substring(0, 4) == 'UDDS').map<String>((e) => e.key).toList();
+      severelyDiseaseModel.pttp = entries.where((e) => e.value && e.key.substring(0, 4) == 'PTTP').map<String>((e) => e.key).toList();
+      severelyDiseaseModel.avpuCd = bioInfoModel.avpu;
+      severelyDiseaseModel.oxyYn = bioInfoModel.o2Apply;
+      severelyDiseaseModel.bdtp = bioInfoModel.bdTemp;
+      severelyDiseaseModel.spo2 = bioInfoModel.spo2;
+      severelyDiseaseModel.hr = bioInfoModel.pulse;
+      severelyDiseaseModel.resp = bioInfoModel.breath;
+      severelyDiseaseModel.sbp = bioInfoModel.sbp;
+      severelyDiseaseModel.newsScore = bioInfoModel.score;
 
-      await _patientRepository.regSevrInfo(SeverelyDiseaseModel(
-        ptId: ptId,
-        dnrAgreYn: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA').key,
-        reqBedTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP').key,
-        svrtTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP').key,
-        svrtIptTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP').key,
-        udds: entries.where((e) => e.value && e.key.substring(0, 4) == 'UDDS').map<String>((e) => e.key).toList(),
-        pttp: entries.where((e) => e.value && e.key.substring(0, 4) == 'PTTP').map<String>((e) => e.key).toList(),
-        avpuCd: bioInfoModel.avpu,
-        oxyYn: bioInfoModel.o2Apply,
-        bdtp: bioInfoModel.bdTemp,
-        spo2: bioInfoModel.spo2,
-        hr: bioInfoModel.pulse,
-        resp: bioInfoModel.breath,
-        sbp: bioInfoModel.sbp,
-        newsScore: bioInfoModel.score,
-      ).toJson());
-
-      return _list;
+      await _patientRepository.regSevrInfo(severelyDiseaseModel.toJson());
+      return severelyDiseaseModel;
     });
     if (state.hasError) {}
   }
@@ -73,37 +71,34 @@ class SeverelyDiseasePresenter extends AsyncNotifier<List<BaseCodeModel>> {
     state = await AsyncValue.guard(() async {
       final entries = ref.read(checkedSeverelyDiseaseProvider).entries;
       var bioInfoModel = ref.read(bioInfoProvider.notifier).bioInfoModel;
+      severelyDiseaseModel.ptId = ptId;
+      severelyDiseaseModel.dnrAgreYn = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA').key;
+      severelyDiseaseModel.reqBedTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP').key;
+      severelyDiseaseModel.svrtTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP').key;
+      severelyDiseaseModel.svrtIptTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP').key;
+      severelyDiseaseModel.udds = entries.where((e) => e.value && e.key.substring(0, 4) == 'UDDS').map<String>((e) => e.key).toList();
+      severelyDiseaseModel.pttp = entries.where((e) => e.value && e.key.substring(0, 4) == 'PTTP').map<String>((e) => e.key).toList();
+      severelyDiseaseModel.avpuCd = bioInfoModel.avpu;
+      severelyDiseaseModel.oxyYn = bioInfoModel.o2Apply;
+      severelyDiseaseModel.bdtp = bioInfoModel.bdTemp;
+      severelyDiseaseModel.spo2 = bioInfoModel.spo2;
+      severelyDiseaseModel.hr = bioInfoModel.pulse;
+      severelyDiseaseModel.resp = bioInfoModel.breath;
+      severelyDiseaseModel.sbp = bioInfoModel.sbp;
+      severelyDiseaseModel.newsScore = bioInfoModel.score;
 
-      severelyDiseaseModel = SeverelyDiseaseModel(
-        ptId: ptId,
-        dnrAgreYn: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA').key,
-        reqBedTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP').key,
-        svrtTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP').key,
-        svrtIptTypeCd: entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP').key,
-        udds: entries.where((e) => e.value && e.key.substring(0, 4) == 'UDDS').map<String>((e) => e.key).toList(),
-        pttp: entries.where((e) => e.value && e.key.substring(0, 4) == 'PTTP').map<String>((e) => e.key).toList(),
-        avpuCd: bioInfoModel.avpu,
-        oxyYn: bioInfoModel.o2Apply,
-        bdtp: bioInfoModel.bdTemp,
-        spo2: bioInfoModel.spo2,
-        hr: bioInfoModel.pulse,
-        resp: bioInfoModel.breath,
-        sbp: bioInfoModel.sbp,
-        newsScore: bioInfoModel.score,
-      );
-
-      return _list;
+      return severelyDiseaseModel;
     });
     if (state.hasError) {}
   }
 
-  late final List<BaseCodeModel> _list;
+  late final List<BaseCodeModel> list;
   late final PatientRepository _patientRepository;
   late final UserRegRequestRepository _userRegRequestRepository;
   late final SeverelyDiseaseModel severelyDiseaseModel;
 }
 
-final severelyDiseaseProvider = AsyncNotifierProvider<SeverelyDiseasePresenter, List<BaseCodeModel>>(
+final severelyDiseaseProvider = AsyncNotifierProvider<SeverelyDiseasePresenter, SeverelyDiseaseModel>(
   () => SeverelyDiseasePresenter(),
 );
 final checkedSeverelyDiseaseProvider = StateProvider<Map<String, bool>>(
