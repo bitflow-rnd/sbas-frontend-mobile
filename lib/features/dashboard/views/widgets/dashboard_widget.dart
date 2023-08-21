@@ -1,10 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 
 import '../../../assign/views/assign_bed_screen.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends ConsumerWidget {
   const Dashboard({
     super.key,
     required this.title,
@@ -14,20 +17,37 @@ class Dashboard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
       flex: 1,
       child: InkWell(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15.r),
         splashColor: Colors.grey.shade300,
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AssignBedScreen(
-              automaticallyImplyLeading: false,
-            ),
-          ),
-        ),
+        onTap: () async {
+          double x = -1.0;
+          switch (title) {
+            case "요청":
+              x = -1.0;
+              break;
+            case "승인":
+              x = -0.5;
+              break;
+            case "이송":
+              x = 0.0;
+              break;
+            case "입원":
+              x = 0.5;
+              break;
+          }
+          ref.read(assignBedProvider.notifier).setTopNavItem(x).then((value) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AssignBedScreen(
+                    automaticallyImplyLeading: false,
+                  ),
+                ),
+              ));
+        },
         child: Container(
           margin: edge,
           decoration: BoxDecoration(

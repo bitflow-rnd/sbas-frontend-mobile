@@ -2,10 +2,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/views/alarm_screen.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/dashboard/views/widgets/dashboard_widget.dart';
 import 'package:sbas/util.dart';
 
@@ -82,63 +85,74 @@ class DashboardScreen extends ConsumerWidget {
             Expanded(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 6,
+                padding: EdgeInsets.symmetric(
+                  vertical: 6.w,
                 ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: const [
-                          Dashboard(
-                            title: '요청',
-                            edge: EdgeInsets.only(
-                              right: 6,
-                              bottom: 6,
-                            ),
-                            path: 'request',
-                            count: 0,
+                child: ref.watch(assignBedProvider).when(
+                      loading: () => const SBASProgressIndicator(),
+                      error: (error, stackTrace) => Center(
+                        child: Text(
+                          error.toString(),
+                          style: const TextStyle(
+                            color: Palette.mainColor,
                           ),
-                          Dashboard(
-                            title: '승인',
-                            edge: EdgeInsets.only(
-                              left: 6,
-                              bottom: 6,
+                        ),
+                      ),
+                      data: (data) => Column(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              children: [
+                                Dashboard(
+                                  title: '요청',
+                                  edge: EdgeInsets.only(
+                                    right: 6,
+                                    bottom: 6,
+                                  ),
+                                  path: 'request',
+                                  count: ref.watch(assignCountProvider.notifier).state[0],
+                                ),
+                                Dashboard(
+                                  title: '승인',
+                                  edge: EdgeInsets.only(
+                                    left: 6,
+                                    bottom: 6,
+                                  ),
+                                  path: 'assign',
+                                  count: ref.watch(assignCountProvider.notifier).state[1],
+                                ),
+                              ],
                             ),
-                            path: 'assign',
-                            count: 5,
                           ),
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              children: [
+                                Dashboard(
+                                  title: '이송',
+                                  edge: EdgeInsets.only(
+                                    top: 6,
+                                    right: 6,
+                                  ),
+                                  path: 'transfer',
+                                  count: ref.watch(assignCountProvider.notifier).state[2],
+                                ),
+                                Dashboard(
+                                  title: '입원',
+                                  edge: EdgeInsets.only(
+                                    top: 6,
+                                    left: 6,
+                                  ),
+                                  path: 'hospitalization',
+                                  count: ref.watch(assignCountProvider.notifier).state[2],
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: const [
-                          Dashboard(
-                            title: '이송',
-                            edge: EdgeInsets.only(
-                              top: 6,
-                              right: 6,
-                            ),
-                            path: 'transfer',
-                            count: 3,
-                          ),
-                          Dashboard(
-                            title: '입원',
-                            edge: EdgeInsets.only(
-                              top: 6,
-                              left: 6,
-                            ),
-                            path: 'hospitalization',
-                            count: 1,
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
               ),
             ),
             Row(

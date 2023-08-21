@@ -8,10 +8,11 @@ class BottomSubmitBtn extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
+    this.mainColor = Palette.mainColor,
   });
   final String text;
   final VoidCallback? onPressed;
-
+  final Color mainColor;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -26,7 +27,7 @@ class BottomSubmitBtn extends StatelessWidget {
           ),
         ),
         disabledBackgroundColor: Palette.mainColor,
-        backgroundColor: Palette.mainColor,
+        backgroundColor: mainColor,
       ),
       child: SafeArea(
         child: Center(
@@ -34,7 +35,7 @@ class BottomSubmitBtn extends StatelessWidget {
             text,
             style: CTS(
               fontSize: 16,
-              color: Palette.white,
+              color: mainColor == Palette.mainColor ? Palette.white : Palette.greyText_60,
             ),
           ),
         ),

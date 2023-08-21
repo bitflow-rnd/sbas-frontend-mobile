@@ -64,6 +64,7 @@ class PatientRegScreen extends ConsumerWidget {
               SizedBox(
                 width: width * 0.5,
                 child: BottomSubmitBtn(
+                  mainColor: Palette.white,
                   text: patientAttc != null ? '이전' : '취소',
                   onPressed: patientAttc != null
                       ? () {

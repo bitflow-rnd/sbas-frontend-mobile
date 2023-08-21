@@ -350,9 +350,9 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
 
                     // ref.read(agencyRegionProvider.notifier).exchangeTheCounty();
 
-                    // if (selectedModel.cdId != null) {
-                    //   ref.read(originInfoProvider.notifier).selectLocalGovernment(selectedModel.cdId ?? '');
-                    // }
+                    if (selectedModel.cdId != null) {
+                      ref.read(originInfoProvider.notifier).selectLocalGovernment(selectedModel.cdId ?? '');
+                    }
                     field.didChange(value);
                     // field.didChange(selectedModel.cdNm);
                   }),

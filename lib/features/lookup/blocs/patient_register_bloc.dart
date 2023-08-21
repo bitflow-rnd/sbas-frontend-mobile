@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/models/base_code_model.dart';
+import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 // import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
@@ -18,11 +19,40 @@ import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   @override
   FutureOr<PatientRegInfoModel> build() {
-    _patientInfoModel = PatientRegInfoModel();
+    _patientInfoModel = PatientRegInfoModel.empty();
     // _regRepository = ref.read(userRegReqProvider);
     _patientRepository = ref.read(patientRepoProvider);
 
     return _patientInfoModel;
+  }
+
+  init(Patient patient) {
+    _patientInfoModel.rgstUserId = patient.rgstUserId ?? "";
+    _patientInfoModel.rgstDttm = patient.rgstDttm ?? "";
+    _patientInfoModel.updtUserId = patient.updtUserId ?? "";
+    _patientInfoModel.updtDttm = patient.updtDttm ?? "";
+    _patientInfoModel.ptNm = patient.ptNm ?? "";
+    _patientInfoModel.gndr = patient.gndr ?? "";
+    _patientInfoModel.rrno1 = patient.rrno1 ?? "";
+    _patientInfoModel.rrno2 = patient.rrno2 ?? "";
+    _patientInfoModel.dstr1Cd = patient.dstr1Cd ?? "";
+    _patientInfoModel.dstr2Cd = patient.dstr2Cd ?? "";
+    _patientInfoModel.addr = patient.addr ?? "";
+    _patientInfoModel.telno = patient.telno ?? "";
+    _patientInfoModel.natiCd = patient.natiCd ?? "";
+    _patientInfoModel.picaVer = patient.picaVer ?? "";
+    _patientInfoModel.dethYn = patient.dethYn ?? "";
+    _patientInfoModel.nokNm = patient.nokNm ?? "";
+    _patientInfoModel.mpno = patient.mpno ?? "";
+    _patientInfoModel.job = patient.job ?? "";
+    _patientInfoModel.attcId = patient.attcId ?? "";
+    _patientInfoModel.bedStatCd = patient.bedStatCd ?? "";
+    _patientInfoModel.bedStatNm = patient.bedStatNm ?? "";
+    _patientInfoModel.bascAddr = patient.bascAddr ?? "";
+    _patientInfoModel.detlAddr = patient.detlAddr ?? "";
+    _patientInfoModel.zip = patient.zip ?? "";
+    _patientInfoModel.natiNm = patient.natiNm ?? "";
+    _patientInfoModel.ptId = patient.ptId ?? "";
   }
 
   Future<void> registry(String? id, BuildContext context) async {
@@ -447,3 +477,4 @@ final patientRegProvider = AsyncNotifierProvider<PatientRegisterPresenter, Patie
 final patientImageProvider = StateProvider<XFile?>((ref) => null);
 final patientAttcProvider = StateProvider<String?>((ref) => null);
 final patientIsUploadProvider = StateProvider<bool>((ref) => true);
+final patientInfoIsChangedProvider = StateProvider<bool>((ref) => false);

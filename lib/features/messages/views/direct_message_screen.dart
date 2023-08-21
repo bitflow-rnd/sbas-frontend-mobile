@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,177 +55,179 @@ class DirectMessageScreen extends ConsumerWidget {
 
     return Scaffold(
         backgroundColor: Palette.white,
-        appBar: AppBar(
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-          ),
-          backgroundColor: Colors.white,
-          elevation: 1,
-          leading: Image.asset(
-            'assets/home/home_logo.png',
-            alignment: Alignment.topLeft,
-          ),
-          leadingWidth: 256,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications_none,
-                color: Color(0xFF696969),
-              ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.menu,
-                color: Color(0xFF696969),
-              ),
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Container(
-              height: 82.h,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  ref.read(selecteTabProvider.notifier).state = 0;
-                                },
-                                child: Text(
-                                  '연락처',
-                                  style: CTS.medium(
-                                    color: Color(0xff676a7a),
-                                    fontSize: 13,
+        // appBar: AppBar(
+        //   systemOverlayStyle: const SystemUiOverlayStyle(
+        //     statusBarBrightness: Brightness.light,
+        //     statusBarColor: Colors.transparent,
+        //     statusBarIconBrightness: Brightness.dark,
+        //   ),
+        //   backgroundColor: Colors.white,
+        //   elevation: 1,
+        //   leading: Image.asset(
+        //     'assets/home/home_logo.png',
+        //     alignment: Alignment.topLeft,
+        //   ),
+        //   leadingWidth: 256,
+        //   actions: [
+        //     IconButton(
+        //       onPressed: () {},
+        //       icon: const Icon(
+        //         Icons.notifications_none,
+        //         color: Color(0xFF696969),
+        //       ),
+        //     ),
+        //     IconButton(
+        //       onPressed: () {},
+        //       icon: const Icon(
+        //         Icons.menu,
+        //         color: Color(0xFF696969),
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                height: 82.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    ref.read(selecteTabProvider.notifier).state = 0;
+                                  },
+                                  child: Text(
+                                    '연락처',
+                                    style: CTS.medium(
+                                      color: Color(0xff676a7a),
+                                      fontSize: 13,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 4.w),
-                                height: 16.h,
-                                width: 16.h,
-                                decoration: BoxDecoration(
-                                    color: Palette.mainColor,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(Bitflow.defaultRadius),
-                                    )),
-                                child: Text(
-                                  "1",
-                                  style: CTS.bold(color: Colors.white, fontSize: 10),
-                                ).c,
-                              ),
-                            ],
-                          ),
-                          Gaps.h44,
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  ref.read(selecteTabProvider.notifier).state = 1;
-                                },
-                                child: Text(
-                                  '메세지',
-                                  style: CTS.medium(
-                                    color: Palette.black,
-                                    fontSize: 13,
+                                Container(
+                                  margin: EdgeInsets.only(left: 4.w),
+                                  height: 16.h,
+                                  width: 16.h,
+                                  decoration: BoxDecoration(
+                                      color: Palette.mainColor,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(Bitflow.defaultRadius),
+                                      )),
+                                  child: Text(
+                                    "1",
+                                    style: CTS.bold(color: Colors.white, fontSize: 10),
+                                  ).c,
+                                ),
+                              ],
+                            ),
+                            Gaps.h44,
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    ref.read(selecteTabProvider.notifier).state = 1;
+                                  },
+                                  child: Text(
+                                    '메세지',
+                                    style: CTS.medium(
+                                      color: Palette.black,
+                                      fontSize: 13,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 4.w),
-                                height: 16.h,
-                                width: 16.h,
-                                decoration: BoxDecoration(
-                                    color: Palette.mainColor,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(Bitflow.defaultRadius),
-                                    )),
-                                child: Text(
-                                  "1",
-                                  style: CTS.bold(color: Colors.white, fontSize: 10),
-                                ).c,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Stack(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(top: 12.h),
-                                height: 6.h,
-                                width: 200.w,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFecedef),
-                                  borderRadius: BorderRadius.circular(3),
+                                Container(
+                                  margin: EdgeInsets.only(left: 4.w),
+                                  height: 16.h,
+                                  width: 16.h,
+                                  decoration: BoxDecoration(
+                                      color: Palette.mainColor,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(Bitflow.defaultRadius),
+                                      )),
+                                  child: Text(
+                                    "1",
+                                    style: CTS.bold(color: Colors.white, fontSize: 10),
+                                  ).c,
                                 ),
-                              ),
-                              Positioned(
-                                left: ref.watch(selecteTabProvider.notifier).state == 0 ? 0 : null,
-                                right: ref.watch(selecteTabProvider.notifier).state == 0 ? null : 0,
-                                child: Container(
+                              ],
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Stack(
+                              children: [
+                                Container(
                                   margin: EdgeInsets.only(top: 12.h),
                                   height: 6.h,
-                                  width: 100.w,
+                                  width: 200.w,
                                   decoration: BoxDecoration(
-                                    color: Palette.mainColor,
+                                    color: Color(0xFFecedef),
                                     borderRadius: BorderRadius.circular(3),
                                   ),
                                 ),
-                              ),
-                            ],
+                                Positioned(
+                                  left: ref.watch(selecteTabProvider.notifier).state == 0 ? 0 : null,
+                                  right: ref.watch(selecteTabProvider.notifier).state == 0 ? null : 0,
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 12.h),
+                                    height: 6.h,
+                                    width: 100.w,
+                                    decoration: BoxDecoration(
+                                      color: Palette.mainColor,
+                                      borderRadius: BorderRadius.circular(3),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Gaps.h32,
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Palette.mainColor,
+                            width: 1,
                           ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Gaps.h32,
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Palette.mainColor,
-                          width: 1,
+                          borderRadius: BorderRadius.circular(7),
                         ),
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      child: Text(
-                        '+ 사용자 초대',
-                        style: CTS.medium(
-                          color: Palette.mainColor,
-                          fontSize: 12,
+                        child: Text(
+                          '+ 사용자 초대',
+                          style: CTS.medium(
+                            color: Palette.mainColor,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Divider(
-              color: Palette.greyText_20,
-              height: 1,
-            ),
-            selectedTabIndex != 0
-                ? Expanded(
-                    child: TalkRoomWidget(onTap: (tkrmId) => onTap(context, tkrmId)),
-                  )
-                : contactFragment(context),
-          ],
+              Divider(
+                color: Palette.greyText_20,
+                height: 1,
+              ),
+              selectedTabIndex != 0
+                  ? Expanded(
+                      child: TalkRoomWidget(onTap: (tkrmId) => onTap(context, tkrmId)),
+                    )
+                  : contactFragment(context),
+            ],
+          ),
         ));
   }
 
@@ -339,19 +342,22 @@ class DirectMessageScreen extends ConsumerWidget {
               horizontal: 16.w,
               vertical: 8.h,
             ),
-            child: Row(
-              children: [
-                locationItem(text: "보건소", isSelected: true),
-                locationItem(text: "병상배정반"),
-                locationItem(text: "의료진"),
-                locationItem(text: "구급대"),
-                locationItem(text: "보건전산"),
-                Icon(
-                  Icons.keyboard_arrow_up_outlined,
-                  color: Palette.greyText_60,
-                  size: 22.h,
-                ),
-              ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  locationItem(text: "보건소", isSelected: true),
+                  locationItem(text: "병상배정반"),
+                  locationItem(text: "의료진"),
+                  locationItem(text: "구급대"),
+                  locationItem(text: "보건전산"),
+                  Icon(
+                    Icons.keyboard_arrow_up_outlined,
+                    color: Palette.greyText_60,
+                    size: 22.h,
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(

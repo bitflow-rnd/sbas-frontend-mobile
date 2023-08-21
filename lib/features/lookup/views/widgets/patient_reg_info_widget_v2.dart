@@ -8,6 +8,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/util.dart';
 import 'package:sbas/constants/palette.dart';
@@ -35,10 +36,11 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
 }
 
 class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
+  
   @override
   Widget build(BuildContext context) {
     final vm = ref.read(patientRegProvider.notifier);
-
+    
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Form(

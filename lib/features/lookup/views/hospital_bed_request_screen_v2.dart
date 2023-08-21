@@ -44,7 +44,6 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   final Patient? patient;
   final List<String> headerList = ["역학조사서", "환자정보", "감염병정보", "중증정보", "출발정보"];
   final bool isRight = false;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     attcId = patient?.attcId ?? '';
@@ -196,7 +195,6 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                         child: Padding(
                       padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
                       child: PatientRegInfoV2(formKey: formKey),
-                      // child: PatientRegInfoV2(),
                     )),
 
                   if (order == 2)
@@ -205,7 +203,6 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                       report: report,
                     ), //감염병정보
                   //상단 2개는 신규일때만 들어갈수있도록?!
-                  //하단부 ConsumerStatefulWidget로 변경.
                   if (order == 3)
                     SeverelyDiseaseV2(
                       formKey: formKey,
@@ -258,6 +255,10 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
           child: InkWell(
             onTap: () {
               if (order == 0) {
+                if (patient != null && ref.read(patientInfoIsChangedProvider.notifier).state == false) {
+                  ref.watch(patientRegProvider.notifier).init(patient!);
+                  ref.read(patientInfoIsChangedProvider.notifier).state = true;
+                }
                 patientImage != null || !patientIsUpload || hasPatient
                     ? patientAttc != null
                         ? _tryValidation()
@@ -365,29 +366,4 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
       ),
     );
   }
-
-  // PatientRegInfoModel tempPaitent = PatientRegInfoModel(
-  //   rgstUserId: "cyberprophet",
-  //   rgstDttm: "2023-04-11T06:12:03.709296Z",
-  //   updtUserId: "cyberprophet",
-  //   updtDttm: "2023-04-11T08:31:22.296640Z",
-  //   ptId: "PT00000055",
-  //   ptNm: "달나라",
-  //   gndr: "F",
-  //   rrno1: "310301",
-  //   rrno2: "2",
-  //   dstr1Cd: "50",
-  //   dstr2Cd: "5013",
-  //   addr: "제주특별자치도 서귀포시 아우성",
-  //   telno: "04580808080",
-  //   natiCd: "KR",
-  //   picaVer: "",
-  //   dethYn: "N",
-  //   nokNm: "나라고",
-  //   mpno: "01021210909",
-  //   job: "머라고",
-  //   attcId: null,
-  //   bedStatCd: "BAST0001",
-  //   bedStatNm: "병상요청",
-  // );
 }

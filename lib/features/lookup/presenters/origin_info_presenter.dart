@@ -23,9 +23,9 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
 
       var severelyDiseaseModel = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel;
 
-      await _repository.postRegOriginInfo(_dprtInfo);
+      // await _repository.postRegOriginInfo(_dprtInfo);
 
-      await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _dprtInfo));//실병상요청. 
+      await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _dprtInfo)); //실병상요청.
 
       return _dprtInfo;
     });
@@ -73,6 +73,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       _dprtInfo.reqDstr1Cd = value;
+      _dprtInfo.reqDstr2Cd = value; //2 입력하는 부분이 없음..
 
       return _dprtInfo;
     });

@@ -189,4 +189,32 @@ class PatientRegInfoModel {
 
     return data;
   }
+
+  PatientRegInfoModel.empty()
+      : bedStatCd = '',
+        bedStatNm = '',
+        rgstUserId = '',
+        rgstDttm = '',
+        updtUserId = '',
+        updtDttm = '',
+        ptNm = '',
+        gndr = '',
+        rrno1 = '',
+        rrno2 = '',
+        dstr1Cd = '',
+        dstr2Cd = '',
+        addr = '',
+        telno = '',
+        natiCd = '',
+        picaVer = '',
+        dethYn = '',
+        nokNm = '',
+        mpno = '',
+        job = '',
+        attcId = '',
+        bascAddr = '',
+        detlAddr = '',
+        zip = '',
+        natiNm = '',
+        ptId = '';
 }
