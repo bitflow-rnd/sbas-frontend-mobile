@@ -14,6 +14,7 @@ import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_origin_infomationV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_infectious_diseaseV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_severely_diseaseV2.dart';
+import 'package:sbas/features/dashboard/views/dashboard_screen.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
@@ -290,8 +291,9 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
 
               if (order == 4) {
                 ref.read(originInfoProvider.notifier).registry(patient?.ptId ?? '');
-                Navigator.pop(context);
-                Navigator.pop(context);
+
+                Navigator.popUntil(context, (route) => route.isFirst);
+
                 Navigator.push(
                     context,
                     MaterialPageRoute(

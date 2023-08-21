@@ -100,7 +100,7 @@ class AssignBedScreen extends ConsumerWidget {
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {
-                          await ref.watch(assignBedProvider.notifier).reloadPaitents();
+                          await ref.watch(assignBedProvider.notifier).reloadPatients();
                         },
                         child: Stack(
                           children: [

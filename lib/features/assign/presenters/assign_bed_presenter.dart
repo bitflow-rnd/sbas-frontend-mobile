@@ -13,8 +13,9 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
     final assignCountState = ref.read(assignCountProvider.notifier).state;
 
     list[0].x = -1;
-
+  
     for (int i = 0; i < list.length; i++) {
+      list[i].items.sort((a, b) => (b.updtDttm ?? "").compareTo(a.updtDttm ?? ""));
       assignCountState[i] = list[i].count;
     }
     _list = list[0];
@@ -22,16 +23,8 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
     return _list;
   }
 
-  Future<void> reloadPaitents() async {
-    final list = await _patientRepository.lookupPatientInfo();
-    final assignCountState = ref.read(assignCountProvider.notifier).state;
-
-    list[0].x = -1;
-
-    for (int i = 0; i < list.length; i++) {
-      assignCountState[i] = list[i].count;
-    }
-    _list = list[0];
+  reloadPatients() {
+    setTopNavItem(ref.read(assignTabXindexProvider.notifier).state);
   }
 
   Future<bool> approveReq(Map<String, dynamic> map) async {
@@ -47,8 +40,11 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
       final index = (x * 2).toInt() + 2;
 
       list[index].x = x;
+      ref.watch(assignTabXindexProvider.notifier).state = x;
 
       for (int i = 0; i < list.length; i++) {
+        list[i].items.sort((a, b) => (b.updtDttm ?? "").compareTo(a.updtDttm ?? ""));
+
         assignCountState[i] = list[i].count;
       }
       _list = list[index];
@@ -68,3 +64,4 @@ final assignBedProvider = AsyncNotifierProvider<AssignBedListPresenter, AssignLi
   () => AssignBedListPresenter(),
 );
 final assignCountProvider = StateProvider((ref) => <int>[0, 0, 0, 0, 0]);
+final assignTabXindexProvider = StateProvider((ref) => -1.0);

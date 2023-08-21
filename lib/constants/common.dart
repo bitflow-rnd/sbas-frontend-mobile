@@ -295,6 +295,7 @@ class Common {
                 }
               },
               child: Container(
+                height: 400.h,
                 padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: Container(
                   padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),

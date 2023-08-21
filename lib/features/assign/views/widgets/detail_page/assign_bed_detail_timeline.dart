@@ -166,7 +166,6 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
   }
 
   Widget _whichBottomer(String type, BuildContext context, WidgetRef ref) {
-    print("_whichBottomer >>>>>>>>>>>> ${patient.bedStatNm}");
     switch (type) {
       case '승인대기':
         return _bottomer(
@@ -188,13 +187,28 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               );
               if (res != null && context.mounted) {
                 //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
-
+                if (assignItem.inhpAsgnYn == "Y") {
+                  //원내배정
+                  var postRes = await ref.watch(assignBedProvider.notifier).approveReq({
+                    "ptId": patient.ptId,
+                    "bdasSeq": assignItem.bdasSeq,
+                    "aprvYn": "Y",
+                    // "negCd": null,//불가사유 String
+                    "msg": res.toString(),
+                  });
+                } else {
+                  ref.watch(availableHospitalProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq).then((value) => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AssignBedFindScreen(patient: patient, bdasSeq: assignItem.bdasSeq, hospList: value),
+                      ))); //병상요청시 가능한 병원 목록 조회
+                }
                 var postRes = await ref.watch(assignBedProvider.notifier).approveReq({
                   "ptId": patient.ptId,
                   "bdasSeq": assignItem.bdasSeq,
                   "aprvYn": "Y",
                   // "negCd": null,//불가사유 String
-                  "msg": res,
+                  "msg": res.toString(),
                   "reqHospIdList": [
                     // "HP00002944",
                     // "HP00065860",
@@ -204,7 +218,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 if (postRes) {
                   //승인성공
                   await ref.watch(patientTimeLineProvider.notifier).getAsync(assignItem.ptId, assignItem.bdasSeq);
-                  await ref.watch(assignBedProvider.notifier).reloadPaitents(); // 리스트 갱신
+                  await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
                 }
               }
             });
@@ -284,32 +298,31 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     TextEditingController textEditingController = TextEditingController();
     final focusNode = FocusNode();
 
-    // Call requestFocus() on the focus node when the bottom sheet is displayed
     WidgetsBinding.instance.addPostFrameCallback((_) => focusNode.requestFocus());
     return showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        // <-- SEE HERE
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(24.r),
         ),
       ),
-      isScrollControlled: false,
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return SingleChildScrollView(
           child: GestureDetector(
             onTap: () {
-              FocusScopeNode currentFocus = FocusScope.of(context);
-              if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                currentFocus.focusedChild?.unfocus();
-              }
+              // FocusScopeNode currentFocus = FocusScope.of(context);
+              // if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+              //   currentFocus.focusedChild?.unfocus();
+              // }
             },
             child: Container(
+              height: 400.h,
               padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Container(
                 padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  // mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Row(
