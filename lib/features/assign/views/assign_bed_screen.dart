@@ -10,6 +10,7 @@ import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/views/widgets/card_item_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_navbar_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_search_widget.dart';
+import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/util.dart';
 
@@ -126,12 +127,15 @@ class AssignBedScreen extends ConsumerWidget {
                               children: [
                                 const Spacer(),
                                 BottomSubmitBtn(
-                                  onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => PatientRegScreen(),
-                                    ),
-                                  ),
+                                  onPressed: () {
+                                    ref.read(patientRegProvider.notifier).init();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PatientRegScreen(),
+                                      ),
+                                    );
+                                  },
                                   text: '병상요청',
                                 ),
                               ],

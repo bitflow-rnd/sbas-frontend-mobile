@@ -23,7 +23,7 @@ class PatientRegScreen extends ConsumerWidget {
     final width = MediaQuery.of(context).size.width;
     final patientImage = ref.watch(patientImageProvider);
     final patientAttc = ref.watch(patientAttcProvider);
-    final patientIsUpload = ref.watch(patientIsUploadProvider);
+    // final patientIsUpload = ref.watch(patientIsUploadProvider);
 
     return Scaffold(
       backgroundColor: Palette.white,
@@ -77,22 +77,20 @@ class PatientRegScreen extends ConsumerWidget {
               SizedBox(
                 width: width * 0.5,
                 child: BottomSubmitBtn(
-                  text: '다음',
-                  onPressed: patientImage != null || !patientIsUpload
-                      ? patientAttc != null
-                          ? _tryValidation()
-                              ? () => ref.read(patientRegProvider.notifier).registry(patient?.ptId, context) //환자실등록
-                              : null
-                          : (patientImage != null
-                              ? () => ref.read(patientRegProvider.notifier).uploadImage(patientImage)
-                              : () {
-                                  if (patient != null) {
-                                    ref.read(patientRegProvider.notifier).overrideInfo(patient!);
-                                  }
-                                  ref.read(patientAttcProvider.notifier).state = '';
-                                })
-                      : null,
-                ),
+                    text: '다음',
+                    onPressed: () {
+                      if (patientAttc != null) {
+                        if (_tryValidation()) {
+                          ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+                        }
+                      } else {
+                        if (patientImage != null) {
+                          ref.read(patientRegProvider.notifier).uploadImage(patientImage);
+                        } else {
+                          ref.read(patientAttcProvider.notifier).state = '';
+                        }
+                      }
+                    }),
               ),
             ],
           ),

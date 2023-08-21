@@ -26,6 +26,7 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
 final patientImageProvider = StateProvider<XFile?>((ref) => null);
 final patientAttcProvider = StateProvider<String?>((ref) => null);
@@ -51,7 +52,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
 
     final patientImage = ref.watch(patientImageProvider);
     final patientAttc = ref.watch(patientAttcProvider);
-    final patientIsUpload = ref.watch(patientIsUploadProvider);
+    // final patientIsUpload = ref.watch(patientIsUploadProvider);
 
     return Scaffold(
       backgroundColor: Palette.white,
@@ -107,7 +108,10 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
               onTap: () => FocusScope.of(context).unfocus(),
               child: Column(
                 children: [
-                  _header(patient!),
+                  PatientTopInfo(
+                    patient: patient,
+                  ),
+                  // _header(patient!),
                   Divider(
                     color: Palette.greyText_20,
                     height: 1,
@@ -212,7 +216,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     OriginInfomationV2(
                       formKey: formKey,
                     ), //출발정보
-                  _bottomer(ref, patientImage, patientAttc, patientIsUpload, context, hasPatient: patient != null),
+                  _bottomer(ref, patientImage, patientAttc, context, hasPatient: patient != null),
                 ],
               ),
             ),
@@ -220,7 +224,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     );
   }
 
-  Widget _bottomer(WidgetRef ref, patientImage, patientAttc, patientIsUpload, BuildContext context, {required bool hasPatient}) {
+  Widget _bottomer(WidgetRef ref, patientImage, patientAttc, BuildContext context, {required bool hasPatient}) {
     final order = ref.watch(orderOfRequestProvider);
 
     return Row(
@@ -256,23 +260,26 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
             onTap: () {
               if (order == 0) {
                 if (patient != null && ref.read(patientInfoIsChangedProvider.notifier).state == false) {
-                  ref.watch(patientRegProvider.notifier).init(patient!);
+                  //환자정보가 변경되지 않았을때 기존 정보 사용
+                  ref.watch(patientRegProvider.notifier).patientInit(patient!);
                   ref.read(patientInfoIsChangedProvider.notifier).state = true;
                 }
-                patientImage != null || !patientIsUpload || hasPatient
-                    ? patientAttc != null
-                        ? _tryValidation()
-                            ? () => ref.read(patientRegProvider.notifier).registry(patient?.ptId, context) //환자실등록
-                            : null
-                        : (patientImage != null
-                            ? () => ref.read(patientRegProvider.notifier).uploadImage(patientImage)
-                            : () {
-                                if (patient != null) {
-                                  ref.read(patientRegProvider.notifier).overrideInfo(patient!);
-                                }
-                                ref.read(patientAttcProvider.notifier).state = '';
-                              })
-                    : null;
+                // patientImage != null || !patientIsUpload || hasPatient
+                if (patientAttc != null) {
+                  if (_tryValidation()) {
+                    ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+                  }
+                } else {
+                  if (patientImage != null) {
+                    ref.read(patientRegProvider.notifier).uploadImage(patientImage);
+                  } else {
+                    if (patient != null) {
+                      ref.read(patientRegProvider.notifier).overrideInfo(patient!);
+                    } else {
+                      ref.read(patientAttcProvider.notifier).state = '';
+                    }
+                  }
+                }
               }
               if (order == 2) {
                 ref.read(infectiousDiseaseProvider.notifier).registry(patient?.ptId ?? '');
@@ -284,8 +291,14 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
               if (order == 4) {
                 ref.read(originInfoProvider.notifier).registry(patient?.ptId ?? '');
                 Navigator.pop(context);
-                context.goNamed(AssignBedScreen.routeName);
-                return;
+                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AssignBedScreen(
+                        automaticallyImplyLeading: false,
+                      ),
+                    ));
               } else if (order < 4) {
                 ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
               }

@@ -9,6 +9,7 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
+import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_detail_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/constants/palette.dart';
@@ -70,18 +71,15 @@ class PatientLookupScreen extends ConsumerWidget {
                           vertical: 4.h,
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Palette.greyText_30, width: 1),
+                          borderSide: BorderSide(color: Palette.greyText_30, width: 1),
                           borderRadius: BorderRadius.circular(4.r),
                         ),
                         border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Palette.greyText_30, width: 1),
+                          borderSide: BorderSide(color: Palette.greyText_30, width: 1),
                           borderRadius: BorderRadius.circular(4.r),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Palette.greyText_30, width: 1),
+                          borderSide: BorderSide(color: Palette.greyText_30, width: 1),
                           borderRadius: BorderRadius.circular(4.r),
                         ),
                       ),
@@ -152,8 +150,7 @@ class PatientLookupScreen extends ConsumerWidget {
           ],
         ),
       );
-  Widget _getGestureDetector(BuildContext context, WidgetRef ref) =>
-      GestureDetector(
+  Widget _getGestureDetector(BuildContext context, WidgetRef ref) => GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Stack(
           children: [
@@ -207,16 +204,14 @@ class PatientLookupScreen extends ConsumerWidget {
                                             style: BorderStyle.solid,
                                             color: Colors.grey.shade300,
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(7.r),
+                                          borderRadius: BorderRadius.circular(7.r),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             style: BorderStyle.solid,
                                             color: Colors.grey.shade300,
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(7.r),
+                                          borderRadius: BorderRadius.circular(7.r),
                                         ),
                                       ),
                                     ),
@@ -237,9 +232,7 @@ class PatientLookupScreen extends ConsumerWidget {
                           itemCount: patient.count,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () async {
-                              final patientInfo = await ref
-                                  .read(patientInfoProvider.notifier)
-                                  .getAsync(patient.items[index].ptId);
+                              final patientInfo = await ref.read(patientInfoProvider.notifier).getAsync(patient.items[index].ptId);
 
                               if (context.mounted) {
                                 Navigator.push(
@@ -274,14 +267,17 @@ class PatientLookupScreen extends ConsumerWidget {
               left: 0,
               right: 0,
               child: BottomPositionedSubmitButton(
-                text: '환자 등록',
-                function: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PatientRegScreen(),
-                  ),
-                ),
-              ),
+                  text: '환자 등록',
+                  function: () {
+                    ref.read(patientRegProvider.notifier).init();
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PatientRegScreen(),
+                      ),
+                    );
+                  }),
             ),
           ],
         ),

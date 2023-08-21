@@ -26,7 +26,12 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     return _patientInfoModel;
   }
 
-  init(Patient patient) {
+  init() {
+    _patientInfoModel.clear();
+    ref.watch(patientInfoIsChangedProvider.notifier).state = false;
+  }
+
+  patientInit(Patient patient) {
     _patientInfoModel.rgstUserId = patient.rgstUserId ?? "";
     _patientInfoModel.rgstDttm = patient.rgstDttm ?? "";
     _patientInfoModel.updtUserId = patient.updtUserId ?? "";

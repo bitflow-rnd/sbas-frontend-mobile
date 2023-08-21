@@ -7,6 +7,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/hospital_bed_request_screen.dart';
 import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
@@ -345,6 +346,8 @@ class PatientLookupDetailScreen extends ConsumerWidget {
               child: BottomPositionedSubmitButton(
                 text: '수정',
                 function: () async {
+                  ref.read(patientRegProvider.notifier).init();
+
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -361,22 +364,22 @@ class PatientLookupDetailScreen extends ConsumerWidget {
             )
           else // 병상배정이력 - 병상요청
             Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: BottomPositionedSubmitButton(
-                text: '병상 요청',
-                function: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HospitalBedRequestScreenV2(
-                      // builder: (context) => HospitalBedRequestScreen(
-                      patient: patient,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: BottomPositionedSubmitButton(
+                    text: '병상 요청',
+                    function: () {
+                      ref.read(patientRegProvider.notifier).init();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HospitalBedRequestScreenV2(
+                              // builder: (context) => HospitalBedRequestScreen(
+                              patient: patient,
+                            ),
+                          ));
+                    })),
         ],
       ),
     );
