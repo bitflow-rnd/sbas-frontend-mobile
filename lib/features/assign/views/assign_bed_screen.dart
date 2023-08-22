@@ -61,42 +61,6 @@ class AssignBedScreen extends ConsumerWidget {
                         list: ref.watch(assignCountProvider),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.r,
-                      ),
-                      child: Container(
-                        alignment: Alignment.topLeft,
-                        child: RichText(
-                          text: TextSpan(
-                            text: '총',
-                            style: CTS.bold(
-                              color: Colors.black,
-                              fontSize: 15,
-                            ),
-                            children: [
-                              const WidgetSpan(
-                                child: Gaps.h1,
-                              ),
-                              TextSpan(
-                                text: '${list.count}',
-                                style: CTS.bold(
-                                  color: Palette.mainColor,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '명',
-                                style: CTS.bold(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {
