@@ -56,11 +56,16 @@ class PatientTopInfo extends StatelessWidget {
                       Gaps.v4,
                       (patient == null || patient?.undrDsesCdNm == null)
                           ? Container()
-                          : Text(
-                              patient!.undrDsesCdNm!.map((e) => e + ", ").toList().toString(), //TODO 임시로 하드코딩 - 수정 필요
-                              style: CTS(
-                                color: Palette.mainColor,
-                              ),
+                          : Row(
+                              children: [
+                                for (int i = 0; i < patient!.undrDsesCdNm!.length; i++)
+                                  Text(
+                                    '#${patient?.undrDsesCdNm?[i]}',
+                                    style: CTS(
+                                      color: Palette.mainColor,
+                                    ),
+                                  ),
+                              ],
                             ),
                     ],
                   ),

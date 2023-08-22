@@ -20,9 +20,8 @@ import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart'
 
 class PatientLookupDetailScreen extends ConsumerWidget {
   PatientLookupDetailScreen({
-    required this.patient,
-    required this.age,
     super.key,
+    required this.patient,
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -107,18 +106,14 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                     ),
                                     child: Row(
                                       children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            list[i],
-                                            style: CTS(
-                                              color: Palette.greyText,
-                                              fontSize: 13,
-                                            ),
+                                        Text(
+                                          list[i],
+                                          style: CTS(
+                                            color: Palette.greyText,
+                                            fontSize: 13,
                                           ),
                                         ),
                                         Expanded(
-                                          flex: 3,
                                           child: Text(
                                             getConvertPatientInfo(i, patient),
                                             style: CTS.medium(
@@ -174,7 +169,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                               ),
                                               Gaps.h10,
                                               Text(
-                                                '$age세',
+                                                '${patient.age}세',
                                                 style: CTS.medium(
                                                   fontSize: 13,
                                                 ),
@@ -353,5 +348,4 @@ class PatientLookupDetailScreen extends ConsumerWidget {
     '기저질환',
   ];
   final Patient patient;
-  final int age;
 }

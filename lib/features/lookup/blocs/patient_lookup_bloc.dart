@@ -39,6 +39,16 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 2:
+      if (patient.bascAddr == null && patient.detlAddr == null) {
+        text = '-';
+        break;
+      } else if (patient.bascAddr == null) {
+        text = patient.detlAddr ?? '-';
+        break;
+      } else if (patient.detlAddr == null) {
+        text = patient.bascAddr ?? '-';
+        break;
+      }
       text = '${patient.bascAddr} ${patient.detlAddr}';
       break;
 
@@ -51,18 +61,24 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 5:
-      text =
-          patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? text;
+      if (patient.mpno != null && patient.mpno!.isNotEmpty && patient.mpno!.length == 11 && patient.mpno!.startsWith('010')) {
+        text = patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? text;
+      } else if (patient.mpno != null && patient.mpno!.isNotEmpty) {
+        text = patient.mpno ?? text;
+      } else {
+        text = '-';
+      }
       break;
 
     case 6:
       final length = patient.telno?.length ?? 0;
 
-      if (length > 0) {
-        text = patient.telno
-                ?.replaceRange(length - 4, length - 4, '-')
-                .replaceRange(length - 7, length - 7, '-') ??
-            text;
+      if (length > 0 && patient.telno != null && (patient.telno!.length == 11 || patient.telno!.length == 10)) {
+        text = patient.telno?.replaceRange(length - 4, length - 4, '-').replaceRange(length - 7, length - 7, '-') ?? text;
+      } else if (patient.telno != null && patient.telno!.isNotEmpty) {
+        text = patient.telno ?? text;
+      } else {
+        text = '-';
       }
       break;
 
@@ -98,7 +114,6 @@ String getAddress(Patient? patient) {
   return '${address?[0]} ${address?[1]} / $phone';
 }
 
-final patientLookupProvider =
-    AsyncNotifierProvider<PatientLookupBloc, PatientListModel>(
+final patientLookupProvider = AsyncNotifierProvider<PatientLookupBloc, PatientListModel>(
   () => PatientLookupBloc(),
 );

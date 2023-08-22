@@ -69,7 +69,7 @@ class AssignBedDetailPatientInfo extends ConsumerWidget {
                                   padding: EdgeInsets.symmetric(
                                     horizontal: 2.w,
                                   ),
-                                  height: 24.h,
+                                  height: 26.h,
                                   child: ListView.separated(
                                     separatorBuilder: (_, index) => Gaps.h4,
                                     scrollDirection: Axis.horizontal,
@@ -85,15 +85,15 @@ class AssignBedDetailPatientInfo extends ConsumerWidget {
                                           color: Palette.greyText_20,
                                           width: 1,
                                         ),
-                                        borderRadius: BorderRadius.circular(13.5),
+                                        borderRadius: BorderRadius.circular(13.5.r),
                                       ),
                                       child: Text(
                                         tags?[index] ?? '',
                                         style: CTS(
-                                          fontSize: 13,
+                                          fontSize: 13.sp,
                                           color: Palette.greyText_80,
                                         ),
-                                        textAlign: TextAlign.end,
+                                        textAlign: TextAlign.center,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),

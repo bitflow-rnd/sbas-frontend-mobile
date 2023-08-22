@@ -27,7 +27,7 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
     '보호자 이름',
     '직업',
   ];
-  final oneList = [
+  final isAliveList = [
     '생존',
     '사망',
   ];
@@ -36,11 +36,10 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
 }
 
 class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
-  
   @override
   Widget build(BuildContext context) {
     final vm = ref.read(patientRegProvider.notifier);
-    
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Form(
@@ -332,7 +331,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
             ),
             child: Row(
               children: [
-                for (var i in widget.oneList)
+                for (var i in widget.isAliveList)
                   Row(
                     children: [
                       Container(
@@ -351,20 +350,20 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           ),
           Row(
             children: [
-              for (var i in widget.oneList)
+              for (var i in widget.isAliveList)
                 Row(
                   children: [
                     GestureDetector(
                       onTap: () => vm.setSurvivalStatus(i),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: widget.oneList[vm.isSurvivalStatus] == i ? const Color(0xff538ef5) : Colors.transparent,
-                            borderRadius: widget.oneList[vm.isSurvivalStatus] == i ? BorderRadius.circular(6) : null),
+                            color: widget.isAliveList[vm.isSurvivalStatus] == i ? const Color(0xff538ef5) : Colors.transparent,
+                            borderRadius: widget.isAliveList[vm.isSurvivalStatus] == i ? BorderRadius.circular(6) : null),
                         padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
                         child: Text(i,
                             style: CTS.bold(
                               fontSize: 11,
-                              color: widget.oneList[vm.isSurvivalStatus] == i ? Palette.white : Palette.greyText_60,
+                              color: widget.isAliveList[vm.isSurvivalStatus] == i ? Palette.white : Palette.greyText_60,
                             )),
                       ),
                     ),

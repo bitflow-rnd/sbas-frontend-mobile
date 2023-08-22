@@ -57,25 +57,25 @@ class PaitentCardItem extends StatelessWidget {
                         ),
                         maxLines: 1,
                       ),
-                      model.bedStatCd != null
-                          ? Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 4.h,
-                                horizontal: 8.r,
-                              ),
-                              decoration: BoxDecoration(
-                                color: color.withOpacity(0.16),
-                                borderRadius: BorderRadius.circular(
-                                  30.r,
-                                ),
-                              ),
-                              child: Text(
-                                model.bedStatNm ?? '',
-                                style: CTS.bold(color: color, fontSize: 12),
-                                maxLines: 1,
-                              ),
-                            )
-                          : Container(),
+                      // model.bedStatCd != null
+                      //     ? Container(
+                      //         padding: EdgeInsets.symmetric(
+                      //           vertical: 4.h,
+                      //           horizontal: 8.r,
+                      //         ),
+                      //         decoration: BoxDecoration(
+                      //           color: color.withOpacity(0.16),
+                      //           borderRadius: BorderRadius.circular(
+                      //             30.r,
+                      //           ),
+                      //         ),
+                      //         child: Text(
+                      //           model.bedStatNm ?? '',
+                      //           style: CTS.bold(color: color, fontSize: 12),
+                      //           maxLines: 1,
+                      //         ),
+                      //       )
+                      //     : Container(),
                     ],
                   ),
                   model.hospId != null ? Gaps.v4 : Container(),
@@ -103,37 +103,40 @@ class PaitentCardItem extends StatelessWidget {
                     ),
                     maxLines: 1,
                   ),
-                  Container(
-                    height: 30.h,
-                    width: (MediaQuery.of(context).size.width / 2).w,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 6.h,
-                    ),
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: model.tagList?.length ?? 0,
-                      itemBuilder: (_, index) => Container(
+                  if (model.tagList != null && model.tagList!.isNotEmpty)
+                    Center(
+                      child: Container(
+                        height: 33.h,
+                        width: MediaQuery.of(context).size.width - 150.w,
                         padding: EdgeInsets.symmetric(
-                          vertical: 2.5.h,
-                          horizontal: 6.w,
+                          vertical: 6.h,
                         ),
-                        margin: EdgeInsets.only(right: 8.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            4.r,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: model.tagList?.length ?? 0,
+                          itemBuilder: (_, index) => Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 2.5.h,
+                              horizontal: 6.w,
+                            ),
+                            margin: EdgeInsets.only(right: 8.w),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                4.r,
+                              ),
+                              color: Colors.grey.shade100,
+                            ),
+                            child: AutoSizeText(
+                              '#${model.tagList?[index]}',
+                              style: CTS.bold(
+                                color: Colors.grey,
+                              ),
+                              maxFontSize: 12,
+                            ),
                           ),
-                          color: Colors.grey.shade100,
-                        ),
-                        child: AutoSizeText(
-                          '#${model.tagList?[index]}',
-                          style: CTS.bold(
-                            color: Colors.grey,
-                          ),
-                          maxFontSize: 12,
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ],

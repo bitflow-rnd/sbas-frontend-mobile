@@ -232,15 +232,14 @@ class PatientLookupScreen extends ConsumerWidget {
                           itemCount: patient.count,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () async {
-                              final patientInfo = await ref.read(patientInfoProvider.notifier).getAsync(patient.items[index].ptId);
+                              final patientBasicInfo = await ref.read(patientInfoProvider.notifier).getAsync(patient.items[index].ptId);
 
                               if (context.mounted) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => PatientLookupDetailScreen(
-                                      patient: patientInfo,
-                                      age: patient.items[index].age ?? 0,
+                                      patient: patientBasicInfo,
                                     ),
                                   ),
                                 );
@@ -248,9 +247,9 @@ class PatientLookupScreen extends ConsumerWidget {
                             },
                             child: PaitentCardItem(
                               model: patient.items[index],
-                              color: getStateColor(
-                                patient.items[index].bedStatCd,
-                              ),
+                              color: getStateColor(""
+                                  // patient.items[index].bedStatCd,
+                                  ),
                             ),
                           ),
                         ),

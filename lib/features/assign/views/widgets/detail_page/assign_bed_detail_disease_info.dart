@@ -65,25 +65,23 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                     child: Row(
                       children: [
                         i != 4
-                            ? Expanded(
-                                flex: 1,
-                                child: Text(
-                                  list1[i],
-                                  style: CTS(
-                                    color: Palette.greyText,
-                                    fontSize: 13,
-                                  ),
+                            ? Text(
+                                list1[i],
+                                style: CTS(
+                                  color: Palette.greyText,
+                                  fontSize: 13,
                                 ),
                               )
                             : Expanded(
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisSize: MainAxisSize.max,
                                   children: [
                                     for (int j = 0; j < 3; j++)
                                       Expanded(
                                         child: Column(
                                           // mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               list1[i].split(",")[j],
@@ -98,7 +96,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                                 vertical: 8.h,
                                               ),
                                               child: Text(
-                                                getList1Value(i, diseaseInfo), // 발병일, 진단일, 신고일
+                                                getList1Value(i + 100, diseaseInfo), // 발병일, 진단일, 신고일
                                                 // "aaaaa",
                                                 style: CTS.medium(fontSize: 13),
                                                 maxLines: 2,
@@ -111,16 +109,14 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                   ],
                                 ),
                               ),
+                        const Spacer(),
                         i != 4
-                            ? Expanded(
-                                flex: 3,
-                                child: Text(
-                                  getList1Value(i, diseaseInfo),
-                                  style: CTS.medium(fontSize: 13),
-                                  textAlign: TextAlign.end,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                            ? Text(
+                                getList1Value(i, diseaseInfo),
+                                style: CTS.medium(fontSize: 13),
+                                textAlign: TextAlign.end,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               )
                             : Container(),
                       ],
@@ -159,37 +155,68 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                         ),
                         Expanded(
                           flex: 4,
-                          child: Row(
-                            //wrap 사용하여 개수 유동적 대응
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              for (var disease = 0; disease < 3; disease++)
-                                Container(
-                                  margin: EdgeInsets.only(right: 8.w),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 12.w,
-                                    vertical: 4.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Palette.greyText_20,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(13.5),
-                                  ),
-                                  child: Text(
-                                    '기저질환',
-                                    style: CTS.medium(
-                                      fontSize: 13,
-                                      color: Palette.greyText_80,
-                                    ),
-                                    textAlign: TextAlign.end,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                )
-                            ],
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              //wrap 사용하여 개수 유동적 대응
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                if (i == 0)
+                                  for (var disease = 0; disease < diseaseInfo.undrDsesNms.length; disease++)
+                                    Container(
+                                      margin: EdgeInsets.only(right: 8.w),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 12.w,
+                                        vertical: 4.h,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                          color: Palette.greyText_20,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(13.5),
+                                      ),
+                                      child: Text(
+                                        diseaseInfo.undrDsesNms[disease],
+                                        style: CTS.medium(
+                                          fontSize: 13,
+                                          color: Palette.greyText_80,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    )
+                                else if (i == 1)
+                                  for (var innerIndex = 0; innerIndex < diseaseInfo.ptTypeNms.length; innerIndex++)
+                                    Container(
+                                      margin: EdgeInsets.only(right: 8.w),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 12.w,
+                                        vertical: 4.h,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                          color: Palette.greyText_20,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(13.5),
+                                      ),
+                                      child: Text(
+                                        diseaseInfo.ptTypeNms[innerIndex],
+                                        style: CTS.medium(
+                                          fontSize: 13,
+                                          color: Palette.greyText_80,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    )
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -243,8 +270,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                             children: [
                               for (var i = 1; i < 4; i++)
                                 Padding(
-                                  padding:
-                                      EdgeInsets.only(top: i != 1 ? 12.h : 0),
+                                  padding: EdgeInsets.only(top: i != 1 ? 12.h : 0),
                                   child: Row(
                                     children: [
                                       Text(
@@ -400,8 +426,14 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
         text = diseaseInfo.diagGrde ?? defaultText;
         break;
 
-      case 4:
-        text = "2023.06.02";
+      case 104:
+        text = diseaseInfo.occrDt ?? defaultText;
+        break;
+      case 105:
+        text = diseaseInfo.diagDt ?? defaultText;
+        break;
+      case 106:
+        text = diseaseInfo.rptDt ?? defaultText;
         break;
 
       case 5:

@@ -10,7 +10,7 @@ class PrivatePatientProvider {
   PatientTimelineModel? timeLine;
   Future<PatientListModel> lookupPatientInfo() async => PatientListModel.fromJson(await _api.getAsync('$_privateRoute/search'));
 
-  Future<Patient> getPatientInfo(String ptId) async => Patient.fromJson(await _api.getAsync('$_privateRoute/basicinfo?ptId=$ptId'));
+  Future<Patient> getPatientInfo(String ptId) async => Patient.fromJson(await _api.getAsync('$_privateRoute/basicinfo/$ptId'));
 
   Future<dynamic> postRegOriginInfo(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/regstrtpoint', toJson(map));
 
