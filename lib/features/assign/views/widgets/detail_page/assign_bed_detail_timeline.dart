@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
@@ -26,57 +27,68 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final timeLine = ref.watch(patientTimeLineProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq); // Provider에서 timeLine 상태를 가져옵니다.
     return Expanded(
-      child: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  dateFragment(getDateTimeFormatDay(assignItem.updtDttm!)),
-                  IntrinsicHeight(
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 32.w),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: CustomPaint(
-                                  painter: DashedLineVerticalPainter(),
-                                  size: const Size(1, double.infinity),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          // timeline_approved
-                          // timeline_bed_assign_complete
-                          // timeline_go_hospital_complete
-                          // timeline_move_complete
-                          // timeline_refused
-                          // timeline_go_home
-                          //
-                          //timeline_suspend //  원형 점
+      child: ref.watch(patientTimeLineProvider).when(
+            loading: () => const SBASProgressIndicator(),
+            error: (error, stackTrace) => Center(
+              child: Text(
+                error.toString(),
+                style: const TextStyle(
+                  color: Palette.mainColor,
+                ),
+              ),
+            ),
+            data: (timeline) => Column(children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      dateFragment(getDateTimeFormatDay(assignItem.updtDttm!)),
+                      IntrinsicHeight(
+                        child: Stack(
                           children: [
-                            FutureBuilder(
-                                future:
-                                    ref.watch(patientTimeLineProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq), // Provider에서 timeLine 상태를 가져옵니다.
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    if (assignItem.bedStatCdNm == '승인대기') {
-                                      return Column(
-                                        children: [
-                                          for (var i = 0; i < snapshot.data!.count!; i++) timeLineBody(snapshot.data!.items[i]),
-                                        ],
-                                      );
-                                    }
-                                  }
-                                  return Container();
-                                }
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 32.w),
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: CustomPaint(
+                                      painter: DashedLineVerticalPainter(),
+                                      size: const Size(1, double.infinity),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              // crossAxisAlignment: CrossAxisAlignment.start,
+                              // timeline_approved
+                              // timeline_bed_assign_complete
+                              // timeline_go_hospital_complete
+                              // timeline_move_complete
+                              // timeline_refused
+                              // timeline_go_home
+                              //
+                              //timeline_suspend //  원형 점
+
+                              children: [
+                                for (var i = 0; i < timeline.count!; i++) timeLineBody(timeline.items[i]),
+                                // FutureBuilder(
+                                //     future: ref
+                                //         .watch(patientTimeLineProvider.notifier)
+                                //         .getAsync(patient.ptId, assignItem.bdasSeq), // Provider에서 timeLine 상태를 가져옵니다.
+                                //     builder: (context, snapshot) {
+                                //       if (snapshot.hasData) {
+                                //         if (bedStatCdNm == '승인대기') {
+                                //           return Column(
+                                //             children: [
+                                //               for (var i = 0; i < snapshot.data!.count!; i++) timeLineBody(snapshot.data!.items[i]),
+                                //             ],
+                                //           );
+                                //         }
+                                //       }
+                                //       return Container();
+                                //     }
                                 // if (assignItem.bedStatCdNm == '배정대기')
                                 // return  Column(
                                 //     children: [
@@ -103,65 +115,18 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                 //   );
                                 //     );
                                 //   },
-                                ),
-
-                            // Column(
-                            //   children: [
-                            //     completeCard(
-                            //       title: "승인",
-                            //       dateTime: "오후 2시 33분",
-                            //       src: "timeline_approved",
-                            //       by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                            //       detail: "병상배정이 완료되었습니다.",
-                            //     ),
-                            //     completeCard(
-                            //       title: "배정불가",
-                            //       dateTime: "오후 2시 33분",
-                            //       src: "timeline_refused",
-                            //       by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                            //       detail: "가능한 음압격리 병실이 없습니다.",
-                            //     ),
-                            //     completeCard(
-                            //         title: "배정완료",
-                            //         dateTime: "오후 2시 33분",
-                            //         src: "timeline_bed_assign_complete",
-                            //         by: "대구의료원 / 신경내과 / 강성일",
-                            //         detail: "도착 5분전 전화 주시면 나가 있겠습니다."),
-                            //     completeCard(
-                            //         title: "이송완료",
-                            //         dateTime: "오후 2시 33분",
-                            //         src: "timeline_move_complete",
-                            //         by: "대구광역시 중부 대명 구급 / 신채호 외 2명",
-                            //         detail: "128라5431 / 128km / 예상 24분"),
-                            //     completeCard(
-                            //       title: "입원완료",
-                            //       dateTime: "오후 2시 33분",
-                            //       src: "timeline_go_hospital_complete",
-                            //       by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                            //       detail: "병상배정이 완료되었습니다.",
-                            //     ),
-                            //     completeCard(
-                            //         title: "귀가요청",
-                            //         dateTime: "오후 2시 33분",
-                            //         src: "timeline_go_home",
-                            //         by: "대구광역시 병상배정반 / 팀장 / 홍성수",
-                            //         detail: "강한 귀가 의사를 표현하여 재택 회송 요청드립니다 보호자 편에 귀가 가능합니다..",
-                            //         isBlue: true,
-                            //         isSelected: true),
-                            //   ],
-                            // ),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+              _whichBottomer(assignItem.bedStatCdNm ?? '', context, ref), //patient.bedStatNm ?? ''
+            ]),
           ),
-          _whichBottomer(patient.bedStatNm ?? '', context, ref), //patient.bedStatNm ?? ''
-        ],
-      ),
     );
   }
 
@@ -217,7 +182,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 });
                 if (postRes) {
                   //승인성공
-                  await ref.watch(patientTimeLineProvider.notifier).getAsync(assignItem.ptId, assignItem.bdasSeq);
+                  await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
                   await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
                 }
               }

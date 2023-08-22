@@ -12,14 +12,12 @@ class PatientTimelineModel {
       count = json["count"];
     }
     if (json["items"] is List) {
-      items = (json["items"] as List)
-          .map((e) => TimeLine.fromJson(e))
-          .toList();
+      items = (json["items"] as List).map((e) => TimeLine.fromJson(e)).toList();
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String ,dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
 
     data["count"] = count;
     data["items"] = items.map((e) => e.toJson()).toList();
@@ -34,6 +32,8 @@ class TimeLine {
   String? updtDttm;
   String? msg;
   String? timeLineStatus;
+  String? hospId;
+  String? chrgId;
 
   TimeLine({
     this.title,
@@ -41,6 +41,8 @@ class TimeLine {
     this.updtDttm,
     this.msg,
     this.timeLineStatus,
+    this.hospId,
+    this.chrgId,
   });
 
   TimeLine.fromJson(Map<String, dynamic> json) {
@@ -59,16 +61,24 @@ class TimeLine {
     if (json["timeLineStatus"] is String) {
       timeLineStatus = json["timeLineStatus"];
     }
+    if (json["hospId"] is String) {
+      hospId = json["hospId"];
+    }
+    if (json["chrgId"] is String) {
+      chrgId = json["chrgId"];
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String ,dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
 
     data["title"] = title;
     data["by"] = by;
     data["updtDttm"] = updtDttm;
     data["msg"] = msg;
     data["timeLineStatus"] = timeLineStatus;
+    data["hospId"] = hospId;
+    data["chrgId"] = chrgId;
 
     return data;
   }

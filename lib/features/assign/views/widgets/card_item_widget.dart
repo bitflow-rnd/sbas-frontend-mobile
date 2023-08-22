@@ -20,20 +20,16 @@ class CardItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => InkWell(
         onTap: () async {
-          final patient =
-              await ref.read(patientInfoProvider.notifier).getAsync(model.ptId);
-          final diseaseInfo =
-              await ref.read(patientDiseaseInfoProvider.notifier).getAsync(model.ptId);
-          final timeLine =
-              await ref.read(patientTimeLineProvider.notifier).getAsync(model.ptId, model.bdasSeq);
+          final patient = await ref.read(patientInfoProvider.notifier).getAsync(model.ptId);
+          final diseaseInfo = await ref.read(patientDiseaseInfoProvider.notifier).getAsync(model.ptId);
+
           if (context.mounted) {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => AssignBedDetailScreen(
-                  model: patient,
+                  patient: patient,
                   assignItem: model,
-                  timeLine: timeLine,
                   diseaseInfo: diseaseInfo,
                 ),
               ),
