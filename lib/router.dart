@@ -60,7 +60,7 @@ final routerProvider = Provider(
             name: MainNavigationScreen.routeName,
             path: '/:tab(home|assign|lookup|message)',
             builder: (context, state) {
-              final tab = state.params['tab']!;
+              final tab = state.pathParameters['tab']!;
 
               return MainNavigationScreen(tab: tab);
             },
