@@ -54,12 +54,14 @@ class PatientTopInfo extends StatelessWidget {
                         maxLines: 1,
                       ),
                       Gaps.v4,
-                      Text(
-                        '#중증#투석', //TODO 임시로 하드코딩 - 수정 필요
-                        style: CTS(
-                          color: Palette.mainColor,
-                        ),
-                      ),
+                      (patient == null || patient?.undrDsesCdNm == null)
+                          ? Container()
+                          : Text(
+                              patient!.undrDsesCdNm!.map((e) => e + ", ").toList().toString(), //TODO 임시로 하드코딩 - 수정 필요
+                              style: CTS(
+                                color: Palette.mainColor,
+                              ),
+                            ),
                     ],
                   ),
           ],

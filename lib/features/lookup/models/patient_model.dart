@@ -25,6 +25,17 @@ class Patient {
   String? zip;
   String? natiNm;
   String? ptId;
+  //  추가
+  int? bdasSeq;
+  String? dstr1CdNm;
+  String? dstr2CdNm;
+  dynamic hospId;
+  String? hospNm;
+  int? age;
+  String? bedStatCdNm;
+  List<String>? tagList;
+  List<String>? undrDsesCd;
+  List<String>? undrDsesCdNm;
 
   Patient({
     this.bedStatCd,
@@ -53,6 +64,17 @@ class Patient {
     this.zip,
     this.natiNm,
     this.ptId,
+    //추가
+    this.bdasSeq,
+    this.dstr1CdNm,
+    this.dstr2CdNm,
+    this.hospId,
+    this.hospNm,
+    this.age,
+    this.bedStatCdNm,
+    this.tagList,
+    this.undrDsesCd,
+    this.undrDsesCdNm,
   });
 
   Patient.fromJson(Map<String, dynamic> json) {
@@ -134,6 +156,32 @@ class Patient {
     if (json["attcId"] is String) {
       attcId = json["attcId"];
     }
+    //추가
+
+    if (json['bdasSeq'] is String) {
+      bdasSeq = json['bdasSeq'];
+    }
+    if (json['dstr1CdNm'] is String) {
+      dstr1CdNm = json['dstr1CdNm'];
+    }
+    if (json['dstr2CdNm'] is String) {
+      dstr2CdNm = json['dstr2CdNm'];
+    }
+    if (json['hospId'] is String) {
+      hospId = json['hospId'];
+    }
+    if (json['hospNm'] is String) {
+      hospNm = json['hospNm'];
+    }
+    if (json['age'] is int) {
+      age = json['age'];
+    }
+    if (json['bedStatCdNm'] is String) {
+      bedStatCdNm = json['bedStatCdNm'];
+    }
+    tagList = (json['tagList'] as List?)?.map((dynamic e) => e as String).toList();
+    undrDsesCd = (json['undrDsesCd'] as List?)?.map((dynamic e) => e as String).toList();
+    undrDsesCdNm = (json['undrDsesCdNm'] as List?)?.map((dynamic e) => e as String).toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -165,6 +213,17 @@ class Patient {
     data["attcId"] = attcId;
     data['bedStatCd'] = bedStatCd;
     data['bedStatNm'] = bedStatNm;
+    //추가
+    data['bdasSeq'] = bdasSeq;
+    data['dstr1CdNm'] = dstr1CdNm;
+    data['dstr2CdNm'] = dstr2CdNm;
+    data['hospId'] = hospId;
+    data['hospNm'] = hospNm;
+    data['age'] = age;
+    data['bedStatCdNm'] = bedStatCdNm;
+    data['tagList'] = tagList;
+    data['undrDsesCd'] = undrDsesCd;
+    data['undrDsesCdNm'] = undrDsesCdNm;
 
     return data;
   }

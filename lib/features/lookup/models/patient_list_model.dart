@@ -1,8 +1,9 @@
 import 'package:sbas/features/lookup/models/patient_item_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class PatientListModel {
   int? count;
-  late List<PatientItemModel> items;
+  late List<Patient> items;
 
   PatientListModel({
     this.count,
@@ -13,9 +14,7 @@ class PatientListModel {
       count = json["count"];
     }
     if (json["items"] is List) {
-      items = (json["items"] as List)
-          .map((e) => PatientItemModel.fromJson(e))
-          .toList();
+      items = (json["items"] as List).map((e) => Patient.fromJson(e)).toList();
     }
   }
   Map<String, dynamic> toJson() {

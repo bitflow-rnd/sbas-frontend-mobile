@@ -16,6 +16,7 @@ import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
 class PatientLookupDetailScreen extends ConsumerWidget {
   PatientLookupDetailScreen({
@@ -71,53 +72,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
         children: [
           Column(
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.h,
-                  vertical: 14.w,
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/patient.png',
-                      height: 36.h,
-                      width: 36.h,
-                    ),
-                    Gaps.h8,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: '${patient.ptNm}',
-                            style: CTS.bold(
-                              fontSize: 15,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: '',
-                                style: CTS(
-                                  color: const Color(0xff333333),
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Gaps.v4,
-                        const Text(
-                          '#중증#투석', //TODO 임시로 하드코딩 - 수정 필요
-                          style: TextStyle(
-                            color: Palette.mainColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              PatientTopInfo(patient: patient),
               const Divider(
                 color: Colors.grey,
                 height: 1,

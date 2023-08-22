@@ -249,7 +249,7 @@ class PatientLookupScreen extends ConsumerWidget {
                             child: PaitentCardItem(
                               model: patient.items[index],
                               color: getStateColor(
-                                patient.items[index].statCd,
+                                patient.items[index].bedStatCd,
                               ),
                             ),
                           ),

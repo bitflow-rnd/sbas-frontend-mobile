@@ -5,6 +5,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_item_model.dart';
+import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/util.dart';
 
 class PaitentCardItem extends StatelessWidget {
@@ -56,7 +57,7 @@ class PaitentCardItem extends StatelessWidget {
                         ),
                         maxLines: 1,
                       ),
-                      model.statCd != null
+                      model.bedStatCd != null
                           ? Container(
                               padding: EdgeInsets.symmetric(
                                 vertical: 4.h,
@@ -69,7 +70,7 @@ class PaitentCardItem extends StatelessWidget {
                                 ),
                               ),
                               child: Text(
-                                model.statCdNm ?? '',
+                                model.bedStatNm ?? '',
                                 style: CTS.bold(color: color, fontSize: 12),
                                 maxLines: 1,
                               ),
@@ -110,7 +111,7 @@ class PaitentCardItem extends StatelessWidget {
                     ),
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: model.tagList.length,
+                      itemCount: model.tagList?.length ?? 0,
                       itemBuilder: (_, index) => Container(
                         padding: EdgeInsets.symmetric(
                           vertical: 2.5.h,
@@ -124,7 +125,7 @@ class PaitentCardItem extends StatelessWidget {
                           color: Colors.grey.shade100,
                         ),
                         child: AutoSizeText(
-                          '#${model.tagList[index]}',
+                          '#${model.tagList?[index]}',
                           style: CTS.bold(
                             color: Colors.grey,
                           ),
@@ -139,6 +140,6 @@ class PaitentCardItem extends StatelessWidget {
           ),
         ),
       );
-  final PatientItemModel model;
+  final Patient model;
   final Color color;
 }

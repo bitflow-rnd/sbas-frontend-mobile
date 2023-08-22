@@ -7,6 +7,7 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
 class AssignBedApproveScreen extends StatefulWidget {
   const AssignBedApproveScreen({
@@ -54,7 +55,7 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
                   onTap: () => FocusScope.of(context).unfocus(),
                   child: Column(
                     children: [
-                      _header(widget.patient.ptNm ?? '', "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
+                      PatientTopInfo(patient: widget.patient),
                       Divider(
                         color: Palette.greyText_20,
                         height: 1,
@@ -80,7 +81,6 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
                           ),
                         ),
                       ),
-
                       Common.bottomer(
                         rBtnText: "배정 승인",
                         isOneBtn: true,
@@ -210,53 +210,4 @@ class _AssignBedApproveScreenState extends State<AssignBedApproveScreen> {
         focusedBorder: _inputBorder,
         contentPadding: const EdgeInsets.all(0),
       );
-  Widget _header(String name, String detail) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 14.h,
-        horizontal: 16.w,
-      ),
-      child: Row(
-        children: [
-          Image.asset(
-            'assets/patient.png',
-            height: 36.h,
-            width: 36.h,
-          ),
-          Gaps.h8,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: name,
-                  style: CTS.bold(
-                    fontSize: 15,
-                    color: Colors.black,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: detail, //TODO :: MaxLines 관리및 디자인 협의필요 04.28하진우.
-                      style: CTS(
-                        color: const Color(0xff333333),
-                        fontSize: 10,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Gaps.v4,
-              const Text(
-                '#중증#투석',
-                style: TextStyle(
-                  color: Palette.mainColor,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 }

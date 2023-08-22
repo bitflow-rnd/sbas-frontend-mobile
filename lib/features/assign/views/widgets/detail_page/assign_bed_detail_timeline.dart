@@ -144,7 +144,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                     patient: patient,
                   ),
                 ),
-              );
+              ).then((value) => print(value));
             },
             rBtnFunc: () async {
               String? res = await _showBottomSheet(
@@ -188,6 +188,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               }
             });
       case '배정대기':
+      case "원내배정":
         return _bottomer(
             lBtnText: "배정 불가",
             rBtnText: "배정 승인",

@@ -11,6 +11,7 @@ import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_timeline.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 import 'package:sbas/util.dart';
 
 import '../../lookup/models/patient_disease_info_model.dart';
@@ -40,7 +41,7 @@ class AssignBedDetailScreen extends ConsumerStatefulWidget {
 class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(patientTimeLineProvider.notifier).refresh(widget.assignItem.ptId, widget.assignItem.bdasSeq);
     });
 
@@ -86,8 +87,7 @@ class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
           children: [
-            _header(widget.patient.ptNm ?? '',
-                "(${widget.patient.gndr}/${getAge(widget.patient)}세/${widget.patient.bascAddr?.split(' ')[0]}/${getPhoneFormat(widget.patient.mpno)})"),
+            PatientTopInfo(patient: widget.patient),
             Divider(
               color: Palette.greyText_20,
               height: 1,
@@ -171,53 +171,5 @@ class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
     );
   }
 
-  Widget _header(String name, String detail) => Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: 14.h,
-          horizontal: 16.w,
-        ),
-        child: Row(
-          children: [
-            Image.asset(
-              'assets/patient.png',
-              height: 36.h,
-              width: 36.h,
-            ),
-            Gaps.h8,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: name,
-                    style: CTS.bold(
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: detail,
-                        style: CTS(
-                          color: const Color(0xff333333),
-                          fontSize: 10,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Gaps.v4,
-                Text(
-                  // widget.model
-                  '#중증#투석', //TODO 임시로 하드코딩 - 수정 필요
-                  style: TextStyle(
-                    color: Palette.mainColor,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
   int _selectedIndex = 0;
 }
