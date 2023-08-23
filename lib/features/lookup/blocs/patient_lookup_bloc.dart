@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/lookup/models/patient_list_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
-import 'package:sbas/util.dart';
 
 class PatientLookupBloc extends AsyncNotifier<PatientListModel> {
   @override
@@ -71,15 +70,17 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 6:
-      final length = patient.telno?.length ?? 0;
+      var telno = patient.telno;
 
-      if (length > 0 && patient.telno != null && (patient.telno!.length == 11 || patient.telno!.length == 10)) {
-        text = patient.telno?.replaceRange(length - 4, length - 4, '-').replaceRange(length - 7, length - 7, '-') ?? text;
-      } else if (patient.telno != null && patient.telno!.isNotEmpty) {
-        text = patient.telno ?? text;
-      } else {
+      if (telno == null || telno.isEmpty) {
         text = '-';
+      } else {
+        text = telno.replaceFirstMapped(
+            RegExp(r'^(02|\d{3})(\d{3,4})(\d{4})$'),
+                (match) => '${match[1]}-${match[2]}-${match[3]}'
+        );
       }
+
       break;
 
     case 7:
@@ -98,10 +99,10 @@ String getConvertPatientInfo(int index, Patient patient) {
 }
 
 String getPatientInfo(Patient patient) {
-  final address = patient.addr?.split(' ');
+  final address = patient.bascAddr?.split(' ');
   final phone = patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-');
 
-  return '${patient.gndr}/${getAge(patient)}세/${address?[0]}${address?[1]}/$phone';
+  return '${patient.gndr} / ${patient.age}세 / ${address?[0]} ${address?[1]} / $phone';
 }
 
 String getAddress(Patient? patient) {

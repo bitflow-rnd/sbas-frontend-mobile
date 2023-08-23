@@ -42,7 +42,7 @@ class PatientTopInfo extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: '[${getPatientInfo(patient!)}]',
+                              text: ' [${getPatientInfo(patient!)}]',
                               style: CTS(
                                 color: const Color(0xff333333),
                                 fontSize: 8,
