@@ -145,7 +145,7 @@ class DashboardScreen extends ConsumerWidget {
                                     left: 6,
                                   ),
                                   path: 'hospitalization',
-                                  count: ref.watch(assignCountProvider.notifier).state[2],
+                                  count: ref.watch(assignCountProvider.notifier).state[3],
                                 ),
                               ],
                             ),

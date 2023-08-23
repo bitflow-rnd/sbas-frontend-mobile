@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/views/public_alarm_screen.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/authentication/blocs/login_bloc.dart';
 import 'package:sbas/features/main/views/service_policy_screen.dart';
@@ -75,14 +77,19 @@ class MainDrawer extends ConsumerWidget {
                   ),
                   SizedBox(height: 12.h),
                   Container(color: Palette.dividerGrey, height: 1.h),
-                  _drawerItem("병상요청", "assets/auth_group/selected_request.png", 0, "", context, const AssignBedScreen(automaticallyImplyLeading: false)),
-                  _drawerItem("배정승인", "assets/auth_group/selected_request.png", 5, "", context, const AssignBedScreen(automaticallyImplyLeading: false)),
-                  _drawerItem("이송", "assets/auth_group/selected_request.png", 3, "", context, const AssignBedScreen(automaticallyImplyLeading: false)),
-                  _drawerItem("입·퇴원", "assets/auth_group/selected_request.png", 1, "", context, const AssignBedScreen(automaticallyImplyLeading: false)),
+                  _drawerItem("병상요청", "assets/auth_group/selected_request.png", ref.watch(assignCountProvider.notifier).state[0], "", context,
+                      const AssignBedScreen(automaticallyImplyLeading: false), ref),
+                  _drawerItem("배정승인", "assets/auth_group/selected_request.png", ref.watch(assignCountProvider.notifier).state[1], "", context,
+                      const AssignBedScreen(automaticallyImplyLeading: false), ref),
+                  _drawerItem("이송", "assets/auth_group/selected_request.png", ref.watch(assignCountProvider.notifier).state[2], "", context,
+                      const AssignBedScreen(automaticallyImplyLeading: false), ref),
+                  _drawerItem("입·퇴원", "assets/auth_group/selected_request.png", ref.watch(assignCountProvider.notifier).state[3], "", context,
+                      const AssignBedScreen(automaticallyImplyLeading: false), ref),
                   Container(color: Palette.dividerGrey, height: 1.h),
-                  _drawerItem("공지사항", "assets/auth_group/selected_request.png", null, "", context, PublicAlarmPage()),
+                  _drawerItem("공지사항", "assets/auth_group/selected_request.png", null, "", context, PublicAlarmPage(), ref),
                   Container(color: Palette.dividerGrey, height: 1.h),
-                  _drawerItem("내활동내역", "assets/auth_group/selected_request.png", null, "", context, const AssignBedScreen(automaticallyImplyLeading: false)),
+                  _drawerItem(
+                      "내활동내역", "assets/auth_group/selected_request.png", null, "", context, const AssignBedScreen(automaticallyImplyLeading: false), ref),
                 ],
               ),
             ),
@@ -120,14 +127,47 @@ class MainDrawer extends ConsumerWidget {
               'ⓒ 2023 Lemon Healthcare Inc. All rights reserved.',
               style: CTS(fontSize: 10, color: Palette.greyText_60),
             ),
+            Gaps.v24,
           ],
         ),
       ),
     );
   }
 
-  Widget _drawerItem(String title, String iconPath, int? count, String route, BuildContext context, dynamic page) {
+  Widget _drawerItem(String title, String iconPath, int? count, String route, BuildContext context, dynamic page, WidgetRef ref) {
     return InkWell(
+      onTap: count != null
+          ? () async {
+              double x = -1.0;
+              switch (title) {
+                case "병상요청":
+                  x = -1.0;
+                  break;
+                case "배정승인":
+                  x = -0.5;
+                  break;
+                case "이송":
+                  x = 0.0;
+                  break;
+                case "입·퇴원":
+                  x = 0.5;
+                  break;
+              }
+              ref.read(assignBedProvider.notifier).setTopNavItem(x).then((value) => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => page),
+                  ));
+            }
+          : () {
+              //count 의 값이 Null 이 아닐 경우 병상 배정 페이지로 이동.
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return page;
+                }),
+              );
+            },
       child: Container(
         // padding: count == null ? EdgeInsets.symmetric(vertical: 8.h) : null,
         padding: EdgeInsets.symmetric(vertical: 8.h),
@@ -143,7 +183,7 @@ class MainDrawer extends ConsumerWidget {
               title,
               style: CTS.bold(color: Palette.black, fontSize: 14),
             ),
-            count != null
+            count != null && count != 0
                 ? Container(
                     margin: EdgeInsets.only(left: 8.w),
                     padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 4.h),
@@ -168,12 +208,6 @@ class MainDrawer extends ConsumerWidget {
             ),
           ],
         ),
-      ),
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) {
-          return page;
-        }),
       ),
     );
   }

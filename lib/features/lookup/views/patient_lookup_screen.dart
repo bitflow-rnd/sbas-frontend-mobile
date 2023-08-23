@@ -293,22 +293,6 @@ class PatientLookupScreen extends ConsumerWidget {
               color: Colors.black,
             ),
           ),
-          actions: [
-            Container(
-              padding: EdgeInsets.symmetric(
-                vertical: 8.h,
-              ),
-              margin: EdgeInsets.only(right: 16.w),
-              child: InkWell(
-                onTap: () => PatientRegInfoModal().showModal6(context),
-                child: Image.asset(
-                  "assets/common_icon/flask_icon.png",
-                  height: 24.h,
-                  width: 24.w,
-                ),
-              ),
-            ),
-          ],
           elevation: 0,
           centerTitle: true,
           backgroundColor: Colors.white,

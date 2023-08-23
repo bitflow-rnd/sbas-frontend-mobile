@@ -72,20 +72,22 @@ class AssignBedScreen extends ConsumerWidget {
                               margin: EdgeInsets.only(
                                 bottom: 46.h,
                               ),
-                              child: ListView.separated(
-                                itemCount: list.count,
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 8.r,
-                                  horizontal: 16.r,
-                                ),
-                                itemBuilder: (_, index) => AsgnCardItem(
-                                  model: list.items[index],
-                                  color: getStateColor(
-                                    list.items[index].bedStatCd,
-                                  ),
-                                ),
-                                separatorBuilder: (_, index) => Gaps.v8,
-                              ),
+                              child: list.items.isNotEmpty
+                                  ? ListView.separated(
+                                      itemCount: list.count,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 8.r,
+                                        horizontal: 16.r,
+                                      ),
+                                      itemBuilder: (_, index) => AsgnCardItem(
+                                        model: list.items[index],
+                                        color: getStateColor(
+                                          list.items[index].bedStatCd,
+                                        ),
+                                      ),
+                                      separatorBuilder: (_, index) => Gaps.v8,
+                                    )
+                                  : const Center(child: Text('내역이 없습니다.')),
                             ),
                             Column(
                               children: [

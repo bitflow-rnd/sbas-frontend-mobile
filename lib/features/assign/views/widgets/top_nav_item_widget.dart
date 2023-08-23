@@ -22,50 +22,51 @@ class TopNavItem extends ConsumerWidget {
         ),
         child: InkWell(
           onTap: () => ref.read(assignBedProvider.notifier).setTopNavItem(x),
-          child: Container(
-            width: width * 0.2,
-            color: Colors.transparent,
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  text,
-                  style: CTS.medium(
-                    color: Colors.grey,
-                    fontSize: 13,
-                  ),
-                ),
-                SizedBox(width: 2.w),
-                Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color:
-                          isSelected ? Palette.mainColor : Colors.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isSelected
-                            ? Palette.mainColor
-                            : Palette.greyText_60,
-                        width: 1.2.r,
-                        style: BorderStyle.solid,
-                      ),
+          child: IntrinsicWidth(
+            child: Container(
+              height: 20.h,
+              color: Colors.transparent,
+              alignment: Alignment.center,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    text,
+                    style: CTS.medium(
+                      color: Colors.grey,
+                      fontSize: 13.sp,
                     ),
-                    child: Container(
-                      padding: EdgeInsets.all(2.3.r),
-                      child: Center(
-                        child: Text(
-                          '$count',
-                          style: CTS.medium(
-                            color: isSelected ? Colors.white : Palette.greyText,
-                            fontSize: 10.0,
+                  ),
+                  SizedBox(width: 2.w),
+                  if (count != 0)
+                    Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isSelected ? Palette.mainColor : Colors.transparent,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isSelected ? Palette.mainColor : Palette.greyText_60,
+                            width: 1.2.r,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.all(2.3.r),
+                          child: Center(
+                            child: Text(
+                              '$count',
+                              style: CTS.medium(
+                                color: isSelected ? Colors.white : Palette.greyText,
+                                fontSize: 10.0.sp,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

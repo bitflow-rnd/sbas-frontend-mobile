@@ -83,31 +83,32 @@ class Dashboard extends ConsumerWidget {
                   ],
                 ),
               ),
-              Positioned(
-                top: 12,
-                left: 12,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Palette.mainColor,
-                    borderRadius: BorderRadius.circular(
-                      20,
+              if (count != 0)
+                Positioned(
+                  top: 12.r,
+                  left: 12.r,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Palette.mainColor,
+                      borderRadius: BorderRadius.circular(
+                        20,
+                      ),
                     ),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 6,
-                    horizontal: 12,
-                  ),
-                  child: AutoSizeText(
-                    count.toString(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 6,
+                      horizontal: 12,
                     ),
-                    maxFontSize: 16,
-                    maxLines: 1,
+                    child: AutoSizeText(
+                      count.toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      maxFontSize: 16,
+                      maxLines: 1,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
