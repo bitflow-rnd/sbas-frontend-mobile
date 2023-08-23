@@ -16,7 +16,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
     return _dprtInfo;
   }
 
-  Future<void> registry(String ptId) async {
+  Future<bool> registry(String ptId) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       _dprtInfo.ptId = ptId;
@@ -26,10 +26,16 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
       // await _repository.postRegOriginInfo(_dprtInfo);
 
       await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _dprtInfo)); //실병상요청.
-
+      
       return _dprtInfo;
     });
-    if (state.hasError) {}
+    if (state.hasError) {
+      return false;
+    }
+    if (state.hasValue) {
+      return true;
+    }
+    return false;
   }
 
   Future<void> setAddress(Kpostal postal) async {
@@ -175,6 +181,20 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
       case 1005:
         _dprtInfo.chrgTelno = text;
         break;
+    }
+  }
+
+  bool isValid() {
+    if (_dprtInfo.dprtDstrBascAddr == null || _dprtInfo.dprtDstrBascAddr!.isEmpty) {
+      return false;
+    }
+    if (_dprtInfo.dprtDstrDetlAddr == null || _dprtInfo.dprtDstrDetlAddr!.isEmpty) {
+      return false;
+    }
+    if (_dprtInfo.reqDstr1Cd == null || _dprtInfo.reqDstr1Cd!.isEmpty) {
+      return false;
+    } else {
+      return true;
     }
   }
 

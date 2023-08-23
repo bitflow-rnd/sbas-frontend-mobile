@@ -55,165 +55,169 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.w,
-                  vertical: 18.h,
-                ),
-                child: ref.watch(originInfoProvider).when(
-                      loading: () => const SBASProgressIndicator(),
-                      error: (error, stackTrace) => Center(
-                        child: Text(
-                          error.toString(),
-                          style: CTS(
-                            color: Palette.mainColor,
+      child: Form(
+        key: widget.formKey,
+        autovalidateMode: AutovalidateMode.always,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 18.h,
+                  ),
+                  child: ref.watch(originInfoProvider).when(
+                        loading: () => const SBASProgressIndicator(),
+                        error: (error, stackTrace) => Center(
+                          child: Text(
+                            error.toString(),
+                            style: CTS(
+                              color: Palette.mainColor,
+                            ),
                           ),
                         ),
-                      ),
-                      data: (origin) => Column(children: [
-                        for (int i = 0; i < widget._subTitles.length; i++)
-                          if (i == 0)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _getTitle(widget._subTitles[i], true),
-                                Gaps.v12,
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: ref.watch(agencyRegionProvider).when(
-                                            loading: () => const SBASProgressIndicator(),
-                                            error: (error, stackTrace) => Center(
-                                              child: Text(
-                                                error.toString(),
-                                                style: const TextStyle(
-                                                  color: Palette.mainColor,
-                                                ),
-                                              ),
-                                            ),
-                                            data: (region) => FormField(
-                                              builder: (field) => _selectRegion(
-                                                region.where(
-                                                  (e) => e.cdGrpId == 'SIDO',
-                                                ),
-                                                field,
-                                              ),
-                                              validator: (value) {
-                                                return null;
-                                              },
-                                              initialValue: ref.watch(selectedRegionProvider).cdNm,
-                                            ),
-                                          ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        "※ 병상배정 지자체 선택",
-                                        style: CTS(color: Palette.mainColor, fontSize: 12),
-                                      ).c,
-                                    )
-                                  ],
-                                ),
-                                Text(
-                                  "안내문구 노출 영역",
-                                  style: CTS(color: Palette.red, fontSize: 11),
-                                  textAlign: TextAlign.start,
-                                ),
-                                if (_selectedOriginIndex == 1) //병원 출발기준
-                                  Column(
+                        data: (origin) => Column(children: [
+                          for (int i = 0; i < widget._subTitles.length; i++)
+                            if (i == 0)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _getTitle(widget._subTitles[i], true),
+                                  Gaps.v12,
+                                  Row(
                                     children: [
-                                      Gaps.v28,
-                                      _getTitle("원내 배정 여부", true),
-                                      Gaps.v16,
-                                      _initRowClassification(
-                                        widget._assignedToTheFloorTitles,
-                                        true,
+                                      Expanded(
+                                        child: ref.watch(agencyRegionProvider).when(
+                                              loading: () => const SBASProgressIndicator(),
+                                              error: (error, stackTrace) => Center(
+                                                child: Text(
+                                                  error.toString(),
+                                                  style: const TextStyle(
+                                                    color: Palette.mainColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              data: (region) => FormField(
+                                                builder: (field) => _selectRegion(
+                                                  region.where(
+                                                    (e) => e.cdGrpId == 'SIDO',
+                                                  ),
+                                                  field,
+                                                ),
+                                                validator: (value) {
+                                                  return null;
+                                                },
+                                                initialValue: ref.watch(selectedRegionProvider).cdNm,
+                                              ),
+                                            ),
                                       ),
+                                      Expanded(
+                                        child: Text(
+                                          "※ 병상배정 지자체 선택",
+                                          style: CTS(color: Palette.mainColor, fontSize: 12),
+                                        ).c,
+                                      )
                                     ],
                                   ),
-                              ],
-                            )
-                          else if (i == 1)
-                            Column(
-                              children: [
-                                Gaps.v28,
-                                _getTitle("환자 출발지", false),
-                                Gaps.v16,
-                                _initRowClassification(
-                                  widget._classification,
-                                  false,
-                                ),
-                              ],
-                            ),
-                        Column(
-                          children: [
-                            Gaps.v14,
-                            Row(
-                              children: [
-                                Expanded(child: _initTextField(0, true)),
-                                InkWell(
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => KpostalView(
-                                        kakaoKey: dotenv.env['KAKAO'] ?? '',
-                                        callback: (postal) => ref.read(originInfoProvider.notifier).setAddress(postal),
+                                  Text(
+                                    "안내문구 노출 영역",
+                                    style: CTS(color: Palette.red, fontSize: 11),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  if (_selectedOriginIndex == 1) //병원 출발기준
+                                    Column(
+                                      children: [
+                                        Gaps.v28,
+                                        _getTitle("원내 배정 여부", true),
+                                        Gaps.v16,
+                                        _initRowClassification(
+                                          widget._assignedToTheFloorTitles,
+                                          true,
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              )
+                            else if (i == 1)
+                              Column(
+                                children: [
+                                  Gaps.v28,
+                                  _getTitle("환자 출발지", false),
+                                  Gaps.v16,
+                                  _initRowClassification(
+                                    widget._classification,
+                                    false,
+                                  ),
+                                ],
+                              ),
+                          Column(
+                            children: [
+                              Gaps.v14,
+                              Row(
+                                children: [
+                                  Expanded(child: _initTextField(0, true)),
+                                  InkWell(
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => KpostalView(
+                                          kakaoKey: dotenv.env['KAKAO'] ?? '',
+                                          callback: (postal) => ref.read(originInfoProvider.notifier).setAddress(postal),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  child: Container(
-                                    margin: EdgeInsets.only(left: 7.w),
-                                    decoration: BoxDecoration(
-                                      color: Palette.mainColor,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
-                                    child: Text(
-                                      "주소검색",
-                                      style: CTS(
-                                        fontSize: 13,
-                                        color: Palette.white,
+                                    child: Container(
+                                      margin: EdgeInsets.only(left: 7.w),
+                                      decoration: BoxDecoration(
+                                        color: Palette.mainColor,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
+                                      child: Text(
+                                        "주소검색",
+                                        style: CTS(
+                                          fontSize: 13,
+                                          color: Palette.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            Gaps.v10,
-                            _initTextField(100, true),
-                            Gaps.v28,
-                          ],
-                        ),
-                        if (_selectedOriginIndex == 0)
-                          for (int i = 0; i < widget._homeTitles.length; i++)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _getTitle(widget._homeTitles[i], false),
-                                Gaps.v4,
-                                _initTextField(i + 103, true),
-                                Gaps.v36,
-                              ],
-                            )
-                        else if (_selectedOriginIndex == 1)
-                          for (int i = 0; i < widget._hospitalTitles.length; i++)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _getTitle(widget._hospitalTitles[i], false),
-                                Gaps.v8,
-                                _initTextField(i + 3 + 1000, false),
-                                Gaps.v36,
-                              ],
-                            ),
-                      ]),
-                    ),
-              ),
-            ],
+                                  )
+                                ],
+                              ),
+                              Gaps.v10,
+                              _initTextField(100, true),
+                              Gaps.v28,
+                            ],
+                          ),
+                          if (_selectedOriginIndex == 0)
+                            for (int i = 0; i < widget._homeTitles.length; i++)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _getTitle(widget._homeTitles[i], false),
+                                  Gaps.v4,
+                                  _initTextField(i + 103, true),
+                                  Gaps.v36,
+                                ],
+                              )
+                          else if (_selectedOriginIndex == 1)
+                            for (int i = 0; i < widget._hospitalTitles.length; i++)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _getTitle(widget._hospitalTitles[i], false),
+                                  Gaps.v8,
+                                  _initTextField(i + 3 + 1000, false),
+                                  Gaps.v36,
+                                ],
+                              ),
+                        ]),
+                      ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

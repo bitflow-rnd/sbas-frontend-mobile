@@ -10,27 +10,27 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
   @override
   FutureOr<InfectiousDiseaseModel> build() {
-    _diseaseRepository = ref.read(patientRepoProvider);
+    _patientRepository = ref.read(patientRepoProvider);
     _regRepository = ref.read(userRegReqProvider);
-    _patientDiseaseModel = InfectiousDiseaseModel.empty();
+    _infectiousDiseaseModel = InfectiousDiseaseModel.empty();
 
-    return _patientDiseaseModel;
+    return _infectiousDiseaseModel;
   }
 
-  Future<bool> registry(String id) async {
+  Future<bool> registry(String ptId) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _patientDiseaseModel.ptId = id;
+      _infectiousDiseaseModel.ptId = ptId;
 
       final imageFile = ref.read(infectiousImageProvider);
 
       if (imageFile != null) {
-        _patientDiseaseModel.diagAttcId = await _regRepository.uploadImage(imageFile);
+        _infectiousDiseaseModel.diagAttcId = await _regRepository.uploadImage(imageFile);
       }
-      await _diseaseRepository.registerDiseaseInfo(
-        _patientDiseaseModel.toJson(),
+      await _patientRepository.registerDiseaseInfo(
+        _infectiousDiseaseModel.toJson(),
       );
-      return _patientDiseaseModel;
+      return _infectiousDiseaseModel;
     });
     if (state.hasError) {
       return false;
@@ -42,126 +42,126 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
   }
 
   updateRegion(String? rcptPhc) {
-    _patientDiseaseModel.rcptPhc = rcptPhc;
+    _infectiousDiseaseModel.rcptPhc = rcptPhc;
   }
 
   String? init(int index, EpidemiologicalReportModel report) {
     //V2 로 변경완료
     switch (index) {
       case 0: //입원여부
-        _patientDiseaseModel.diagNm ??= report.diagNm; // 질병명
-        _patientDiseaseModel.rptType ??= report.rptType; // 신고구분
+        _infectiousDiseaseModel.diagNm ??= report.diagNm; // 질병명
+        _infectiousDiseaseModel.rptType ??= report.rptType; // 신고구분
 
         //상기 3항목은 들어갈 곳이 없어서 여기서 초기화
-        _patientDiseaseModel.admsYn ??= report.admsYn;
-        return _patientDiseaseModel.admsYn;
+        _infectiousDiseaseModel.admsYn ??= report.admsYn;
+        return _infectiousDiseaseModel.admsYn;
       case 1: //보건소명 직접입력 //현재 보건소 선택결과 저장안됨.TODO
-        _patientDiseaseModel.rcptPhc ??= report.rcptPhc; //신고구분
-        return _patientDiseaseModel.rcptPhc;
+        _infectiousDiseaseModel.rcptPhc ??= report.rcptPhc; //신고구분
+        return _infectiousDiseaseModel.rcptPhc;
       case 2: //코로나증상여부
-        _patientDiseaseModel.cv19Symp ??= report.cv19Symp;
-        return _patientDiseaseModel.cv19Symp;
+        _infectiousDiseaseModel.cv19Symp ??= report.cv19Symp;
+        return _infectiousDiseaseModel.cv19Symp;
       case 3: //확진검사결과
-        _patientDiseaseModel.dfdgExamRslt ??= report.dfdgExamRslt;
-        return _patientDiseaseModel.dfdgExamRslt;
+        _infectiousDiseaseModel.dfdgExamRslt ??= report.dfdgExamRslt;
+        return _infectiousDiseaseModel.dfdgExamRslt;
       case 4: //질병급
-        _patientDiseaseModel.diagGrde ??= report.diagGrde;
-        return _patientDiseaseModel.diagGrde;
+        _infectiousDiseaseModel.diagGrde ??= report.diagGrde;
+        return _infectiousDiseaseModel.diagGrde;
       case 5: //발병일
-        _patientDiseaseModel.occrDt ??= report.occrDt;
-        return _patientDiseaseModel.occrDt;
+        _infectiousDiseaseModel.occrDt ??= report.occrDt;
+        return _infectiousDiseaseModel.occrDt;
       case 6: //진단일
-        _patientDiseaseModel.diagDt ??= report.diagDt;
-        return _patientDiseaseModel.diagDt;
+        _infectiousDiseaseModel.diagDt ??= report.diagDt;
+        return _infectiousDiseaseModel.diagDt;
       case 7: //신고일
-        _patientDiseaseModel.rptDt ??= report.rptDt;
-        return _patientDiseaseModel.rptDt;
+        _infectiousDiseaseModel.rptDt ??= report.rptDt;
+        return _infectiousDiseaseModel.rptDt;
       case 8: //환자등분류
-        _patientDiseaseModel.ptCatg ??= report.ptCatg;
-        return _patientDiseaseModel.ptCatg;
+        _infectiousDiseaseModel.ptCatg ??= report.ptCatg;
+        return _infectiousDiseaseModel.ptCatg;
       case 9: //비고
-        _patientDiseaseModel.rmk ??= report.rmk;
-        return _patientDiseaseModel.rmk;
+        _infectiousDiseaseModel.rmk ??= report.rmk;
+        return _infectiousDiseaseModel.rmk;
       case 10: //요양기관명
-        _patientDiseaseModel.instNm ??= report.instNm;
-        return _patientDiseaseModel.instNm;
+        _infectiousDiseaseModel.instNm ??= report.instNm;
+        return _infectiousDiseaseModel.instNm;
       case 11: //요양병원기호
-        _patientDiseaseModel.instId ??= report.instId;
-        return _patientDiseaseModel.instId;
+        _infectiousDiseaseModel.instId ??= report.instId;
+        return _infectiousDiseaseModel.instId;
       case 12: //상세주소
         //TODO::상세주소 중 instBascAddr,+ instAddr  = instAddr 이 되어야 하지만 기존 코드에서 없어서 keep
-        _patientDiseaseModel.instAddr ??= report.instAddr;
-        return _patientDiseaseModel.instAddr;
+        _infectiousDiseaseModel.instAddr ??= report.instAddr;
+        return _infectiousDiseaseModel.instAddr;
       case 13: //전화번호
-        _patientDiseaseModel.instTelno ??= report.instTelno;
-        return _patientDiseaseModel.instTelno;
+        _infectiousDiseaseModel.instTelno ??= report.instTelno;
+        return _infectiousDiseaseModel.instTelno;
       case 14: //진단의사 성명
-        _patientDiseaseModel.diagDrNm ??= report.diagDrNm;
-        return _patientDiseaseModel.diagDrNm;
+        _infectiousDiseaseModel.diagDrNm ??= report.diagDrNm;
+        return _infectiousDiseaseModel.diagDrNm;
       case 15: //신고기관장 성명
-        _patientDiseaseModel.rptChfNm ??= report.rptChfNm;
-        return _patientDiseaseModel.rptChfNm;
+        _infectiousDiseaseModel.rptChfNm ??= report.rptChfNm;
+        return _infectiousDiseaseModel.rptChfNm;
     }
     return null;
   }
 
-  String? getOccrDt() => _patientDiseaseModel.occrDt;
+  String? getOccrDt() => _infectiousDiseaseModel.occrDt;
 
   void setTextEditingController(int index, String? value) {
     switch (index) {
       case 0: //입원여부
-        _patientDiseaseModel.admsYn = value;
+        _infectiousDiseaseModel.admsYn = value;
         break;
       case 1: //보건소명 직접입력
-        _patientDiseaseModel.rcptPhc = value;
+        _infectiousDiseaseModel.rcptPhc = value;
         break;
       case 2: //코로나증상여부
-        _patientDiseaseModel.cv19Symp = value;
+        _infectiousDiseaseModel.cv19Symp = value;
         break;
       case 3: //확진검사결과
-        _patientDiseaseModel.dfdgExamRslt = value;
+        _infectiousDiseaseModel.dfdgExamRslt = value;
         break;
       case 4: //질병급
-        _patientDiseaseModel.diagGrde = value;
+        _infectiousDiseaseModel.diagGrde = value;
         break;
       case 5: //발병일
-        _patientDiseaseModel.occrDt = value;
+        _infectiousDiseaseModel.occrDt = value;
         break;
       case 6: //진단일
-        _patientDiseaseModel.diagDt = value;
+        _infectiousDiseaseModel.diagDt = value;
         break;
       case 7: //신고일
-        _patientDiseaseModel.rptDt = value;
+        _infectiousDiseaseModel.rptDt = value;
         break;
       case 8: //환자등분류
-        _patientDiseaseModel.ptCatg = value;
+        _infectiousDiseaseModel.ptCatg = value;
         break;
       case 9: //비고
-        _patientDiseaseModel.rmk = value;
+        _infectiousDiseaseModel.rmk = value;
         break;
       case 10: //요양기관명
-        _patientDiseaseModel.instNm = value;
+        _infectiousDiseaseModel.instNm = value;
         break;
       case 11: //요양병원기호
-        _patientDiseaseModel.instId = value;
+        _infectiousDiseaseModel.instId = value;
         break;
       case 12: //상세주소
-        _patientDiseaseModel.instAddr = value;
+        _infectiousDiseaseModel.instAddr = value;
         break;
       case 13: //전화번호
-        _patientDiseaseModel.instTelno = value;
+        _infectiousDiseaseModel.instTelno = value;
         break;
       case 14: //진단의사 성명
-        _patientDiseaseModel.diagDrNm = value;
+        _infectiousDiseaseModel.diagDrNm = value;
         break;
       case 15: //신고기관장 성명
-        _patientDiseaseModel.rptChfNm = value;
+        _infectiousDiseaseModel.rptChfNm = value;
         break;
     }
   }
 
-  late final PatientRepository _diseaseRepository;
-  late final InfectiousDiseaseModel _patientDiseaseModel;
+  late final PatientRepository _patientRepository;
+  late final InfectiousDiseaseModel _infectiousDiseaseModel;
   late final UserRegRequestRepository _regRepository;
 }
 

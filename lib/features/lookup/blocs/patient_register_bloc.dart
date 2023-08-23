@@ -67,7 +67,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       if (id == null) {
-        await _patientRepository.registerPatientInfo(patientInfoModel.toJson());
+        patientInfoModel.ptId = (await _patientRepository.registerPatientInfo(patientInfoModel.toJson()))["result"];
       } else {
         await _patientRepository.amendPatientInfo(
           id,

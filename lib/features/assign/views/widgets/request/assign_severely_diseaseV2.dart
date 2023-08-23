@@ -58,119 +58,124 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
   int _selectedIndex = -1, _selectedStateIndex = -1, _selectedOxygenIndex = -1, _score = 0;
   @override
   Widget build(BuildContext context) {
-    return ref.watch(severelyDiseaseProvider).when(
-          loading: () => const SBASProgressIndicator(),
-          error: (error, stackTrace) => Center(
-            child: Text(
-              error.toString(),
-              style: const TextStyle(
-                color: Palette.mainColor,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Form(
+        key: widget.formKey,
+        autovalidateMode: AutovalidateMode.always,
+        child: ref.watch(severelyDiseaseProvider).when(
+              loading: () => const SBASProgressIndicator(),
+              error: (error, stackTrace) => Center(
+                child: Text(
+                  error.toString(),
+                  style: const TextStyle(
+                    color: Palette.mainColor,
+                  ),
+                ),
+              ),
+              data: (model) => SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 14,
+                  horizontal: 18,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (int i = 0; i < widget._subTitles.length; i++)
+                      if (i == 0)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _getTitle(widget._subTitles[i], true),
+                            Gaps.v16,
+                            _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
+                            // _initRowClassification(model.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
+                            Gaps.v6,
+                            if (_selectedIndex == 1 && _score == 0) _initBioInfo(),
+                            if (_selectedIndex == 1)
+                              Column(
+                                children: [
+                                  Gaps.v28,
+                                  _getTitle("중증도 분석 결과", true),
+                                ],
+                              ),
+                            if (_selectedIndex == 1 && _score > 0)
+                              Column(
+                                children: [
+                                  Gaps.v20,
+                                  Text(
+                                    'NEWS Score: $_score',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const Divider(
+                                    color: Colors.grey,
+                                  ),
+                                  const Text(
+                                    '※중증도 분석 A.I.시스템의 분석 값 입니다.',
+                                    style: TextStyle(
+                                      color: Palette.mainColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            if (_selectedIndex == 0 || _selectedIndex == 1)
+                              Column(
+                                children: [
+                                  Gaps.v16,
+                                  _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVTP')),
+                                  // 이부분도 디자인과 다름. 디자인상 중증/준중증/준등증 으로 되어있지만.
+                                  //실제 SVTP 로 조회시 무증상~사망의 7개 나옴. 일단 디자인과 동일하게 구현.
+                                  Gaps.v28
+                                ],
+                              ),
+                          ],
+                        )
+                      else if (i == 1)
+                        Column(
+                          children: [
+                            _getTitle(widget._subTitles[i], true),
+                            Gaps.v16,
+                            _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'BDTP')),
+                          ],
+                        )
+                      else if (i == 2)
+                        Column(
+                          children: [
+                            Gaps.v28,
+                            _getTitle(widget._subTitles[i], true),
+                            Gaps.v16,
+                            _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'DNRA')),
+                          ],
+                        )
+                      else if (i == 3)
+                        Column(
+                          children: [
+                            Gaps.v28,
+                            _getTitle(widget._subTitles[i], true),
+                            Gaps.v16,
+                            rowMultiSelectButton(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'PTTP'), i),
+                          ],
+                        )
+                      else if (i == 4)
+                        Column(
+                          children: [
+                            Gaps.v28,
+                            _getTitle(widget._subTitles[i], true),
+                            Gaps.v16,
+                            rowMultiSelectButton(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'UDDS'), i),
+                          ],
+                        ),
+                  ],
+                ),
               ),
             ),
-          ),
-          data: (model) => Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                vertical: 14,
-                horizontal: 18,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (int i = 0; i < widget._subTitles.length; i++)
-                    if (i == 0)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _getTitle(widget._subTitles[i], true),
-                          Gaps.v16,
-                          _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
-                          // _initRowClassification(model.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
-                          Gaps.v6,
-                          if (_selectedIndex == 1 && _score == 0) _initBioInfo(),
-                          if (_selectedIndex == 1)
-                            Column(
-                              children: [
-                                Gaps.v28,
-                                _getTitle("중증도 분석 결과", true),
-                              ],
-                            ),
-                          if (_selectedIndex == 1 && _score > 0)
-                            Column(
-                              children: [
-                                Gaps.v20,
-                                Text(
-                                  'NEWS Score: $_score',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Divider(
-                                  color: Colors.grey,
-                                ),
-                                const Text(
-                                  '※중증도 분석 A.I.시스템의 분석 값 입니다.',
-                                  style: TextStyle(
-                                    color: Palette.mainColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          if (_selectedIndex == 0 || _selectedIndex == 1)
-                            Column(
-                              children: [
-                                Gaps.v16,
-                                _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVTP')),
-                                // 이부분도 디자인과 다름. 디자인상 중증/준중증/준등증 으로 되어있지만.
-                                //실제 SVTP 로 조회시 무증상~사망의 7개 나옴. 일단 디자인과 동일하게 구현.
-                                Gaps.v28
-                              ],
-                            ),
-                        ],
-                      )
-                    else if (i == 1)
-                      Column(
-                        children: [
-                          _getTitle(widget._subTitles[i], true),
-                          Gaps.v16,
-                          _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'BDTP')),
-                        ],
-                      )
-                    else if (i == 2)
-                      Column(
-                        children: [
-                          Gaps.v28,
-                          _getTitle(widget._subTitles[i], true),
-                          Gaps.v16,
-                          _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'DNRA')),
-                        ],
-                      )
-                    else if (i == 3)
-                      Column(
-                        children: [
-                          Gaps.v28,
-                          _getTitle(widget._subTitles[i], true),
-                          Gaps.v16,
-                          rowMultiSelectButton(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'PTTP'), i),
-                        ],
-                      )
-                    else if (i == 4)
-                      Column(
-                        children: [
-                          Gaps.v28,
-                          _getTitle(widget._subTitles[i], true),
-                          Gaps.v16,
-                          rowMultiSelectButton(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'UDDS'), i),
-                        ],
-                      ),
-                ],
-              ),
-            ),
-          ),
-        );
+      ),
+    );
   }
 
   Widget _initBioInfo() => ref.watch(bioInfoProvider).when(

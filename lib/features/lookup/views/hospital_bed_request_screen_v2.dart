@@ -54,7 +54,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     final order = ref.watch(orderOfRequestProvider);
     final patientImage = ref.watch(patientImageProvider);
     final patientAttc = ref.watch(patientAttcProvider);
-   final a =  ref.watch(patientRegProvider.notifier).patientInfoModel;
+    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
     // final patientIsUpload = ref.watch(patientIsUploadProvider);
     //빌드 이후 실행
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -220,9 +220,11 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 if (order == 2) Expanded(child: InfectiousDiseaseV2(formKey: infectiousDisFormKey, report: report)), //감염병정보
                 //상단 2개는 신규일때만 들어갈수있도록?!
                 if (order == 3)
-                  SeverelyDiseaseV2(
-                    formKey: severelyDisFormKey,
-                    ptId: patient!.ptId!,
+                  Expanded(
+                    child: SeverelyDiseaseV2(
+                      formKey: severelyDisFormKey,
+                      ptId: patient?.ptId ?? a.ptId ?? '',
+                    ),
                   ), //중증정보
                 if (order == 4)
                   OriginInfomationV2(
@@ -269,71 +271,90 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
         Expanded(
           child: InkWell(
             onTap: () async {
-              // if (isPatientRegister) {
-              //   if (order == 0) {
-              //     if (patientAttc == null && patientImage != null) {
-              //       //역학조사서 이미지는 선택되어있지만, 업로드 이전
-              //       var uploadRes = await ref.read(patientRegProvider.notifier).uploadImage(patientImage);
-              //       if (uploadRes) ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
-              //     } else if (patientAttc != null && patientImage != null) {
-              //       //역학조사서 이미지가 업로드 되어있는 경우 + 환자등록
-              //       ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
-              //       // ref.read(patientRegProvider.notifier).overrideInfo(patient!);
-              //     } else {
-              //       //역학조사서 없는경우
-              //       ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
-              //     }
-              //   } else if (order == 1) {
-              //     if (_tryBasicInfoValidation()) {
-              //       ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
-              //     } else {
-              //       return;
+              if (isPatientRegister) {
+                if (order == 0) {
+                  if (patientAttc == null && patientImage != null) {
+                    //역학조사서 이미지는 선택되어있지만, 업로드 이전
+                    var uploadRes = await ref.read(patientRegProvider.notifier).uploadImage(patientImage);
+                    if (uploadRes) ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
+                  } else if (patientAttc != null && patientImage != null) {
+                    //역학조사서 이미지가 업로드 되어있는 경우 + 환자등록
+                    ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
+                    // ref.read(patientRegProvider.notifier).overrideInfo(patient!);
+                  } else {
+                    //역학조사서 없는경우
+                    ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
+                  }
+                } else if (order == 1) {
+                  if (_tryBasicInfoValidation()) {
+                    ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+                  } else {
+                    return;
 
-              //       //다음단계 넘어가면 안됨.
-              //     }
-              //   } else if (order == 2) {
-              //     //예외처리 추가 필요.
-              //     if (_tryInfectDisValidation()) {
-              //       bool infectRes = await ref.read(infectiousDiseaseProvider.notifier).registry(patient?.ptId ?? '');
-              //       if (infectRes) {
-              //         ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
-              //       }
-              //     }
-              //   } else if (order == 3) {
-              //     ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patient?.ptId ?? '');
-              //   } else if (order == 4) {
-              //     await ref
-              //         .read(originInfoProvider.notifier)
-              //         .registry(patient?.ptId ?? '')
-              //         .then((value) => Navigator.popUntil(context, (route) => route.isFirst))
-              //         .then((value) => Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //               builder: (context) => const AssignBedScreen(
-              //                 automaticallyImplyLeading: false,
-              //               ),
-              //             )));
-              //   } else if (order < 3) {
-              //     ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
-              //   }
-              // }
-              if (true) {
+                    //다음단계 넘어가면 안됨.
+                  }
+                } else if (order == 2) {
+                  //예외처리 추가 필요.
+                  if (_tryInfectDisValidation()) {
+                    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
+
+                    bool infectRes = await ref.read(infectiousDiseaseProvider.notifier).registry(a.ptId ?? '');
+                    if (infectRes) {
+                      ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
+                    }
+                  }
+                } else if (order == 3) {
+                  if (_trySeverelyDisValidation()) {
+                    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
+
+                    bool severeRes = await ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(a.ptId ?? '');
+                    if (severeRes) {
+                      ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
+                    }
+                  }
+                } else if (order == 4) {
+                  if (_tryOrignInfoValidation() && ref.watch(originInfoProvider.notifier).isValid()) {
+                    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
+
+                    bool orignRes = await ref.read(originInfoProvider.notifier).registry(a.ptId ?? '');
+                    if (orignRes) {
+                      ref.read(patientRepoProvider).lookupPatientInfo();
+                      // ignore: use_build_context_synchronously
+                      Navigator.popUntil(context, (route) => route.isFirst);
+
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AssignBedScreen(
+                              automaticallyImplyLeading: false,
+                            ),
+                          ));
+                    }
+                  }
+                }
+              } else {
                 // 병상요청 화면
                 if (order == 0) {
                   if (patientAttc == null && patientImage != null) {
                     //역학조사서 이미지는 선택되어있지만, 업로드 이전
                     var uploadRes = await ref.read(patientRegProvider.notifier).uploadImage(patientImage);
                     if (uploadRes) ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
-                  } else if (patientAttc != null && patientImage != null && isPatientRegister) {
+                  } else if (patientAttc != null && patientImage != null) {
                     //역학조사서 이미지가 업로드 되어있는 경우 + 환자등록
                     ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
                     // ref.read(patientRegProvider.notifier).overrideInfo(patient!);
-                  } else if (patientAttc != null && patientImage != null && !isPatientRegister) {
+                  } else if (patientAttc != null && patientImage != null) {
                     //역학조사서 이미지가 업로드 되어있는 경우 + 병상요청
+
                     ref.read(patientRegProvider.notifier).overrideInfo(patient!);
                   }
                 } else if (order == 1) {
                   if (_tryBasicInfoValidation()) {
+                    if (patient == null || patient?.ptId == null) {
+                      //등록되지 않은 환자의 경우 등록.
+                      await ref.read(patientRegProvider.notifier).registry(null, context);
+                    }
                     // ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
                     ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                   } else {
@@ -344,27 +365,40 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 } else if (order == 2) {
                   //예외처리 추가 필요.
                   if (_tryInfectDisValidation()) {
-                    bool infectRes = await ref.read(infectiousDiseaseProvider.notifier).registry(patient?.ptId ?? '');
+                    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
+
+                    bool infectRes = await ref.read(infectiousDiseaseProvider.notifier).registry(patient?.ptId ?? a.ptId ?? '');
                     if (infectRes) {
                       ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                     }
                   }
                 } else if (order == 3) {
-                  ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patient?.ptId ?? '');
+                  if (_trySeverelyDisValidation()) {
+                    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
+                    bool severeRes = await ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patient?.ptId ?? a.ptId ?? '');
+                    if (severeRes) {
+                      ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
+                    }
+                  }
                 } else if (order == 4) {
-                  await ref
-                      .read(originInfoProvider.notifier)
-                      .registry(patient?.ptId ?? '')
-                      .then((value) => Navigator.popUntil(context, (route) => route.isFirst))
-                      .then((value) => Navigator.push(
+                  if (_tryOrignInfoValidation() && ref.watch(originInfoProvider.notifier).isValid()) {
+                    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
+                    bool orignRes = await ref.read(originInfoProvider.notifier).registry(patient?.ptId ?? a.ptId ?? '');
+                    if (orignRes) {
+                      ref.read(patientRepoProvider).lookupPatientInfo();
+                      // ignore: use_build_context_synchronously
+                      Navigator.popUntil(context, (route) => route.isFirst);
+
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const AssignBedScreen(
                               automaticallyImplyLeading: false,
                             ),
-                          )));
-                } else if (order < 4) {
-                  ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
+                          ));
+                    }
+                  }
                 }
               }
             },
@@ -392,8 +426,8 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   }
 
 // patientBasicFormKey
-// severelyDisFormKey
 // infectiousDisFormKey
+// severelyDisFormKey
 // orignFormKey
   bool _tryBasicInfoValidation() {
     bool isValid = patientBasicFormKey.currentState?.validate() ?? false;

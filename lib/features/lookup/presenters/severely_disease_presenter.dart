@@ -66,7 +66,7 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
     if (state.hasError) {}
   }
 
-  Future<void> saveDiseaseInfo(String ptId) async {
+  Future<bool> saveDiseaseInfo(String ptId) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final entries = ref.read(checkedSeverelyDiseaseProvider).entries;
@@ -89,7 +89,13 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
 
       return severelyDiseaseModel;
     });
-    if (state.hasError) {}
+    if (state.hasError) {
+      return false;
+    }
+    if (state.hasValue) {
+      return true;
+    }
+    return false;
   }
 
   late final List<BaseCodeModel> list;
