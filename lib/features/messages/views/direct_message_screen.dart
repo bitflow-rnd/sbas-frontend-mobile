@@ -43,49 +43,8 @@ class DirectMessageScreen extends ConsumerWidget {
       );
     }
 
-    void onContactTap(BuildContext context, contract) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ContactDetailScreen(
-            contact: contract,
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
         backgroundColor: Palette.white,
-        // appBar: AppBar(
-        //   systemOverlayStyle: const SystemUiOverlayStyle(
-        //     statusBarBrightness: Brightness.light,
-        //     statusBarColor: Colors.transparent,
-        //     statusBarIconBrightness: Brightness.dark,
-        //   ),
-        //   backgroundColor: Colors.white,
-        //   elevation: 1,
-        //   leading: Image.asset(
-        //     'assets/home/home_logo.png',
-        //     alignment: Alignment.topLeft,
-        //   ),
-        //   leadingWidth: 256,
-        //   actions: [
-        //     IconButton(
-        //       onPressed: () {},
-        //       icon: const Icon(
-        //         Icons.notifications_none,
-        //         color: Color(0xFF696969),
-        //       ),
-        //     ),
-        //     IconButton(
-        //       onPressed: () {},
-        //       icon: const Icon(
-        //         Icons.menu,
-        //         color: Color(0xFF696969),
-        //       ),
-        //     ),
-        //   ],
-        // ),
         body: SafeArea(
           child: Column(
             children: [
@@ -234,11 +193,4 @@ class DirectMessageScreen extends ConsumerWidget {
 
   static String routeName = 'directMessage';
   static String routeUrl = '/directMessage';
-}
-
-class Contract {
-  Contract(this.name, this.phone, this.organization);
-  String name;
-  String phone;
-  String organization;
 }

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
+import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
@@ -54,6 +55,7 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
             child: Image.asset(
               "assets/message/hospital_image.png",
               height: 240.h,
+              width: 1.sw,
             ),
           ),
           Column(
@@ -86,7 +88,7 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                 ),
                                 Gaps.v6,
                                 Text(
-                                  widget.contact.instNm ?? '',
+                                  "${widget.contact.instNm ?? ""} / ${widget.contact.ocpCd ?? ""}",
                                   style: CTS(
                                     color: Palette.greyText_80,
                                     fontSize: 13,
@@ -308,6 +310,55 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                   ),
                 ),
               ),
+              // ㅇㅇxpanded(
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        decoration: BoxDecoration(
+                          color: Palette.white,
+                          border: Border.all(
+                            color: Palette.greyText_20,
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          "반려",
+                          style: CTS(
+                            color: Palette.greyText_80,
+                            fontSize: 16,
+                          ),
+                        ).c,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        decoration: BoxDecoration(
+                          color: Palette.mainColor,
+                          border: Border.all(
+                            color: Palette.mainColor,
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          "승인",
+                          style: CTS(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ).c,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ],
@@ -318,8 +369,6 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
   void _showBottomSheet(BuildContext context) {
     TextEditingController _textEditingController = TextEditingController();
     final _focusNode = FocusNode();
-
-    // Call requestFocus() on the focus node when the bottom sheet is displayed
     WidgetsBinding.instance.addPostFrameCallback((_) => _focusNode.requestFocus());
     showModalBottomSheet(
         context: context,

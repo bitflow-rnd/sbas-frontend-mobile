@@ -241,7 +241,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
-                        color: Palette.greyText_80,
+                        color: Palette.greyText_20,
                         width: 1,
                       ),
                     ),
@@ -307,8 +307,12 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
             },
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 12.h),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Palette.mainColor,
+                border: Border.all(
+                  color: Palette.mainColor,
+                  width: 1,
+                ),
               ),
               child: Text(
                 order == 4 ? '요청 완료' : '다음',
