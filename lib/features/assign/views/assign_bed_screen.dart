@@ -78,7 +78,7 @@ class AssignBedScreen extends ConsumerWidget {
                                   vertical: 8.r,
                                   horizontal: 16.r,
                                 ),
-                                itemBuilder: (_, index) => CardItem(
+                                itemBuilder: (_, index) => AsgnCardItem(
                                   model: list.items[index],
                                   color: getStateColor(
                                     list.items[index].bedStatCd,

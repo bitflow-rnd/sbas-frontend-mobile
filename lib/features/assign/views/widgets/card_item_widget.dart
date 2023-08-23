@@ -11,8 +11,8 @@ import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/patient_disease_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 
-class CardItem extends ConsumerWidget {
-  const CardItem({
+class AsgnCardItem extends ConsumerWidget {
+  const AsgnCardItem({
     super.key,
     required this.model,
     required this.color,

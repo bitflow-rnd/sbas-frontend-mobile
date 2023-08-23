@@ -56,21 +56,51 @@ Future setPassword(BuildContext context) async => await Navigator.push(
       builder: (context) => const SetPasswordScreen(),
     ));
 
+//
 Color getStateColor(String? code) {
   switch (code) {
-    case 'BAST0007':
-      return const Color(0xFF00FF00);
-    case 'BAST0006':
-      return const Color(0xFF0000FF);
     case 'BAST0003':
-      return const Color(0xFF00BFFF);
+      return const Color(0xFF67ccaa);
     case 'BAST0004':
-      return const Color(0xFF000080);
+      return const Color(0xFF4caff1);
     case 'BAST0005':
-      return const Color(0xFF696969);
+    case 'BAST0006':
+      return const Color(0xFF4caff1);
+    case 'BAST0007':
+    case 'BAST0008':
+      return const Color(0xFFff666e);
   }
   return const Color(0xFF8B8000);
 }
+
+// "승인대기":
+// cdId: BAST0003
+// cdNm: 승인대기
+// rmk: 병상요청후 배정반 승인대기
+//============================
+// "배정대기":
+// cdId: BAST0004
+// cdNm: 배정대기
+// rmk: 의료진 승인 대기
+//============================
+// "이송대기":
+// cdId: BAST0005
+// cdNm: 이송대기
+// rmk: 없음
+// "이송중":
+// cdId: BAST0006
+// cdNm: 이송중
+// rmk: 입퇴원처리대기
+//============================
+// "완료":
+// cdId: BAST0007
+// cdNm: 완료
+// rmk: 입퇴원처리완료
+
+// "배정불가":
+// cdId: BAST0008
+// cdNm: 배정불가
+// rmk: 배정불가처리완료
 
 int getAge(Patient? patient) {
   final birth = int.tryParse(patient?.rrno1?.substring(0, 2) ?? '') ?? 0;
@@ -162,10 +192,7 @@ InputDecoration getInputDecoration(String hintText) => InputDecoration(
         ),
       ),
       hintText: hintText,
-      hintStyle: CTS.regular(
-        fontSize: 13.sp,
-        color: Palette.greyText_60
-      ),
+      hintStyle: CTS.regular(fontSize: 13.sp, color: Palette.greyText_60),
       contentPadding: const EdgeInsets.symmetric(
         vertical: 18,
         horizontal: 22,
