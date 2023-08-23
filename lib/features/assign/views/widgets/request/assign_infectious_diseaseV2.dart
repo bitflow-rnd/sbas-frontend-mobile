@@ -16,7 +16,6 @@ import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
-import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 
 class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
   InfectiousDiseaseV2({
@@ -26,7 +25,7 @@ class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<InfectiousDiseaseV2> createState() => _InfectiousDiseaseV2();
+  ConsumerState<InfectiousDiseaseV2> createState() => _InfectiousDiseaseV2State();
 
   final GlobalKey<FormState> formKey;
   final EpidemiologicalReportModel report;
@@ -72,7 +71,7 @@ class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
   ];
 }
 
-class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
+class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
   @override
   Widget build(BuildContext context) {
     final ImagePicker picker = ImagePicker();
@@ -80,21 +79,22 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
     InfectiousDiseaseBloc vm = ref.read(infectiousDiseaseProvider.notifier);
     final patientImage = ref.watch(infectiousImageProvider);
 
-    return ref.watch(infectiousDiseaseProvider).when(
-          loading: () => const SBASProgressIndicator(),
-          error: (error, stackTrace) => Center(
-            child: Text(
-              error.toString(),
-              style: const TextStyle(
-                color: Palette.mainColor,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: SingleChildScrollView(
+        child: ref.watch(infectiousDiseaseProvider).when(
+              loading: () => const SBASProgressIndicator(),
+              error: (error, stackTrace) => Center(
+                child: Text(
+                  error.toString(),
+                  style: const TextStyle(
+                    color: Palette.mainColor,
+                  ),
+                ),
               ),
-            ),
-          ),
-          data: (disease) => Form(
-            autovalidateMode: AutovalidateMode.always,
-            key: widget.formKey,
-            child: Expanded(
-              child: SingleChildScrollView(
+              data: (disease) => Form(
+                key: widget.formKey,
+                autovalidateMode: AutovalidateMode.always,
                 child: Column(
                   children: [
                     for (int i = 0; i < widget.list.length; i++)
@@ -311,8 +311,8 @@ class _InfectiousDiseaseV2 extends ConsumerState<InfectiousDiseaseV2> {
                 ),
               ),
             ),
-          ),
-        );
+      ),
+    );
   }
 
   Widget _getTextInputField(

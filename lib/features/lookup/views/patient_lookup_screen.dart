@@ -10,6 +10,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_detail_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/constants/palette.dart';
@@ -273,7 +274,7 @@ class PatientLookupScreen extends ConsumerWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PatientRegScreen(),
+                        builder: (context) => HospitalBedRequestScreenV2(patient: null, isPatientRegister: true),
                       ),
                     );
                   }),

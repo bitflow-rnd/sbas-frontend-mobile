@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/models/base_code_model.dart';
+import 'package:sbas/features/assign/repos/assign_repo.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 // import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
@@ -16,79 +17,81 @@ import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 
+import '../../assign/bloc/assign_bed_bloc.dart';
+
 class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   @override
   FutureOr<PatientRegInfoModel> build() {
-    _patientInfoModel = PatientRegInfoModel.empty();
+    patientInfoModel = PatientRegInfoModel.empty();
     // _regRepository = ref.read(userRegReqProvider);
     _patientRepository = ref.read(patientRepoProvider);
 
-    return _patientInfoModel;
+    return patientInfoModel;
   }
 
   init() {
-    _patientInfoModel.clear();
+    patientInfoModel.clear();
     ref.watch(patientInfoIsChangedProvider.notifier).state = false;
   }
 
   patientInit(Patient patient) {
-    _patientInfoModel.rgstUserId = patient.rgstUserId ?? "";
-    _patientInfoModel.rgstDttm = patient.rgstDttm ?? "";
-    _patientInfoModel.updtUserId = patient.updtUserId ?? "";
-    _patientInfoModel.updtDttm = patient.updtDttm ?? "";
-    _patientInfoModel.ptNm = patient.ptNm ?? "";
-    _patientInfoModel.gndr = patient.gndr ?? "";
-    _patientInfoModel.rrno1 = patient.rrno1 ?? "";
-    _patientInfoModel.rrno2 = patient.rrno2 ?? "";
-    _patientInfoModel.dstr1Cd = patient.dstr1Cd ?? "";
-    _patientInfoModel.dstr2Cd = patient.dstr2Cd ?? "";
-    _patientInfoModel.addr = patient.addr ?? "";
-    _patientInfoModel.telno = patient.telno ?? "";
-    _patientInfoModel.natiCd = patient.natiCd ?? "";
-    _patientInfoModel.picaVer = patient.picaVer ?? "";
-    _patientInfoModel.dethYn = patient.dethYn ?? "";
-    _patientInfoModel.nokNm = patient.nokNm ?? "";
-    _patientInfoModel.mpno = patient.mpno ?? "";
-    _patientInfoModel.job = patient.job ?? "";
-    _patientInfoModel.attcId = patient.attcId ?? "";
-    _patientInfoModel.bedStatCd = patient.bedStatCd ?? "";
-    _patientInfoModel.bedStatNm = patient.bedStatNm ?? "";
-    _patientInfoModel.bascAddr = patient.bascAddr ?? "";
-    _patientInfoModel.detlAddr = patient.detlAddr ?? "";
-    _patientInfoModel.zip = patient.zip ?? "";
-    _patientInfoModel.natiNm = patient.natiNm ?? "";
-    _patientInfoModel.ptId = patient.ptId ?? "";
+    patientInfoModel.rgstUserId = patient.rgstUserId ?? "";
+    patientInfoModel.rgstDttm = patient.rgstDttm ?? "";
+    patientInfoModel.updtUserId = patient.updtUserId ?? "";
+    patientInfoModel.updtDttm = patient.updtDttm ?? "";
+    patientInfoModel.ptNm = patient.ptNm ?? "";
+    patientInfoModel.gndr = patient.gndr ?? "";
+    patientInfoModel.rrno1 = patient.rrno1 ?? "";
+    patientInfoModel.rrno2 = patient.rrno2 ?? "";
+    patientInfoModel.dstr1Cd = patient.dstr1Cd ?? "";
+    patientInfoModel.dstr2Cd = patient.dstr2Cd ?? "";
+    patientInfoModel.addr = patient.addr ?? "";
+    patientInfoModel.telno = patient.telno ?? "";
+    patientInfoModel.natiCd = patient.natiCd ?? "";
+    patientInfoModel.picaVer = patient.picaVer ?? "";
+    patientInfoModel.dethYn = patient.dethYn ?? "";
+    patientInfoModel.nokNm = patient.nokNm ?? "";
+    patientInfoModel.mpno = patient.mpno ?? "";
+    patientInfoModel.job = patient.job ?? "";
+    patientInfoModel.attcId = patient.attcId ?? "";
+    patientInfoModel.bedStatCd = patient.bedStatCd ?? "";
+    patientInfoModel.bedStatNm = patient.bedStatNm ?? "";
+    patientInfoModel.bascAddr = patient.bascAddr ?? "";
+    patientInfoModel.detlAddr = patient.detlAddr ?? "";
+    patientInfoModel.zip = patient.zip ?? "";
+    patientInfoModel.natiNm = patient.natiNm ?? "";
+    patientInfoModel.ptId = patient.ptId ?? "";
   }
 
   Future<void> registry(String? id, BuildContext context) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       if (id == null) {
-        await _patientRepository.registerPatientInfo(_patientInfoModel.toJson());
+        await _patientRepository.registerPatientInfo(patientInfoModel.toJson());
       } else {
         await _patientRepository.amendPatientInfo(
           id,
-          _patientInfoModel.toJson(),
+          patientInfoModel.toJson(),
         );
       }
-      return _patientInfoModel;
+      return patientInfoModel;
     });
     if (state.hasError) {}
     if (state.hasValue) {
       //get back page
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
+      // // Navigator.of(context).pop();
 
-      _patientInfoModel.clear();
+      // _patientInfoModel.clear();
 
-      ref.read(patientImageProvider.notifier).state = null;
-      ref.read(patientAttcProvider.notifier).state = null;
+      // ref.read(patientImageProvider.notifier).state = null;
+      // ref.read(patientAttcProvider.notifier).state = null;
 
       ref.read(patientLookupProvider.notifier).refresh();
     }
   }
 
-  Future<void> uploadImage(XFile imageFile) async {
+  Future<bool> uploadImage(XFile imageFile) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       try {
@@ -96,46 +99,51 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
           await _patientRepository.getOpticalCharacterRecognition(imageFile),
         );
         ref.read(patientAttcProvider.notifier).state = report.attcId;
-        _patientInfoModel.bascAddr = report.baseAddr;
-        _patientInfoModel.detlAddr = report.dtlAddr;
-        _patientInfoModel.zip = report.zip;
-        _patientInfoModel.attcId = report.attcId;
-        _patientInfoModel.gndr = report.rrno2 == '1' || report.rrno2 == '3' ? '남' : '여';
-        _patientInfoModel.job = report.job;
-        _patientInfoModel.ptNm = report.ptNm;
-        _patientInfoModel.rrno1 = report.rrno1;
-        _patientInfoModel.rrno2 = report.rrno2;
-        _patientInfoModel.dethYn = report.dethYn == '사망' ? 'Y' : 'N';
-        _patientInfoModel.dstr1Cd = report.dstr1Cd;
-        _patientInfoModel.dstr2Cd = report.dstr2Cd;
-        _patientInfoModel.telno = report.telno; //mpn
-        _patientInfoModel.mpno = report.mpno;
-        _patientInfoModel.nokNm = report.nokNm;
-        _patientInfoModel.natiCd = report.natiCd;
+        patientInfoModel.bascAddr = report.baseAddr;
+        patientInfoModel.detlAddr = report.dtlAddr;
+        patientInfoModel.zip = report.zip;
+        patientInfoModel.attcId = report.attcId;
+        patientInfoModel.gndr = report.rrno2 == '1' || report.rrno2 == '3' ? '남' : '여';
+        patientInfoModel.job = report.job;
+        patientInfoModel.ptNm = report.ptNm;
+        patientInfoModel.rrno1 = report.rrno1;
+        patientInfoModel.rrno2 = report.rrno2;
+        patientInfoModel.dethYn = report.dethYn == '사망' ? 'Y' : 'N';
+        patientInfoModel.dstr1Cd = report.dstr1Cd;
+        patientInfoModel.dstr2Cd = report.dstr2Cd;
+        patientInfoModel.telno = report.telno; //mpn
+        patientInfoModel.mpno = report.mpno;
+        patientInfoModel.nokNm = report.nokNm;
+        patientInfoModel.natiCd = report.natiCd;
       } catch (exception) {
         if (kDebugMode) {
           print(exception);
         }
       }
-      return _patientInfoModel;
+      return patientInfoModel;
     });
-    if (state.hasError) {}
-    if (state.hasValue) {}
+    if (state.hasError) {
+      return false;
+    }
+    if (state.hasValue) {
+      return true;
+    }
+    return true;
   }
 
   Future<void> uploadPatientGender(String gender) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      if (_patientInfoModel.rrno1 != null) {
+      if (patientInfoModel.rrno1 != null) {
         if (gender == '여') {
-          _patientInfoModel.rrno2 = '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) < 0 ? '2' : '4';
+          patientInfoModel.rrno2 = '20'.compareTo(patientInfoModel.rrno1!.substring(0, 2)) < 0 ? '2' : '4';
         }
         if (gender == '남') {
-          _patientInfoModel.rrno2 = '20'.compareTo(_patientInfoModel.rrno1!.substring(0, 2)) < 0 ? '1' : '3';
+          patientInfoModel.rrno2 = '20'.compareTo(patientInfoModel.rrno1!.substring(0, 2)) < 0 ? '1' : '3';
         }
-        _patientInfoModel.gndr = gender;
+        patientInfoModel.gndr = gender;
       }
-      return _patientInfoModel;
+      return patientInfoModel;
     });
     if (state.hasError) {}
     if (state.hasValue) {}
@@ -144,9 +152,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   Future<void> updatePatientRegion(BaseCodeModel region) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _patientInfoModel.dstr1Cd = region.cdId;
+      patientInfoModel.dstr1Cd = region.cdId;
 
-      return _patientInfoModel;
+      return patientInfoModel;
     });
     if (state.hasError) {}
     if (state.hasValue) {}
@@ -155,9 +163,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   Future<void> updatePatientCounty(BaseCodeModel region) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _patientInfoModel.dstr2Cd = region.cdId;
+      patientInfoModel.dstr2Cd = region.cdId;
 
-      return _patientInfoModel;
+      return patientInfoModel;
     });
     if (state.hasError) {}
     if (state.hasValue) {}
@@ -166,9 +174,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   Future<void> updatePatientNationality(String nationality) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _patientInfoModel.natiCd = nationality;
+      patientInfoModel.natiCd = nationality;
 
-      return _patientInfoModel;
+      return patientInfoModel;
     });
     if (state.hasError) {}
     if (state.hasValue) {}
@@ -177,9 +185,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   Future<void> updatePatientCrossroadsOfLife(String life) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _patientInfoModel.dethYn = life;
+      patientInfoModel.dethYn = life;
 
-      return _patientInfoModel;
+      return patientInfoModel;
     });
     if (state.hasError) {}
     if (state.hasValue) {}
@@ -188,19 +196,19 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   Future<void> setAddress(Kpostal postal) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _patientInfoModel.bascAddr = postal.roadAddress;
-      _patientInfoModel.zip = postal.postCode;
+      patientInfoModel.bascAddr = postal.roadAddress;
+      patientInfoModel.zip = postal.postCode;
 
-      return _patientInfoModel;
+      return patientInfoModel;
     });
   }
 
   Future<void> setSurvivalStatus(String status) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _patientInfoModel.dethYn = status == '생존' ? 'N' : 'Y';
+      patientInfoModel.dethYn = status == '생존' ? 'N' : 'Y';
 
-      return _patientInfoModel;
+      return patientInfoModel;
     });
   }
 
@@ -210,23 +218,23 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       report.natiCd = report.natiCd == 'NATI0001' ? 'NATI0002' : 'NATI0001';
       report.natiNm = report.natiCd == 'NATI0001' ? '대한민국' : '';
 
-      _patientInfoModel.natiCd = report.natiCd;
-      _patientInfoModel.natiNm = report.natiNm;
+      patientInfoModel.natiCd = report.natiCd;
+      patientInfoModel.natiNm = report.natiNm;
 
-      return _patientInfoModel;
+      return patientInfoModel;
     });
   }
 
-  String? get sex => _patientInfoModel.gndr;
+  String? get sex => patientInfoModel.gndr;
 
   String get age {
     String birthday;
-    if (_patientInfoModel.rrno1 != null) {
-      if (_patientInfoModel.rrno2 == '3' || _patientInfoModel.rrno2 == '4') {
+    if (patientInfoModel.rrno1 != null) {
+      if (patientInfoModel.rrno2 == '3' || patientInfoModel.rrno2 == '4') {
         //외국인등록번호 관련 출생년도 설정 필요.
-        birthday = '20${_patientInfoModel.rrno1}';
+        birthday = '20${patientInfoModel.rrno1}';
       } else {
-        birthday = '19${_patientInfoModel.rrno1}';
+        birthday = '19${patientInfoModel.rrno1}';
       }
     } else {
       birthday = '19700101';
@@ -237,74 +245,74 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     return (difference.inDays ~/ 365.25).toString();
   }
 
-  String get address => _patientInfoModel.bascAddr ?? '';
+  String get address => patientInfoModel.bascAddr ?? '';
 
-  int get isSurvivalStatus => _patientInfoModel.dethYn == 'Y' ? 1 : 0;
+  int get isSurvivalStatus => patientInfoModel.dethYn == 'Y' ? 1 : 0;
 
   void overrideInfo(Patient patient) {
-    _patientInfoModel.addr = patient.addr;
-    _patientInfoModel.dethYn = patient.dethYn;
-    _patientInfoModel.gndr = patient.gndr;
-    _patientInfoModel.job = patient.job;
-    _patientInfoModel.ptNm = patient.ptNm;
-    _patientInfoModel.rrno1 = patient.rrno1;
-    _patientInfoModel.rrno2 = patient.rrno2;
-    _patientInfoModel.dstr1Cd = patient.dstr1Cd;
-    _patientInfoModel.dstr2Cd = patient.dstr2Cd;
-    _patientInfoModel.mpno = patient.mpno;
-    _patientInfoModel.natiCd = patient.natiCd;
-    _patientInfoModel.telno = patient.telno;
-    _patientInfoModel.attcId = patient.attcId;
-    _patientInfoModel.nokNm = patient.nokNm;
-    _patientInfoModel.picaVer = patient.picaVer;
-    _patientInfoModel.natiNm = patient.natiNm;
+    patientInfoModel.addr = patient.addr;
+    patientInfoModel.dethYn = patient.dethYn;
+    patientInfoModel.gndr = patient.gndr;
+    patientInfoModel.job = patient.job;
+    patientInfoModel.ptNm = patient.ptNm;
+    patientInfoModel.rrno1 = patient.rrno1;
+    patientInfoModel.rrno2 = patient.rrno2;
+    patientInfoModel.dstr1Cd = patient.dstr1Cd;
+    patientInfoModel.dstr2Cd = patient.dstr2Cd;
+    patientInfoModel.mpno = patient.mpno;
+    patientInfoModel.natiCd = patient.natiCd;
+    patientInfoModel.telno = patient.telno;
+    patientInfoModel.attcId = patient.attcId;
+    patientInfoModel.nokNm = patient.nokNm;
+    patientInfoModel.picaVer = patient.picaVer;
+    patientInfoModel.natiNm = patient.natiNm;
   }
 
   void setTextEditingController(int index, String? value) {
     switch (index) {
       case 0:
-        _patientInfoModel.ptNm = value;
+        patientInfoModel.ptNm = value;
         return;
 
       case 1:
-        _patientInfoModel.rrno1 = value;
+        patientInfoModel.rrno1 = value;
         return;
 
       case 101:
-        _patientInfoModel.rrno2 = value;
+        patientInfoModel.rrno2 = value;
 
-        _patientInfoModel.gndr = value == '1' || value == '3' ? '남' : '여';
+        patientInfoModel.gndr = value == '1' || value == '3' ? '남' : '여';
         return;
 
       case 2:
-        _patientInfoModel.detlAddr = value;
+        patientInfoModel.detlAddr = value;
         return;
 
       case 3:
-        _patientInfoModel.dethYn = value;
+        patientInfoModel.dethYn = value;
         return;
 
       case 4:
         return;
 
       case 104:
-        _patientInfoModel.natiNm = value ?? '대한민국';
+        patientInfoModel.natiNm = value ?? '대한민국';
         return;
 
       case 5:
-        _patientInfoModel.mpno = value;
+        patientInfoModel.mpno = value;
         return;
 
       case 6:
-        _patientInfoModel.telno = value;
+        patientInfoModel.telno = value;
         return;
 
       case 7:
-        _patientInfoModel.nokNm = value;
+        patientInfoModel.nokNm = value;
         return;
 
       case 8:
-        _patientInfoModel.job = value;
+        patientInfoModel.job = value;
         return;
     }
   }
@@ -471,7 +479,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     }
   }
 
-  late final PatientRegInfoModel _patientInfoModel;
+  late final PatientRegInfoModel patientInfoModel;
   late final PatientRepository _patientRepository;
   // late final UserRegRequestRepository _regRepository;
 }
@@ -479,7 +487,3 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
 final patientRegProvider = AsyncNotifierProvider<PatientRegisterPresenter, PatientRegInfoModel>(
   () => PatientRegisterPresenter(),
 );
-final patientImageProvider = StateProvider<XFile?>((ref) => null);
-final patientAttcProvider = StateProvider<String?>((ref) => null);
-final patientIsUploadProvider = StateProvider<bool>((ref) => true);
-final patientInfoIsChangedProvider = StateProvider<bool>((ref) => false);

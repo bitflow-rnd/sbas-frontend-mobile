@@ -8,7 +8,6 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/util.dart';
 import 'package:sbas/constants/palette.dart';
@@ -42,24 +41,24 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Form(
-        key: widget.formKey,
-        autovalidateMode: AutovalidateMode.always,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 18,
-          ),
-          child: ref.watch(patientRegProvider).when(
-                loading: () => const SBASProgressIndicator(),
-                error: (error, stackTrace) => Center(
-                  child: Text(
-                    error.toString(),
-                    style: CTS(
-                      color: Palette.mainColor,
-                    ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 18,
+        ),
+        child: ref.watch(patientRegProvider).when(
+              loading: () => const SBASProgressIndicator(),
+              error: (error, stackTrace) => Center(
+                child: Text(
+                  error.toString(),
+                  style: CTS(
+                    color: Palette.mainColor,
                   ),
                 ),
-                data: (report) => Column(
+              ),
+              data: (report) => Form(
+                key: widget.formKey,
+                autovalidateMode: AutovalidateMode.always,
+                child: Column(
                   children: [
                     for (int i = 0; i < widget.list.length; i++)
                       Column(
@@ -124,11 +123,10 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                         ],
                       ),
                     Gaps.v20,
-                    SizedBox(height: MediaQuery.of(context).viewInsets.bottom), // Add this
                   ],
                 ),
               ),
-        ),
+            ),
       ),
     );
   }

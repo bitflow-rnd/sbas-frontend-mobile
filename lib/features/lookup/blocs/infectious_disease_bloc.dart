@@ -17,7 +17,7 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
     return _patientDiseaseModel;
   }
 
-  Future<void> registry(String id) async {
+  Future<bool> registry(String id) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       _patientDiseaseModel.ptId = id;
@@ -32,8 +32,13 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
       );
       return _patientDiseaseModel;
     });
-    if (state.hasError) {}
-    if (state.hasValue) {}
+    if (state.hasError) {
+      return false;
+    }
+    if (state.hasValue) {
+      return true;
+    }
+    return false;
   }
 
   updateRegion(String? rcptPhc) {

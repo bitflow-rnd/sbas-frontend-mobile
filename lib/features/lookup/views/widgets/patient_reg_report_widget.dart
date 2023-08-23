@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
 
 class PatientRegReport extends ConsumerWidget {
   const PatientRegReport({

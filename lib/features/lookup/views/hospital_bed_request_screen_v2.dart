@@ -2,47 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/extensions.dart';
-import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
+import 'package:sbas/features/assign/repos/assign_repo.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_origin_infomationV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_infectious_diseaseV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_severely_diseaseV2.dart';
-import 'package:sbas/features/dashboard/views/dashboard_screen.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
-import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
-import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
+
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
-final patientImageProvider = StateProvider<XFile?>((ref) => null);
-final patientAttcProvider = StateProvider<String?>((ref) => null);
-final patientIsUploadProvider = StateProvider<bool>((ref) => true);
+// final patientImageProvider = StateProvider<XFile?>((ref) => null);
+// final patientAttcProvider = StateProvider<String?>((ref) => null);
+// final patientIsUploadProvider = StateProvider<bool>((ref) => true);
 final assignNewBedProvider = AsyncNotifierProvider<AssignNewBedPresenter, PatientRegInfoModel>(
   () => AssignNewBedPresenter(),
 );
 
 class HospitalBedRequestScreenV2 extends ConsumerWidget {
   HospitalBedRequestScreenV2({
+    this.isPatientRegister = false,
     this.patient,
     super.key,
   });
-
-  final formKey = GlobalKey<FormState>();
+  final bool isPatientRegister;
+  //@@ Form key must be final
+  static final patientBasicFormKey = GlobalKey<FormState>();
+  static final severelyDisFormKey = GlobalKey<FormState>();
+  static final infectiousDisFormKey = GlobalKey<FormState>();
+  static final orignFormKey = GlobalKey<FormState>();
   final Patient? patient;
   final List<String> headerList = ["역학조사서", "환자정보", "감염병정보", "중증정보", "출발정보"];
   final bool isRight = false;
@@ -50,16 +52,31 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     attcId = patient?.attcId ?? '';
     final order = ref.watch(orderOfRequestProvider);
-
     final patientImage = ref.watch(patientImageProvider);
     final patientAttc = ref.watch(patientAttcProvider);
+   final a =  ref.watch(patientRegProvider.notifier).patientInfoModel;
     // final patientIsUpload = ref.watch(patientIsUploadProvider);
-
+    //빌드 이후 실행
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (patient != null && ref.read(patientInfoIsChangedProvider.notifier).state == false) {
+        //환자정보가 변경되지 않았을때 기존 정보 사용 override
+        await ref.watch(patientRegProvider.notifier).patientInit(patient!); // 기존 데이터로 override
+        ref.read(patientInfoIsChangedProvider.notifier).state = true;
+        // 이미 기본 정보 입력, valid 한 케이스 2(감염병정보)으로 이동
+        if (_tryBasicInfoValidation()) {
+          ref.read(orderOfRequestProvider.notifier).update((state) => 2);
+        } else {
+          //입력은 되었지만 이상함 -> 1(환자정보) 추가하도록
+          ref.read(orderOfRequestProvider.notifier).update((state) => 1);
+        }
+      }
+      //patient 가 null 이 아닐 때 patientRegProvider.patientINit 으로 init
+    });
     return Scaffold(
       backgroundColor: Palette.white,
       appBar: AppBar(
         title: Text(
-          "병상요청",
+          isPatientRegister ? "환자 등록" : "병상요청",
           style: CTS.medium(
             fontSize: 15,
             color: Colors.black,
@@ -105,127 +122,120 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 ),
               ),
             ),
-            data: (report) => GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Column(
-                children: [
-                  PatientTopInfo(
-                    patient: patient,
-                  ),
-                  // _header(patient!),
-                  Divider(
-                    color: Palette.greyText_20,
-                    height: 1,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 2.w),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 6.h),
-                                  child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: List.generate(
-                                        5,
-                                        (index) => InkWell(
-                                          onTap: () {
-                                            ref.read(orderOfRequestProvider.notifier).update((state) => index);
-                                            // TODO :: 이동시 data 저장 로직 필요.
-                                          },
-                                          child: SizedBox(
-                                            width: 0.22.sw,
-                                            child: Text(
-                                              headerList[index],
-                                              style: CTS.medium(
-                                                color: Colors.black,
-                                                fontSize: 13,
-                                              ),
-                                            ).c,
-                                          ),
+            data: (report) => Column(
+              children: [
+                PatientTopInfo(
+                  patient: patient,
+                ),
+                // _header(patient!),
+                Divider(
+                  color: Palette.greyText_20,
+                  height: 1,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 2.w),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 6.h),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: List.generate(
+                                      5,
+                                      (index) => InkWell(
+                                        onTap: () {
+                                          ref.read(orderOfRequestProvider.notifier).update((state) => index);
+                                          // TODO :: 이동시 data 저장 로직 필요.
+                                        },
+                                        child: SizedBox(
+                                          width: 0.22.sw,
+                                          child: Text(
+                                            headerList[index],
+                                            style: CTS.medium(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                            ),
+                                          ).c,
                                         ),
-                                      )),
-                                ),
+                                      ),
+                                    )),
                               ),
-                              Stack(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(left: 16.w),
+                            ),
+                            Stack(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(left: 16.w),
+                                  height: 6.h,
+                                  width: 0.22.sw * 5,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffecedef),
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                ),
+                                AnimatedContainer(
+                                  padding: EdgeInsets.only(left: 0.22.sw * order + 16.w),
+                                  duration: const Duration(
+                                    milliseconds: 200,
+                                  ),
+                                  child: Container(
+                                    width: 0.22.sw,
                                     height: 6.h,
-                                    width: 0.22.sw * 5,
                                     decoration: BoxDecoration(
-                                      color: const Color(0xffecedef),
-                                      borderRadius: BorderRadius.circular(3),
+                                      borderRadius: BorderRadius.circular(
+                                        30,
+                                      ),
+                                      color: Palette.mainColor,
                                     ),
                                   ),
-                                  AnimatedContainer(
-                                    padding: EdgeInsets.only(left: 0.22.sw * order + 16.w),
-                                    duration: const Duration(
-                                      milliseconds: 200,
-                                    ),
-                                    child: Container(
-                                      width: 0.22.sw,
-                                      height: 6.h,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          30,
-                                        ),
-                                        color: Palette.mainColor,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  if (order == 0) //역학조사서
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                        child: const PatientRegReport(),
-                      ),
-                    ),
-                  if (order == 1) //환자정보
-                    Expanded(
-                        child: Padding(
+                ),
+                if (order == 0) //역학조사서
+                  Expanded(
+                    child: Padding(
                       padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                      child: PatientRegInfoV2(formKey: formKey),
-                    )),
+                      child: const PatientRegReport(),
+                    ),
+                  ),
+                if (order == 1) //환자정보
+                  Expanded(
+                      child: Padding(
+                    padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
+                    child: PatientRegInfoV2(formKey: patientBasicFormKey),
+                  )),
 
-                  if (order == 2)
-                    InfectiousDiseaseV2(
-                      formKey: formKey,
-                      report: report,
-                    ), //감염병정보
-                  //상단 2개는 신규일때만 들어갈수있도록?!
-                  if (order == 3)
-                    SeverelyDiseaseV2(
-                      formKey: formKey,
-                      ptId: patient!.ptId!,
-                    ), //중증정보
-                  if (order == 4)
-                    OriginInfomationV2(
-                      formKey: formKey,
-                    ), //출발정보
-                  _bottomer(ref, patientImage, patientAttc, context, hasPatient: patient != null),
-                ],
-              ),
+                if (order == 2) Expanded(child: InfectiousDiseaseV2(formKey: infectiousDisFormKey, report: report)), //감염병정보
+                //상단 2개는 신규일때만 들어갈수있도록?!
+                if (order == 3)
+                  SeverelyDiseaseV2(
+                    formKey: severelyDisFormKey,
+                    ptId: patient!.ptId!,
+                  ), //중증정보
+                if (order == 4)
+                  OriginInfomationV2(
+                    formKey: orignFormKey,
+                  ), //출발정보
+                _bottomer(ref, patientImage, patientAttc, context, hasPatient: patient != null),
+              ],
             ),
           ),
     );
   }
 
-  Widget _bottomer(WidgetRef ref, patientImage, patientAttc, BuildContext context, {required bool hasPatient}) {
+  Widget _bottomer(WidgetRef ref, XFile? patientImage, String? patientAttc, BuildContext context, {required bool hasPatient}) {
     final order = ref.watch(orderOfRequestProvider);
 
     return Row(
@@ -234,10 +244,10 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
             ? Expanded(
                 child: InkWell(
                   onTap: () {
-                    ref.read(orderOfRequestProvider.notifier).update((state) => state - 1);
+                    ref.read(orderOfRequestProvider.notifier).update((state) => order - 1);
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 11.h),
+                    padding: EdgeInsets.symmetric(vertical: 12.h),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
@@ -258,51 +268,104 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
             : Container(),
         Expanded(
           child: InkWell(
-            onTap: () {
-              if (order == 0) {
-                if (patient != null && ref.read(patientInfoIsChangedProvider.notifier).state == false) {
-                  //환자정보가 변경되지 않았을때 기존 정보 사용
-                  ref.watch(patientRegProvider.notifier).patientInit(patient!);
-                  ref.read(patientInfoIsChangedProvider.notifier).state = true;
-                }
-                // patientImage != null || !patientIsUpload || hasPatient
-                if (patientAttc != null) {
-                  if (_tryValidation()) {
-                    ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+            onTap: () async {
+              // if (isPatientRegister) {
+              //   if (order == 0) {
+              //     if (patientAttc == null && patientImage != null) {
+              //       //역학조사서 이미지는 선택되어있지만, 업로드 이전
+              //       var uploadRes = await ref.read(patientRegProvider.notifier).uploadImage(patientImage);
+              //       if (uploadRes) ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
+              //     } else if (patientAttc != null && patientImage != null) {
+              //       //역학조사서 이미지가 업로드 되어있는 경우 + 환자등록
+              //       ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
+              //       // ref.read(patientRegProvider.notifier).overrideInfo(patient!);
+              //     } else {
+              //       //역학조사서 없는경우
+              //       ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
+              //     }
+              //   } else if (order == 1) {
+              //     if (_tryBasicInfoValidation()) {
+              //       ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+              //     } else {
+              //       return;
+
+              //       //다음단계 넘어가면 안됨.
+              //     }
+              //   } else if (order == 2) {
+              //     //예외처리 추가 필요.
+              //     if (_tryInfectDisValidation()) {
+              //       bool infectRes = await ref.read(infectiousDiseaseProvider.notifier).registry(patient?.ptId ?? '');
+              //       if (infectRes) {
+              //         ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
+              //       }
+              //     }
+              //   } else if (order == 3) {
+              //     ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patient?.ptId ?? '');
+              //   } else if (order == 4) {
+              //     await ref
+              //         .read(originInfoProvider.notifier)
+              //         .registry(patient?.ptId ?? '')
+              //         .then((value) => Navigator.popUntil(context, (route) => route.isFirst))
+              //         .then((value) => Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //               builder: (context) => const AssignBedScreen(
+              //                 automaticallyImplyLeading: false,
+              //               ),
+              //             )));
+              //   } else if (order < 3) {
+              //     ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
+              //   }
+              // }
+              if (true) {
+                // 병상요청 화면
+                if (order == 0) {
+                  if (patientAttc == null && patientImage != null) {
+                    //역학조사서 이미지는 선택되어있지만, 업로드 이전
+                    var uploadRes = await ref.read(patientRegProvider.notifier).uploadImage(patientImage);
+                    if (uploadRes) ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
+                  } else if (patientAttc != null && patientImage != null && isPatientRegister) {
+                    //역학조사서 이미지가 업로드 되어있는 경우 + 환자등록
+                    ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
+                    // ref.read(patientRegProvider.notifier).overrideInfo(patient!);
+                  } else if (patientAttc != null && patientImage != null && !isPatientRegister) {
+                    //역학조사서 이미지가 업로드 되어있는 경우 + 병상요청
+                    ref.read(patientRegProvider.notifier).overrideInfo(patient!);
                   }
-                } else {
-                  if (patientImage != null) {
-                    ref.read(patientRegProvider.notifier).uploadImage(patientImage);
+                } else if (order == 1) {
+                  if (_tryBasicInfoValidation()) {
+                    // ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+                    ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                   } else {
-                    if (patient != null) {
-                      ref.read(patientRegProvider.notifier).overrideInfo(patient!);
-                    } else {
-                      ref.read(patientAttcProvider.notifier).state = '';
+                    return;
+
+                    //다음단계 넘어가면 안됨.
+                  }
+                } else if (order == 2) {
+                  //예외처리 추가 필요.
+                  if (_tryInfectDisValidation()) {
+                    bool infectRes = await ref.read(infectiousDiseaseProvider.notifier).registry(patient?.ptId ?? '');
+                    if (infectRes) {
+                      ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                     }
                   }
+                } else if (order == 3) {
+                  ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patient?.ptId ?? '');
+                } else if (order == 4) {
+                  await ref
+                      .read(originInfoProvider.notifier)
+                      .registry(patient?.ptId ?? '')
+                      .then((value) => Navigator.popUntil(context, (route) => route.isFirst))
+                      .then((value) => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AssignBedScreen(
+                              automaticallyImplyLeading: false,
+                            ),
+                          )));
+                } else if (order < 4) {
+                  ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                 }
-              }
-              if (order == 2) {
-                ref.read(infectiousDiseaseProvider.notifier).registry(patient?.ptId ?? '');
-              }
-              if (order == 3) {
-                ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patient?.ptId ?? '');
-              }
-
-              if (order == 4) {
-                ref.read(originInfoProvider.notifier).registry(patient?.ptId ?? '');
-
-                Navigator.popUntil(context, (route) => route.isFirst);
-
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AssignBedScreen(
-                        automaticallyImplyLeading: false,
-                      ),
-                    ));
-              } else if (order < 4) {
-                ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
               }
             },
             child: Container(
@@ -328,10 +391,38 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     );
   }
 
-  bool _tryValidation() {
-    bool isValid = formKey.currentState?.validate() ?? false;
+// patientBasicFormKey
+// severelyDisFormKey
+// infectiousDisFormKey
+// orignFormKey
+  bool _tryBasicInfoValidation() {
+    bool isValid = patientBasicFormKey.currentState?.validate() ?? false;
     if (isValid) {
-      formKey.currentState?.save();
+      patientBasicFormKey.currentState?.save();
+    }
+    return isValid;
+  }
+
+  bool _tryInfectDisValidation() {
+    bool isValid = infectiousDisFormKey.currentState?.validate() ?? false;
+    if (isValid) {
+      infectiousDisFormKey.currentState?.save();
+    }
+    return isValid;
+  }
+
+  bool _trySeverelyDisValidation() {
+    bool isValid = severelyDisFormKey.currentState?.validate() ?? false;
+    if (isValid) {
+      severelyDisFormKey.currentState?.save();
+    }
+    return isValid;
+  }
+
+  bool _tryOrignInfoValidation() {
+    bool isValid = orignFormKey.currentState?.validate() ?? false;
+    if (isValid) {
+      orignFormKey.currentState?.save();
     }
     return isValid;
   }

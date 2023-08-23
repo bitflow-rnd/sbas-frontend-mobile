@@ -4,11 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
-import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
-
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
@@ -18,6 +17,9 @@ class PatientRegScreen extends ConsumerWidget {
     this.patient,
     super.key,
   });
+
+  final formKey = GlobalKey<FormState>();
+  final Patient? patient;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final width = MediaQuery.of(context).size.width;
@@ -26,6 +28,7 @@ class PatientRegScreen extends ConsumerWidget {
     // final patientIsUpload = ref.watch(patientIsUploadProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Palette.white,
       appBar: Bitflow.getAppBar(
         '환자 등록',
@@ -106,7 +109,4 @@ class PatientRegScreen extends ConsumerWidget {
     }
     return isValid;
   }
-
-  final formKey = GlobalKey<FormState>();
-  final Patient? patient;
 }
