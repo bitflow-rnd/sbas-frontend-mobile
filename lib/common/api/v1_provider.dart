@@ -47,7 +47,7 @@ class V1Provider {
         showToast(res.data['message']);
       }
       if (res.statusCode == 200) {
-        if (kDebugMode) {
+        if (!!kDebugMode) {
           print(res.data);
         }
         return res.data['result'];
