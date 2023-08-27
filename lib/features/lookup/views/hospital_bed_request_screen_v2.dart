@@ -149,21 +149,15 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: List.generate(
                                       5,
-                                      (index) => InkWell(
-                                        onTap: () {
-                                          ref.read(orderOfRequestProvider.notifier).update((state) => index);
-                                          // TODO :: 이동시 data 저장 로직 필요.
-                                        },
-                                        child: SizedBox(
-                                          width: 0.22.sw,
-                                          child: Text(
-                                            headerList[index],
-                                            style: CTS.medium(
-                                              color: Colors.black,
-                                              fontSize: 13,
-                                            ),
-                                          ).c,
-                                        ),
+                                      (index) => SizedBox(
+                                        width: 0.22.sw,
+                                        child: Text(
+                                          headerList[index],
+                                          style: CTS.medium(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                          ),
+                                        ).c,
                                       ),
                                     )),
                               ),
@@ -318,9 +312,9 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   if (_tryOrignInfoValidation() && ref.watch(originInfoProvider.notifier).isValid()) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
 
-                    bool orignRes = await ref.read(originInfoProvider.notifier).registry(a.ptId ?? '');
+                    bool orignRes = await ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(a.ptId ?? '');
                     if (orignRes) {
-                      ref.read(patientRepoProvider).lookupPatientInfo();
+                      await ref.read(patientRepoProvider).lookupPatientInfo();
                       // ignore: use_build_context_synchronously
                       Navigator.popUntil(context, (route) => route.isFirst);
 
@@ -332,7 +326,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                               automaticallyImplyLeading: false,
                             ),
                           ));
-                    }
+                    } else {}
                   }
                 }
               } else {
@@ -384,9 +378,9 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 } else if (order == 4) {
                   if (_tryOrignInfoValidation() && ref.watch(originInfoProvider.notifier).isValid()) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
-                    bool orignRes = await ref.read(originInfoProvider.notifier).registry(patient?.ptId ?? a.ptId ?? '');
+                    bool orignRes = await ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(patient?.ptId ?? a.ptId ?? '');
                     if (orignRes) {
-                      ref.read(patientRepoProvider).lookupPatientInfo();
+                      await ref.read(patientRepoProvider).lookupPatientInfo();
                       // ignore: use_build_context_synchronously
                       Navigator.popUntil(context, (route) => route.isFirst);
 

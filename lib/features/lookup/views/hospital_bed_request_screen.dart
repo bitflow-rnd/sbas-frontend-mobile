@@ -78,16 +78,16 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                         ptId: patient?.ptId ?? '',
                       ),
                     ),
-                  )
-                else if (order == 1)
-                  Expanded(
-                    child: SizedBox(
-                      width: width,
-                      child: OriginInfomation(
-                        formKey: formKey,
-                      ),
-                    ),
                   ),
+                // else if (order == 1)
+                // Expanded(
+                //   child: SizedBox(
+                //     width: width,
+                //     child: OriginInfomation(
+                //       formKey: formKey,
+                //     ),
+                //   ),
+                // ),
                 Row(
                   children: [
                     SizedBox(
@@ -111,7 +111,7 @@ class HospitalBedRequestScreen extends ConsumerWidget {
                             ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patient?.ptId ?? '');
                           }
                           if (index == 1) {
-                            ref.read(originInfoProvider.notifier).registry(patient?.ptId ?? '');
+                            ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(patient?.ptId ?? '');
 
                             Navigator.pop(context);
 

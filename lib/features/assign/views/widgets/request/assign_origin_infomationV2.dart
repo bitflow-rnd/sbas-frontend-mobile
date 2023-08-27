@@ -292,7 +292,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
             ),
           ),
           data: (region) => FormField(
-            initialValue: ref.watch(selectedRegionProvider).cdNm,
+            initialValue: ref.watch(selectedRegionProvider).cdId,
             builder: (field) => SizedBox(
               child: Column(
                 children: [
@@ -326,29 +326,22 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                         ),
                         isDense: true,
                         isExpanded: true,
-                        onChanged: (value) => setState(() {
-                          final model = ref.read(selectedRegionProvider);
-
-                          final selectedModel = region.firstWhere((e) => value == e.cdNm);
-
-                          ref.read(selectedCountyProvider).cdNm = null;
-
-                          model.cdGrpId = selectedModel.cdGrpId;
-                          model.cdGrpNm = selectedModel.cdGrpNm;
-                          model.cdId = selectedModel.cdId;
-                          model.cdNm = selectedModel.cdNm;
-                          model.cdSeq = selectedModel.cdSeq;
-                          model.cdVal = selectedModel.cdVal;
-                          model.rmk = selectedModel.rmk;
-
-                          // ref.read(agencyRegionProvider.notifier).exchangeTheCounty();
-
-                          if (selectedModel.cdId != null) {
-                            ref.read(originInfoProvider.notifier).selectLocalGovernment(selectedModel.cdId ?? '');
+                        onChanged: (value) {
+                          if (value != null && value.isNotEmpty) {
+                            try {
+                              final selectRegion = region.firstWhere((e) => value == e.cdId);
+                              ref.read(originInfoProvider.notifier).selectLocalGovernment(selectRegion);
+                            } catch (e) {
+                              print("erro${e.toString()}");
+                            }
                           }
-                          field.didChange(selectedModel.cdNm);
-                        }),
-                        value: "",
+                        },
+                        value: region
+                            .firstWhere(
+                              (e) => e.cdNm == code,
+                              orElse: () => BaseCodeModel(),
+                            )
+                            .cdId,
                       ),
                     ),
                   ),

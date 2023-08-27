@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kpostal/kpostal.dart';
+import 'package:sbas/common/models/base_code_model.dart';
+import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
+import 'package:sbas/features/lookup/models/severely_disease_model.dart';
 import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/models/bed_assgin_request_model.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
@@ -11,22 +14,26 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   @override
   FutureOr<OriginInfoModel> build() {
     _dprtInfo = OriginInfoModel();
+
     _repository = ref.read(patientRepoProvider);
 
     return _dprtInfo;
   }
 
-  Future<bool> registry(String ptId) async {
+  Future<bool> orignSeverelyDiseaseRegistry(String ptId) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       _dprtInfo.ptId = ptId;
 
-      var severelyDiseaseModel = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel;
+      SeverelyDiseaseModel severelyDiseaseModel = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel;
 
       // await _repository.postRegOriginInfo(_dprtInfo);
 
-      await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _dprtInfo)); //실병상요청.
-
+      var res = await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _dprtInfo)); //실병상요청.
+      if (!res || res) {
+        ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel.clear();
+        _dprtInfo.clear();
+      }
       return _dprtInfo;
     });
     if (state.hasError) {
@@ -75,10 +82,11 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
     return index;
   }
 
-  Future<void> selectLocalGovernment(String value) async {
+  Future<void> selectLocalGovernment(BaseCodeModel baseCode) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _dprtInfo.reqDstr1Cd = value;
+      ref.watch(selectedRegionProvider.notifier).state = baseCode;
+      _dprtInfo.reqDstr1Cd = baseCode.cdNm;
       // _dprtInfo.reqDstr2Cd = value; //2 입력하는 부분이 없음..
 
       return _dprtInfo;

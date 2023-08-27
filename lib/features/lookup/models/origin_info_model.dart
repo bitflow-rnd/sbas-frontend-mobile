@@ -74,6 +74,23 @@ class OriginInfoModel {
       msg = json["msg"];
     }
   }
+  void clear() {
+    ptId = null;
+    reqDstr1Cd = null;
+    reqDstr2Cd = null;
+    dprtDstrTypeCd = null;
+    dprtDstrBascAddr = null;
+    dprtDstrDetlAddr = null;
+    dprtDstrZip = null;
+    nok1Telno = null;
+    nok2Telno = null;
+    inhpAsgnYn = null;
+    deptNm = null;
+    spclNm = null;
+    chrgTelno = null;
+    msg = null;
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
