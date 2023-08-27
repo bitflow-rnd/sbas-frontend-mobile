@@ -272,6 +272,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
           child: InkWell(
             onTap: () async {
               if (isPatientRegister) {
+                //신규 환자 등록 화면.
                 if (order == 0) {
                   if (patientAttc == null && patientImage != null) {
                     //역학조사서 이미지는 선택되어있지만, 업로드 이전
@@ -288,6 +289,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 } else if (order == 1) {
                   if (_tryBasicInfoValidation()) {
                     ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+                    ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                   } else {
                     return;
 
@@ -354,12 +356,11 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     if (patient == null || patient?.ptId == null) {
                       //등록되지 않은 환자의 경우 등록.
                       await ref.read(patientRegProvider.notifier).registry(null, context);
+                    } else {
+                      //등록된 환자의 경우 정보 업데이트.
+                      await ref.read(patientRegProvider.notifier).registry(patient!.ptId, context);
                     }
-                    // ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
                     ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
-                  } else {
-                    return;
-
                     //다음단계 넘어가면 안됨.
                   }
                 } else if (order == 2) {

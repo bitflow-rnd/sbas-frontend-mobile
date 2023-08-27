@@ -88,31 +88,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                                   Gaps.v12,
                                   Row(
                                     children: [
-                                      Expanded(
-                                        child: ref.watch(agencyRegionProvider).when(
-                                              loading: () => const SBASProgressIndicator(),
-                                              error: (error, stackTrace) => Center(
-                                                child: Text(
-                                                  error.toString(),
-                                                  style: const TextStyle(
-                                                    color: Palette.mainColor,
-                                                  ),
-                                                ),
-                                              ),
-                                              data: (region) => FormField(
-                                                builder: (field) => _selectRegion(
-                                                  region.where(
-                                                    (e) => e.cdGrpId == 'SIDO',
-                                                  ),
-                                                  field,
-                                                ),
-                                                validator: (value) {
-                                                  return null;
-                                                },
-                                                initialValue: ref.watch(selectedRegionProvider).cdNm,
-                                              ),
-                                            ),
-                                      ),
+                                      Expanded(child: _selectRegion(origin.reqDstr1Cd)),
                                       Expanded(
                                         child: Text(
                                           "※ 병상배정 지자체 선택",
@@ -304,74 +280,89 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
     );
   }
 
-  Widget _selectRegion(Iterable<BaseCodeModel> region, FormFieldState<Object?> field) => SizedBox(
-        child: Column(
-          children: [
-            InputDecorator(
-              decoration: getInputDecoration(""),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  items: region
-                      .map(
-                        (e) => DropdownMenuItem(
-                          alignment: Alignment.center,
-                          value: e.cdId,
-                          child: SizedBox(
-                            width: 150,
-                            child: Text(
-                              e.cdNm ?? '',
-                              style: TextStyle(fontSize: 13, color: Palette.black),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                  hint: SizedBox(
-                    width: 150,
-                    child: Text(
-                      '시/도 선택',
-                      style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  isDense: true,
-                  isExpanded: true,
-                  onChanged: (value) => setState(() {
-                    final model = ref.read(selectedRegionProvider);
-
-                    final selectedModel = region.firstWhere((e) => value == e.cdId);
-
-                    // ref.read(selectedCountyProvider).cdNm = null;
-
-                    model.cdGrpId = selectedModel.cdGrpId;
-                    model.cdGrpNm = selectedModel.cdGrpNm;
-                    model.cdId = selectedModel.cdId;
-                    model.cdNm = selectedModel.cdNm;
-                    model.cdSeq = selectedModel.cdSeq;
-                    model.cdVal = selectedModel.cdVal;
-                    model.rmk = selectedModel.rmk;
-
-                    // ref.read(agencyRegionProvider.notifier).exchangeTheCounty();
-
-                    if (selectedModel.cdId != null) {
-                      ref.read(originInfoProvider.notifier).selectLocalGovernment(selectedModel.cdId ?? '');
-                    }
-                    field.didChange(value);
-                    // field.didChange(selectedModel.cdNm);
-                  }),
-                  value: field.value != '' ? field.value : null,
-                ),
+  Widget _selectRegion(String? code) {
+    return ref.watch(agencyRegionProvider).when(
+          loading: () => const SBASProgressIndicator(),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              error.toString(),
+              style: const TextStyle(
+                color: Palette.mainColor,
               ),
             ),
-            Gaps.v8,
-            if (field.hasError)
-              FieldErrorText(
-                field: field,
-              )
-          ],
-        ),
-      );
+          ),
+          data: (region) => FormField(
+            initialValue: ref.watch(selectedRegionProvider).cdNm,
+            builder: (field) => SizedBox(
+              child: Column(
+                children: [
+                  InputDecorator(
+                    decoration: getInputDecoration(""),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        items: region
+                            .map(
+                              (e) => DropdownMenuItem(
+                                alignment: Alignment.center,
+                                value: e.cdId,
+                                child: SizedBox(
+                                  width: 150,
+                                  child: Text(
+                                    e.cdNm ?? '',
+                                    style: TextStyle(fontSize: 13, color: Palette.black),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        hint: SizedBox(
+                          width: 150,
+                          child: Text(
+                            '시/도 선택',
+                            style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        isDense: true,
+                        isExpanded: true,
+                        onChanged: (value) => setState(() {
+                          final model = ref.read(selectedRegionProvider);
+
+                          final selectedModel = region.firstWhere((e) => value == e.cdNm);
+
+                          ref.read(selectedCountyProvider).cdNm = null;
+
+                          model.cdGrpId = selectedModel.cdGrpId;
+                          model.cdGrpNm = selectedModel.cdGrpNm;
+                          model.cdId = selectedModel.cdId;
+                          model.cdNm = selectedModel.cdNm;
+                          model.cdSeq = selectedModel.cdSeq;
+                          model.cdVal = selectedModel.cdVal;
+                          model.rmk = selectedModel.rmk;
+
+                          // ref.read(agencyRegionProvider.notifier).exchangeTheCounty();
+
+                          if (selectedModel.cdId != null) {
+                            ref.read(originInfoProvider.notifier).selectLocalGovernment(selectedModel.cdId ?? '');
+                          }
+                          field.didChange(selectedModel.cdNm);
+                        }),
+                        value: "",
+                      ),
+                    ),
+                  ),
+                  Gaps.v8,
+                  if (field.hasError)
+                    FieldErrorText(
+                      field: field,
+                    )
+                ],
+              ),
+            ),
+          ),
+        );
+  }
 
   Widget rowMultiSelectButton(list, selectList) {
     return Row(

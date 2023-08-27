@@ -173,6 +173,15 @@ InputDecoration getInputDecoration(String hintText) => InputDecoration(
           Radius.circular(4.r),
         ),
       ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          color: Colors.red.shade300,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(4.r),
+        ),
+      ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
           style: BorderStyle.solid,
@@ -185,7 +194,7 @@ InputDecoration getInputDecoration(String hintText) => InputDecoration(
       errorBorder: OutlineInputBorder(
         borderSide: BorderSide(
           style: BorderStyle.solid,
-          color: Colors.grey.shade300,
+          color: Colors.red.shade300,
         ),
         borderRadius: BorderRadius.all(
           Radius.circular(4.r),
