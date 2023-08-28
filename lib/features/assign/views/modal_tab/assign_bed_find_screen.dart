@@ -8,7 +8,9 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/available_hospital_model.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
 class AssignBedFindScreen extends ConsumerStatefulWidget {
@@ -207,30 +209,42 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
               Common.bottomer(
                   lBtnFunc: () {},
                   rBtnFunc: () async {
-                    var res = await Common.showBottomSheet(
+                    var msgRes = await Common.showBottomSheet(
                       context: context,
                       header: '배정요청',
                     );
-                    if (res != null && res != '') {
-                      // ignore: use_build_context_synchronously
-                      Common.showModal(
-                        context,
+                    if (msgRes != null && msgRes != '') {
+                      bool postRes = await ref.watch(assignBedProvider.notifier).approveReq({
+                        "ptId": widget.patient.ptId,
+                        "bdasSeq": widget.bdasSeq,
+                        "aprvYn": "Y",
+                        "msg": msgRes.toString(),
+                        // "hospId": widget.hospList.items[selectedIdx!].hospId,
+                        "reqHospIdList": ["HP00002944"],
+                      });
+                      if (postRes) {
+                        //승인성공
+                        await ref.watch(patientTimeLineProvider.notifier).refresh(widget.patient.ptId, widget.bdasSeq);
+                        await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
                         // ignore: use_build_context_synchronously
-                        Common.commonModal(
-                          context: context,
-                          imageWidget: Image.asset(
-                            "assets/auth_group/modal_check.png",
-                            width: 44.h,
+                        Common.showModal(
+                          context,
+                          // ignore: use_build_context_synchronously
+                          Common.commonModal(
+                            context: context,
+                            imageWidget: Image.asset(
+                              "assets/auth_group/modal_check.png",
+                              width: 44.h,
+                            ),
+                            imageHeight: 44.h,
+                            mainText: "배정 요청이 완료되었습니다.",
+                            button2Function: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
                           ),
-                          imageHeight: 44.h,
-                          mainText: "배정 요청이 완료되었습니다.",
-                          button2Function: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      );
+                        );
+                      }
                     }
                   },
                   lBtnText: "배정 불가",

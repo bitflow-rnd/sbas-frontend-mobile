@@ -28,9 +28,9 @@ class Palette {
   static Color greyText_80 = const Color(0XFF676a7a).withOpacity(0.8);
   static Color greyText_20 = const Color(0XFF676a7a).withOpacity(0.2);
   static Color greyText_08 = const Color(0XFF676a7a).withOpacity(0.08);
+  static Color disabledTextField = const Color(0XFFecedef).withOpacity(0.6);
 
   static Color modalBackground = const Color(0XFF2b2d31).withOpacity(0.3);
-
 
   static Map<int, Color> myCustomColorShades = {
     50: Color(0xFFE2E7F9),

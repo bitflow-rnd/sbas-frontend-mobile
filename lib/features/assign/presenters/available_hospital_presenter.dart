@@ -11,16 +11,15 @@ class AvailableHospitalPresenter extends AsyncNotifier {
   }
 
   Future<AvailableHospitalModel> getAsync(String? ptId, int? bdasSeq) async {
-    if (ptId != null && ptId.isNotEmpty &&
-        bdasSeq != null) {
+    if (ptId != null && ptId.isNotEmpty && bdasSeq != null) {
       return await _assignRepository.getAvalHospList(ptId, bdasSeq);
     }
     return AvailableHospitalModel(count: 0, items: []);
   }
-  
+
   late final AssignRepository _assignRepository;
 }
 
-final availableHospitalProvider = AsyncNotifierProvider<AvailableHospitalPresenter, void> (
+final availableHospitalProvider = AsyncNotifierProvider<AvailableHospitalPresenter, void>(
   () => AvailableHospitalPresenter(),
 );
