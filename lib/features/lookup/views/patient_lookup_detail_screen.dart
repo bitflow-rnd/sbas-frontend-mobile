@@ -45,9 +45,10 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                   ),
                   margin: EdgeInsets.only(right: 16.w),
                   child: InkWell(
-                    onTap: () {},
+                    // onTap: () {},
                     child: Image.asset(
                       "assets/common_icon/share_icon.png",
+                      color: Palette.greyText_30,
                       height: 24.h,
                       width: 24.w,
                     ),
