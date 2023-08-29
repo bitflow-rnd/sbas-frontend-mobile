@@ -35,6 +35,7 @@ class TimeLine {
   String? chrgInstId;
   String? chrgUserId;
   int? asgnReqSeq;
+  String? chrgInstNm;
 
   TimeLine({
     this.title,
@@ -45,6 +46,7 @@ class TimeLine {
     this.chrgInstId,
     this.chrgUserId,
     this.asgnReqSeq,
+    this.chrgInstNm,
   });
 
   TimeLine.fromJson(Map<String, dynamic> json) {
@@ -72,6 +74,9 @@ class TimeLine {
     if (json["asgnReqSeq"] is int) {
       asgnReqSeq = json["asgnReqSeq"];
     }
+    if (json["chrgInstNm"] is String) {
+      chrgInstNm = json["chrgInstNm"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -85,6 +90,7 @@ class TimeLine {
     data["chrgInstId"] = chrgInstId;
     data["chrgUserId"] = chrgUserId;
     data["asgnReqSeq"] = asgnReqSeq;
+    data["chrgInstNm"] = chrgInstNm;
 
     return data;
   }

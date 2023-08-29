@@ -15,6 +15,7 @@ import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
+import 'package:sbas/util.dart';
 
 class AsgnBdDoctorApproveScreen extends ConsumerWidget {
   const AsgnBdDoctorApproveScreen({
@@ -87,7 +88,7 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                                   _getTitle(list[i], i == 0 ? null : false),
                                   Gaps.v16,
                                   i == 0
-                                      ? _getTextInputField(i: i, initalValue: timeLine.chrgInstId ?? "", isFixed: true, ref: ref)
+                                      ? _getTextInputField(i: i, initalValue: timeLine.chrgInstNm ?? "", isFixed: true, ref: ref)
                                       : _getTextInputField(i: i, hint: hintList[i], ref: ref),
                                   Gaps.v28,
                                 ],
@@ -126,16 +127,13 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                             .watch(asgnBdDocProvider.notifier)
                             .init(assignItem.ptId ?? "", "Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? -1, timeLine.chrgInstId ?? "");
                         if (ref.watch(asgnBdDocProvider.notifier).isValid() == true) {
-                          bool aprvDocRes = await ref.watch(asgnBdDocProvider.notifier).aprvDocReq();
+                          await ref.watch(asgnBdDocProvider.notifier).aprvDocReq();
 
-                          if (aprvDocRes) {
-                            await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
-                            await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                          }
+                          await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
+                          await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+
+                          // ignore: use_build_context_synchronously
+                          Navigator.pop(context);
                         }
                       } else {
                         return;

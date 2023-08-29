@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/assign/model/asgn_bed_req_model.dart';
+import 'package:sbas/features/assign/model/asgn_doc_res_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
+import 'package:sbas/util.dart';
 
 class AsgnBdDocPresenter extends AsyncNotifier {
   @override
@@ -11,12 +13,12 @@ class AsgnBdDocPresenter extends AsyncNotifier {
     _assignRepository = ref.watch(assignRepoProvider);
   }
 
-  init(String ptId, String aprvYn, int bdasSeq, int asgnReqSeq, String chrgInstId) {
+  init(String ptId, String aprvYn, int bdasSeq, int asgnReqSeq, String hospId) {
     asgnBdReqModel.ptId = ptId;
     asgnBdReqModel.aprvYn = aprvYn;
     asgnBdReqModel.bdasSeq = bdasSeq;
+    asgnBdReqModel.hospId = hospId;
     asgnBdReqModel.asgnReqSeq = asgnReqSeq;
-    asgnBdReqModel.chrgInstId = chrgInstId;
   }
 
 // ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
@@ -45,21 +47,23 @@ class AsgnBdDocPresenter extends AsyncNotifier {
   }
 
   bool isValid() {
-    if (asgnBdReqModel.chrgInstId == null || asgnBdReqModel.chrgInstId!.isEmpty) {
-      return false;
-    }
     if (asgnBdReqModel.asgnReqSeq == null || asgnBdReqModel.asgnReqSeq == -1) {
+      showToast("asgnReqSeq is null");
       return false;
     }
     if (asgnBdReqModel.bdasSeq == null || asgnBdReqModel.bdasSeq == -1) {
+      showToast("bdasSeq is null");
       return false;
     }
     return true;
   }
 
   Future<bool> aprvDocReq() async {
-    String res = await _assignRepository.postDocAsgnConfirm(asgnBdReqModel.toJson());
-    return res.contains("성공");
+    AsgnDocRes res = await _assignRepository.postDocAsgnConfirm(asgnBdReqModel.toJson());
+    if (res.isAlreadyApproved == false) {
+      showToast(res.message!);
+    }
+    return res.isAlreadyApproved == false;
   }
 }
 
