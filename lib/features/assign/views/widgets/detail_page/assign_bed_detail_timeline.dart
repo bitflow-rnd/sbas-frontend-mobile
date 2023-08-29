@@ -44,13 +44,18 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             final customTitleOrder = {
               "병상요청 (전원요청)": -2,
               "병상요청 (원내배정)": -2,
-              "승인대기": -1,
-              "승인": 0,
-              "배정대기": 1,
-              "원내배정": 2,
-              "이송대기": 4,
-              "이송중": 5,
-              "입원": 6,
+              "승인대기": -1, //병상배정반 승인대기
+              "승인": 0,    //병상배정반 승인
+              "배정대기": 1, //의료진 승인 대기
+              "원내배정": 2, //원내배정 케이스
+              "이송대기": 4, //의료진 승인 후 이송 요청 전.
+              "이송중": 5, //이송 요청 이후
+              "이송완료": 6, //이송 완료
+              "입원": 7, 
+              "입원완료": 8,
+              "퇴원": 9,
+              "재택회송": 9,
+              "귀가요청": 10,
             };
 
             timeLine.items.sort((a, b) {
@@ -151,7 +156,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                       Navigator.pop(context, true);
                     },
                   ));
-              if (res) {
+              if (res ?? false) {
                 //병상 배정 불가 처리.
                 var postRes = await ref.watch(assignBedProvider.notifier).rejectReq({
                   "ptId": patient.ptId,
