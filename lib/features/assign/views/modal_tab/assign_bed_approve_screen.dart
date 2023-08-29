@@ -122,7 +122,9 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
 
                       if (confirm == true) {
                         //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
-                        ref.watch(asgnBdDocProvider.notifier).init("Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? -1, timeLine.hospId ?? "");
+                        ref
+                            .watch(asgnBdDocProvider.notifier)
+                            .init(assignItem.ptId??"", "Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? -1, timeLine.hospId ?? "");
                         if (ref.watch(asgnBdDocProvider.notifier).isValid() == true) {
                           bool aprvDocRes = await ref.watch(asgnBdDocProvider.notifier).aprvDocReq();
 
@@ -184,8 +186,8 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                 ),
               ),
             ),
-      onSaved: (newValue) => bdDoc.setTextEditingController(i, newValue),
-      onChanged: (value) => bdDoc.setTextEditingController(i, value),
+      onSaved: (newValue) => bdDoc.setTextByIndex(i, newValue),
+      onChanged: (value) => bdDoc.setTextByIndex(i, value),
       validator: (value) {
         return null;
       },
