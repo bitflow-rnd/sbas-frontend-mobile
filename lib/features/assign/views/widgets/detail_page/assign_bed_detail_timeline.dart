@@ -41,17 +41,17 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 ),
               ),
           data: (timeLine) {
-            final customTitleOrder = {
+            final titleOrder = {
               "병상요청 (전원요청)": -2,
               "병상요청 (원내배정)": -2,
               "승인대기": -1, //병상배정반 승인대기
-              "승인": 0,    //병상배정반 승인
+              "승인": 0, //병상배정반 승인
               "배정대기": 1, //의료진 승인 대기
               "원내배정": 2, //원내배정 케이스
               "이송대기": 4, //의료진 승인 후 이송 요청 전.
               "이송중": 5, //이송 요청 이후
               "이송완료": 6, //이송 완료
-              "입원": 7, 
+              "입원": 7,
               "입원완료": 8,
               "퇴원": 9,
               "재택회송": 9,
@@ -59,10 +59,10 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             };
 
             timeLine.items.sort((a, b) {
-              if (customTitleOrder[a.title] == null || customTitleOrder[b.title] == null) {
+              if (titleOrder[a.title] == null || titleOrder[b.title] == null) {
                 return 0;
               }
-              final titleComparison = customTitleOrder[a.title]!.compareTo(customTitleOrder[b.title]!);
+              final titleComparison = titleOrder[a.title]!.compareTo(titleOrder[b.title]!);
               if (titleComparison != 0) {
                 return titleComparison;
               } else {
