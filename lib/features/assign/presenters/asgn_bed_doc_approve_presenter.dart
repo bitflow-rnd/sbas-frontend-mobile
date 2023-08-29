@@ -5,9 +5,6 @@ import 'package:sbas/features/assign/model/asgn_bed_req_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
 
 class AsgnBdDocPresenter extends AsyncNotifier {
-
-
-
   @override
   FutureOr build() {
     asgnBdReqModel = AsgnBdReqModel();
@@ -25,25 +22,38 @@ class AsgnBdDocPresenter extends AsyncNotifier {
   void setTextEditingController(int index, String? value) {
     switch (index) {
       // case 0: //병실
-      //   asgnBdReqModel.roomNo = value;
+      //   asgnBdReqModel.roomNm = value;
       //   break;
       case 1: //병실
-        // asgnBdReqModel.msg = value;
+        asgnBdReqModel.roomNm = value;
         break;
       case 2: //진료과
-        // asgnBdReqModel.msg = value;
+        asgnBdReqModel.deptNm = value;
         break;
       case 3:
         //담당의
-        // asgnBdReqModel. = value;
+        asgnBdReqModel.spclNm = value;
         break;
       case 4:
-        // asgnBdReqModel.telNo = value;
+        asgnBdReqModel.chrgTelno = value;
         break;
       case 5:
-      // asgnBdReqModel.msg = value;
+        asgnBdReqModel.msg = value;
       // break;
     }
+  }
+
+  bool isValid() {
+    if (asgnBdReqModel.hospId == null || asgnBdReqModel.roomNm!.isEmpty) {
+      return false;
+    }
+    if (asgnBdReqModel.asgnReqSeq == null || asgnBdReqModel.asgnReqSeq == -1) {
+      return false;
+    }
+    if (asgnBdReqModel.bdasSeq == null || asgnBdReqModel.bdasSeq == -1) {
+      return false;
+    }
+    return true;
   }
 
   Future<bool> aprvDocReq() async {

@@ -84,7 +84,7 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                             for (var i = 0; i < list.length; i++)
                               Column(
                                 children: [
-                                  _getTitle(list[i], list[i] == '의료기관명' ? null : false),
+                                  _getTitle(list[i], i == 0 ? null : false),
                                   Gaps.v16,
                                   i == 0
                                       ? _getTextInputField(i: i, initalValue: timeLine.hospId ?? "", isFixed: true, ref: ref)
@@ -119,26 +119,21 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                             },
                             imageHeight: 44.h,
                           ));
-                      if (confirm) {
+
+                      if (confirm == true) {
                         //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
-                        ref.watch(asgnBdDocProvider.notifier).init("Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? 1, timeLine.hospId ?? "");
-                        bool aprvDocRes = await ref.watch(asgnBdDocProvider.notifier).aprvDocReq();
-                        // bool asgnConfirmRes = await ref.watch(assignBedProvider.notifier).asgnConfirm({
-                        //   "ptId": patient.ptId,
-                        //   "bdasSeq": assignItem.bdasSeq,
-                        //   "aprvYn": "Y",
-                        //   "asgnReqSeq": timeLine.asgnReqSeq,
-                        //   // "hospId": timeLine.items.where((element) => element.hospId == "${현재 병원 아이디}")
-                        //   "hospId": timeLine.hospId,
-                        //   "msg": ".toString" //
-                        // });
-                        if (aprvDocRes) {
-                          await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
-                          await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
+                        ref.watch(asgnBdDocProvider.notifier).init("Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? -1, timeLine.hospId ?? "");
+                        if (ref.watch(asgnBdDocProvider.notifier).isValid() == true) {
+                          bool aprvDocRes = await ref.watch(asgnBdDocProvider.notifier).aprvDocReq();
+
+                          if (aprvDocRes) {
+                            await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
+                            await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                          }
                         }
                       } else {
                         return;

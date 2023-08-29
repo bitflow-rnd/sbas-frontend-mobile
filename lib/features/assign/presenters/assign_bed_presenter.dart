@@ -5,14 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/model/assign_list_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
   @override
   FutureOr<AssignListModel> build() async {
-    _patientRepository = ref.read(assignRepoProvider);
+    _asgnRepo = ref.read(assignRepoProvider);
 
-    final list = await _patientRepository.lookupPatientInfo();
+    final list = await _asgnRepo.lookupPatientInfo();
     final assignCountState = ref.read(assignCountProvider.notifier).state;
 
     list[0].x = -1;
@@ -31,7 +30,13 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
   }
 
   Future<bool> approveReq(Map<String, dynamic> map) async {
-    String res = await _patientRepository.postReqApprove(map);
+    String res = await _asgnRepo.postReqApprove(map);
+    if (res == "승인 성공") return true;
+    return false;
+  }
+
+  Future<bool> asgnConfirm(Map<String, dynamic> map) async {
+    String res = await _asgnRepo.postAsgnConfirm(map);
     if (res == "승인 성공") return true;
     return false;
   }
@@ -65,7 +70,7 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
   Future<void> setTopNavItem(double x) async {
     searchTextController.clear();
     state = await AsyncValue.guard(() async {
-      final list = await _patientRepository.lookupPatientInfo();
+      final list = await _asgnRepo.lookupPatientInfo();
       final assignCountState = ref.read(assignCountProvider.notifier).state;
       final index = (x * 2).toInt() + 2;
 
@@ -87,7 +92,7 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
   List<String>? getTagList(String? ptId) => _list.items.firstWhere((e) => e.ptId == ptId).tagList;
   TextEditingController searchTextController = TextEditingController();
   late AssignListModel _list;
-  late final AssignRepository _patientRepository;
+  late final AssignRepository _asgnRepo;
 }
 
 final assignBedProvider = AsyncNotifierProvider<AssignBedListPresenter, AssignListModel>(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,10 +12,11 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/presenters/available_hospital_presenter.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_approve_move.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_cancel_screen.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_find_screen.dart';
-import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_go_home.dart';
+import 'package:sbas/features/assign/views/modal_tab/assign_bed_approve_move.dart';
+import 'package:sbas/features/assign/views/modal_tab/assign_bed_approve_screen.dart';
+import 'package:sbas/features/assign/views/modal_tab/assign_bed_cancel_screen.dart';
+import 'package:sbas/features/assign/views/modal_tab/assign_bed_find_screen.dart';
+import 'package:sbas/features/assign/views/modal_tab/assign_bed_go_home.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
@@ -38,7 +41,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 ),
               ),
             ),
-            data: (timeline) => Column(children: [
+            data: (timeLine) => Column(children: [
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -72,49 +75,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                               //timeline_suspend //  원형 점
 
                               children: [
-                                for (var i = 0; i < timeline.count!; i++) timeLineBody(timeline.items[i]),
-                                // FutureBuilder(
-                                //     future: ref
-                                //         .watch(patientTimeLineProvider.notifier)
-                                //         .getAsync(patient.ptId, assignItem.bdasSeq), // Provider에서 timeLine 상태를 가져옵니다.
-                                //     builder: (context, snapshot) {
-                                //       if (snapshot.hasData) {
-                                //         if (bedStatCdNm == '승인대기') {
-                                //           return Column(
-                                //             children: [
-                                //               for (var i = 0; i < snapshot.data!.count!; i++) timeLineBody(snapshot.data!.items[i]),
-                                //             ],
-                                //           );
-                                //         }
-                                //       }
-                                //       return Container();
-                                //     }
-                                // if (assignItem.bedStatCdNm == '배정대기')
-                                // return  Column(
-                                //     children: [
-                                //       for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
-                                //     ],
-                                //   );
-                                // if (assignItem.bedStatCdNm == '이송대기')
-                                //   Column(
-                                //     children: [
-                                //       for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
-                                //     ],
-                                //   ),
-                                // if (assignItem.bedStatCdNm == '이송중')
-                                //   Column(
-                                //     children: [
-                                //       for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
-                                //     ],
-                                //   ),
-                                // if (assignItem.bedStatCdNm == '입원')
-                                //   return Column(
-                                //     children: [
-                                //       for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
-                                //     ],
-                                //   );
-                                //     );
-                                //   },
+                                for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
                               ],
                             ),
                           ],
@@ -124,13 +85,13 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   ),
                 ),
               ),
-              _whichBottomer(assignItem.bedStatCdNm ?? '', context, ref), //patient.bedStatNm ?? ''
+              _whichBottomer(assignItem.bedStatCdNm ?? '', context, ref, timeLine), //patient.bedStatNm ?? ''
             ]),
           ),
     );
   }
 
-  Widget _whichBottomer(String type, BuildContext context, WidgetRef ref) {
+  Widget _whichBottomer(String type, BuildContext context, WidgetRef ref, PatientTimelineModel timeLine) {
     switch (type) {
       case '승인대기':
         return _bottomer(
@@ -147,43 +108,35 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               ).then((value) => print(value));
             },
             rBtnFunc: () async {
-              String? res = await _showBottomSheet(
-                context: context,
-              );
-              if (res != null && context.mounted) {
-                //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
+              if (context.mounted) {
+                bool postRes;
+                //원내배정
                 if (assignItem.inhpAsgnYn == "Y") {
+                  String? res = await _showBottomSheet(
+                    context: context,
+                  );
                   //원내배정
-                  var postRes = await ref.watch(assignBedProvider.notifier).approveReq({
+                  postRes = await ref.watch(assignBedProvider.notifier).approveReq({
                     "ptId": patient.ptId,
                     "bdasSeq": assignItem.bdasSeq,
                     "aprvYn": "Y",
-                    // "negCd": null,//불가사유 String
                     "msg": res.toString(),
                   });
-                } else {
-                  ref.watch(availableHospitalProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq).then((value) => Navigator.push(
+
+                  if (postRes) {
+                    //승인성공
+                    await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
+                    await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                  }
+                }
+
+                //원외배정
+                else {
+                  await ref.watch(availableHospitalProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq).then((value) => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => AssignBedFindScreen(patient: patient, bdasSeq: assignItem.bdasSeq, hospList: value),
                       ))); //병상요청시 가능한 병원 목록 조회
-                }
-                var postRes = await ref.watch(assignBedProvider.notifier).approveReq({
-                  "ptId": patient.ptId,
-                  "bdasSeq": assignItem.bdasSeq,
-                  "aprvYn": "Y",
-                  // "negCd": null,//불가사유 String
-                  "msg": res.toString(),
-                  "reqHospIdList": [
-                    // "HP00002944",
-                    // "HP00065860",
-                    // "HP00013438",
-                  ]
-                });
-                if (postRes) {
-                  //승인성공
-                  await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
-                  await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
                 }
               }
             });
@@ -203,25 +156,17 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               );
             },
             rBtnFunc: () async {
-              dynamic res = await _showBottomSheet(
-                context: context,
-              );
-              var hospList = await ref.watch(availableHospitalProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq); //병상요청시 가능한 병원 목록 조회
-              if (res != null && context.mounted) {
-                //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AssignBedFindScreen(
-                        patient: patient,
-                        bdasSeq: assignItem.bdasSeq,
-                        // hospList: AvailableHospitalModel(items: [],ㅋ count: 0),
-                        hospList: hospList
-                        // hospList: AvailableHospitalModel(items: [], count: 0),
-                        ),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AsgnBdDoctorApproveScreen(
+                    patient: patient,
+                    assignItem: assignItem,
+                    timeLine: timeLine.items.where((element) => element.hospId != null).first,
+                    //TODO:: Timeline 에서 현재 사용자의 hospId 가 있는 데이터를 가져오도록 추후구현
                   ),
-                );
-              }
+                ),
+              );
             });
       case '이송대기':
         return Common.bottomer(
