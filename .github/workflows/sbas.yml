@@ -1,9 +1,14 @@
 name: SBAS
 
+# on:
+#   push:
+#     branches: [ 'dev' ]
+
 on:
   push:
     branches: [ 'dev' ]
-
+    tags:
+      - '*'
 jobs:
   android:
     runs-on: ubuntu-latest
