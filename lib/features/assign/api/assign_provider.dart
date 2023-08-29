@@ -9,8 +9,7 @@ class AssignProvider {
   Future<AvailableHospitalModel> getAvalHospList(String ptId, int bdasSeq) async =>
       AvailableHospitalModel.fromJson(await _api.getAsync('$_privateRoute/hosp-list/$ptId/$bdasSeq'));
 
-  Future<dynamic> postReqApprove(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/reqconfirm', toJson(map));
-  Future<dynamic> postAsgnConfirm(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/asgnconfirm', toJson(map));
+  Future<dynamic> postReqConfirm(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/reqconfirm', toJson(map));
   Future<dynamic> posDocAsgnConfirm(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/asgnconfirm', toJson(map));
 
   final _privateRoute = 'private/bedasgn';

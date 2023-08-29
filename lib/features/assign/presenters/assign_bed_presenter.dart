@@ -30,14 +30,14 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
   }
 
   Future<bool> approveReq(Map<String, dynamic> map) async {
-    String res = await _asgnRepo.postReqApprove(map);
+    String res = await _asgnRepo.postReqConfirm(map);
     if (res == "승인 성공") return true;
     return false;
   }
 
-  Future<bool> asgnConfirm(Map<String, dynamic> map) async {
-    String res = await _asgnRepo.postAsgnConfirm(map);
-    if (res == "승인 성공") return true;
+  Future<bool> rejectReq(Map<String, dynamic> map) async {
+    String res = await _asgnRepo.postReqConfirm(map);
+    if (res == "배정 불가 처리 완료") return true;
     return false;
   }
 

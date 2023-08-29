@@ -6,15 +6,21 @@ import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
 class AssignBedCancelScreen extends StatefulWidget {
   const AssignBedCancelScreen({
     super.key,
     required this.patient,
+    required this.assignItem,
+    required this.timeLine,
   });
   final Patient patient;
+  final TimeLine timeLine;
+  final AssignItemModel assignItem;
   @override
   State<AssignBedCancelScreen> createState() => _AssignBedCancelScreenState();
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,66 +26,102 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     required this.patient,
     required this.assignItem,
   });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
       child: ref.watch(patientTimeLineProvider).when(
-            loading: () => const SBASProgressIndicator(),
-            error: (error, stackTrace) => Center(
-              child: Text(
-                error.toString(),
-                style: const TextStyle(
-                  color: Palette.mainColor,
-                ),
-              ),
-            ),
-            data: (timeLine) => Column(children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      dateFragment(getDateTimeFormatDay(assignItem.updtDttm!)),
-                      IntrinsicHeight(
-                        child: Stack(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 32.w),
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: CustomPaint(
-                                      painter: DashedLineVerticalPainter(),
-                                      size: const Size(1, double.infinity),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Column(
-                              // crossAxisAlignment: CrossAxisAlignment.start,
-                              // timeline_approved
-                              // timeline_bed_assign_complete
-                              // timeline_go_hospital_complete
-                              // timeline_move_complete
-                              // timeline_refused
-                              // timeline_go_home
-                              //
-                              //timeline_suspend //  원형 점
-
-                              children: [
-                                for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+          loading: () => const SBASProgressIndicator(),
+          error: (error, stackTrace) => Center(
+                child: Text(
+                  error.toString(),
+                  style: const TextStyle(
+                    color: Palette.mainColor,
                   ),
                 ),
               ),
-              _whichBottomer(assignItem.bedStatCdNm ?? '', context, ref, timeLine), //patient.bedStatNm ?? ''
-            ]),
-          ),
+          data: (timeLine) {
+            final customTitleOrder = {
+              "병상요청 (전원요청)": -2,
+              "병상요청 (원내배정)": -2,
+              "승인대기": -1,
+              "승인": 0,
+              "배정대기": 1,
+              "원내배정": 2,
+              "이송대기": 4,
+              "이송중": 5,
+              "입원": 6,
+            };
+
+            timeLine.items.sort((a, b) {
+              if (customTitleOrder[a.title] == null || customTitleOrder[b.title] == null) {
+                return 0;
+              }
+              final titleComparison = customTitleOrder[a.title]!.compareTo(customTitleOrder[b.title]!);
+              if (titleComparison != 0) {
+                return titleComparison;
+              } else {
+                if (a.updtDttm == null && b.updtDttm == null) {
+                  return 0;
+                } else if (a.updtDttm == null) {
+                  return 1;
+                } else if (b.updtDttm == null) {
+                  return -1;
+                } else {
+                  return a.updtDttm!.compareTo(b.updtDttm!);
+                }
+              }
+            });
+
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        dateFragment(getDateTimeFormatDay(assignItem.updtDttm!)),
+                        IntrinsicHeight(
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 32.w),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: CustomPaint(
+                                        painter: DashedLineVerticalPainter(),
+                                        size: const Size(1, double.infinity),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                // timeline_approved
+                                // timeline_bed_assign_complete
+                                // timeline_go_hospital_complete
+                                // timeline_move_complete
+                                // timeline_refused
+                                // timeline_go_home
+                                //
+                                //timeline_suspend //  원형 점
+
+                                children: [
+                                  for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                _whichBottomer(assignItem.bedStatCdNm ?? '', context, ref, timeLine),
+              ],
+            );
+          }),
     );
   }
 
@@ -97,15 +131,40 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
         return _bottomer(
             lBtnText: "배정 불가",
             rBtnText: "승인",
-            lBtnFunc: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AssignBedCancelScreen(
-                    patient: patient,
-                  ),
-                ),
-              ).then((value) => print(value));
+            lBtnFunc: () async {
+              var res = await Common.showModal(
+                  context,
+                  Common.commonModal(
+                    context: context,
+                    imageWidget: Image.asset(
+                      "assets/auth_group/modal_check.png",
+                      width: 44.h,
+                    ),
+                    imageHeight: 44.h,
+                    mainText: "배정 불가 처리하시겠습니까?",
+                    button1Text: "취소",
+                    button2Text: "확인",
+                    button1Function: () {
+                      Navigator.pop(context, false);
+                    },
+                    button2Function: () {
+                      Navigator.pop(context, true);
+                    },
+                  ));
+              if (res) {
+                //병상 배정 불가 처리.
+                var postRes = await ref.watch(assignBedProvider.notifier).rejectReq({
+                  "ptId": patient.ptId,
+                  "bdasSeq": assignItem.bdasSeq,
+                  "aprvYn": "N",
+                  // "msg": res.toString(),
+                });
+                if (postRes) {
+                  await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
+                  await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                  Navigator.pop(context);
+                }
+              }
             },
             rBtnFunc: () async {
               if (context.mounted) {
@@ -129,7 +188,6 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                     await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
                   }
                 }
-
                 //원외배정
                 else {
                   await ref.watch(availableHospitalProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq).then((value) => Navigator.push(
@@ -151,6 +209,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => AssignBedCancelScreen(
                     patient: patient,
+                    assignItem: assignItem,
+                    timeLine: timeLine.items.where((element) => (element.chrgInstId != null && element.asgnReqSeq != null)).first,
                   ),
                 ),
               );
