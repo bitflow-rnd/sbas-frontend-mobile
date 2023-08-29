@@ -8,7 +8,7 @@ class InfoInstModel {
   String? instNm;
   String? dstrCd1;
   String? dstrCd2;
-  String? chrgId;
+  String? chrgUserId;
   String? chrgTelno;
   String? chrgNm;
   String? baseAddr;
@@ -27,7 +27,7 @@ class InfoInstModel {
     this.instNm,
     this.dstrCd1,
     this.dstrCd2,
-    this.chrgId,
+    this.chrgUserId,
     this.chrgNm,
     this.chrgTelno,
     this.baseAddr,
@@ -65,8 +65,8 @@ class InfoInstModel {
     if (json["dstrCd2"] is String) {
       dstrCd2 = json["dstrCd2"];
     }
-    if (json["chrgId"] is String) {
-      chrgId = json["chrgId"];
+    if (json["chrgUserId"] is String) {
+      chrgUserId = json["chrgUserId"];
     }
     chrgNm = json["chrgNm"];
     if (json["chrgTelno"] is String) {
@@ -90,7 +90,7 @@ class InfoInstModel {
     data["instNm"] = instNm;
     data["dstrCd1"] = dstrCd1;
     data["dstrCd2"] = dstrCd2;
-    data["chrgId"] = chrgId;
+    data["chrgUserId"] = chrgUserId;
     data["chrgNm"] = chrgNm;
     data["chrgTelno"] = chrgTelno;
     data["baseAddr"] = baseAddr;

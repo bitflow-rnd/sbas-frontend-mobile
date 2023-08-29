@@ -8,7 +8,7 @@ class PatientItemModel {
   String? dstr1CdNm;
   String? dstr2CdNm;
   String? mpno;
-  String? hospId;
+  String? chrgInstId;
   String? hospNm;
   String? telno;
   String? natiCd;
@@ -34,7 +34,7 @@ class PatientItemModel {
     this.dstr1CdNm,
     this.dstr2CdNm,
     this.mpno,
-    this.hospId,
+    this.chrgInstId,
     this.hospNm,
     required this.tagList,
   });
@@ -48,8 +48,8 @@ class PatientItemModel {
     if (json["mpno"] is String) {
       mpno = json["mpno"];
     }
-    if (json["hospId"] is String) {
-      hospId = json["hospId"];
+    if (json["chrgInstId"] is String) {
+      chrgInstId = json["chrgInstId"];
     }
     if (json["hospNm"] is String) {
       hospNm = json["hospNm"];
@@ -113,7 +113,7 @@ class PatientItemModel {
     data['dstr1CdNm'] = dstr1CdNm;
     data['dstr2CdNm'] = dstr2CdNm;
     data['mpno'] = mpno;
-    data['hospId'] = hospId;
+    data['chrgInstId'] = chrgInstId;
     data['hospNm'] = hospNm;
 
     return data;

@@ -29,7 +29,7 @@ class Patient {
   int? bdasSeq;
   String? dstr1CdNm;
   String? dstr2CdNm;
-  dynamic hospId;
+  dynamic chrgInstId;
   String? hospNm;
   int? age;
   String? bedStatCdNm;
@@ -68,7 +68,7 @@ class Patient {
     this.bdasSeq,
     this.dstr1CdNm,
     this.dstr2CdNm,
-    this.hospId,
+    this.chrgInstId,
     this.hospNm,
     this.age,
     this.bedStatCdNm,
@@ -167,8 +167,8 @@ class Patient {
     if (json['dstr2CdNm'] is String) {
       dstr2CdNm = json['dstr2CdNm'];
     }
-    if (json['hospId'] is String) {
-      hospId = json['hospId'];
+    if (json['chrgInstId'] is String) {
+      chrgInstId = json['chrgInstId'];
     }
     if (json['hospNm'] is String) {
       hospNm = json['hospNm'];
@@ -217,7 +217,7 @@ class Patient {
     data['bdasSeq'] = bdasSeq;
     data['dstr1CdNm'] = dstr1CdNm;
     data['dstr2CdNm'] = dstr2CdNm;
-    data['hospId'] = hospId;
+    data['chrgInstId'] = chrgInstId;
     data['hospNm'] = hospNm;
     data['age'] = age;
     data['bedStatCdNm'] = bedStatCdNm;

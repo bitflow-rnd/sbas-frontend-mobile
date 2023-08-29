@@ -219,7 +219,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                         "bdasSeq": widget.bdasSeq,
                         "aprvYn": "Y",
                         "msg": msgRes.toString(),
-                        // "hospId": widget.hospList.items[selectedIdx!].hospId,
+                        // "chrgInstId": widget.hospList.items[selectedIdx!].chrgInstId,
                         "reqHospIdList": ["HP00002944"],
                       });
                       if (postRes) {

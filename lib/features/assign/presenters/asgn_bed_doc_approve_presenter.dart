@@ -11,12 +11,12 @@ class AsgnBdDocPresenter extends AsyncNotifier {
     _assignRepository = ref.watch(assignRepoProvider);
   }
 
-  init(String ptId, String aprvYn, int bdasSeq, int asgnReqSeq, String hospId) {
+  init(String ptId, String aprvYn, int bdasSeq, int asgnReqSeq, String chrgInstId) {
     asgnBdReqModel.ptId = ptId;
     asgnBdReqModel.aprvYn = aprvYn;
     asgnBdReqModel.bdasSeq = bdasSeq;
     asgnBdReqModel.asgnReqSeq = asgnReqSeq;
-    asgnBdReqModel.hospId = hospId;
+    asgnBdReqModel.chrgInstId = chrgInstId;
   }
 
 // ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
@@ -45,7 +45,7 @@ class AsgnBdDocPresenter extends AsyncNotifier {
   }
 
   bool isValid() {
-    if (asgnBdReqModel.hospId == null || asgnBdReqModel.hospId!.isEmpty) {
+    if (asgnBdReqModel.chrgInstId == null || asgnBdReqModel.chrgInstId!.isEmpty) {
       return false;
     }
     if (asgnBdReqModel.asgnReqSeq == null || asgnBdReqModel.asgnReqSeq == -1) {

@@ -162,8 +162,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   builder: (context) => AsgnBdDoctorApproveScreen(
                     patient: patient,
                     assignItem: assignItem,
-                    timeLine: timeLine.items.where((element) => (element.hospId != null && element.asgnReqSeq != null)).first,
-                    //TODO:: Timeline 에서 현재 사용자의 hospId 가 있는 데이터를 가져오도록 추후구현
+                    timeLine: timeLine.items.where((element) => (element.chrgInstId != null && element.asgnReqSeq != null)).first,
+                    //TODO:: Timeline 에서 현재 사용자의 chrgInstId 가 있는 데이터를 가져오도록 추후구현
                   ),
                 ),
               );

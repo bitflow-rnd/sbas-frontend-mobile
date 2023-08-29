@@ -12,14 +12,12 @@ class AvailableHospitalModel {
       count = json["count"];
     }
     if (json["items"] is List) {
-      items = (json["items"] as List)
-          .map((e) => AvailableHospital.fromJson(e))
-          .toList();
+      items = (json["items"] as List).map((e) => AvailableHospital.fromJson(e)).toList();
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String ,dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
 
     data["count"] = count;
     data["items"] = items.map((e) => e.toJson()).toList();
@@ -29,22 +27,22 @@ class AvailableHospitalModel {
 }
 
 class AvailableHospital {
-  String? hospId;
+  String? chrgInstId;
   String? hospNm;
   String? distance;
   String? addr;
   List<String>? tagList;
 
   AvailableHospital({
-    this.hospId,
+    this.chrgInstId,
     this.hospNm,
     this.distance,
     this.addr,
     this.tagList,
   });
   AvailableHospital.fromJson(Map<String, dynamic> json) {
-    if (json["hospId"] is String) {
-      hospId = json["hospId"];
+    if (json["chrgInstId"] is String) {
+      chrgInstId = json["chrgInstId"];
     }
     if (json["hospNm"] is String) {
       hospNm = json["hospNm"];
@@ -56,14 +54,13 @@ class AvailableHospital {
       addr = json["addr"];
     }
     if (json["tagList"] is List) {
-      tagList =
-          json["tagList"] == null ? null : List<String>.from(json["tagList"]);
+      tagList = json["tagList"] == null ? null : List<String>.from(json["tagList"]);
     }
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
-    data['hospId'] = hospId;
+    data['chrgInstId'] = chrgInstId;
     data["hospNm"] = hospNm;
     data["distance"] = distance;
     data["addr"] = addr;

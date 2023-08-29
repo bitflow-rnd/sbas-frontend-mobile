@@ -78,8 +78,8 @@ class PaitentCardItem extends StatelessWidget {
                       //     : Container(),
                     ],
                   ),
-                  model.hospId != null ? Gaps.v4 : Container(),
-                  model.hospId == null
+                  model.chrgInstId != null ? Gaps.v4 : Container(),
+                  model.chrgInstId == null
                       ? Container()
                       : Text(
                           model.hospNm ?? '알수없음',

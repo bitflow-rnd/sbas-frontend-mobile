@@ -32,8 +32,8 @@ class TimeLine {
   String? updtDttm;
   String? msg;
   String? timeLineStatus;
-  String? hospId;
-  String? chrgId;
+  String? chrgInstId;
+  String? chrgUserId;
   int? asgnReqSeq;
 
   TimeLine({
@@ -42,8 +42,8 @@ class TimeLine {
     this.updtDttm,
     this.msg,
     this.timeLineStatus,
-    this.hospId,
-    this.chrgId,
+    this.chrgInstId,
+    this.chrgUserId,
     this.asgnReqSeq,
   });
 
@@ -63,11 +63,11 @@ class TimeLine {
     if (json["timeLineStatus"] is String) {
       timeLineStatus = json["timeLineStatus"];
     }
-    if (json["hospId"] is String) {
-      hospId = json["hospId"];
+    if (json["chrgInstId"] is String) {
+      chrgInstId = json["chrgInstId"];
     }
-    if (json["chrgId"] is String) {
-      chrgId = json["chrgId"];
+    if (json["chrgUserId"] is String) {
+      chrgUserId = json["chrgUserId"];
     }
     if (json["asgnReqSeq"] is int) {
       asgnReqSeq = json["asgnReqSeq"];
@@ -82,8 +82,8 @@ class TimeLine {
     data["updtDttm"] = updtDttm;
     data["msg"] = msg;
     data["timeLineStatus"] = timeLineStatus;
-    data["hospId"] = hospId;
-    data["chrgId"] = chrgId;
+    data["chrgInstId"] = chrgInstId;
+    data["chrgUserId"] = chrgUserId;
     data["asgnReqSeq"] = asgnReqSeq;
 
     return data;

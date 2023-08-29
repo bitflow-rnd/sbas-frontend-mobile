@@ -3,7 +3,7 @@ class AsgnBdReqModel {
   int? bdasSeq;
   int? asgnReqSeq;
   String? aprvYn;
-  String? hospId;
+  String? chrgInstId;
   dynamic negCd;
   String? msg;
   String? roomNm; //병실
@@ -17,7 +17,7 @@ class AsgnBdReqModel {
     this.bdasSeq,
     this.asgnReqSeq,
     this.aprvYn,
-    this.hospId,
+    this.chrgInstId,
     this.negCd,
     this.msg,
     this.roomNm,
@@ -32,7 +32,7 @@ class AsgnBdReqModel {
         bdasSeq = json['bdasSeq'] as int?,
         asgnReqSeq = json['asgnReqSeq'] as int?,
         aprvYn = json['aprvYn'] as String?,
-        hospId = json['hospId'] as String?,
+        chrgInstId = json['chrgInstId'] as String?,
         negCd = json['negCd'],
         msg = json['msg'] as String?,
         roomNm = json['roomNm'] as String?,
@@ -46,7 +46,7 @@ class AsgnBdReqModel {
         'bdasSeq': bdasSeq,
         'asgnReqSeq': asgnReqSeq,
         'aprvYn': aprvYn,
-        'hospId': hospId,
+        'chrgInstId': chrgInstId,
         'negCd': negCd,
         'msg': msg,
         'roomNm': roomNm,

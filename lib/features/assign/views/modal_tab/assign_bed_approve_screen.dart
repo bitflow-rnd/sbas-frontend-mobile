@@ -87,7 +87,7 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                                   _getTitle(list[i], i == 0 ? null : false),
                                   Gaps.v16,
                                   i == 0
-                                      ? _getTextInputField(i: i, initalValue: timeLine.hospId ?? "", isFixed: true, ref: ref)
+                                      ? _getTextInputField(i: i, initalValue: timeLine.chrgInstId ?? "", isFixed: true, ref: ref)
                                       : _getTextInputField(i: i, hint: hintList[i], ref: ref),
                                   Gaps.v28,
                                 ],
@@ -124,7 +124,7 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                         //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
                         ref
                             .watch(asgnBdDocProvider.notifier)
-                            .init(assignItem.ptId??"", "Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? -1, timeLine.hospId ?? "");
+                            .init(assignItem.ptId ?? "", "Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? -1, timeLine.chrgInstId ?? "");
                         if (ref.watch(asgnBdDocProvider.notifier).isValid() == true) {
                           bool aprvDocRes = await ref.watch(asgnBdDocProvider.notifier).aprvDocReq();
 

@@ -97,7 +97,7 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
                                   model.instNm = selectedModel.instNm;
                                   model.dstrCd1 = selectedModel.dstrCd1;
                                   model.dstrCd2 = selectedModel.dstrCd2;
-                                  model.chrgId = selectedModel.chrgId;
+                                  model.chrgUserId = selectedModel.chrgUserId;
                                   model.chrgNm = selectedModel.chrgNm;
                                   model.chrgTelno = selectedModel.chrgTelno;
                                   model.baseAddr = selectedModel.baseAddr;
