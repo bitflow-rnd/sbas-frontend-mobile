@@ -54,6 +54,9 @@ class V1Provider {
       }
     } catch (exception) {
       if (kDebugMode) {
+        if (route.contains("bedassignreq")) {
+          showToast(exception.toString());
+        }
         print({
           'exception': exception,
         });

@@ -39,33 +39,6 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
     return severelyDiseaseModel;
   }
 
-  Future<void> registry(String ptId) async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      final entries = ref.read(checkedSeverelyDiseaseProvider).entries;
-      var bioInfoModel = ref.read(bioInfoProvider.notifier).bioInfoModel;
-      severelyDiseaseModel.ptId = ptId;
-      severelyDiseaseModel.dnrAgreYn = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA').key;
-      severelyDiseaseModel.reqBedTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP').key;
-      severelyDiseaseModel.svrtTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP').key;
-      severelyDiseaseModel.svrtIptTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP').key;
-      severelyDiseaseModel.udds = entries.where((e) => e.value && e.key.substring(0, 4) == 'UDDS').map<String>((e) => e.key).toList();
-      severelyDiseaseModel.pttp = entries.where((e) => e.value && e.key.substring(0, 4) == 'PTTP').map<String>((e) => e.key).toList();
-      severelyDiseaseModel.avpuCd = bioInfoModel.avpu;
-      severelyDiseaseModel.oxyYn = bioInfoModel.o2Apply;
-      severelyDiseaseModel.bdtp = bioInfoModel.bdTemp;
-      severelyDiseaseModel.spo2 = bioInfoModel.spo2;
-      severelyDiseaseModel.hr = bioInfoModel.pulse;
-      severelyDiseaseModel.resp = bioInfoModel.breath;
-      severelyDiseaseModel.sbp = bioInfoModel.sbp;
-      severelyDiseaseModel.newsScore = bioInfoModel.score;
-
-      await _patientRepository.regSevrInfo(severelyDiseaseModel.toJson());
-      return severelyDiseaseModel;
-    });
-    if (state.hasError) {}
-  }
-
   Future<bool> saveDiseaseInfo(String ptId) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
@@ -74,7 +47,12 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
       severelyDiseaseModel.ptId = ptId;
       severelyDiseaseModel.dnrAgreYn = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA').key;
       severelyDiseaseModel.reqBedTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'BDTP').key;
-      severelyDiseaseModel.svrtTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP').key;
+      severelyDiseaseModel.svrtTypeCd = entries //중증 유형   -> null 가능함.
+          .firstWhere(
+            (e) => e.value && e.key.substring(0, 4) == 'SVTP',
+            orElse: () => const MapEntry("", true),
+          )
+          .key;
       severelyDiseaseModel.svrtIptTypeCd = entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP').key;
       severelyDiseaseModel.udds = entries.where((e) => e.value && e.key.substring(0, 4) == 'UDDS').map<String>((e) => e.key).toList();
       severelyDiseaseModel.pttp = entries.where((e) => e.value && e.key.substring(0, 4) == 'PTTP').map<String>((e) => e.key).toList();

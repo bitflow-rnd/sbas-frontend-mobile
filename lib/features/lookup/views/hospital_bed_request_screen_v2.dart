@@ -442,6 +442,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
 
   bool _trySeverelyDisValidation() {
     bool isValid = severelyDisFormKey.currentState?.validate() ?? false;
+
     if (isValid) {
       severelyDisFormKey.currentState?.save();
     }

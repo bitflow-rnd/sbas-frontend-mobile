@@ -13,7 +13,7 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   @override
   FutureOr<OriginInfoModel> build() {
-    _dprtInfo = OriginInfoModel();
+    _dprtInfo.clear();
 
     _repository = ref.read(patientRepoProvider);
 
@@ -30,7 +30,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
       // await _repository.postRegOriginInfo(_dprtInfo);
 
       var res = await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _dprtInfo)); //실병상요청.
-      if (!res || res) {
+      if ( res=="병상 요청 성공") {
         ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel.clear();
         _dprtInfo.clear();
       }
@@ -86,7 +86,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       ref.watch(selectedRegionProvider.notifier).state = baseCode;
-      _dprtInfo.reqDstr1Cd = baseCode.cdNm;
+      _dprtInfo.reqDstr1Cd = baseCode.cdId;
       // _dprtInfo.reqDstr2Cd = value; //2 입력하는 부분이 없음..
 
       return _dprtInfo;
@@ -207,7 +207,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   }
 
   late final PatientRepository _repository;
-  late final OriginInfoModel _dprtInfo;
+  final OriginInfoModel _dprtInfo = OriginInfoModel();
 }
 
 final originInfoProvider = AsyncNotifierProvider<OriginInfoPresenter, OriginInfoModel>(
