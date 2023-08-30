@@ -55,6 +55,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     final patientImage = ref.watch(patientImageProvider);
     final patientAttc = ref.watch(patientAttcProvider);
     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
+
     // final patientIsUpload = ref.watch(patientIsUploadProvider);
     //빌드 이후 실행
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -63,7 +64,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
         await ref.watch(patientRegProvider.notifier).patientInit(patient!); // 기존 데이터로 override
         ref.read(patientInfoIsChangedProvider.notifier).state = true;
         // 이미 기본 정보 입력, valid 한 케이스 2(감염병정보)으로 이동
-        if (_tryBasicInfoValidation()) {
+        if (tryBasicInfoValidation()) {
           ref.read(orderOfRequestProvider.notifier).update((state) => 2);
         } else {
           //입력은 되었지만 이상함 -> 1(환자정보) 추가하도록
@@ -281,7 +282,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                   }
                 } else if (order == 1) {
-                  if (_tryBasicInfoValidation()) {
+                  if (tryBasicInfoValidation()) {
                     ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
                     ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                   } else {
@@ -291,7 +292,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   }
                 } else if (order == 2) {
                   //예외처리 추가 필요.
-                  if (_tryInfectDisValidation()) {
+                  if (tryInfectDisValidation()) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
 
                     bool infectRes = await ref.read(infectiousDiseaseProvider.notifier).registry(a.ptId ?? '');
@@ -300,7 +301,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 3) {
-                  if (_trySeverelyDisValidation()) {
+                  if (trySeverelyDisValidation(ref)) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
 
                     bool severeRes = await ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(a.ptId ?? '');
@@ -309,7 +310,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 4) {
-                  if (_tryOrignInfoValidation() && ref.watch(originInfoProvider.notifier).isValid()) {
+                  if (tryOrignInfoValidation() && ref.watch(originInfoProvider.notifier).isValid()) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
 
                     bool orignRes = await ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(a.ptId ?? '');
@@ -346,7 +347,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     ref.read(patientRegProvider.notifier).overrideInfo(patient!);
                   }
                 } else if (order == 1) {
-                  if (_tryBasicInfoValidation()) {
+                  if (tryBasicInfoValidation()) {
                     if (patient == null || patient?.ptId == null) {
                       //등록되지 않은 환자의 경우 등록.
                       await ref.read(patientRegProvider.notifier).registry(null, context);
@@ -359,7 +360,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   }
                 } else if (order == 2) {
                   //예외처리 추가 필요.
-                  if (_tryInfectDisValidation()) {
+                  if (tryInfectDisValidation()) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
 
                     bool infectRes = await ref.read(infectiousDiseaseProvider.notifier).registry(patient?.ptId ?? a.ptId ?? '');
@@ -368,7 +369,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 3) {
-                  if (_trySeverelyDisValidation()) {
+                  if (trySeverelyDisValidation(ref)) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
                     bool severeRes = await ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patient?.ptId ?? a.ptId ?? '');
                     if (severeRes) {
@@ -376,7 +377,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 4) {
-                  if (_tryOrignInfoValidation() && ref.watch(originInfoProvider.notifier).isValid()) {
+                  if (tryOrignInfoValidation() && ref.watch(originInfoProvider.notifier).isValid()) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
                     bool orignRes = await ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(patient?.ptId ?? a.ptId ?? '');
                     if (orignRes) {
@@ -420,11 +421,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     );
   }
 
-// patientBasicFormKey
-// infectiousDisFormKey
-// severelyDisFormKey
-// orignFormKey
-  bool _tryBasicInfoValidation() {
+  bool tryBasicInfoValidation() {
     bool isValid = patientBasicFormKey.currentState?.validate() ?? false;
     if (isValid) {
       patientBasicFormKey.currentState?.save();
@@ -432,16 +429,18 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     return isValid;
   }
 
-  bool _tryInfectDisValidation() {
+  bool tryInfectDisValidation() {
     bool isValid = infectiousDisFormKey.currentState?.validate() ?? false;
+
     if (isValid) {
       infectiousDisFormKey.currentState?.save();
     }
     return isValid;
   }
 
-  bool _trySeverelyDisValidation() {
+  bool trySeverelyDisValidation(WidgetRef ref) {
     bool isValid = severelyDisFormKey.currentState?.validate() ?? false;
+    isValid = ref.watch(severelyDiseaseProvider.notifier).isValid();
 
     if (isValid) {
       severelyDisFormKey.currentState?.save();
@@ -449,7 +448,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     return isValid;
   }
 
-  bool _tryOrignInfoValidation() {
+  bool tryOrignInfoValidation() {
     bool isValid = orignFormKey.currentState?.validate() ?? false;
     if (isValid) {
       orignFormKey.currentState?.save();
