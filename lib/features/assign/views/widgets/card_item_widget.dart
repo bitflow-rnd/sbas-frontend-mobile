@@ -100,8 +100,8 @@ class AsgnCardItem extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      model.chrgInstNm != null ? Gaps.v4 : Container(),
-                      model.chrgInstNm == null
+                      model.chrgInstNm != null && model.chrgInstNm != '' ? Gaps.v4 : Container(),
+                      model.chrgInstNm == null || model.chrgInstNm == ''
                           ? Container()
                           : Text(
                               model.chrgInstNm ?? '',
@@ -111,22 +111,23 @@ class AsgnCardItem extends ConsumerWidget {
                               ),
                               maxLines: 1,
                             ),
-                      Gaps.v4,
-                      Text(
-                        model.diagNm ?? '',
-                        style: CTS(color: Colors.grey, fontSize: 12),
-                        maxLines: 1,
-                      ),
+                      if (model.diagNm != null && model.diagNm != '') Gaps.v4,
+                      if (model.diagNm != null && model.diagNm != '')
+                        Text(
+                          model.diagNm ?? '',
+                          style: CTS(color: Colors.grey, fontSize: 12),
+                          maxLines: 1,
+                        ),
                       Text(
                         model.bascAddr ?? '',
                         style: CTS(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           color: Colors.grey,
                         ),
                         maxLines: 1,
                       ),
                       Container(
-                        height: 30.h,
+                        height: 32.h,
                         width: (MediaQuery.of(context).size.width / 2).w,
                         padding: EdgeInsets.symmetric(
                           vertical: 6.h,
