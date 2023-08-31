@@ -32,6 +32,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   init() {
     patientInfoModel.clear();
     ref.watch(patientInfoIsChangedProvider.notifier).state = false;
+    patientInfoModel.natiCd = "NATI0001";
+    patientInfoModel.natiNm = "대한민국"; //대한민국 기본 Default
+    patientInfoModel.dethYn = "N"; //생존으로 initialization
   }
 
   patientInit(Patient patient) {
@@ -390,7 +393,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     }
   }
 
-  String? isValid(int index, String? value) {
+  String? isFieldValid(int index, String? value) {
     switch (index) {
       case 0:
         if (value == null ||

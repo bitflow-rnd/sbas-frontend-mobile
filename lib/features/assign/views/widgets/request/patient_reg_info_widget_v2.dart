@@ -88,8 +88,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                                 text: vm.getTextEditingController(i, report),
                               ),
                               onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-                              onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(i, value),
-                              validator: (value) => vm.isValid(i, value),
+                              onChanged: (value) => vm.setTextEditingController(i, value),
+                              validator: (value) => vm.isFieldValid(i, value),
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
                                   RegExp(vm.getRegExp(i)),
@@ -149,12 +149,11 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
               ),
               onSaved: (newValue) => vm.setTextEditingController(index, newValue),
               onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(index, value),
-              validator: (value) => vm.isValid(index, value),
+              validator: (value) => vm.isFieldValid(index, value),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
                   RegExp(vm.getRegExp(index)),
                 ),
-                FilteringTextInputFormatter.singleLineFormatter,
               ],
               keyboardType: vm.getKeyboardType(index),
               autovalidateMode: AutovalidateMode.always,
@@ -180,12 +179,11 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                     ),
                     onSaved: (newValue) => vm.setTextEditingController(index + 100, newValue),
                     onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(index + 100, value),
-                    validator: (value) => vm.isValid(index + 100, value),
+                    validator: (value) => vm.isFieldValid(index + 100, value),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
                         RegExp(vm.getRegExp(index + 100)),
                       ),
-                      FilteringTextInputFormatter.singleLineFormatter,
                     ],
                     keyboardType: vm.getKeyboardType(index + 100),
                     autovalidateMode: AutovalidateMode.always,

@@ -22,7 +22,7 @@ import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
-import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
+import 'package:sbas/features/assign/views/widgets/request/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
@@ -64,7 +64,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
         await ref.watch(patientRegProvider.notifier).patientInit(patient!); // 기존 데이터로 override
         ref.read(patientInfoIsChangedProvider.notifier).state = true;
         // 이미 기본 정보 입력, valid 한 케이스 2(감염병정보)으로 이동
-        if (tryBasicInfoValidation()) {
+        if (tryBasicInfoValidation(ref)) {
           ref.read(orderOfRequestProvider.notifier).update((state) => 2);
         } else {
           //입력은 되었지만 이상함 -> 1(환자정보) 추가하도록
@@ -270,10 +270,12 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 //신규 환자 등록 화면.
                 if (order == 0) {
                   if (patientAttc == null && patientImage != null) {
+                    //image 가 선택되어있지만 업로드 이전
                     //역학조사서 이미지는 선택되어있지만, 업로드 이전
                     var uploadRes = await ref.read(patientRegProvider.notifier).uploadImage(patientImage);
                     if (uploadRes) ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
                   } else if (patientAttc != null && patientImage != null) {
+                    // image 가 선택되어있고 업로드 된 경우
                     //역학조사서 이미지가 업로드 되어있는 경우 + 환자등록
                     ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                     // ref.read(patientRegProvider.notifier).overrideInfo(patient!);
@@ -282,7 +284,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                   }
                 } else if (order == 1) {
-                  if (tryBasicInfoValidation()) {
+                  if (tryBasicInfoValidation(ref)) {
                     ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
                     ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                   } else {
@@ -318,7 +320,6 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                       await ref.read(patientRepoProvider).lookupPatientInfo();
                       // ignore: use_build_context_synchronously
                       Navigator.popUntil(context, (route) => route.isFirst);
-
                       // ignore: use_build_context_synchronously
                       Navigator.push(
                           context,
@@ -347,7 +348,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     ref.read(patientRegProvider.notifier).overrideInfo(patient!);
                   }
                 } else if (order == 1) {
-                  if (tryBasicInfoValidation()) {
+                  if (tryBasicInfoValidation(ref)) {
                     if (patient == null || patient?.ptId == null) {
                       //등록되지 않은 환자의 경우 등록.
                       await ref.read(patientRegProvider.notifier).registry(null, context);
@@ -421,8 +422,9 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     );
   }
 
-  bool tryBasicInfoValidation() {
+  bool tryBasicInfoValidation(WidgetRef ref) {
     bool isValid = patientBasicFormKey.currentState?.validate() ?? false;
+
     if (isValid) {
       patientBasicFormKey.currentState?.save();
     }

@@ -369,7 +369,7 @@ class PatientRegInfoState extends ConsumerState<PatientRegInfo> {
                               ),
                               onSaved: (newValue) => vm.setTextEditingController(i, newValue),
                               onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(i, value),
-                              validator: (value) => vm.isValid(i, value),
+                              validator: (value) => vm.isFieldValid(i, value),
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
                                   RegExp(vm.getRegExp(i)),

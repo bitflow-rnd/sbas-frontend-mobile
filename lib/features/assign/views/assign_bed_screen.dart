@@ -98,7 +98,10 @@ class AssignBedScreen extends ConsumerWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => HospitalBedRequestScreenV2(patient: null),
+                                        builder: (context) => HospitalBedRequestScreenV2(
+                                          patient: null,
+                                          isPatientRegister: true,
+                                        ),
                                       ),
                                     );
                                   },
