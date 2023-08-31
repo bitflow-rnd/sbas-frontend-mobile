@@ -310,7 +310,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 4) {
-                  if (tryOrignInfoValidation() && ref.watch(originInfoProvider.notifier).isValid()) {
+                  if (tryOrignInfoValidation(ref) && ref.watch(originInfoProvider.notifier).isValid()) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
 
                     bool orignRes = await ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(a.ptId ?? '');
@@ -377,7 +377,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 4) {
-                  if (tryOrignInfoValidation() && ref.watch(originInfoProvider.notifier).isValid()) {
+                  if (tryOrignInfoValidation(ref) && ref.watch(originInfoProvider.notifier).isValid()) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
                     bool orignRes = await ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(patient?.ptId ?? a.ptId ?? '');
                     if (orignRes) {
@@ -448,8 +448,10 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     return isValid;
   }
 
-  bool tryOrignInfoValidation() {
+  bool tryOrignInfoValidation(WidgetRef ref) {
     bool isValid = orignFormKey.currentState?.validate() ?? false;
+    isValid = ref.watch(severelyDiseaseProvider.notifier).isValid();
+
     if (isValid) {
       orignFormKey.currentState?.save();
     }

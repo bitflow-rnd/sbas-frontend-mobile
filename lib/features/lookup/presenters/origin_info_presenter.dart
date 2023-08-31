@@ -13,10 +13,7 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   @override
   FutureOr<OriginInfoModel> build() {
-    _dprtInfo.clear();
-
     _repository = ref.read(patientRepoProvider);
-
     return _dprtInfo;
   }
 
@@ -30,7 +27,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
       // await _repository.postRegOriginInfo(_dprtInfo);
 
       var res = await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _dprtInfo)); //실병상요청.
-      if ( res=="병상 요청 성공") {
+      if (res == "병상 요청 성공") {
         ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel.clear();
         _dprtInfo.clear();
       }
@@ -193,11 +190,19 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   }
 
   bool isValid() {
-    if (_dprtInfo.dprtDstrBascAddr == null || _dprtInfo.dprtDstrBascAddr!.isEmpty) {
+    // if (_dprtInfo.dprtDstrBascAddr == null || _dprtInfo.dprtDstrBascAddr!.isEmpty) {
+    //   return false;
+    // }
+    // if (_dprtInfo.dprtDstrDetlAddr == null || _dprtInfo.dprtDstrDetlAddr!.isEmpty) {
+    //   return false;
+    // }
+    if (_dprtInfo.dprtDstrTypeCd == null || _dprtInfo.dprtDstrTypeCd == "") {
       return false;
     }
-    if (_dprtInfo.dprtDstrDetlAddr == null || _dprtInfo.dprtDstrDetlAddr!.isEmpty) {
-      return false;
+    if (_dprtInfo.dprtDstrTypeCd != null && _dprtInfo.dprtDstrTypeCd == "DPTP0002") {
+      if (_dprtInfo.inhpAsgnYn == null || _dprtInfo.inhpAsgnYn == "") {
+        return false;
+      }
     }
     if (_dprtInfo.reqDstr1Cd == null || _dprtInfo.reqDstr1Cd!.isEmpty) {
       return false;
@@ -207,6 +212,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
   }
 
   late final PatientRepository _repository;
+
   final OriginInfoModel _dprtInfo = OriginInfoModel();
 }
 

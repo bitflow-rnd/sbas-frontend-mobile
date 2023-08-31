@@ -94,8 +94,7 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
     if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP', orElse: () => const MapEntry("null", false)).key == "null") {
       return false;
     }
-
-    return false;
+    return true;
   }
 
   late final List<BaseCodeModel> list;

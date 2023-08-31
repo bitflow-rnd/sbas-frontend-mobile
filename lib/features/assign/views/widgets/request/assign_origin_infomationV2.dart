@@ -338,7 +338,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                         },
                         value: region
                             .firstWhere(
-                              (e) => e.cdNm == code,
+                              (e) => e.cdId == code,
                               orElse: () => BaseCodeModel(),
                             )
                             .cdId,
