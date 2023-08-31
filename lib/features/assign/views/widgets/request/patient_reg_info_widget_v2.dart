@@ -30,6 +30,10 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
     '생존',
     '사망',
   ];
+  final nationSel = [
+    '대한민국',
+    '기타',
+  ];
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => PatientRegInfoV2State();
 }
@@ -318,7 +322,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           Gaps.v10
         ],
       );
-  Widget _sliderRow(PatientRegisterPresenter vm) => Stack(
+  Widget _isDeathRow(PatientRegisterPresenter vm) => Stack(
         children: [
           Container(
             decoration: BoxDecoration(
@@ -384,43 +388,106 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
             children: [
               getSubTitlt(widget.list[3], false),
               const Spacer(),
-              _sliderRow(vm),
+              _isDeathRow(vm),
             ],
           ),
           Gaps.v12
         ],
       );
+
+  Widget _nationSelRow(PatientRegisterPresenter vm) => Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xffe4e4e4),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Row(
+              children: [
+                for (var i in widget.nationSel)
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
+                        child: Text(i,
+                            style: CTS.bold(
+                              fontSize: 11,
+                              color: Colors.transparent,
+                            )),
+                      ),
+                      Gaps.h1,
+                    ],
+                  )
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              for (var i in widget.nationSel)
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => vm.setNation(i == "대한민국" ? "NATI0001" : "NATI0002"),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: widget.nationSel[vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i ? const Color(0xff538ef5) : Colors.transparent,
+                            borderRadius: widget.nationSel[vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i ? BorderRadius.circular(6) : null),
+                        padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
+                        child: Text(i,
+                            style: CTS.bold(
+                              fontSize: 11,
+                              color: widget.nationSel[vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i ? Palette.white : Palette.greyText_60,
+                            )),
+                      ),
+                    ),
+                    i != '기타'
+                        ? Container(
+                            height: 12.h,
+                            width: 1,
+                            decoration: BoxDecoration(
+                              color: const Color(0xff676a7a).withOpacity(0.2),
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+            ],
+          ),
+        ],
+      );
   Widget _nation(PatientRegInfoModel report, PatientRegisterPresenter vm) => Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InkWell(
-                onTap: () => vm.setNation(report),
-                child: Container(
-                  margin: EdgeInsets.only(right: 7.w),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Palette.greyText_20,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 13.5.h),
-                  child: Text(
-                    vm.getTextEditingController(4, report),
-                    style: CTS(
-                      fontSize: 13,
-                      color: Palette.greyText,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
+              _nationSelRow(vm),
+              // InkWell(
+              //   onTap: () => vm.setNation(report),
+              //   child: Container(
+              //     margin: EdgeInsets.only(right: 7.w),
+              //     decoration: BoxDecoration(
+              //       border: Border.all(
+              //         color: Palette.greyText_20,
+              //         width: 1,
+              //       ),
+              //       borderRadius: BorderRadius.circular(4),
+              //     ),
+              //     padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 13.5.h),
+              //     child: Text(
+              //       vm.getTextEditingController(4, report),
+              //       style: CTS(
+              //         fontSize: 13,
+              //         color: Palette.greyText,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+
+              Container(
+                width: 130.w,
                 child: TextFormField(
+                  controller: TextEditingController(text: vm.patientInfoModel.natiNm),
                   decoration: getInputDecoration(report.natiCd == 'NATI0001' ? '' : '직접입력'),
-                  controller: TextEditingController(
-                    text: vm.getTextEditingController(104, report),
-                  ),
                   onSaved: (newValue) => vm.setTextEditingController(104, newValue),
                   onChanged: (value) => vm.setTextEditingController(104, value),
                   validator: (value) {
@@ -430,7 +497,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                   autovalidateMode: AutovalidateMode.always,
                   keyboardType: TextInputType.streetAddress,
                   maxLines: 1,
-                  readOnly: report.natiCd == 'NATI0001',
+                  readOnly: vm.patientInfoModel.natiCd == 'NATI0001',
                 ),
               ),
             ],

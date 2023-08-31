@@ -215,18 +215,31 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     });
   }
 
-  Future<void> setNation(PatientRegInfoModel report) async {
+  Future<void> setNation(String natiCd) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      report.natiCd = report.natiCd == 'NATI0001' ? 'NATI0002' : 'NATI0001';
-      report.natiNm = report.natiCd == 'NATI0001' ? '대한민국' : '';
-
-      patientInfoModel.natiCd = report.natiCd;
-      patientInfoModel.natiNm = report.natiNm;
-
+      patientInfoModel.natiCd = natiCd;
+      if (natiCd == "NATI0001") {
+        patientInfoModel.natiNm = "대한민국";
+      } else {
+        patientInfoModel.natiNm = "";
+      }
       return patientInfoModel;
     });
   }
+
+  // Future<void> setNation(PatientRegInfoModel report) async {
+  //   state = const AsyncLoading();
+  //   state = await AsyncValue.guard(() async {
+  //     report.natiCd = report.natiCd == 'NATI0001' ? 'NATI0002' : 'NATI0001';
+  //     report.natiNm = report.natiCd == 'NATI0001' ? '대한민국' : '';
+
+  //     patientInfoModel.natiCd = report.natiCd;
+  //     patientInfoModel.natiNm = report.natiNm;
+
+  //     return patientInfoModel;
+  //   });
+  // }
 
   String? get sex => patientInfoModel.gndr;
 

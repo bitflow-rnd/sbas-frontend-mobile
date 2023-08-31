@@ -156,7 +156,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                                         )),
                                                   ),
                                                 ),
-                                                i != '기타'
+                                                stIndex != '기타'
                                                     ? Container(
                                                         height: 12,
                                                         width: 1,
