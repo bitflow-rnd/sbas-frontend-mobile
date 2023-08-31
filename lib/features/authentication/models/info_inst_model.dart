@@ -4,6 +4,7 @@ class InfoInstModel {
   String? updtUserId;
   String? updtDttm;
   String? id;
+  String? instId;
   String? instTypeCd;
   String? instNm;
   String? dstrCd1;
@@ -23,6 +24,7 @@ class InfoInstModel {
     this.updtUserId,
     this.updtDttm,
     this.id,
+    this.instId,
     this.instTypeCd,
     this.instNm,
     this.dstrCd1,
@@ -49,6 +51,9 @@ class InfoInstModel {
     }
     if (json["updtDttm"] is String) {
       updtDttm = json["updtDttm"];
+    }
+    if (json["instId"] is String) {
+      instId = json["instId"];
     }
     if (json["id"] is String) {
       id = json["id"];

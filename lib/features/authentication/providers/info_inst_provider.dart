@@ -15,10 +15,11 @@ class InfoInstProvider {
       );
       if (res.statusCode == 200) {
         final List<InfoInstModel> list = [];
-
-        for (var element in fromJson(res.body)['result']) {
+        final items = fromJson(res.body);
+        items['result']['items'].forEach((element) {
           list.add(InfoInstModel.fromJson(element));
-        }
+        });
+
         return list;
       }
     } catch (exception) {

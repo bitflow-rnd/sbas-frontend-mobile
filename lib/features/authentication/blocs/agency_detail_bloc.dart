@@ -26,8 +26,7 @@ class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
 
       final user = ref.read(regUserProvider);
 
-      list.addAll(await _infoInstRepository.getOrganCode(
-          user.instTypeCd ?? '', agency.cdId ?? ''));
+      list.addAll(await _infoInstRepository.getOrganCode(user.instTypeCd ?? '', agency.cdId ?? ''));
 
       return list;
     });
@@ -54,13 +53,12 @@ class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
     }
   }
 
-  late final List<InfoInstModel> list;
+  List<InfoInstModel> list = [];
 
   late final UserRegRequestRepository _infoInstRepository;
 }
 
-final agencyDetailProvider =
-    AsyncNotifierProvider<AgencyDetailBloc, List<InfoInstModel>>(
+final agencyDetailProvider = AsyncNotifierProvider<AgencyDetailBloc, List<InfoInstModel>>(
   () => AgencyDetailBloc(),
 );
 final selectedAgencyProvider = StateProvider<InfoInstModel>(

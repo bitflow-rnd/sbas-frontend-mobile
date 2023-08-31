@@ -40,7 +40,7 @@ class UserRegRequestRepository {
       await _baseOrganProvider.getOrganCode(
         // 'instTypecd=ORGN0003&dstrCd1=$dstrCd1',
         // ORGN003 으로 안나와서 002로 수정.
-        'instTypecd=ORGN0002&dstrCd1=$dstrCd1',
+        'instTypecd=ORGN0003&dstrCd1=$dstrCd1',
       );
   Future<List<InfoInstModel>> getOrganCode(
     String typeCd,
