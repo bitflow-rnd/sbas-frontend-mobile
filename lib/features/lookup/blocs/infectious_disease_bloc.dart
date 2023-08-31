@@ -30,7 +30,7 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
       await _patientRepository.registerDiseaseInfo(
         _infectiousDiseaseModel.toJson(),
       );
-      
+
       return _infectiousDiseaseModel;
     });
     if (state.hasError) {

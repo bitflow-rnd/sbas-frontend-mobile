@@ -506,9 +506,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                     ref.read(agencyDetailProvider.notifier).updatePublicHealthCenter(
                           region.firstWhere((e) => e.cdId == value).cdId ?? '',
                         );
-                    ref.read(infectiousDiseaseProvider.notifier).updateRegion(
-                          region.firstWhere((e) => e.cdId == value).cdId ?? '',
-                        );
+                    ref.read(infectiousDiseaseProvider.notifier).updateRegion("");
                     field.didChange(value);
                   },
                   value: field.value != '' ? field.value : null,
