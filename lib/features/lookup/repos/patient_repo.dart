@@ -59,6 +59,9 @@ class PatientRepository {
   Future<PatientDiseaseInfoModel> getDiseaseInfo(String ptId) async => await _privatePatientProvider.getDiseaseInfo(
         ptId,
       );
+  Future<OriginInfoModel> getTransferInfo(String ptId,int bdasSeq) async => await _privatePatientProvider.getTransInfo(
+        ptId,bdasSeq
+      );
   Future<PatientTimelineModel> getTimeLine(String ptId, int bdasSeq) async => await _privatePatientProvider.getTimeLine(ptId, bdasSeq);
   final _patientProvider = PatientProvider();
   final _privatePatientProvider = PrivatePatientProvider();

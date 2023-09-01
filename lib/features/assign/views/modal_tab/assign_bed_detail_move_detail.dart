@@ -4,16 +4,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/lookup/models/origin_info_model.dart';
 
 class AssignBedMoveDetialInfo extends ConsumerWidget {
-  const AssignBedMoveDetialInfo({super.key, this.type});
+  const AssignBedMoveDetialInfo({
+    super.key,
+    this.type,
+    this.ptId,
+    required this.transferInfo,
+  });
   final String? type;
   final String message = "메시지";
-
+  final OriginInfoModel transferInfo;
+  final String? ptId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<String> list = [];
-    if (type == "병원-집") {
+    if (transferInfo.dprtDstrTypeCd == "DPTP0001") {
+      //DPTP0001: 자택 ,  DPTP9992: 병원 DPTP0003: 기타.
       list = [
         '환자 출발지',
         '배정 요청 지역',
@@ -21,7 +29,7 @@ class AssignBedMoveDetialInfo extends ConsumerWidget {
         '보호자 2 연락처',
         '메시지',
       ];
-    } else {
+    } else if (transferInfo.dprtDstrTypeCd == "DPTP0002") {
       list = [
         '환자 출발지',
         '배정 요청 지역',
@@ -29,6 +37,12 @@ class AssignBedMoveDetialInfo extends ConsumerWidget {
         '담당의',
         '전화번호',
         '원내배정여부',
+        '메시지',
+      ];
+    } else {
+      list = [
+        '환자 출발지',
+        '배정 요청 지역',
         '메시지',
       ];
     }
@@ -68,11 +82,11 @@ class AssignBedMoveDetialInfo extends ConsumerWidget {
                       )
                     ],
                   ),
-                  i == 0
+                  i == 0 && (transferInfo.dprtDstrBascAddr == null && transferInfo.dprtDstrDetlAddr == null) == false
                       ? Padding(
                           padding: EdgeInsets.only(top: 12.h),
                           child: Text(
-                            '대구 북구 호암로 51 래미안아파트 113동 501호',
+                            "${transferInfo.dprtDstrBascAddr ?? ""}" " ${(transferInfo.dprtDstrDetlAddr ?? " ")}",
                             textAlign: TextAlign.end,
                             style: CTS(
                               color: Palette.greyText,
@@ -105,52 +119,59 @@ class AssignBedMoveDetialInfo extends ConsumerWidget {
   }
 
   String _getListValue_1(int index) {
-    String text = '';
-    if (type == "병원-집") {
-      text = "Data has to be here";
+    if (transferInfo.dprtDstrTypeCd == "DPTP0001") {
+      // '환자 출발지',
+      // '배정 요청 지역',
+      // '보호자 1 연락처',
+      // '보호자 2 연락처',
+      // '메시지',
       switch (index) {
         case 0:
-          text = "자택";
-          break;
+          return "자택";
         case 1:
-          text = '대구광역시';
-          break;
+          return transferInfo.reqDstr1CdNm ?? "-";
         case 2:
-          text = "010-2323-2323";
-          break;
+          return transferInfo.nok1Telno ?? "-";
         case 3:
-          text = "010-2323-2323";
-          break;
+          return transferInfo.nok2Telno ?? "-";
         case 4:
-          text = "";
-          break;
+          return transferInfo.msg ?? "-";
       }
-      return text;
-    } else {
+    } else if (transferInfo.dprtDstrTypeCd == "DPTP0002") {
       switch (index) {
+        //  '환자 출발지',
+        // '배정 요청 지역',
+        // '진료과',
+        // '담당의',
+        // '전화번호',
+        // '원내배정여부',
+        // '메시지',
         case 0:
-          text = "자택";
-          break;
+          return "병원";
         case 1:
-          text = '대구광역시';
-          break;
+          return transferInfo.reqDstr1CdNm ?? "";
         case 2:
-          text = "감염내과";
-          break;
+          return transferInfo.deptNm ?? "-";
         case 3:
-          text = "권승구";
-          break;
+          return transferInfo.spclNm ?? "-";
         case 4:
-          text = "022-2222-2222";
-          break;
+          return transferInfo.chrgTelno ?? "-";
         case 5:
-          text = "전원요청";
-          break;
+          return (transferInfo.inhpAsgnYn ?? "N") == "Y" ? "원내배정" : "전원요청";
         case 6:
-          text = "";
-          break;
+          return transferInfo.msg ?? "-";
       }
-      return text;
+    } else if (transferInfo.dprtDstrTypeCd == "DPTP0003") {
+      switch (index) {
+        case 0:
+          return "기타";
+        case 1:
+          return transferInfo.reqDstr1CdNm ?? "";
+
+        case 2:
+          return transferInfo.msg ?? "";
+      }
     }
+    return "";
   }
 }

@@ -10,6 +10,7 @@ import 'package:sbas/features/assign/views/modal_tab/assign_bed_detail_move_deta
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_disease_info.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_patient_info.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_timeline.dart';
+import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
@@ -21,11 +22,13 @@ class AssignBedDetailScreen extends ConsumerStatefulWidget {
     required this.patient,
     required this.assignItem,
     required this.diseaseInfo,
+    required this.transferInfo,
   });
   final Patient patient;
   final AssignItemModel assignItem;
 
   final PatientDiseaseInfoModel diseaseInfo;
+  final OriginInfoModel transferInfo;
   final headerList = [
     "타임라인",
     "환자정보",
@@ -163,7 +166,7 @@ class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
               AssignBedDetailDiseaseInfo(ptId: widget.patient.ptId, diseaseInfo: widget.diseaseInfo)
             else if (_selectedIndex == 3)
               /*집-병원 또는 null 로 하면 집-병원 으로 젼환가능*/
-              const AssignBedMoveDetialInfo(type: "병원-집")
+              AssignBedMoveDetialInfo(ptId: widget.patient.ptId, transferInfo: widget.transferInfo)
           ],
         ),
       ),

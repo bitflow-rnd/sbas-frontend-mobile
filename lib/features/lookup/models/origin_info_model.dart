@@ -1,6 +1,7 @@
 class OriginInfoModel {
   String? ptId;
   String? reqDstr1Cd;
+  String? reqDstr1CdNm;
   String? reqDstr2Cd;
   String? dprtDstrTypeCd;
   String? dprtDstrBascAddr;
@@ -17,6 +18,7 @@ class OriginInfoModel {
   OriginInfoModel({
     this.ptId,
     this.reqDstr1Cd,
+    this.reqDstr1CdNm,
     this.reqDstr2Cd,
     this.dprtDstrTypeCd,
     this.dprtDstrBascAddr,
@@ -36,6 +38,9 @@ class OriginInfoModel {
     }
     if (json["reqDstr1Cd"] is String) {
       reqDstr1Cd = json["reqDstr1Cd"];
+    }
+    if (json["reqDstr1CdNm"] is String) {
+      reqDstr1CdNm = json["reqDstr1CdNm"];
     }
     if (json["reqDstr2Cd"] is String) {
       reqDstr2Cd = json["reqDstr2Cd"];
@@ -77,6 +82,7 @@ class OriginInfoModel {
   void clear() {
     ptId = null;
     reqDstr1Cd = null;
+    reqDstr1CdNm = null;
     reqDstr2Cd = null;
     dprtDstrTypeCd = null;
     dprtDstrBascAddr = null;
@@ -96,6 +102,7 @@ class OriginInfoModel {
 
     data["ptId"] = ptId;
     data["reqDstr1Cd"] = reqDstr1Cd;
+    data["reqDstr1CdNm"] = reqDstr1CdNm;
     data["reqDstr2Cd"] = reqDstr2Cd;
     data["dprtDstrTypeCd"] = dprtDstrTypeCd;
     data["dprtDstrBascAddr"] = dprtDstrBascAddr;

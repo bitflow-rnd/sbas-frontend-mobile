@@ -1,4 +1,5 @@
 import 'package:sbas/common/api/v1_provider.dart';
+import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_list_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
@@ -18,6 +19,8 @@ class PrivatePatientProvider {
 
   Future<PatientDiseaseInfoModel> getDiseaseInfo(String ptId) async =>
       PatientDiseaseInfoModel.fromJson(await _api.getAsync('$_privateRoute/disease-info/$ptId'));
+  Future<OriginInfoModel> getTransInfo(String ptId, int bdasSeq) async =>
+      OriginInfoModel.fromJson(await _api.getAsync('$_privateRoute/transinfo/$ptId/$bdasSeq'));
 
   Future<PatientTimelineModel> getTimeLine(String ptId, int bdasSeq) async {
     if (timeLine == null) {
