@@ -228,7 +228,6 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                               } else {
                                 ref.watch(HospList.provider.notifier).addHosp(currentHospId);
                                 print("selected");
-                                
                               }
                               // print(selectedHospList);
                             },
@@ -333,8 +332,6 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                       ],
                                     ),
                                     Gaps.v8,
-                                  Consumer(builder: (context, ref, child) {
-                                    return 
                                     Container(
                                         height: 24.h,
                                         width: 24.h,
@@ -350,7 +347,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                                 color: Palette.white,
                                                 size: 16.h,
                                               )
-                                            : Container())
+                                            : Container()),
                                   ],
                                 )
                               ],
