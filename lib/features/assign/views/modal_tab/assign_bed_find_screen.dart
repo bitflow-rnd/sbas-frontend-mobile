@@ -13,6 +13,8 @@ import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
+final searchDetailIsOpenProvider = StateProvider<bool>((ref) => false);
+
 class AssignBedFindScreen extends ConsumerStatefulWidget {
   const AssignBedFindScreen({
     super.key,
@@ -23,17 +25,16 @@ class AssignBedFindScreen extends ConsumerStatefulWidget {
   final Patient patient;
   final int? bdasSeq;
   final AvailableHospitalModel hospList;
+
   @override
   ConsumerState<AssignBedFindScreen> createState() => _AssignBedFindScreenState();
 }
 
-final availableHospIdProvider = StateProvider<List<String>>((ref) => []);
-
 class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
-  bool isSearchDetailOpen = false;
-
   @override
   Widget build(BuildContext context) {
+    final isSearchDetailOpen = ref.watch(searchDetailIsOpenProvider);
+    final selectedHospList = ref.watch(HospList.provider.notifier);
     return Scaffold(
         backgroundColor: Palette.white,
         appBar: AppBar(
@@ -111,7 +112,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                         Expanded(child: rowMultiSelectButton(['임산부', '음압격리', '투석'], ['임산부'])),
                       ],
                     ),
-                    isSearchDetailOpen
+                    ref.watch(searchDetailIsOpenProvider.notifier).state
                         ? Column(
                             children: [
                               Gaps.v16,
@@ -157,9 +158,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                           padding: EdgeInsets.zero, // 패딩 설정
                           constraints: const BoxConstraints(),
                           onPressed: () {
-                            setState(() {
-                              isSearchDetailOpen = !isSearchDetailOpen;
-                            });
+                            ref.read(searchDetailIsOpenProvider.notifier).state = !isSearchDetailOpen;
                           },
                           icon: Icon(!isSearchDetailOpen ? Icons.arrow_drop_down : Icons.arrow_drop_up),
                         ),
@@ -202,7 +201,162 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      for (var i = 0; i < widget.hospList.count!; i++) requestContainer(i),
+                      for (var i = 0; i < widget.hospList.count!; i++)
+                        Container(
+                          // margin: EdgeInsets.only(top: 8.h, left: 12.w, right: 12.w),
+                          margin: EdgeInsets.only(top: 8.h),
+                          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0x1a645c5c),
+                                offset: Offset(0, 3),
+                                blurRadius: 12,
+                                spreadRadius: 0,
+                              ),
+                            ],
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              String currentHospId = widget.hospList.items[i].hospId!;
+                              bool hasItem = selectedHospList.contains(currentHospId);
+                              if (hasItem) {
+                                ref.watch(HospList.provider.notifier).removeHosp(currentHospId);
+                                print("removed");
+                              } else {
+                                ref.watch(HospList.provider.notifier).addHosp(currentHospId);
+                                print("selected");
+                                
+                              }
+                              // print(selectedHospList);
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.asset("assets/message/hospital_icon.png", width: 36.w, height: 36.h),
+                                Gaps.h8,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${widget.hospList.items[i].hospNm}',
+                                          style: CTS.medium(
+                                            color: Colors.black,
+                                            fontSize: 15.sp,
+                                          ),
+                                        ),
+                                        // Gaps.h8,
+                                        // Container(
+                                        //   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                                        //   decoration: BoxDecoration(
+                                        //     color: Palette.red.withOpacity(0.12),
+                                        //     borderRadius: BorderRadius.circular(11),
+                                        //   ),
+                                        //   child: Text(
+                                        //     'AI추천',
+                                        //     style: CTS.medium(
+                                        //       color: Palette.red,
+                                        //       fontSize: 12,
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
+                                    // Gaps.v8,
+                                    SizedBox(
+                                      width: 180.w,
+                                      height: 30.h,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '${widget.hospList.items[i].addr}',
+                                              style: CTS(
+                                                color: Palette.greyText_80,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Gaps.v4,
+                                    Row(
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(right: 4.w),
+                                          padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                                          decoration: BoxDecoration(
+                                            color: Palette.greyText_20,
+                                            borderRadius: BorderRadius.circular(4),
+                                          ),
+                                          child: Text(
+                                            '#임산부',
+                                            style: CTS(
+                                              color: Palette.greyText_80,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(right: 4.w),
+                                          padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                                          decoration: BoxDecoration(
+                                            color: Palette.greyText_20,
+                                            borderRadius: BorderRadius.circular(4),
+                                          ),
+                                          child: Text(
+                                            '#음압격리',
+                                            style: CTS(
+                                              color: Palette.greyText_80,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                const Spacer(),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.location_on_sharp, color: Palette.mainColor, size: 20.h),
+                                        Text('${widget.hospList.items[i].distance}', style: CTS(color: Palette.mainColor, fontSize: 12)),
+                                      ],
+                                    ),
+                                    Gaps.v8,
+                                  Consumer(builder: (context, ref, child) {
+                                    return 
+                                    Container(
+                                        height: 24.h,
+                                        width: 24.h,
+                                        decoration: BoxDecoration(
+                                            color: selectedHospList.contains(widget.hospList.items[i].hospId!) ? Palette.mainColor : Palette.white,
+                                            borderRadius: BorderRadius.circular(4.r),
+                                            border: !selectedHospList.contains(widget.hospList.items[i].hospId!)
+                                                ? Border.all(color: Palette.greyText_20, width: 1)
+                                                : null),
+                                        child: selectedHospList.contains(widget.hospList.items[i].hospId!)
+                                            ? Icon(
+                                                Icons.check,
+                                                color: Palette.white,
+                                                size: 16.h,
+                                              )
+                                            : Container())
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        )
                     ],
                   ),
                 ),
@@ -253,167 +407,6 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
             ],
           ),
         ));
-  }
-
-  Widget requestContainer(int idx) {
-    return Container(
-      // margin: EdgeInsets.only(top: 8.h, left: 12.w, right: 12.w),
-      margin: EdgeInsets.only(top: 8.h),
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1a645c5c),
-            offset: Offset(0, 3),
-            blurRadius: 12,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: InkWell(
-        onTap: () async {
-          bool hasItem = ref.read(availableHospIdProvider.notifier).state.contains(widget.hospList.items[idx].hospId);
-          if (hasItem) {
-            ref.read(availableHospIdProvider.notifier).update((state) {
-              state.remove(widget.hospList.items[idx].hospId!);
-              return state;
-            });
-          } else {
-            ref.read(availableHospIdProvider.notifier).update((state) {
-              state.add(widget.hospList.items[idx].hospId!);
-              return state;
-            });
-          }
-        },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset("assets/message/hospital_icon.png", width: 36.w, height: 36.h),
-            Gaps.h8,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      '${widget.hospList.items[idx].hospNm}',
-                      style: CTS.medium(
-                        color: Colors.black,
-                        fontSize: 15.sp,
-                      ),
-                    ),
-                    // Gaps.h8,
-                    // Container(
-                    //   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                    //   decoration: BoxDecoration(
-                    //     color: Palette.red.withOpacity(0.12),
-                    //     borderRadius: BorderRadius.circular(11),
-                    //   ),
-                    //   child: Text(
-                    //     'AI추천',
-                    //     style: CTS.medium(
-                    //       color: Palette.red,
-                    //       fontSize: 12,
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-                // Gaps.v8,
-                SizedBox(
-                  width: 180.w,
-                  height: 30.h,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Text(
-                          '${widget.hospList.items[idx].addr}',
-                          style: CTS(
-                            color: Palette.greyText_80,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Gaps.v4,
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 4.w),
-                      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
-                      decoration: BoxDecoration(
-                        color: Palette.greyText_20,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        '#임산부',
-                        style: CTS(
-                          color: Palette.greyText_80,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(right: 4.w),
-                      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
-                      decoration: BoxDecoration(
-                        color: Palette.greyText_20,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        '#음압격리',
-                        style: CTS(
-                          color: Palette.greyText_80,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const Spacer(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.location_on_sharp, color: Palette.mainColor, size: 20.h),
-                    Text('${widget.hospList.items[idx].distance}', style: CTS(color: Palette.mainColor, fontSize: 12)),
-                  ],
-                ),
-                Gaps.v8,
-                InkWell(
-                  // activeColor: Palette.mainColor,
-                  child: Container(
-                      height: 24.h,
-                      width: 24.h,
-                      decoration: BoxDecoration(
-                          color: ref.watch(availableHospIdProvider).contains(widget.hospList.items[idx].hospId) ? Palette.mainColor : Palette.white,
-                          borderRadius: BorderRadius.circular(4.r),
-                          border: !ref.watch(availableHospIdProvider).contains(widget.hospList.items[idx].hospId)
-                              ? Border.all(color: Palette.greyText_20, width: 1)
-                              : null),
-                      child: ref.watch(availableHospIdProvider).contains(widget.hospList.items[idx].hospId)
-                          ? Icon(
-                              Icons.check,
-                              color: Palette.white,
-                              size: 16.h,
-                            )
-                          : Container()),
-                  onTap: () {},
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
   }
 
   Widget dropdownButton(List<String> dlist, String sel) {
@@ -539,4 +532,20 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
           horizontal: 12.w,
         ),
       );
+}
+
+class HospList extends StateNotifier<List<String>> {
+  HospList() : super([]);
+
+  static final provider = StateNotifierProvider<HospList, List<String>>((ref) => HospList());
+
+  void addHosp(String item) {
+    state.add(item);
+  }
+
+  void removeHosp(String item) {
+    state.remove(item);
+  }
+
+  bool contains(String item) => state.contains(item);
 }
