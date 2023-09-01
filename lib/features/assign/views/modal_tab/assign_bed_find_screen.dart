@@ -27,9 +27,10 @@ class AssignBedFindScreen extends ConsumerStatefulWidget {
   ConsumerState<AssignBedFindScreen> createState() => _AssignBedFindScreenState();
 }
 
+final availableHospIdProvider = StateProvider<List<String>>((ref) => []);
+
 class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
   bool isSearchDetailOpen = false;
-  int? selectedIdx;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +78,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: TextFormField(
-                              decoration: getInputDecoration("대구광역시 호암로 21"),
+                              decoration: getInputDecoration(""),
                               validator: (value) {
                                 return null;
                               },
@@ -201,7 +202,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      for (var i = 0; i < widget.hospList.count!; i++) requestContainer(i, selectedIdx),
+                      for (var i = 0; i < widget.hospList.count!; i++) requestContainer(i),
                     ],
                   ),
                 ),
@@ -254,7 +255,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
         ));
   }
 
-  Widget requestContainer(int idx, int? selectedIdx) {
+  Widget requestContainer(int idx) {
     return Container(
       // margin: EdgeInsets.only(top: 8.h, left: 12.w, right: 12.w),
       margin: EdgeInsets.only(top: 8.h),
@@ -273,7 +274,18 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
       ),
       child: InkWell(
         onTap: () async {
-          // var list = await ref.watch(availableHospitalProvider.notifier).getAsync(widget.patient.ptId, widget.bdasSeq);
+          bool hasItem = ref.read(availableHospIdProvider.notifier).state.contains(widget.hospList.items[idx].hospId);
+          if (hasItem) {
+            ref.read(availableHospIdProvider.notifier).update((state) {
+              state.remove(widget.hospList.items[idx].hospId!);
+              return state;
+            });
+          } else {
+            ref.read(availableHospIdProvider.notifier).update((state) {
+              state.add(widget.hospList.items[idx].hospId!);
+              return state;
+            });
+          }
         },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -289,30 +301,30 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                       '${widget.hospList.items[idx].hospNm}',
                       style: CTS.medium(
                         color: Colors.black,
-                        fontSize: 15,
+                        fontSize: 15.sp,
                       ),
                     ),
-                    Gaps.h8,
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                      decoration: BoxDecoration(
-                        color: Palette.red.withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(11),
-                      ),
-                      child: Text(
-                        'AI추천',
-                        style: CTS.medium(
-                          color: Palette.red,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
+                    // Gaps.h8,
+                    // Container(
+                    //   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                    //   decoration: BoxDecoration(
+                    //     color: Palette.red.withOpacity(0.12),
+                    //     borderRadius: BorderRadius.circular(11),
+                    //   ),
+                    //   child: Text(
+                    //     'AI추천',
+                    //     style: CTS.medium(
+                    //       color: Palette.red,
+                    //       fontSize: 12,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 // Gaps.v8,
                 SizedBox(
-                  width: 220,
-                  height: 30,
+                  width: 180.w,
+                  height: 30.h,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -382,19 +394,19 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                       height: 24.h,
                       width: 24.h,
                       decoration: BoxDecoration(
-                          color: selectedIdx == idx ? Palette.mainColor : Palette.white,
-                          borderRadius: BorderRadius.circular(4),
-                          border: selectedIdx != idx ? Border.all(color: Palette.greyText_20, width: 1) : null),
-                      child: selectedIdx == idx
+                          color: ref.watch(availableHospIdProvider).contains(widget.hospList.items[idx].hospId) ? Palette.mainColor : Palette.white,
+                          borderRadius: BorderRadius.circular(4.r),
+                          border: !ref.watch(availableHospIdProvider).contains(widget.hospList.items[idx].hospId)
+                              ? Border.all(color: Palette.greyText_20, width: 1)
+                              : null),
+                      child: ref.watch(availableHospIdProvider).contains(widget.hospList.items[idx].hospId)
                           ? Icon(
                               Icons.check,
                               color: Palette.white,
                               size: 16.h,
                             )
                           : Container()),
-                  onTap: () {
-                    setIndex(idx);
-                  },
+                  onTap: () {},
                 ),
               ],
             )
@@ -402,12 +414,6 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
         ),
       ),
     );
-  }
-
-  setIndex(int idx) {
-    setState(() {
-      selectedIdx = idx;
-    });
   }
 
   Widget dropdownButton(List<String> dlist, String sel) {

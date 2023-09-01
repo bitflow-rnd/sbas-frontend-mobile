@@ -27,7 +27,8 @@ class AvailableHospitalModel {
 }
 
 class AvailableHospital {
-  String? chrgInstId;
+  String? chrgInstId; //제거필요?
+  String? hospId; 
   String? hospNm;
   String? distance;
   String? addr;
@@ -43,6 +44,9 @@ class AvailableHospital {
   AvailableHospital.fromJson(Map<String, dynamic> json) {
     if (json["chrgInstId"] is String) {
       chrgInstId = json["chrgInstId"];
+    }
+    if (json["hospId"] is String) {
+      hospId = json["hospId"];
     }
     if (json["hospNm"] is String) {
       hospNm = json["hospNm"];
@@ -60,6 +64,7 @@ class AvailableHospital {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
+    data['hospId'] = chrgInstId;
     data['chrgInstId'] = chrgInstId;
     data["hospNm"] = hospNm;
     data["distance"] = distance;
