@@ -22,12 +22,9 @@ final routerProvider = Provider(
         authToken = {
           'Authorization': 'Bearer ${prefs.getString('auth_token')}}',
         };
-        await provider.postAsync(
-            'admin/user/push-key',
-            toJson({
-              'id': prefs.getString('id'),
-              'pushKey': await FirebaseMessaging.instance.getToken()
-            }));
+        String? pushKey = await FirebaseMessaging.instance.getToken();
+        print("FCM firebase pushKey : $pushKey");
+        await provider.postAsync('admin/user/push-key', toJson({'id': prefs.getString('id'), 'pushKey': pushKey}));
       }
       FlutterNativeSplash.remove();
 

@@ -14,6 +14,7 @@ import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart'
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
 final searchDetailIsOpenProvider = StateProvider<bool>((ref) => false);
+final selectedItemsProvider = StateProvider<List<String>>((ref) => []);
 
 class AssignBedFindScreen extends ConsumerStatefulWidget {
   const AssignBedFindScreen({
@@ -34,7 +35,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
   @override
   Widget build(BuildContext context) {
     final isSearchDetailOpen = ref.watch(searchDetailIsOpenProvider);
-    final selectedHospList = ref.watch(HospList.provider.notifier);
+    final selectedHospList = ref.watch(selectedItemsProvider);
     return Scaffold(
         backgroundColor: Palette.white,
         appBar: AppBar(
@@ -223,10 +224,14 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                               String currentHospId = widget.hospList.items[i].hospId!;
                               bool hasItem = selectedHospList.contains(currentHospId);
                               if (hasItem) {
-                                ref.watch(HospList.provider.notifier).removeHosp(currentHospId);
+                                setState(() {
+                                  ref.watch(selectedItemsProvider.notifier).state.remove(currentHospId);
+                                });
                                 print("removed");
                               } else {
-                                ref.watch(HospList.provider.notifier).addHosp(currentHospId);
+                                setState(() {
+                                  ref.watch(selectedItemsProvider.notifier).state.add(currentHospId);
+                                });
                                 print("selected");
                               }
                               // print(selectedHospList);
@@ -336,12 +341,14 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                         height: 24.h,
                                         width: 24.h,
                                         decoration: BoxDecoration(
-                                            color: selectedHospList.contains(widget.hospList.items[i].hospId!) ? Palette.mainColor : Palette.white,
+                                            color: ref.watch(selectedItemsProvider.notifier).state.contains(widget.hospList.items[i].hospId!)
+                                                ? Palette.mainColor
+                                                : Palette.white,
                                             borderRadius: BorderRadius.circular(4.r),
-                                            border: !selectedHospList.contains(widget.hospList.items[i].hospId!)
+                                            border: !ref.watch(selectedItemsProvider.notifier).state.contains(widget.hospList.items[i].hospId!)
                                                 ? Border.all(color: Palette.greyText_20, width: 1)
                                                 : null),
-                                        child: selectedHospList.contains(widget.hospList.items[i].hospId!)
+                                        child: ref.watch(selectedItemsProvider.notifier).state.contains(widget.hospList.items[i].hospId!)
                                             ? Icon(
                                                 Icons.check,
                                                 color: Palette.white,
@@ -361,6 +368,10 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
               Common.bottomer(
                   lBtnFunc: () {},
                   rBtnFunc: () async {
+                    if (selectedHospList.isEmpty) {
+                      //하나는 선택되어야함.
+                      return;
+                    }
                     var msgRes = await Common.showBottomSheet(
                       context: context,
                       header: '배정요청',
@@ -372,7 +383,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                         "aprvYn": "Y",
                         "msg": msgRes.toString(),
                         // "chrgInstId": widget.hospList.items[selectedIdx!].chrgInstId,
-                        "reqHospIdList": ["HP00002944"],
+                        "reqHospIdList": selectedHospList,
                       });
                       if (postRes) {
                         //승인성공
@@ -529,20 +540,4 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
           horizontal: 12.w,
         ),
       );
-}
-
-class HospList extends StateNotifier<List<String>> {
-  HospList() : super([]);
-
-  static final provider = StateNotifierProvider<HospList, List<String>>((ref) => HospList());
-
-  void addHosp(String item) {
-    state.add(item);
-  }
-
-  void removeHosp(String item) {
-    state.remove(item);
-  }
-
-  bool contains(String item) => state.contains(item);
 }

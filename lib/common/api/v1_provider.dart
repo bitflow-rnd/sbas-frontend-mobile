@@ -52,11 +52,15 @@ class V1Provider {
         }
         return res.data['result'];
       }
-    } catch (exception) {
+    } on DioException catch (exception) {
       if (kDebugMode) {
         if (route.contains("bedassignreq")) {
           showToast(exception.toString());
         }
+        if (exception.response?.data['message'] == 'check push token') { // 백엔드 토큰이슈 
+          return true;
+        }
+
         print({
           'exception': exception,
         });
