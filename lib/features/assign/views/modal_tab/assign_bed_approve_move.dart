@@ -1,130 +1,345 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/models/base_code_model.dart';
+import 'package:sbas/common/widgets/field_error_widget.dart';
+import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/bloc/assign_bed_move_aprv_presenter.dart';
+import 'package:sbas/features/assign/bloc/safety_center_bloc.dart';
+import 'package:sbas/features/assign/bloc/safety_region_bloc.dart';
+import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
+import 'package:sbas/util.dart';
 
-class AssignBedApproveMoveScreen extends StatefulWidget {
+class AssignBedApproveMoveScreen extends ConsumerStatefulWidget {
   const AssignBedApproveMoveScreen({
     super.key,
     required this.patient,
+    required this.formKey,
+    required this.bdasSeq,
   });
   final Patient patient;
+  final int? bdasSeq;
+  final GlobalKey<FormState> formKey;
   @override
-  State<AssignBedApproveMoveScreen> createState() => _AssignBedApproveMoveScreenState();
+  ConsumerState<AssignBedApproveMoveScreen> createState() => _AssignBedApproveMoveScreenState();
 }
 
-class _AssignBedApproveMoveScreenState extends State<AssignBedApproveMoveScreen> {
+class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMoveScreen> {
   List<String> list = ['관할 구급대', '연락처', '탑승대원 및 의료진', '배차정보', '메시지'];
   List<String> hintList = ['', '연락처 입력', '', '차량번호 입력', '메시지 입력'];
   // 이부분 의료기관명 readonly 로 들어갈부분.
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(asgnBdMvAprPresenter.notifier).init(
+            bdasSeq: widget.bdasSeq,
+            ptId: widget.patient.ptId,
+          );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Palette.white,
-        appBar: AppBar(
-          title: Text(
-            "이송 처리",
-            style: CTS.medium(
-              fontSize: 15,
-              color: Colors.black,
-            ),
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(
-                Icons.close,
-                color: Palette.greyText,
-                weight: 24.h,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-          elevation: 0.5,
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
+      backgroundColor: Palette.white,
+      appBar: AppBar(
+        title: Text(
+          "이송 처리",
+          style: CTS.medium(
+            fontSize: 15,
+            color: Colors.black,
           ),
         ),
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Column(
-            children: [
-              PatientTopInfo(patient: widget.patient),
-              Divider(
-                color: Palette.greyText_20,
-                height: 1,
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 24.w),
-                    child: Column(
-                      children: [
-                        Gaps.v20,
-                        _getTitle(list[0], true),
-                        Gaps.v16,
-                        Container(child: firstRow()),
-                        Gaps.v28,
-                        Row(
-                          children: [
-                            _getTitle('연락처', true),
-                            Gaps.h16,
-                            Expanded(child: Container(padding: EdgeInsets.only(left: 12.w), child: _getTextInputField(hint: hintList[1]))),
-                          ],
-                        ),
-                        Gaps.v28,
-                        _getTitle(list[2], false),
-                        Gaps.v8,
-                        _thirdRow(),
-                        Gaps.v8,
-                        _thirdRow(),
-                        Gaps.v8,
-                        _thirdRow(),
-                        Gaps.v28,
-                        Row(
-                          children: [
-                            _getTitle(list[3], false),
-                            Spacer(),
-                            carNumTag("54더1980"),
-                            carNumTag("143호1927"),
-                          ],
-                        ),
-                        Gaps.v12,
-                        _getTextInputField(hint: hintList[3]),
-                        Gaps.v28,
-                        _getTitle(list[4], false),
-                        Gaps.v16,
-                        _getTextInputField(hint: hintList[4], maxLines: 6),
-                        Gaps.v28,
-                      ],
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.close,
+              color: Palette.greyText,
+              weight: 24.h,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+        elevation: 0.5,
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+      ),
+      body: Form(
+          key: widget.formKey,
+          autovalidateMode: AutovalidateMode.always,
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: ref.watch(asgnBdMvAprPresenter).when(
+                  error: (error, stackTrace) => Center(
+                    child: Text(
+                      error.toString(),
+                      style: const TextStyle(
+                        color: Palette.mainColor,
+                      ),
                     ),
                   ),
+                  loading: () => const SBASProgressIndicator(),
+                  data: (_) => Column(
+                    children: [
+                      PatientTopInfo(patient: widget.patient),
+                      Divider(
+                        color: Palette.greyText_20,
+                        height: 1,
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 24.w),
+                            child: Column(
+                              children: [
+                                Gaps.v20,
+                                _getTitle(list[0], true),
+                                Gaps.v16,
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ref.watch(saftyRegionPresenter).when(
+                                            loading: () => const SBASProgressIndicator(),
+                                            error: (error, stackTrace) => Center(
+                                              child: Text(
+                                                error.toString(),
+                                                style: const TextStyle(
+                                                  color: Palette.mainColor,
+                                                ),
+                                              ),
+                                            ),
+                                            data: (region) => FormField(
+                                              builder: (field) => _selectRegion(
+                                                region.where(
+                                                  (e) => e.cdGrpId == 'SIDO',
+                                                ),
+                                                field,
+                                              ),
+                                              validator: (value) {
+                                                return null;
+                                              },
+                                              // initialValue: widget.dstr1Cd,
+                                            ),
+                                          ),
+                                    ),
+                                    Gaps.h8,
+                                    Expanded(
+                                      child: ref.watch(saftyCenterPresenter).when(
+                                            loading: () => const SBASProgressIndicator(),
+                                            error: (error, stackTrace) => Center(
+                                              child: Text(
+                                                error.toString(),
+                                                style: const TextStyle(
+                                                  color: Palette.mainColor,
+                                                ),
+                                              ),
+                                            ),
+                                            data: (publicHealthCenter) => FormField(
+                                              builder: (field) => _selectSaftyCenter(publicHealthCenter, field),
+                                              validator: (value) {
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                                Gaps.v28,
+                                Row(
+                                  children: [
+                                    _getTitle('연락처', true),
+                                    Gaps.h16,
+                                    Expanded(
+                                        child: Container(
+                                            padding: EdgeInsets.only(left: 12.w),
+                                            child: _getTextInputField(hint: hintList[1], i: 1, type: TextInputType.number))),
+                                  ],
+                                ),
+                                Gaps.v28,
+                                _getTitle(list[2], false),
+                                Gaps.v8,
+                                _thirdRow(1000),
+                                Gaps.v8,
+                                _thirdRow(2000),
+                                Gaps.v8,
+                                _thirdRow(3000),
+                                Gaps.v28,
+                                Row(
+                                  children: [
+                                    _getTitle(list[3], false),
+                                    // Spacer(),
+                                    // carNumTag("54더1980"),
+                                    // carNumTag("143호1927"),
+                                  ],
+                                ),
+                                Gaps.v12,
+                                _getTextInputField(hint: hintList[3], i: 3),
+                                Gaps.v28,
+                                _getTitle(list[4], false),
+                                Gaps.v16,
+                                _getTextInputField(hint: hintList[4], i: 4, maxLines: 6),
+                                Gaps.v28,
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Common.bottomer(
+                        rBtnText: "처리 완료",
+                        isOneBtn: true,
+                        lBtnFunc: () {},
+                        rBtnFunc: () async {
+                          if (validation()) {
+                            var res = await ref.watch(asgnBdMvAprPresenter.notifier).submit();
+                            if (res) {
+                              Navigator.pop(context);
+                            }
+                          }
+                        },
+                      )
+                    ],
+                  ),
+                ),
+          )),
+    );
+  }
+
+  bool validation() {
+    bool isValid = widget.formKey.currentState?.validate() ?? false;
+
+    if (isValid) {
+      widget.formKey.currentState?.save();
+    }
+    return isValid;
+  }
+
+  Widget _selectRegion(Iterable<BaseCodeModel> region, FormFieldState<Object?> field) => SizedBox(
+        child: Column(
+          children: [
+            InputDecorator(
+              decoration: getInputDecoration(""),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  items: region
+                      .map(
+                        (e) => DropdownMenuItem(
+                          alignment: Alignment.center,
+                          value: e.cdId,
+                          child: SizedBox(
+                            width: 150,
+                            child: Text(
+                              e.cdNm ?? '',
+                              style: TextStyle(fontSize: 13, color: Palette.black),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  hint: SizedBox(
+                    width: 150,
+                    child: Text(
+                      '시/도 선택',
+                      style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  isDense: true,
+                  isExpanded: true,
+                  onChanged: (value) {
+                    ref.read(saftyCenterPresenter.notifier).updatePublicHealthCenter(
+                          region.firstWhere((e) => e.cdId == value).cdId ?? '',
+                        );
+                    // ref.read(saftyRegionPresenter.notifier).updateSaftyCenter(
+                    //       region.firstWhere((e) => e.cdId == value).cdId ?? '',
+                    //     );
+                    field.didChange(value);
+                  },
+                  value: field.value != '' ? field.value : null,
                 ),
               ),
-              Common.bottomer(
-                rBtnText: "처리 완료",
-                isOneBtn: true,
-                lBtnFunc: () {},
-                rBtnFunc: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
+            ),
+            Gaps.v8,
+            if (field.hasError)
+              FieldErrorText(
+                field: field,
               )
-            ],
-          ),
-        ));
-  }
+          ],
+        ),
+      );
+
+  Widget _selectSaftyCenter(Iterable<InfoInstModel> center, FormFieldState<Object?> field) => SizedBox(
+        child: Column(
+          children: [
+            InputDecorator(
+              decoration: getInputDecoration(""),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  items: center
+                      .map(
+                        (e) => DropdownMenuItem(
+                          alignment: Alignment.center,
+                          value: e.instNm,
+                          child: SizedBox(
+                            width: 150,
+                            child: Text(
+                              e.instNm ?? '',
+                              style: TextStyle(fontSize: 13, color: Palette.black),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  hint: SizedBox(
+                    width: 150,
+                    child: Text(
+                      '보건소 선택',
+                      style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  isDense: true,
+                  isExpanded: true,
+                  onChanged: (value) {
+                    print(value);
+
+                    // ref.read(saftyCenterPresenter.notifier).updateRegion(
+                    //       center.firstWhere((e) => e.instNm == value).instNm ?? '',
+                    //     );
+                    ref.read(asgnBdMvAprPresenter.notifier).changeSaftyCenter(center.firstWhere((element) => element.instNm == value));
+                    field.didChange(value);
+                  },
+                  value: field.value != '' ? field.value : null,
+                ),
+              ),
+            ),
+            Gaps.v8,
+            if (field.hasError)
+              FieldErrorText(
+                field: field,
+              )
+          ],
+        ),
+      );
 
   Widget carNumTag(String num) {
     return Container(
@@ -145,50 +360,43 @@ class _AssignBedApproveMoveScreenState extends State<AssignBedApproveMoveScreen>
     );
   }
 
-  Row _thirdRow() {
+  Row _thirdRow(int i) {
     List<String> dropdownList = ['대원선택', '최근3개월', '최근1년'];
     String selectedDropdown = '대원선택';
     return Row(
       children: [
         Expanded(child: dropdownButton(dropdownList, selectedDropdown)),
         Gaps.h12,
-        Expanded(child: _getTextInputField(hint: '직급')),
+        Expanded(child: _getTextInputField(i: i, hint: '직급')),
         Gaps.h12,
-        Expanded(child: _getTextInputField(hint: '이름'))
+        Expanded(child: _getTextInputField(i: i + 1, hint: '이름'))
       ],
     );
   }
 
   Widget _getTextInputField(
-      {bool isFixed = false, required String hint, TextInputType type = TextInputType.text, int? maxLines, List<TextInputFormatter>? inputFormatters}) {
+      {required int i, required String hint, TextInputType type = TextInputType.text, int? maxLines, List<TextInputFormatter>? inputFormatters}) {
+    final vm = ref.watch(asgnBdMvAprPresenter.notifier);
     return TextFormField(
-      decoration: !isFixed
-          ? Common.getInputDecoration(hint)
-          : InputDecoration(
-              filled: true,
-              fillColor: Colors.grey.shade300,
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  style: BorderStyle.solid,
-                  color: Colors.grey.shade300,
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4.r),
-                ),
-              ),
-            ),
-      controller: TextEditingController(text: isFixed ? hint : ''),
-      // onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-      // onChanged: (value) => vm.setTextEditingController(i, value),
+      style: CTS(fontSize: 12.sp, color: Palette.black),
+      decoration: Common.getInputDecoration(hint),
+      controller: TextEditingController(text: vm.getText(index: i)),
+      onSaved: (newValue) => vm.setTextEditingController(index: i, value: newValue),
+      onChanged: (value) => vm.setTextEditingController(index: i, value: value),
       validator: (value) {
         return null;
       },
       readOnly: hint == '',
-      inputFormatters: inputFormatters,
+      inputFormatters: vm.getRegExp(index: i) != null
+          ? [
+              FilteringTextInputFormatter.allow(
+                RegExp(vm.getRegExp(index: i) ?? ""),
+              )
+            ]
+          : null,
       autovalidateMode: AutovalidateMode.always,
       keyboardType: type,
       maxLines: maxLines,
-      // maxLength: maxLength,
     );
   }
 
@@ -246,7 +454,7 @@ class _AssignBedApproveMoveScreenState extends State<AssignBedApproveMoveScreen>
       Gaps.h12,
       Expanded(child: dropdownButton(dropdownList, selectedDropdown)),
       Gaps.h12,
-      Expanded(child: _getTextInputField(hint: "직접 입력"))
+      Expanded(child: _getTextInputField(i: 0, hint: "직접 입력"))
     ]);
   }
 }

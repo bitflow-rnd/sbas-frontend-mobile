@@ -26,7 +26,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     required this.patient,
     required this.assignItem,
   });
-
+  static final asgnBdMoveKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
@@ -244,6 +244,9 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => AssignBedApproveMoveScreen(
                     patient: patient,
+                    formKey: asgnBdMoveKey,
+                    bdasSeq: assignItem.bdasSeq,
+                    // timeLine: timeLine.items.where((element) => (element.chrgInstId != null && element.asgnReqSeq != null)).first,
                   ),
                 ),
               );

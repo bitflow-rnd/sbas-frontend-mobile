@@ -52,19 +52,28 @@ class Common {
             Radius.circular(4.r),
           ),
         ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4.r),
+          ),
+        ),
         hintText: hintText,
-        hintStyle: CTS.regular(
+        hintStyle: CTS(
           fontSize: 13.sp,
-          color: Palette.greyText_60,
+          color: Colors.grey.shade400,
         ),
         contentPadding: hintText == ""
             ? EdgeInsets.symmetric(
                 horizontal: 12.w,
                 vertical: 14.h,
               )
-            : const EdgeInsets.symmetric(
-                vertical: 18,
-                horizontal: 22,
+            : EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 14.h,
               ),
       );
 

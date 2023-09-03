@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -427,6 +426,15 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
           ),
         ),
         errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            style: BorderStyle.solid,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4.r),
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(
             style: BorderStyle.solid,
             color: Colors.grey.shade300,

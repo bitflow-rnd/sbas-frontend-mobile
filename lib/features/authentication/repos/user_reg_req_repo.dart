@@ -42,6 +42,13 @@ class UserRegRequestRepository {
         // ORGN003 으로 안나와서 002로 수정.
         'instTypecd=ORGN0003&dstrCd1=$dstrCd1',
       );
+  Future<List<InfoInstModel>> getCodeDstr1OrgnCd(
+    String typeCd,
+    String dstrCd1,
+  ) async =>
+      await _baseOrganProvider.getOrganCode(
+        'instTypecd=$typeCd&dstrCd1=$dstrCd1',
+      );
   Future<List<InfoInstModel>> getOrganCode(
     String typeCd,
     String dstrCd2,
