@@ -13,9 +13,11 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_move_aprv_presenter.dart';
 import 'package:sbas/features/assign/bloc/safety_center_bloc.dart';
 import 'package:sbas/features/assign/bloc/safety_region_bloc.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
+import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 import 'package:sbas/util.dart';
 
@@ -210,8 +212,29 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                           if (validation()) {
                             var res = await ref.watch(asgnBdMvAprPresenter.notifier).submit();
                             if (res) {
-                              Navigator.pop(context);
+                              await ref.watch(patientTimeLineProvider.notifier).refresh(widget.patient.ptId, widget.bdasSeq);
+                              await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                              // ignore: use_build_context_synchronously
+                              Common.showModal(
+                                context,
+                                // ignore: use_build_context_synchronously
+                                Common.commonModal(
+                                  context: context,
+                                  imageWidget: Image.asset(
+                                    "assets/auth_group/modal_check.png",
+                                    width: 44.h,
+                                  ),
+                                  imageHeight: 44.h,
+                                  mainText: "이송 처리가 완료되었습니다.",
+                                  button2Function: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              );
+                              // ignore: use_build_context_synchronously
                             }
+                            showToast("배차 실패 ");
                           }
                         },
                       )

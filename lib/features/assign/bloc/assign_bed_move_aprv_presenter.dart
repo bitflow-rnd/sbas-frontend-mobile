@@ -26,8 +26,8 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
 
   Future<bool> submit() async {
     var submitRes = await _assignRepository.reqMvApr(_asgnBdMvAprReq.toJson());
-    if (submitRes) {
-      return false;
+    if (submitRes == "이송 정보 등록 성공") {
+      return true;
     }
 
     return false;

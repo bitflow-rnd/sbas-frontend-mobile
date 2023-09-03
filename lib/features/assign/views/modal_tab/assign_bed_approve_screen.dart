@@ -134,6 +134,8 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
 
                           // ignore: use_build_context_synchronously
                           Navigator.pop(context);
+                          // ignore: use_build_context_synchronously
+                          Navigator.pop(context);
                         }
                       } else {
                         return;
