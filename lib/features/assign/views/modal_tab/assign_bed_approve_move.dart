@@ -229,6 +229,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                   button2Function: () {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
+                                    Navigator.pop(context);
                                   },
                                 ),
                               );

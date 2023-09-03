@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
@@ -233,11 +235,28 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                     children: [
                                       Row(
                                         children: [
-                                          Expanded(child: _getTextInputField(hint: "기본주소 입력", vm: vm, i: i)),
+                                          Expanded(
+                                            child: TextFormField(
+                                              decoration: getInputDecoration("주소검색을 이용하여 입력"),
+                                              controller: TextEditingController(text: vm.address),
+                                              validator: (value) => null,
+                                              readOnly: true,
+                                              maxLines: 1,
+                                              style: CTS(
+                                                fontSize: 13.sp,
+                                              ),
+                                            ),
+                                          ),
                                           InkWell(
-                                            onTap: () {
-                                              //주소검색 로직
-                                            },
+                                            onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => KpostalView(
+                                                  kakaoKey: dotenv.env['KAKAO'] ?? '',
+                                                  callback: (postal) => vm.setAddress(postal),
+                                                ),
+                                              ),
+                                            ),
                                             child: Container(
                                               margin: EdgeInsets.only(left: 7.w),
                                               decoration: BoxDecoration(
@@ -322,6 +341,9 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
       int? maxLength,
       List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
+      style: CTS(
+        fontSize: 13.sp,
+      ),
       decoration: getInputDecoration(hint),
       controller: TextEditingController(
         text: vm.init(i, widget.report),

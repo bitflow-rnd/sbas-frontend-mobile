@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kpostal/kpostal.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/infectious_disease_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
 class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
+  String get address => _infectiousDiseaseModel.instBascAddr ?? '';
+
   @override
   FutureOr<InfectiousDiseaseModel> build() {
     _patientRepository = ref.read(patientRepoProvider);
@@ -44,6 +47,16 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
 
   updateRegion(String? rcptPhc) {
     _infectiousDiseaseModel.rcptPhc = rcptPhc;
+  }
+
+  Future<void> setAddress(Kpostal postal) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      _infectiousDiseaseModel.instBascAddr = postal.roadAddress;
+      _infectiousDiseaseModel.instZip = postal.postCode;
+
+      return _infectiousDiseaseModel;
+    });
   }
 
   String? init(int index, EpidemiologicalReportModel report) {

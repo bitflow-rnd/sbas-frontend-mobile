@@ -128,7 +128,7 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                             .init(assignItem.ptId ?? "", "Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? -1, timeLine.chrgInstId ?? "");
                         if (ref.watch(asgnBdDocProvider.notifier).isValid() == true) {
                           await ref.watch(asgnBdDocProvider.notifier).aprvDocReq();
-
+                          await Future.delayed(Duration(milliseconds: 1500));
                           await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
                           await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
 

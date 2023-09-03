@@ -289,6 +289,9 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                   validator: (value) => null,
                   readOnly: true,
                   maxLines: 1,
+                  style: CTS(
+                    fontSize: 13.sp,
+                  ),
                 ),
               ),
               InkWell(

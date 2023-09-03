@@ -312,11 +312,12 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 4) {
-                  if (tryOrignInfoValidation(ref) && ref.watch(originInfoProvider.notifier).isValid()) {
+                  if (tryOrignInfoValidation(ref)) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
-
                     bool orignRes = await ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(a.ptId ?? '');
                     if (orignRes) {
+                      await Future.delayed(Duration(milliseconds: 1500));
+
                       await ref.read(patientRepoProvider).lookupPatientInfo();
                       // ignore: use_build_context_synchronously
                       Navigator.popUntil(context, (route) => route.isFirst);
@@ -378,10 +379,11 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 4) {
-                  if (tryOrignInfoValidation(ref) && ref.watch(originInfoProvider.notifier).isValid()) {
+                  if (tryOrignInfoValidation(ref)) {
                     final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
                     bool orignRes = await ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(patient?.ptId ?? a.ptId ?? '');
                     if (orignRes) {
+                      await Future.delayed(Duration(milliseconds: 1500));
                       await ref.read(patientRepoProvider).lookupPatientInfo();
                       // ignore: use_build_context_synchronously
                       Navigator.popUntil(context, (route) => route.isFirst);
@@ -453,7 +455,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   bool tryOrignInfoValidation(WidgetRef ref) {
     bool isValid = orignFormKey.currentState?.validate() ?? false;
     isValid = ref.watch(severelyDiseaseProvider.notifier).isValid();
-
+    isValid = ref.watch(originInfoProvider.notifier).isValid();
     if (isValid) {
       orignFormKey.currentState?.save();
     }
