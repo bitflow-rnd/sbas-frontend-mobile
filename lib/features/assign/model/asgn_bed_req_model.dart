@@ -4,7 +4,7 @@ class AsgnBdReqModel {
   int? asgnReqSeq;
   String? aprvYn;
   String? hospId;
-  dynamic negCd;
+  String? negCd;
   String? msg;
   String? roomNm; //병실
   String? deptNm; //진료과
@@ -26,6 +26,20 @@ class AsgnBdReqModel {
     this.spclId,
     this.chrgTelno,
   });
+  void clear() {
+    ptId = null;
+    bdasSeq = null;
+    asgnReqSeq = null;
+    aprvYn = null;
+    hospId = null;
+    negCd = null;
+    msg = null;
+    roomNm = null;
+    deptNm = null;
+    spclNm = null;
+    spclId = null;
+    chrgTelno = null;
+  }
 
   AsgnBdReqModel.fromJson(Map<String, dynamic> json)
       : ptId = json['ptId'] as String?,
@@ -33,7 +47,7 @@ class AsgnBdReqModel {
         asgnReqSeq = json['asgnReqSeq'] as int?,
         aprvYn = json['aprvYn'] as String?,
         hospId = json['hospId'] as String?,
-        negCd = json['negCd'],
+        negCd = json['negCd'] as String?,
         msg = json['msg'] as String?,
         roomNm = json['roomNm'] as String?,
         deptNm = json['deptNm'] as String?,

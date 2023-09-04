@@ -50,14 +50,15 @@ class V1Provider {
         if (!!kDebugMode) {
           print(res.data);
         }
-        return res.data['result'];
+        return res.data['result'] ?? res.data['message'];
       }
     } on DioException catch (exception) {
       if (kDebugMode) {
         if (route.contains("bedassignreq")) {
           showToast(exception.toString());
         }
-        if (exception.response?.data['message'] == 'check push token') { // 백엔드 토큰이슈 
+        if (exception.response?.data['message'] == 'check push token') {
+          // 백엔드 토큰이슈
           return true;
         }
 

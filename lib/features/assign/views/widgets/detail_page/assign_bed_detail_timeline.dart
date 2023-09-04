@@ -220,7 +220,9 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   builder: (context) => AssignBedCancelScreen(
                     patient: patient,
                     assignItem: assignItem,
-                    timeLine: timeLine.items.where((element) => (element.chrgInstId != null && element.asgnReqSeq != null)).first,
+                    timeLine: timeLine.items
+                        .where((element) => (element.chrgInstId != null && element.asgnReqSeq != null && element.timeLineStatus == "suspend"))
+                        .first,
                   ),
                 ),
               );

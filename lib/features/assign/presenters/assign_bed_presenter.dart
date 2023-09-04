@@ -29,9 +29,11 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
     setTopNavItem(ref.read(assignTabXindexProvider.notifier).state);
   }
 
-  Future<bool> approveReq(Map<String, dynamic> map) async {
+  Future<dynamic> approveReq(Map<String, dynamic> map) async {
     var res = await _asgnRepo.postReqConfirm(map);
-    if (res == "승인 성공") return true;
+    if (res == "승인 성공" || res == "check push token") {
+      return true;
+    }
     return false;
   }
 

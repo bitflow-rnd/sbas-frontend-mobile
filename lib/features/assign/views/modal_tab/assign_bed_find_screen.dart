@@ -387,6 +387,8 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                       });
                       if (postRes) {
                         //승인성공
+                        ref.watch(selectedItemsProvider.notifier).state = [];
+
                         await ref.watch(patientTimeLineProvider.notifier).refresh(widget.patient.ptId, widget.bdasSeq);
                         await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
                         await Future.delayed(Duration(milliseconds: 1500)).then((value) {

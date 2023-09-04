@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/constants/common.dart';
-import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_cancel_presenter.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
-class AssignBedCancelScreen extends StatefulWidget {
+final selectedItem = StateProvider<BaseCodeModel>((ref) => BaseCodeModel());
+
+class AssignBedCancelScreen extends ConsumerStatefulWidget {
   const AssignBedCancelScreen({
     super.key,
     required this.patient,
@@ -22,15 +26,26 @@ class AssignBedCancelScreen extends StatefulWidget {
   final TimeLine timeLine;
   final AssignItemModel assignItem;
   @override
-  State<AssignBedCancelScreen> createState() => _AssignBedCancelScreenState();
+  ConsumerState<AssignBedCancelScreen> createState() => _AssignBedCancelScreenState();
 }
 
-class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
+class _AssignBedCancelScreenState extends ConsumerState<AssignBedCancelScreen> {
   List<String> list = ['의료기관명', '메시지'];
   List<String> hintList = ['칠곡경북대병원', '메시지 입력'];
   // 이부분 의료기관명 readonly 로 들어갈부분.
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref
+          .read(asgnBdCancelProvider.notifier)
+          .init(bdasSeq: widget.assignItem.bdasSeq, ptId: widget.patient.ptId, hospId: widget.timeLine.chrgInstId, asgnReqSeq: widget.timeLine.asgnReqSeq);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final asgnBdCancel = ref.watch(asgnBdCancelProvider.notifier);
     return Container(
       child: Scaffold(
           backgroundColor: Palette.white,
@@ -59,7 +74,6 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
             child: Column(
               children: [
                 PatientTopInfo(patient: widget.patient),
-                // _header(widget.patient.ptNm ?? '', "(${widget.patient.getSex()} / ${widget.patient.getAge()}세 / 대구 북구 / 010-8833-1234)"), //pnum 등 분리필요
                 Divider(
                   color: Palette.greyText_20,
                   height: 1,
@@ -75,16 +89,16 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
                             children: [
                               _getTitle(list[0], false),
                               Gaps.v16,
-                              _getTextInputField(hint: hintList[0], isFixed: true),
+                              _getTextInputField(hint: widget.timeLine.chrgInstNm ?? "", isFixed: true),
                               Gaps.v28,
-                              //
-
                               _getTitle('불가 사유', true),
                               Gaps.v16,
-                              //
-                              rowMultiSelectButton(['병상부족', '정신이상자 수용 불가', '투석장비없음'], ['병상부족']),
+                              ref.watch(asgnBdCancelProvider).when(
+                                    data: (data) => rowMultiSelectButton(data),
+                                    loading: () => const Center(child: CircularProgressIndicator()),
+                                    error: (e, s) => Center(child: Text(e.toString())),
+                                  ),
                               Gaps.v28,
-                              //
                               _getTitle(list[1], true),
                               Gaps.v16,
                               _getTextInputField(hint: hintList[1]),
@@ -96,14 +110,17 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
                     ),
                   ),
                 ),
-
                 Common.bottomer(
                   rBtnText: "불가 처리",
                   isOneBtn: true,
                   lBtnFunc: () {},
-                  rBtnFunc: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                  rBtnFunc: () async {
+                    if (ref.watch(asgnBdCancelProvider.notifier).validate()) {
+                      var res = await ref.watch(asgnBdCancelProvider.notifier).asgnBdCancelPost();
+                      ref.watch(selectedItem.notifier).state = BaseCodeModel();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
                   },
                 )
               ],
@@ -112,7 +129,7 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
     );
   }
 
-  Widget rowMultiSelectButton(list, selectList) {
+  Widget rowMultiSelectButton(List<BaseCodeModel> list) {
     return Row(
       children: [
         Expanded(
@@ -122,21 +139,28 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
             direction: Axis.horizontal,
             children: [
               for (var i in list)
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
-                  decoration: BoxDecoration(
-                    color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
-                    border: Border.all(
-                      color: Palette.greyText_20,
-                      width: 1,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      ref.watch(asgnBdCancelProvider.notifier).setBNRN(i.cdId ?? "");
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                    decoration: BoxDecoration(
+                      color: i.cdId != ref.watch(asgnBdCancelProvider.notifier).getNegCd ? Colors.white : Palette.mainColor,
+                      border: Border.all(
+                        color: Palette.greyText_20,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(13.5.r),
                     ),
-                    borderRadius: BorderRadius.circular(13.5.r),
+                    child: Text(i.cdNm ?? "",
+                        style: CTS.bold(
+                          fontSize: 13,
+                          color: i.cdId == ref.watch(asgnBdCancelProvider.notifier).getNegCd ? Palette.white : Palette.greyText_60,
+                        )),
                   ),
-                  child: Text(i,
-                      style: CTS.bold(
-                        fontSize: 13,
-                        color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
-                      )),
                 )
             ],
           ),
@@ -148,6 +172,7 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
   Widget _getTextInputField(
       {bool isFixed = false, required String hint, TextInputType type = TextInputType.text, int? maxLines, List<TextInputFormatter>? inputFormatters}) {
     return TextFormField(
+      style: isFixed ? CTS(color: Palette.greyText_60, fontSize: 13.sp, fontWeight: FontWeight.w500) : CTS(color: Palette.black, fontSize: 13.sp),
       decoration: !isFixed
           ? getInputDecoration(hint)
           : InputDecoration(
@@ -163,14 +188,13 @@ class _AssignBedCancelScreenState extends State<AssignBedCancelScreen> {
                 ),
               ),
             ),
-      controller: TextEditingController(text: isFixed ? hint : ''),
-      // onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-      // onChanged: (value) => vm.setTextEditingController(i, value),
+      controller: TextEditingController(text: isFixed ? hint : ref.watch(asgnBdCancelProvider.notifier).getMsg),
+      onSaved: (newValue) => ref.watch(asgnBdCancelProvider.notifier).setMsg(newValue ?? ""),
+      onChanged: (newValue) => ref.watch(asgnBdCancelProvider.notifier).setMsg(newValue),
       validator: (value) {
         return null;
       },
-      readOnly: hint == '',
-
+      readOnly: isFixed,
       inputFormatters: inputFormatters,
       autovalidateMode: AutovalidateMode.always,
       keyboardType: type,
