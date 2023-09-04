@@ -5,6 +5,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/global_variable.dart';
 import 'package:sbas/common/widgets/observer_widget.dart';
 import 'package:sbas/firebase_options.dart';
 import 'package:sbas/router.dart';
@@ -12,8 +13,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sbas/util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async =>
-    onReceiveCloudMessage(message);
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async => onReceiveCloudMessage(message);
 
 Future main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +57,7 @@ class App extends ConsumerWidget {
         builder: (context, _) => MaterialApp.router(
           routerConfig: ref.watch(routerProvider),
           debugShowCheckedModeBanner: false,
+          scaffoldMessengerKey: CustomGlobalVariable.scaffoldMessengerKey,
           title: '스마트병상배정시스템',
           theme: Bitflow.getTheme(),
           darkTheme: Bitflow.getDarkTheme(),

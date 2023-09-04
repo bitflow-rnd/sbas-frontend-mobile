@@ -38,6 +38,30 @@ void showErrorSnack(
   }
 }
 
+void showNotiSnack(BuildContext context, String? error) {
+  String message = '';
+
+  switch (error) {
+    default:
+      if (kDebugMode) {
+        print(error);
+      }
+      break;
+  }
+  if (message.isNotEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(
+          milliseconds: 1750,
+        ),
+        content: Text(
+          message,
+        ),
+      ),
+    );
+  }
+}
+
 void showToast(String msg) => Fluttertoast.showToast(
       msg: msg,
       backgroundColor: const Color(0xCF696969),
