@@ -76,7 +76,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
         ),
         padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).padding.bottom + 12,
+          // bottom: MediaQuery.of(context).padding.bottom + 12, //원청 QA반영사항
+          bottom: MediaQuery.of(context).padding.bottom,
         ),
         child: Padding(
           padding: const EdgeInsets.all(12),
