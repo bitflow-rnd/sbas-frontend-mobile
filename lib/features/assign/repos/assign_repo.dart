@@ -10,7 +10,7 @@ class AssignRepository {
   Future<dynamic> postReqConfirm(Map<String, dynamic> map) async => await _asgnProvider.postReqConfirm(map);
   Future<dynamic> asgnBdCancel(Map<String, dynamic> map) async => await _asgnProvider.postAsgnBdCancel(map);
   Future<AvailableHospitalModel> getAvalHospList(String ptId, int bdasSeq) async => await _asgnProvider.getAvalHospList(ptId, bdasSeq);
-  Future<AsgnDocRes> postDocAsgnConfirm(Map<String, dynamic> map) async => AsgnDocRes.fromJson(await _asgnProvider.posDocAsgnConfirm(map));
+  Future<dynamic> postDocAsgnConfirm(Map<String, dynamic> map) async => await _asgnProvider.posDocAsgnConfirm(map);
   Future<dynamic> reqMvApr(Map<String, dynamic> map) async => await _asgnProvider.postreqMvApr(map);
 
   final _asgnProvider = AssignProvider();

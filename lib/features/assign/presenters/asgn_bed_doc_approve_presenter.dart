@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/assign/model/asgn_bed_req_model.dart';
 import 'package:sbas/features/assign/model/asgn_doc_res_model.dart';
@@ -59,11 +60,18 @@ class AsgnBdDocPresenter extends AsyncNotifier {
   }
 
   Future<bool> aprvDocReq() async {
-    AsgnDocRes res = await _assignRepository.postDocAsgnConfirm(asgnBdReqModel.toJson());
-    if (res.isAlreadyApproved == false) {
-      showToast(res.message!);
+    var res = await _assignRepository.postDocAsgnConfirm(asgnBdReqModel.toJson());
+    try {
+      if (res != null && res['isAlreadyApproved'] == false) {
+        showToast(res.message!);
+        return res["isAlreadyApproved"] == false;
+      }
+    } catch (e) {
+      if (res == "check push token") {
+        return true;
+      }
     }
-    return res.isAlreadyApproved == false;
+    return false;
   }
 }
 
