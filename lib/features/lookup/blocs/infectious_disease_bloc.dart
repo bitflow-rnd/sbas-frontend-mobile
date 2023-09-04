@@ -174,6 +174,30 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
     }
   }
 
+  void initByOCR(EpidemiologicalReportModel report) {
+    _infectiousDiseaseModel.admsYn ??= report.admsYn;
+    _infectiousDiseaseModel.rcptPhc ??= report.rcptPhc;
+    _infectiousDiseaseModel.cv19Symp ??= report.cv19Symp;
+    _infectiousDiseaseModel.rcptPhc = report.rcptPhc;
+    _infectiousDiseaseModel.diagNm = report.diagNm;
+    _infectiousDiseaseModel.diagGrde = report.diagGrde;
+    _infectiousDiseaseModel.cv19Symp = report.cv19Symp;
+    _infectiousDiseaseModel.occrDt = report.occrDt;
+    _infectiousDiseaseModel.diagDt = report.diagDt;
+    _infectiousDiseaseModel.rptDt = report.rptDt;
+    _infectiousDiseaseModel.dfdgExamRslt = report.dfdgExamRslt;
+    _infectiousDiseaseModel.ptCatg = report.ptCatg;
+    _infectiousDiseaseModel.admsYn = report.admsYn;
+    _infectiousDiseaseModel.rptType = report.rptType;
+    _infectiousDiseaseModel.rmk = report.rmk;
+    _infectiousDiseaseModel.instNm = report.instNm;
+    _infectiousDiseaseModel.instId = report.instId;
+    _infectiousDiseaseModel.instTelno = report.instTelno;
+    _infectiousDiseaseModel.instAddr = report.instAddr;
+    _infectiousDiseaseModel.diagDrNm = report.diagDrNm;
+    _infectiousDiseaseModel.rptChfNm = report.rptChfNm;
+  }
+
   late final PatientRepository _patientRepository;
   late final InfectiousDiseaseModel _infectiousDiseaseModel;
   late final UserRegRequestRepository _regRepository;

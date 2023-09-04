@@ -1,21 +1,18 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
-import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
-// import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
+import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
+import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
-import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 
 import '../../assign/bloc/assign_bed_bloc.dart';
 
@@ -118,6 +115,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         patientInfoModel.mpno = report.mpno;
         patientInfoModel.nokNm = report.nokNm;
         patientInfoModel.natiCd = report.natiCd;
+        ref.read(infectiousDiseaseProvider.notifier).initByOCR(report);
       } catch (exception) {
         if (kDebugMode) {
           print(exception);

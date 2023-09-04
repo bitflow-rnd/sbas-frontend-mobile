@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class SeverelyDiseaseModel {
   String? ptId;
   String? ptTypeCd;
@@ -98,16 +96,16 @@ class SeverelyDiseaseModel {
     if (json["spo2"] is String) {
       spo2 = json["spo2"];
     }
-    if (json["hr"] is Int) {
+    if (json["hr"] is int) {
       hr = json["hr"];
     }
-    if (json["resp"] is Int) {
+    if (json["resp"] is int) {
       resp = json["resp"];
     }
-    if (json["sbp"] is Int) {
+    if (json["sbp"] is int) {
       sbp = json["sbp"];
     }
-    if (json["newsScore"] is Int) {
+    if (json["newsScore"] is int) {
       newsScore = json["newsScore"];
     }
   }
