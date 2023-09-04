@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/api/v1_provider.dart';
 import 'package:sbas/features/authentication/models/auth_token_model.dart';
 import 'package:sbas/features/authentication/models/jwt_model.dart';
 import 'package:sbas/features/authentication/models/user_model.dart';
+import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
 import 'package:sbas/features/authentication/providers/login_provider.dart';
 import 'package:sbas/util.dart';
 
@@ -13,7 +15,7 @@ class LoginRepo {
 
     if (token != null && token.isNotEmpty) {
       final map = await _auth.getUser(token);
-
+      
       if (map != null) {
         final jwt = JwtModel.fromJson(map);
         final name = jwt.token?.name ?? '';
@@ -23,6 +25,7 @@ class LoginRepo {
           userToken = jwt.token!;
         }
         if (name.isNotEmpty) {
+
           await prefs.setString('userNm', userNm);
           return await prefs.setString('id', name);
         }
@@ -44,6 +47,31 @@ class LoginRepo {
         prefs.setString('auth_token', ctor.token!);
       }
       return ctor;
+    }
+    return null;
+  }
+
+  Future<AuthTokenModel?> getUser(UserModel user) async {
+    final map = await _auth.postSignIn(
+      user.toJson(),
+    );
+    if (map != null) {
+      final ctor = AuthTokenModel.fromJson(map);
+
+      if (ctor.token != null && ctor.token!.isNotEmpty) {
+        prefs.setString('auth_token', ctor.token!);
+      }
+      return ctor;
+    }
+    return null;
+  }
+
+  Future<UserDetailModel?> getUserDetail(String id) async {
+    final map = await V1Provider().getAsync(
+      "/private/user/user/$id",
+    );
+    if (map != null) {
+      return UserDetailModel.fromJson(map);
     }
     return null;
   }

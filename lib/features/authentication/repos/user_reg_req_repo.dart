@@ -18,7 +18,7 @@ class UserRegRequestRepository {
     });
   }
 
-  Future<int> reqUserReg(UserRegModel model) async {
+  Future<int> reqUserReg(UserDetailModel model) async {
     final bytes = utf8.encode(model.pw ?? '');
     model.pw = sha512.convert(bytes).toString();
 

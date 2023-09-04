@@ -8,6 +8,7 @@ import 'package:sbas/features/alarm/views/public_alarm_screen.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/authentication/blocs/login_bloc.dart';
+import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/main/views/service_policy_screen.dart';
 import 'package:sbas/features/main/views/settings_screen.dart';
 import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
@@ -46,18 +47,18 @@ class MainDrawer extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '홍길동',
+                            ref.watch(userDetailProvider.notifier).userNm ?? "",
                             style: CTS.bold(
                               color: Palette.black,
-                              fontSize: 15,
+                              fontSize: 15.sp,
                             ),
                           ),
                           SizedBox(height: 8.h),
                           Text(
-                            '병상배정반 / 대구광역시',
+                            ref.watch(userDetailProvider.notifier).instNm ?? "",
                             style: CTS.bold(
                               color: Palette.greyText,
-                              fontSize: 13,
+                              fontSize: 13.sp,
                             ),
                           ),
                         ],
@@ -229,7 +230,3 @@ class MainDrawer extends ConsumerWidget {
         builder: (context) => const SettingPage(),
       ));
 }
-
-final loginProvider = AsyncNotifierProvider<LoginBloc, void>(
-  () => LoginBloc(),
-);

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sbas/common/api/v1_provider.dart';
 import 'package:sbas/common/main_navigation_screen.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
+import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
@@ -25,6 +26,7 @@ final routerProvider = Provider(
         String? pushKey = await FirebaseMessaging.instance.getToken();
         print("FCM firebase pushKey : $pushKey");
         await provider.postAsync('admin/user/push-key', toJson({'id': prefs.getString('id'), 'pushKey': pushKey}));
+        await ref.watch(userDetailProvider.notifier).getUserDetails(prefs.getString('id')!);
       }
       FlutterNativeSplash.remove();
 

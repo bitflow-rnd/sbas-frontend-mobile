@@ -1,4 +1,4 @@
-class UserRegModel {
+class UserDetailModel {
   String? id;
   String? pw;
   String? userNm;
@@ -19,7 +19,7 @@ class UserRegModel {
   String? btDt;
   String? authCd;
 
-  UserRegModel({
+  UserDetailModel({
     this.id,
     this.pw,
     this.userNm,
@@ -62,7 +62,7 @@ class UserRegModel {
     authCd = '';
   }
 
-  UserRegModel.empty()
+  UserDetailModel.empty()
       : id = '',
         pw = '',
         userNm = '',
@@ -83,7 +83,7 @@ class UserRegModel {
         btDt = '',
         authCd = '';
 
-  UserRegModel.fromJson(Map<String, dynamic> json) {
+  UserDetailModel.fromJson(Map<String, dynamic> json) {
     if (json["id"] is String) {
       id = json["id"];
     }

@@ -31,7 +31,7 @@ class LoginProvider {
 
   Future<Map<String, dynamic>?> getUser(String token) async {
     final client = RetryClient(Client());
-
+  
     try {
       final res = await client.get(
         Uri.parse('$_baseUrl/v1/test/user'),

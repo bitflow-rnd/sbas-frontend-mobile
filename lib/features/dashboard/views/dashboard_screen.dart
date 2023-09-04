@@ -100,8 +100,8 @@ class DashboardScreen extends ConsumerWidget {
                       ),
                       data: (data) => Column(
                         children: [
-                          Expanded(
-                            flex: 1,
+                          Container(
+                            height: 162.r,
                             child: Row(
                               children: [
                                 Dashboard(
@@ -125,8 +125,8 @@ class DashboardScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
-                          Expanded(
-                            flex: 1,
+                          Container(
+                            height: 162.r,
                             child: Row(
                               children: [
                                 Dashboard(

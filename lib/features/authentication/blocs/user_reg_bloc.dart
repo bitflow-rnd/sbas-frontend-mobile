@@ -14,8 +14,7 @@ class UserRegBloc extends AsyncNotifier {
     _signUpRepository = ref.read(userRegReqProvider);
   }
 
-  Future<Map<String, dynamic>> confirm(String authNumber) async =>
-      _signUpRepository.confirm(
+  Future<Map<String, dynamic>> confirm(String authNumber) async => _signUpRepository.confirm(
         ref.read(regUserProvider).telno ?? '',
         authNumber,
       );
@@ -40,6 +39,6 @@ class UserRegBloc extends AsyncNotifier {
 final signUpProvider = AsyncNotifierProvider<UserRegBloc, void>(
   () => UserRegBloc(),
 );
-final regUserProvider = StateProvider<UserRegModel>(
-  (ref) => UserRegModel.empty(),
+final regUserProvider = StateProvider<UserDetailModel>(
+  (ref) => UserDetailModel.empty(),
 );
