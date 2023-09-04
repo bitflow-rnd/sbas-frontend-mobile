@@ -89,47 +89,53 @@ class AlarmPageState extends State<AlarmPage> {
             : SingleChildScrollView(
                 child: IntrinsicHeight(
                   child: Stack(children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14.w),
-                      child: Column(children: [
-                        Expanded(
-                          child: CustomPaint(painter: DashedLineVerticalPainter(), size: const Size(1, double.infinity)),
-                        ),
-                      ]),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.symmetric(horizontal: 14.w),
+                    //   child: Column(children: [
+                    //     Expanded(
+                    //       child: CustomPaint(painter: DashedLineVerticalPainter(), size: const Size(1, double.infinity)),
+                    //     ),
+                    //   ]),
+                    // ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        dateFragment("2023년 2월"),
-                        moveCompleteCard(
-                            dateTime: "02. 07 (화) 오전 11시 27분",
-                            name: "김희순",
-                            gender: "남",
-                            age: 88,
-                            departure: "영남대병원 (2/7  08:12)",
-                            arrival: "칠곡경북대병원 (2/7  08:12)",
-                            moveBy: "이동국 (대구 제2구급대)"),
-                        reqBed(
-                            dateTime: "02. 07 (화) 오전 11시 27분",
-                            name: "김희순",
-                            gender: "남",
-                            age: 88,
-                            detail: "BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다."),
-                        dateFragment("2023년 1월"),
-                        otherFrag(
-                            dateTime: "02. 07 (화) 오전 11시 27분",
-                            name: "김희순",
-                            gender: "남",
-                            age: 88,
-                            detail: "BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.",
-                            isApp: true),
-                        otherFrag(
-                            dateTime: "02. 07 (화) 오전 11시 27분",
-                            name: "김희순",
-                            gender: "남",
-                            age: 88,
-                            detail: "BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.",
-                            isApp: false),
+                        Container(
+                          height: 150.h,
+                          child: Center(
+                            child: Text("알림이 없습니다"),
+                          ),
+                        )
+                        // dateFragment("2023년 2월"),
+                        // moveCompleteCard(
+                        //     dateTime: "02. 07 (화) 오전 11시 27분",
+                        //     name: "김희순",
+                        //     gender: "남",
+                        //     age: 88,
+                        //     departure: "영남대병원 (2/7  08:12)",
+                        //     arrival: "칠곡경북대병원 (2/7  08:12)",
+                        //     moveBy: "이동국 (대구 제2구급대)"),
+                        // reqBed(
+                        //     dateTime: "02. 07 (화) 오전 11시 27분",
+                        //     name: "김희순",
+                        //     gender: "남",
+                        //     age: 88,
+                        //     detail: "BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다."),
+                        // dateFragment("2023년 1월"),
+                        // otherFrag(
+                        //     dateTime: "02. 07 (화) 오전 11시 27분",
+                        //     name: "김희순",
+                        //     gender: "남",
+                        //     age: 88,
+                        //     detail: "BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.",
+                        //     isApp: true),
+                        // otherFrag(
+                        //     dateTime: "02. 07 (화) 오전 11시 27분",
+                        //     name: "김희순",
+                        //     gender: "남",
+                        //     age: 88,
+                        //     detail: "BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.",
+                        //     isApp: false),
                       ],
                     ),
                   ]),
