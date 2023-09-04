@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
+import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/models/severely_disease_model.dart';
 import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/models/bed_assgin_request_model.dart';
@@ -27,9 +28,11 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
       // await _repository.postRegOriginInfo(_dprtInfo);
 
       var res = await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _dprtInfo)); //실병상요청.
-      if (res == "병상 요청 성공") {
-        ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel.clear();
+      if (res == "병상 요청 성공" || res == "check push token") {
         _dprtInfo.clear();
+
+        ref.read(infectiousDiseaseProvider.notifier).reset();
+        ref.read(severelyDiseaseProvider.notifier).reset();
       }
       return _dprtInfo;
     });

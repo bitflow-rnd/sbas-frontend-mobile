@@ -18,6 +18,17 @@ class BioInfoModel {
     this.sbp,
     this.score,
   });
+  void clear() {
+    avpu = null;
+    o2Apply = null;
+    bdTemp = null;
+    pulse = null;
+    breath = null;
+    spo2 = null;
+    sbp = null;
+    score = null;
+  }
+
   BioInfoModel.fromJson(Map<String, dynamic> json) {
     if (json["avpu"] is String) {
       avpu = json["avpu"];

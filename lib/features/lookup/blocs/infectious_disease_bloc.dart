@@ -45,6 +45,14 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
     return false;
   }
 
+  reset() {
+    // 초기화 시점에 대한 고려 필요
+    ref.watch(infectiousImageProvider.notifier).state = null;
+    ref.watch(infectiousAttcProvider.notifier).state = null;
+    ref.watch(infectiousIsUploadProvider.notifier).state = true;
+    _infectiousDiseaseModel.clear();
+  }
+
   updateRegion(String? rcptPhc) {
     _infectiousDiseaseModel.rcptPhc = rcptPhc;
   }

@@ -50,6 +50,33 @@ class InfectiousDiseaseModel {
     this.instZip,
     this.diagAttcId,
   });
+  void clear() {
+    ptId = null;
+    rcptPhc = null;
+    diagNm = null;
+    diagGrde = null;
+    cv19Symp = null;
+    occrDt = null;
+    diagDt = null;
+    rptDt = null;
+    dfdgExamRslt = null;
+    ptCatg = null;
+    admsYn = null;
+    rptType = null;
+    rmk = null;
+    instNm = null;
+    instId = null;
+    instTelno = null;
+    instAddr = null;
+    diagDrNm = null;
+    rptChfNm = null;
+    esvyAttcId = null;
+    instBascAddr = null;
+    instDetlAddr = null;
+    instZip = null;
+    diagAttcId = null;
+  }
+
   InfectiousDiseaseModel.fromJson(Map<String, dynamic> json) {
     if (json["ptId"] is String) {
       ptId = json["ptId"];

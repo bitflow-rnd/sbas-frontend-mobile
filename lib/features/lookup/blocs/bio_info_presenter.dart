@@ -21,14 +21,13 @@ class BioInfoPresenter extends AsyncNotifier<BioInfoModel> {
 
       return bioInfoModel;
     });
-    if (state.hasValue) {
-    }
+    if (state.hasValue) {}
     return bioInfoModel.score ?? 0;
   }
 
   late final PatientRepository _patientRepository;
   late final BioInfoModel bioInfoModel;
-  late final SeverelyDiseaseModel severelyDiseaseModel;
+  // late final SeverelyDiseaseModel severelyDiseaseModel;
 }
 
 final bioInfoProvider = AsyncNotifierProvider<BioInfoPresenter, BioInfoModel>(

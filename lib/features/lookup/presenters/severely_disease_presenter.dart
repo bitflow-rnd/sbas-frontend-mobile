@@ -40,6 +40,19 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
     return severelyDiseaseModel;
   }
 
+  reset() {
+// severelyDiseaseProvider
+    severelyDiseaseModel.clear();
+
+    for (final e in list) {
+      if (e.cdId != null && e.cdId!.isNotEmpty) {
+        ref.read(checkedSeverelyDiseaseProvider.notifier).state[e.cdId!] = false;
+      }
+    }
+
+    ref.read(bioInfoProvider.notifier).bioInfoModel.clear();
+  }
+
   Future<bool> saveDiseaseInfo(String ptId) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
