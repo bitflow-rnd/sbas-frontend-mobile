@@ -11,6 +11,7 @@ class AssignProvider {
 
   Future<dynamic> postReqConfirm(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/reqconfirm', toJson(map));
   Future<dynamic> posDocAsgnConfirm(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/asgnconfirm', toJson(map));
+  Future<dynamic> postAsgnHosp(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/confirmhosptlzdiscg', toJson(map));
   Future<dynamic> postreqMvApr(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/confirmtransf', toJson(map));
   Future<dynamic> postAsgnBdCancel(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/asgnconfirm', toJson(map));
 

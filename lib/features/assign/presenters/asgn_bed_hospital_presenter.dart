@@ -52,12 +52,25 @@ class AsgnBdHospPresenter extends AsyncNotifier {
     if (ref.watch(gotoTargetProvider.notifier).state == -1) {
       return false;
     }
-    
+
     return true;
   }
 
-  Future<bool> aprvDocReq() async {
-    var res = await _assignRepository.postDocAsgnConfirm(asgnBdHospReq.toJson());
+  Future<bool> aprGotoHosp() async {
+    String admsStatCd = '';
+    switch (ref.watch(gotoTargetProvider.notifier).state) {
+      case 0:
+        admsStatCd = "IOST0001";
+        break;
+      case 1:
+        admsStatCd = "IOST0002";
+        break;
+      case 2:
+        admsStatCd = "IOST0003";
+        break;
+    }
+    asgnBdHospReq.admsStatCd = admsStatCd;
+    var res = await _assignRepository.postAsgnHosp(asgnBdHospReq.toJson());
     try {
       if (res != null && res['isAlreadyApproved'] == false) {
         showToast(res.message!);

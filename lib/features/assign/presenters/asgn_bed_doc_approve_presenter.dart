@@ -59,19 +59,9 @@ class AsgnBdDocPresenter extends AsyncNotifier {
     return true;
   }
 
-  Future<bool> aprvDocReq() async {
-    var res = await _assignRepository.postDocAsgnConfirm(asgnBdReqModel.toJson());
-    try {
-      if (res != null && res['isAlreadyApproved'] == false) {
-        showToast(res.message!);
-        return res["isAlreadyApproved"] == false;
-      }
-    } catch (e) {
-      if (res == "check push token") {
-        return true;
-      }
-    }
-    return false;
+  Future<bool> patientToHosp() async {
+    var res = await _assignRepository.postAsgnHosp(asgnBdReqModel.toJson());
+    return res;
   }
 }
 

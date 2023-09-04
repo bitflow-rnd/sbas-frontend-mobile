@@ -45,88 +45,85 @@ class _AssignBedCancelScreenState extends ConsumerState<AssignBedCancelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final asgnBdCancel = ref.watch(asgnBdCancelProvider.notifier);
-    return Container(
-      child: Scaffold(
-          backgroundColor: Palette.white,
-          appBar: AppBar(
-            title: Text(
-              "배정 불가",
-              style: CTS.medium(
-                fontSize: 15,
-                color: Colors.black,
-              ),
-            ),
-            elevation: 0.5,
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            leading: const BackButton(
+    return Scaffold(
+        backgroundColor: Palette.white,
+        appBar: AppBar(
+          title: Text(
+            "배정 불가",
+            style: CTS.medium(
+              fontSize: 15,
               color: Colors.black,
             ),
-            systemOverlayStyle: const SystemUiOverlayStyle(
-              statusBarBrightness: Brightness.light,
-              statusBarColor: Colors.transparent,
-              statusBarIconBrightness: Brightness.dark,
-            ),
           ),
-          body: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: Column(
-              children: [
-                PatientTopInfo(patient: widget.patient),
-                Divider(
-                  color: Palette.greyText_20,
-                  height: 1,
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 24.w),
-                      child: Column(
-                        children: [
-                          Gaps.v20,
-                          Column(
-                            children: [
-                              _getTitle(list[0], false),
-                              Gaps.v16,
-                              _getTextInputField(hint: widget.timeLine.chrgInstNm ?? "", isFixed: true),
-                              Gaps.v28,
-                              _getTitle('불가 사유', true),
-                              Gaps.v16,
-                              ref.watch(asgnBdCancelProvider).when(
-                                    data: (data) => rowMultiSelectButton(data),
-                                    loading: () => const Center(child: CircularProgressIndicator()),
-                                    error: (e, s) => Center(child: Text(e.toString())),
-                                  ),
-                              Gaps.v28,
-                              _getTitle(list[1], true),
-                              Gaps.v16,
-                              _getTextInputField(hint: hintList[1]),
-                              Gaps.v28,
-                            ],
-                          )
-                        ],
-                      ),
+          elevation: 0.5,
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          leading: const BackButton(
+            color: Colors.black,
+          ),
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+          ),
+        ),
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Column(
+            children: [
+              PatientTopInfo(patient: widget.patient),
+              Divider(
+                color: Palette.greyText_20,
+                height: 1,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: Column(
+                      children: [
+                        Gaps.v20,
+                        Column(
+                          children: [
+                            _getTitle(list[0], false),
+                            Gaps.v16,
+                            _getTextInputField(hint: widget.timeLine.chrgInstNm ?? "", isFixed: true),
+                            Gaps.v28,
+                            _getTitle('불가 사유', true),
+                            Gaps.v16,
+                            ref.watch(asgnBdCancelProvider).when(
+                                  data: (data) => rowMultiSelectButton(data),
+                                  loading: () => const Center(child: CircularProgressIndicator()),
+                                  error: (e, s) => Center(child: Text(e.toString())),
+                                ),
+                            Gaps.v28,
+                            _getTitle(list[1], true),
+                            Gaps.v16,
+                            _getTextInputField(hint: hintList[1]),
+                            Gaps.v28,
+                          ],
+                        )
+                      ],
                     ),
                   ),
                 ),
-                Common.bottomer(
-                  rBtnText: "불가 처리",
-                  isOneBtn: true,
-                  lBtnFunc: () {},
-                  rBtnFunc: () async {
-                    if (ref.watch(asgnBdCancelProvider.notifier).validate()) {
-                      var res = await ref.watch(asgnBdCancelProvider.notifier).asgnBdCancelPost();
-                      ref.watch(selectedItem.notifier).state = BaseCodeModel();
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    }
-                  },
-                )
-              ],
-            ),
-          )),
-    );
+              ),
+              Common.bottomer(
+                rBtnText: "불가 처리",
+                isOneBtn: true,
+                lBtnFunc: () {},
+                rBtnFunc: () async {
+                  if (ref.watch(asgnBdCancelProvider.notifier).validate()) {
+                    var res = await ref.watch(asgnBdCancelProvider.notifier).asgnBdCancelPost();
+                    ref.watch(selectedItem.notifier).state = BaseCodeModel();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
+                },
+              )
+            ],
+          ),
+        ));
   }
 
   Widget rowMultiSelectButton(List<BaseCodeModel> list) {

@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
-import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
@@ -16,7 +15,7 @@ import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
-class AssignBedGoHome extends ConsumerWidget {
+class AssignBedGoHome extends ConsumerStatefulWidget {
   const AssignBedGoHome({
     super.key,
     required this.patient,
@@ -30,7 +29,12 @@ class AssignBedGoHome extends ConsumerWidget {
   final List<String> list = const ['의료기관명', '병실', '진료과', '병실', '담당의', '연락처', '메시지'];
   final List<String> hintList = const ['칠곡경북대병원', '병실번호', '진료과 입력', '병실번호 입력', '담당의 이름', '의료진 연락처 입력', '입원/퇴원/회송 사유 입력'];
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AssignBedGoHome> createState() => _AssignBedGoHome();
+}
+
+class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.white,
       appBar: AppBar(
@@ -77,7 +81,7 @@ class AssignBedGoHome extends ConsumerWidget {
               onTap: () => FocusScope.of(context).unfocus(),
               child: Column(
                 children: [
-                  PatientTopInfo(patient: patient),
+                  PatientTopInfo(patient: widget.patient),
                   Divider(
                     color: Palette.greyText_20,
                     height: 1,
@@ -93,12 +97,14 @@ class AssignBedGoHome extends ConsumerWidget {
                             Gaps.v16,
                             rowSelectButton(['입원', '퇴원', '자택귀가'], ref),
                             Gaps.v28,
-                            for (var i = 0; i < list.length; i++)
+                            for (var i = 0; i < widget.list.length; i++)
                               Column(
                                 children: [
-                                  _getTitle(list[i], false),
+                                  _getTitle(widget.list[i], i == 0 ? null : false),
                                   Gaps.v16,
-                                  _getTextInputField(ref: ref, i: i, hint: hintList[i], isFixed: i == 0),
+                                  i == 0
+                                      ? _getTextInputField(i: i, initalValue: widget.timeLine.chrgInstNm ?? "", isFixed: true, ref: ref)
+                                      : _getTextInputField(i: i, hint: widget.hintList[i], ref: ref),
                                   Gaps.v28,
                                 ],
                               )
@@ -133,13 +139,12 @@ class AssignBedGoHome extends ConsumerWidget {
                       // if (confirm == true) {
                       if (true) {
                         //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
-                        ref
-                            .watch(asgnBdHospProvider.notifier)
-                            .init(assignItem.ptId ?? "", "Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? -1, timeLine.chrgInstId ?? "");
+                        ref.watch(asgnBdHospProvider.notifier).init(widget.assignItem.ptId ?? "", "Y", widget.assignItem.bdasSeq ?? -1,
+                            widget.timeLine.asgnReqSeq ?? -1, widget.timeLine.chrgInstId ?? "");
                         if (ref.watch(asgnBdHospProvider.notifier).isValid() == true) {
-                          await ref.watch(asgnBdHospProvider.notifier).aprvDocReq();
+                          await ref.watch(asgnBdHospProvider.notifier).aprGotoHosp();
                           await Future.delayed(Duration(milliseconds: 1500));
-                          await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
+                          await ref.watch(patientTimeLineProvider.notifier).refresh(widget.assignItem.ptId, widget.assignItem.bdasSeq);
                           await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
 
                           // ignore: use_build_context_synchronously
@@ -213,20 +218,24 @@ class AssignBedGoHome extends ConsumerWidget {
     );
   }
 
-  Widget _getTitle(String title, bool isRequired) => Row(
+  Widget _getTitle(String title, bool? isRequired) => Row(
         children: [
           Text(
             title,
             style: CTS.medium(
               color: Colors.grey.shade600,
-              fontSize: 13,
+              fontSize: 13.sp,
             ),
           ),
           Text(
-            isRequired ? '(필수)' : '(선택)',
+            isRequired == null
+                ? ""
+                : isRequired
+                    ? "(필수)"
+                    : "(선택)",
             style: CTS.medium(
               fontSize: 13,
-              color: !isRequired ? Colors.grey.shade600 : Palette.mainColor,
+              color: !(isRequired ?? false) ? Colors.grey.shade600 : Palette.mainColor,
             ),
           ),
         ],
@@ -289,12 +298,9 @@ class AssignBedGoHome extends ConsumerWidget {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    print(i);
-                    ref.watch(gotoTargetProvider.notifier).update((state) => list.indexOf(i));
-
-                    // setState(() {
-                    //   selectedRadio = list.indexOf(i);
-                    // });
+                    setState(() {
+                      ref.watch(gotoTargetProvider.notifier).update((state) => list.indexOf(i));
+                    });
                   },
                   child: Consumer(
                       builder: (context, r, child) => Row(
