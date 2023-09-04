@@ -113,7 +113,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                 //timeline_suspend //  원형 점
 
                                 children: [
-                                  for (var i = 0; i < timeLine.count!; i++) timeLineBody(timeLine.items[i]),
+                                  for (var i = 0; i < timeLine.count!; i++)
+                                    timeLineBody(timeLine.items[i], isVisible: !timeLine.items.map((e) => e.title == "배정불가").toList().contains(true)),
                                 ],
                               ),
                             ],
@@ -462,7 +463,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     );
   }
 
-  Widget timeLineBody(TimeLine timeLine) {
+  Widget timeLineBody(TimeLine timeLine, {bool? isVisible = true}) {
     switch (timeLine.timeLineStatus) {
       case "complete":
         return completeCard(
@@ -474,7 +475,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
       case "suspend":
         return suspendCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!), detail: timeLine.by);
       case "closed":
-        return closedCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!));
+        return isVisible ?? true ? closedCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!)) : Container();
       default:
         return Container();
     }

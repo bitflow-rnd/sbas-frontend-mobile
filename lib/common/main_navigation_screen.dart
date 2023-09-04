@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sbas/common/main_drawer.dart';
 import 'package:sbas/common/widgets/nav_tab.dart';
@@ -80,7 +81,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           bottom: MediaQuery.of(context).padding.bottom,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(12.r),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

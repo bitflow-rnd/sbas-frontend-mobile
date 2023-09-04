@@ -31,16 +31,11 @@ class MainDrawer extends ConsumerWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          ref.read(loginProvider.notifier).logout(context);
-                        },
-                        child: Image.asset(
-                          'assets/message/doctor_icon.png',
-                          height: 44.h,
-                          width: 44.w,
-                          alignment: Alignment.topLeft,
-                        ),
+                      Image.asset(
+                        'assets/message/doctor_icon.png',
+                        height: 44.h,
+                        width: 44.w,
+                        alignment: Alignment.topLeft,
                       ),
                       SizedBox(width: 12.w),
                       Column(
@@ -95,6 +90,16 @@ class MainDrawer extends ConsumerWidget {
               ),
             ),
             const Spacer(),
+            TextButton(
+              style: ButtonStyle(
+                overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
+              ),
+              onPressed: () => ref.read(loginProvider.notifier).logout(context),
+              child: Text(
+                '로그아웃',
+                style: CTS(fontSize: 12, color: Palette.greyText_60),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
