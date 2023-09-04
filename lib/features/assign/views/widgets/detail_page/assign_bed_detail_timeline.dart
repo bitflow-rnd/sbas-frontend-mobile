@@ -271,9 +271,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   builder: (context) => AssignBedGoHome(
                     patient: patient,
                     assignItem: assignItem,
-                    timeLine: timeLine.items
-                        .where((element) => (element.chrgInstId != null && element.asgnReqSeq != null && element.timeLineStatus == "suspend"))
-                        .first,
+                    timeLine: timeLine.items.where((element) => (element.title == "입원")).first,
                   ),
                 ),
               );

@@ -26,9 +26,6 @@ import 'package:sbas/features/assign/views/widgets/request/patient_reg_info_widg
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
-// final patientImageProvider = StateProvider<XFile?>((ref) => null);
-// final patientAttcProvider = StateProvider<String?>((ref) => null);
-// final patientIsUploadProvider = StateProvider<bool>((ref) => true);
 final assignNewBedProvider = AsyncNotifierProvider<AssignNewBedPresenter, PatientRegInfoModel>(
   () => AssignNewBedPresenter(),
 );
