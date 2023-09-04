@@ -7,7 +7,6 @@ import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
-import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_move_aprv_presenter.dart';
@@ -16,7 +15,6 @@ import 'package:sbas/features/assign/bloc/safety_region_bloc.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
-import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 import 'package:sbas/util.dart';
@@ -43,8 +41,8 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(asgnBdMvAprPresenter.notifier).init(
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(asgnBdMvAprPresenter.notifier).init(
             bdasSeq: widget.bdasSeq,
             ptId: widget.patient.ptId,
           );
@@ -157,13 +155,14 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                             data: (publicHealthCenter) => FormField(
                                               builder: (field) => _selectSaftyCenter(publicHealthCenter, field),
                                               validator: (value) {
-                                                return null;
+                                                return value == null ? '보건소를 선택해주세요.' : null;
                                               },
                                             ),
                                           ),
                                     ),
                                   ],
                                 ),
+                                _getTextInputField(i: 0, hint: "직접 입력"),
                                 Gaps.v28,
                                 Row(
                                   children: [
@@ -258,46 +257,50 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
   Widget _selectRegion(Iterable<BaseCodeModel> region, FormFieldState<Object?> field) => SizedBox(
         child: Column(
           children: [
-            InputDecorator(
-              decoration: getInputDecoration(""),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  items: region
-                      .map(
-                        (e) => DropdownMenuItem(
-                          alignment: Alignment.center,
-                          value: e.cdId,
-                          child: SizedBox(
-                            width: 150,
-                            child: Text(
-                              e.cdNm ?? '',
-                              style: TextStyle(fontSize: 13, color: Palette.black),
-                              textAlign: TextAlign.left,
+            Container(
+              height: 48.h,
+              child: InputDecorator(
+                decoration: getInputDecoration(""),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    alignment: Alignment.center,
+                    items: region
+                        .map(
+                          (e) => DropdownMenuItem(
+                            alignment: Alignment.center,
+                            value: e.cdId,
+                            child: SizedBox(
+                              width: 150,
+                              child: Text(
+                                e.cdNm ?? '',
+                                style: TextStyle(fontSize: 13, color: Palette.black),
+                                textAlign: TextAlign.left,
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                      .toList(),
-                  hint: SizedBox(
-                    width: 150,
-                    child: Text(
-                      '시/도 선택',
-                      style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
-                      textAlign: TextAlign.left,
+                        )
+                        .toList(),
+                    hint: SizedBox(
+                      width: 150,
+                      child: Text(
+                        '시/도 선택',
+                        style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                        textAlign: TextAlign.left,
+                      ),
                     ),
+                    isDense: true,
+                    isExpanded: true,
+                    onChanged: (value) {
+                      ref.read(saftyCenterPresenter.notifier).updatePublicHealthCenter(
+                            region.firstWhere((e) => e.cdId == value).cdId ?? '',
+                          );
+                      // ref.read(saftyRegionPresenter.notifier).updateSaftyCenter(
+                      //       region.firstWhere((e) => e.cdId == value).cdId ?? '',
+                      //     );
+                      field.didChange(value);
+                    },
+                    value: field.value != '' ? field.value : null,
                   ),
-                  isDense: true,
-                  isExpanded: true,
-                  onChanged: (value) {
-                    ref.read(saftyCenterPresenter.notifier).updatePublicHealthCenter(
-                          region.firstWhere((e) => e.cdId == value).cdId ?? '',
-                        );
-                    // ref.read(saftyRegionPresenter.notifier).updateSaftyCenter(
-                    //       region.firstWhere((e) => e.cdId == value).cdId ?? '',
-                    //     );
-                    field.didChange(value);
-                  },
-                  value: field.value != '' ? field.value : null,
                 ),
               ),
             ),
@@ -313,46 +316,49 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
   Widget _selectSaftyCenter(Iterable<InfoInstModel> center, FormFieldState<Object?> field) => SizedBox(
         child: Column(
           children: [
-            InputDecorator(
-              decoration: getInputDecoration(""),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  items: center
-                      .map(
-                        (e) => DropdownMenuItem(
-                          alignment: Alignment.center,
-                          value: e.instNm,
-                          child: SizedBox(
-                            width: 150,
-                            child: Text(
-                              e.instNm ?? '',
-                              style: TextStyle(fontSize: 13, color: Palette.black),
-                              textAlign: TextAlign.left,
+            Container(
+              height: 48.h,
+              child: InputDecorator(
+                decoration: getInputDecoration(""),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    items: center
+                        .map(
+                          (e) => DropdownMenuItem(
+                            alignment: Alignment.center,
+                            value: e.instNm,
+                            child: SizedBox(
+                              width: 150,
+                              child: Text(
+                                e.instNm ?? '',
+                                style: TextStyle(fontSize: 13, color: Palette.black),
+                                textAlign: TextAlign.left,
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                      .toList(),
-                  hint: SizedBox(
-                    width: 150,
-                    child: Text(
-                      '보건소 선택',
-                      style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
-                      textAlign: TextAlign.left,
+                        )
+                        .toList(),
+                    hint: SizedBox(
+                      width: 150,
+                      child: Text(
+                        '보건소 선택',
+                        style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                        textAlign: TextAlign.left,
+                      ),
                     ),
-                  ),
-                  isDense: true,
-                  isExpanded: true,
-                  onChanged: (value) {
-                    print(value);
+                    isDense: true,
+                    isExpanded: true,
+                    onChanged: (value) {
+                      print(value);
 
-                    // ref.read(saftyCenterPresenter.notifier).updateRegion(
-                    //       center.firstWhere((e) => e.instNm == value).instNm ?? '',
-                    //     );
-                    ref.read(asgnBdMvAprPresenter.notifier).changeSaftyCenter(center.firstWhere((element) => element.instNm == value));
-                    field.didChange(value);
-                  },
-                  value: field.value != '' ? field.value : null,
+                      // ref.read(saftyCenterPresenter.notifier).updateRegion(
+                      //       center.firstWhere((e) => e.instNm == value).instNm ?? '',
+                      //     );
+                      ref.read(asgnBdMvAprPresenter.notifier).changeSaftyCenter(center.firstWhere((element) => element.instNm == value));
+                      field.didChange(value);
+                    },
+                    value: field.value != '' ? field.value : null,
+                  ),
                 ),
               ),
             ),

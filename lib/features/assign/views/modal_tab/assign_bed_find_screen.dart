@@ -389,24 +389,27 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                         //승인성공
                         await ref.watch(patientTimeLineProvider.notifier).refresh(widget.patient.ptId, widget.bdasSeq);
                         await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
-                        // ignore: use_build_context_synchronously
-                        Common.showModal(
-                          context,
-                          // ignore: use_build_context_synchronously
-                          Common.commonModal(
-                            context: context,
-                            imageWidget: Image.asset(
-                              "assets/auth_group/modal_check.png",
-                              width: 44.h,
+                        await Future.delayed(Duration(milliseconds: 1500)).then((value) {
+                          Common.showModal(
+                            context,
+                            // ignore: use_build_context_synchronously
+                            Common.commonModal(
+                              context: context,
+                              imageWidget: Image.asset(
+                                "assets/auth_group/modal_check.png",
+                                width: 44.h,
+                              ),
+                              imageHeight: 44.h,
+                              mainText: "배정 요청이 완료되었습니다.",
+                              button2Function: () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
                             ),
-                            imageHeight: 44.h,
-                            mainText: "배정 요청이 완료되었습니다.",
-                            button2Function: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                          ),
-                        );
+                          );
+                        });
+                        // ignore: use_build_context_synchronously
                       }
                     }
                   },

@@ -192,6 +192,10 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                     //승인성공
                     await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
                     await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                    await Future.delayed(Duration(microseconds: 1500));
+                    Navigator.pop(context);
+
+                    Navigator.pop(context);
                   }
                 }
                 //원외배정

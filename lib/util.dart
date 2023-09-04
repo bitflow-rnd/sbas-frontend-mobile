@@ -203,8 +203,8 @@ InputDecoration getInputDecoration(String hintText) => InputDecoration(
       hintText: hintText,
       hintStyle: CTS.regular(fontSize: 13.sp, color: Palette.greyText_60),
       contentPadding: const EdgeInsets.symmetric(
-        vertical: 18,
-        horizontal: 22,
+        vertical: 12,
+        horizontal: 14,
       ),
     );
 const json = {'Content-Type': 'application/json'};

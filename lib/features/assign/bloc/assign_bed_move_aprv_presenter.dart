@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/assign/model/asgn_bed_mv_apr_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
-import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
-import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
 class AssignBedMoveAprPresenter extends AsyncNotifier {
   @override
@@ -121,6 +119,9 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
 
   String? getRegExp({required int index}) {
     switch (index) {
+      case 0:
+        return r'[가-힝|ㄱ-ㅎ|ㆍ|ᆢ]';
+
       case 1:
         return null;
 
