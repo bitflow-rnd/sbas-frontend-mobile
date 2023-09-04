@@ -52,7 +52,7 @@ class PatientRegReport extends ConsumerWidget {
           InkWell(
             onTap: () async {
               final image = await picker.pickImage(
-                source: kDebugMode ? ImageSource.gallery : ImageSource.camera,
+                source: ImageSource.gallery,
                 preferredCameraDevice: CameraDevice.front,
                 requestFullMetadata: false,
               );

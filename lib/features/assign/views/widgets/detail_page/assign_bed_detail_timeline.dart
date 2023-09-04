@@ -270,6 +270,10 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => AssignBedGoHome(
                     patient: patient,
+                    assignItem: assignItem,
+                    timeLine: timeLine.items
+                        .where((element) => (element.chrgInstId != null && element.asgnReqSeq != null && element.timeLineStatus == "suspend"))
+                        .first,
                   ),
                 ),
               );
@@ -501,7 +505,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
       case "배정완료":
         src = "timeline_bed_assign_complete";
         break;
-      case "배정거절":
+      case "배정불가":
         src = "timeline_refused";
         break;
       case "이송":
