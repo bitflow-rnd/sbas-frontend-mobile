@@ -7,6 +7,8 @@ class AssignItemModel {
   String? bascAddr;
   String? updtDttm;
   String? diagNm;
+  String? order;
+
   String? bedStatCd;
   String? bedStatCdNm;
   String? chrgInstNm;
@@ -22,6 +24,7 @@ class AssignItemModel {
     this.bascAddr,
     this.updtDttm,
     this.diagNm,
+    this.order,
     this.bedStatCd,
     this.bedStatCdNm,
     this.tagList,
@@ -46,6 +49,9 @@ class AssignItemModel {
     }
     if (json["age"] is int) {
       age = json["age"];
+    }
+    if (json["order"] is String) {
+      order = json["order"];
     }
     if (json["bascAddr"] is String) {
       bascAddr = json["bascAddr"];
@@ -79,6 +85,7 @@ class AssignItemModel {
     data["gndr"] = gndr;
     data["age"] = age;
     data["bascAddr"] = bascAddr;
+    data["order"] = order;
     data["updtDttm"] = updtDttm;
     data["diagNm"] = diagNm;
     data["bedStatCd"] = bedStatCd;

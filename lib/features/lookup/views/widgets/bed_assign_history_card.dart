@@ -4,23 +4,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/views/patient_bed_assign_detail_screen.dart';
 
 class BedAssignHistoryCardItem extends StatelessWidget {
   const BedAssignHistoryCardItem({
     super.key,
-    required this.name,
-    required this.disease,
-    required this.timestamp,
-    required this.count,
-    this.hospital,
-    this.tagList,
+    required this.item,
     required this.patient,
   });
-  final String? hospital;
+
   final Patient patient;
-  final List<String>? tagList;
+  final AssignItemModel item;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -68,7 +64,7 @@ class BedAssignHistoryCardItem extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  "  $count차  ",
+                  "  ${item.order}차  ",
                   style: CTS.bold(color: Palette.mainColor, fontSize: 12),
                   maxLines: 1,
                   // maxFontSize: 18,
@@ -83,7 +79,7 @@ class BedAssignHistoryCardItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        name,
+                        patient.ptNm ?? "",
                         style: CTS.bold(
                           color: Colors.black,
                           fontSize: 15,
@@ -93,11 +89,11 @@ class BedAssignHistoryCardItem extends StatelessWidget {
                       ),
                     ],
                   ),
-                  hospital != null ? Gaps.v4 : Container(),
-                  hospital == null
+                  item.chrgInstNm != null ? Gaps.v4 : Container(),
+                  item.chrgInstNm == null
                       ? Container()
                       : Text(
-                          hospital ?? '알수없음',
+                          item.chrgInstNm ?? '알수없음',
                           style: CTS.medium(
                             color: Palette.black,
                             fontSize: 12,
@@ -106,13 +102,13 @@ class BedAssignHistoryCardItem extends StatelessWidget {
                         ),
                   Gaps.v4,
                   Text(
-                    disease,
+                    item.diagNm ?? '알수없음',
                     style: CTS(color: Colors.grey, fontSize: 12),
                     maxLines: 1,
                     // maxFontSize: 12,
                   ),
                   Text(
-                    timestamp,
+                    item.updtDttm ?? "",
                     style: CTS(
                       fontSize: 12,
                       color: Colors.grey,
@@ -120,14 +116,14 @@ class BedAssignHistoryCardItem extends StatelessWidget {
                     maxLines: 1,
                     // maxFontSize: 18,
                   ),
-                  tagList != null
+                  item.tagList != null && item.tagList!.isNotEmpty
                       ? Padding(
                           padding: EdgeInsets.symmetric(
                             vertical: 6.h,
                           ),
                           child: Row(
                               children: List.generate(
-                                  tagList?.length ?? 0,
+                                  item.tagList?.length ?? 0,
                                   (index) => Container(
                                         padding: EdgeInsets.symmetric(
                                           vertical: 1.h,
@@ -141,7 +137,7 @@ class BedAssignHistoryCardItem extends StatelessWidget {
                                           color: Colors.grey.shade100,
                                         ),
                                         child: AutoSizeText(
-                                          '#${tagList?[index]}',
+                                          '#${item.tagList?[index]}',
                                           style: CTS.bold(
                                             color: Colors.grey,
                                             fontSize: 12,
@@ -171,6 +167,4 @@ class BedAssignHistoryCardItem extends StatelessWidget {
       ),
     );
   }
-
-  final String name, disease, timestamp, count;
 }

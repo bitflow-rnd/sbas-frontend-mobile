@@ -7,12 +7,15 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/assign/model/assign_item_model.dart';
+import 'package:sbas/features/lookup/blocs/patient_asgn_history.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_detail_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
+import 'package:sbas/features/lookup/views/widgets/bed_assign_history_card.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
@@ -22,6 +25,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
     super.key,
     required this.patient,
   });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = ref.watch(patientProgressProvider);
@@ -82,7 +86,10 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                     vertical: 14,
                   ),
                   child: GestureDetector(
-                    onTap: () => progress == 0 ? ref.read(patientProgressProvider.notifier).state++ : ref.read(patientProgressProvider.notifier).state--,
+                    onTap: () {
+                      progress == 0 ? ref.read(patientProgressProvider.notifier).state++ : ref.read(patientProgressProvider.notifier).state--;
+                      ref.watch(patientAsgnHistoryPresenter.notifier).getAsync(patient.ptId);
+                    },
                     child: PatientRegTopNav(
                       x: progress == 0 ? 1 : -1,
                       items: const [
@@ -186,7 +193,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                               ),
                           ],
                         )
-                      : ref.watch(patientDetailProvider).when(
+                      : ref.watch(patientAsgnHistoryPresenter).when(
                             loading: () => const SBASProgressIndicator(),
                             error: (error, stackTrace) => Center(
                               child: Text(
@@ -196,75 +203,37 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                 ),
                               ),
                             ),
-                            data:
-                                (history) => /* SingleChildScrollView(
+                            data: (history) => history.count != 0
+                                ? SingleChildScrollView(
                                     child: Column(
-                                      children: const [
-                                        /*
-                                        BedAssignHistoryCardItem(
-                                          name: "칠곡경북대병원",
-                                          disease: "코로나바이러스감염증-19",
-                                          timestamp: '2023년 2월 18일 15시 22분',
-                                          count: "1",
-                                          tagList: const [
-                                            "중증",
-                                            "중증",
-                                            "중증",
-                                            "중증",
-                                          ],
-                                          patient: patient,
-                                        ),
-                                        BedAssignHistoryCardItem(
-                                          name: "칠곡경북대병원",
-                                          disease: "코로나바이러스감염증-19",
-                                          timestamp: '2023년 2월 18일 15시 22분',
-                                          count: "2",
-                                          tagList: const [
-                                            "중증",
-                                            "중증",
-                                            "중증",
-                                            "중증",
-                                          ],
-                                          patient: patient,
-                                        ),
-                                        BedAssignHistoryCardItem(
-                                          name: "칠곡경북대병원",
-                                          disease: "코로나바이러스감염증-19",
-                                          timestamp: '2023년 2월 18일 15시 22분',
-                                          count: "3",
-                                          tagList: const [
-                                            "중증",
-                                            "중증",
-                                            "중증",
-                                            "중증",
-                                          ],
-                                          patient: patient,
-                                        ),
-                                        */
+                                      children: [
+                                        for (AssignItemModel i in history.items)
+                                          BedAssignHistoryCardItem(
+                                            item: i,
+                                            patient: patient,
+                                          ),
                                       ],
                                     ),
                                   )
-                                :
-                                */
-                                    Center(
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/lookup/history_icon.png',
-                                    height: 128.h,
-                                  ),
-                                  const AutoSizeText(
-                                    '병상 배정 이력이 없습니다.',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey,
+                                : Center(
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/lookup/history_icon.png',
+                                          height: 128.h,
+                                        ),
+                                        const AutoSizeText(
+                                          '병상 배정 이력이 없습니다.',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey,
+                                          ),
+                                          maxLines: 1,
+                                          maxFontSize: 22,
+                                        ),
+                                      ],
                                     ),
-                                    maxLines: 1,
-                                    maxFontSize: 22,
                                   ),
-                                ],
-                              ),
-                            ),
                           ),
                 ),
               ),
