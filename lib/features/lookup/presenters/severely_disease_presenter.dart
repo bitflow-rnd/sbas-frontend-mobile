@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/blocs/bio_info_presenter.dart';
-import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/severely_disease_model.dart';
-import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
 class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
   @override
@@ -35,7 +33,7 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
         ref.read(checkedSeverelyDiseaseProvider.notifier).state[e.cdId!] = false;
       }
     }
-    _patientRepository = ref.read(patientRepoProvider);
+    // _patientRepository = ref.read(patientRepoProvider);
     severelyDiseaseModel = SeverelyDiseaseModel.empty();
     return severelyDiseaseModel;
   }
@@ -112,7 +110,7 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
   }
 
   late final List<BaseCodeModel> list;
-  late final PatientRepository _patientRepository;
+  // late final PatientRepository _patientRepository;
   late final UserRegRequestRepository _userRegRequestRepository;
   late final SeverelyDiseaseModel severelyDiseaseModel;
 }

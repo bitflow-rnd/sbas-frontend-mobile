@@ -15,7 +15,6 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/lookup/views/widgets/hospital_bed_request_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/request_steps/infectious_disease_widget.dart';
-import 'package:sbas/features/lookup/views/widgets/request_steps/origin_info_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/request_steps/severely_disease_widget.dart';
 
 import 'package:sbas/constants/palette.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/assign/api/assign_provider.dart';
-import 'package:sbas/features/assign/model/asgn_doc_res_model.dart';
 import 'package:sbas/features/assign/model/assign_list_model.dart';
 import 'package:sbas/features/assign/model/available_hospital_model.dart';
 

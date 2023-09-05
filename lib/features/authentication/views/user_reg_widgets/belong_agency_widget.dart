@@ -27,7 +27,7 @@ class BelongAgency extends ConsumerStatefulWidget {
 }
 
 class _BelongAgencyState extends ConsumerState<BelongAgency> {
-  bool _isSelected = false;
+  // bool _isSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -116,46 +116,45 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
               SizedBox(
                 height: 96,
                 child: ref.watch(belongAgencyProvider).when(
-                  loading: () => const SBASProgressIndicator(),
-                  error: (error, stackTrace) => Center(
-                    child: Text(
-                      error.toString(),
-                      style: CTS(
-                        color: Palette.mainColor,
+                      loading: () => const SBASProgressIndicator(),
+                      error: (error, stackTrace) => Center(
+                        child: Text(
+                          error.toString(),
+                          style: CTS(
+                            color: Palette.mainColor,
+                          ),
+                        ),
+                      ),
+                      data: (data) => GridView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                        ),
+                        itemCount: data.length,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 8,
+                          childAspectRatio: 2.15 / 1,
+                        ),
+                        itemBuilder: (context, index) {
+                          final id = data[index].cdId!;
+
+                          return PatientType(
+                            id: id,
+                            title: data[index].cdNm ?? '',
+                            onChanged: (value) => setState(() {
+                              ref.read(isCheckedProvider)[id] = !value;
+
+                              var checkedKeys = isCheckedMap.entries.where((entry) => entry.value == true).map((entry) => entry.key);
+                              user.ptTypeCd = checkedKeys.join(";");
+
+                              field.didChange(ref.watch(isCheckedProvider).containsValue(true));
+                            }),
+                          );
+                        },
+                        physics: const NeverScrollableScrollPhysics(),
                       ),
                     ),
-                  ),
-                  data: (data) => GridView.builder(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                    ),
-                    itemCount: data.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 8,
-                      childAspectRatio: 2.15 / 1,
-                    ),
-                    itemBuilder: (context, index) {
-                      final id = data[index].cdId!;
-
-                      return PatientType(
-                        id: id,
-                        title: data[index].cdNm ?? '',
-                        onChanged: (value) => setState(() {
-                          ref.read(isCheckedProvider)[id] = !value;
-
-                          var checkedKeys = isCheckedMap.entries
-                              .where((entry) => entry.value == true).map((entry) => entry.key);
-                          user.ptTypeCd = checkedKeys.join(";");
-
-                          field.didChange(ref.watch(isCheckedProvider).containsValue(true));
-                        }),
-                      );
-                    },
-                    physics: const NeverScrollableScrollPhysics(),
-                  ),
-                ),
               ),
               if (field.hasError)
                 FieldErrorText(

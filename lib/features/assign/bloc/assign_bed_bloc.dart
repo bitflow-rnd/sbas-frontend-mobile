@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/models/base_code_model.dart';
-import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
@@ -19,7 +18,7 @@ class AssignNewBedPresenter extends AsyncNotifier<PatientRegInfoModel> {
   @override
   FutureOr<PatientRegInfoModel> build() {
     _patientInfoModel = PatientRegInfoModel();
-    _regRepository = ref.read(userRegReqProvider);
+    // _regRepository = ref.read(userRegReqProvider);
     _patientRepository = ref.read(patientRepoProvider);
 
     return _patientInfoModel;
@@ -433,7 +432,7 @@ class AssignNewBedPresenter extends AsyncNotifier<PatientRegInfoModel> {
 
   late final PatientRegInfoModel _patientInfoModel;
   late final PatientRepository _patientRepository;
-  late final UserRegRequestRepository _regRepository;
+  // late final UserRegRequestRepository _regRepository;
 }
 
 final assignBedProvider = AsyncNotifierProvider<AssignNewBedPresenter, PatientRegInfoModel>(

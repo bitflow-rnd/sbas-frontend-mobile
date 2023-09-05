@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';

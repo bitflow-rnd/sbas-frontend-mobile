@@ -115,9 +115,12 @@ class _AssignBedCancelScreenState extends ConsumerState<AssignBedCancelScreen> {
                 rBtnFunc: () async {
                   if (ref.watch(asgnBdCancelProvider.notifier).validate()) {
                     var res = await ref.watch(asgnBdCancelProvider.notifier).asgnBdCancelPost();
-                    ref.watch(selectedItem.notifier).state = BaseCodeModel();
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    if (res) {
+                      // showToast("불가 처리 되었습니다.");
+                      ref.watch(selectedItem.notifier).state = BaseCodeModel();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
                   }
                 },
               )

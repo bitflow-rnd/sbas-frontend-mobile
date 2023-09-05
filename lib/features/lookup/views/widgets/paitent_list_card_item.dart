@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/models/patient_item_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/util.dart';
 

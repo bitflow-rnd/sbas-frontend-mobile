@@ -12,10 +12,8 @@ import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_detail_screen.dart';
-import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_list_card_item.dart';
-import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
 import 'package:sbas/util.dart';
 
 class PatientLookupScreen extends ConsumerWidget {

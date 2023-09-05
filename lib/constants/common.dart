@@ -218,7 +218,7 @@ class Common {
                                     ),
                                     child: InkWell(
                                       onTap: () {
-                                        button1Function == null ? Navigator.pop(context, false) : button1Function();
+                                        button1Function == () {} ? Navigator.pop(context, false) : button1Function();
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(vertical: 9.r),

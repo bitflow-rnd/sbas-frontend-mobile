@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/assign/model/asgn_bed_hosp_req_model.dart';
-import 'package:sbas/features/assign/model/asgn_bed_req_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
 import 'package:sbas/util.dart';
 

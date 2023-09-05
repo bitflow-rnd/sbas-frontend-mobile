@@ -1,4 +1,3 @@
-import 'package:sbas/features/lookup/models/patient_item_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 
 class PatientListModel {

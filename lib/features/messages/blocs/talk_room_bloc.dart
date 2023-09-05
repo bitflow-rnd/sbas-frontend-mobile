@@ -23,8 +23,7 @@ class TalkRoomBloc {
     _fetchChattingRoom();
   }
 
-  Stream<List<TalkMsgModel>> get chatDetailListStream =>
-      _chatDetailListController.stream;
+  Stream<List<TalkMsgModel>> get chatDetailListStream => _chatDetailListController.stream;
 
   late final List<TalkMsgModel> chatDetailList;
 

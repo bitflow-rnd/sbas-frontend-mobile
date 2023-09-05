@@ -8,9 +8,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/views/assign_bed_detail_screen.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
-import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/patient_disease_info_presenter.dart';
-import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/presenters/patient_transfer_info_presenter.dart';
 
 class AsgnCardItem extends ConsumerWidget {
@@ -29,12 +27,7 @@ class AsgnCardItem extends ConsumerWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AssignBedDetailScreen(
-                  patient: patient,
-                  assignItem: model,
-                  diseaseInfo: diseaseInfo,
-                  transferInfo:orignInfo
-                ),
+                builder: (context) => AssignBedDetailScreen(patient: patient, assignItem: model, diseaseInfo: diseaseInfo, transferInfo: orignInfo),
               ),
             );
           }
