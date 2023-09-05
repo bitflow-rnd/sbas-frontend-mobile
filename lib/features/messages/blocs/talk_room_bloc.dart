@@ -35,8 +35,7 @@ class TalkRoomBloc {
 
   void _fetchChattingRoom() async {
     channel.stream.listen((message) {
-      final parsedData = json.decode(message);
-
+      final parsedData = json.decode(message.replaceAll("\n", "\\n"));
       if (parsedData is List) {
         chatDetailList = TalkMsgModel.fromArrJson(parsedData);
         _chatDetailListController.add(chatDetailList);

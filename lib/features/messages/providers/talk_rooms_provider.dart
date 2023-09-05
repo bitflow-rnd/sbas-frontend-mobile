@@ -21,7 +21,7 @@ class TalkRoomsProvider extends StateNotifier<List<TalkRoomsResponseModel>> {
 
   void _fetchChatRoomList() async {
     channel.stream.listen((message) {
-      final parsedData = json.decode(message);
+      final parsedData = json.decode(message.toString());
       print(parsedData);
 
       if (parsedData is List) {
@@ -57,7 +57,6 @@ class TalkRoomsProvider extends StateNotifier<List<TalkRoomsResponseModel>> {
   final String _wsUrl = '${dotenv.env['WS_URL']}/chat-rooms';
 }
 
-final talkRoomsProvider =
-    StateNotifierProvider<TalkRoomsProvider, List<TalkRoomsResponseModel>>(
+final talkRoomsProvider = StateNotifierProvider<TalkRoomsProvider, List<TalkRoomsResponseModel>>(
   (ref) => TalkRoomsProvider(userId: userToken.name!),
 );

@@ -29,10 +29,7 @@ Row myChatPhotoAttachedWidget(
           margin: const EdgeInsets.only(right: 15),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-                bottomLeft: Radius.circular(8)),
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
             color: const Color(0xfffff700).withOpacity(0.333),
           ),
           child: Column(
@@ -95,10 +92,7 @@ Row myChatVideoAttachedWidget(
           margin: const EdgeInsets.only(right: 15),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-                bottomLeft: Radius.circular(8)),
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
             color: const Color(0xfffff700).withOpacity(0.333),
           ),
           child: Row(
@@ -149,18 +143,15 @@ Row myChatWidget(
       ),
       Gaps.h5,
       Container(
-        constraints: const BoxConstraints(
-          maxWidth: 310,
+        constraints: BoxConstraints(
+          maxWidth: 0.7.sw,
         ),
-        padding: const EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(top: 10.h),
         child: Container(
-          margin: const EdgeInsets.only(right: 15),
-          padding: const EdgeInsets.all(10),
+          margin: EdgeInsets.only(right: 15.w),
+          padding: EdgeInsets.all(10.r),
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-                bottomLeft: Radius.circular(8)),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), topRight: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
             color: const Color(0xfffff700).withOpacity(0.333),
           ),
           child: Text(
@@ -168,7 +159,7 @@ Row myChatWidget(
             textAlign: TextAlign.start,
             style: CTS(
               color: Colors.black,
-              fontSize: 13,
+              fontSize: 13.sp,
             ),
           ),
         ),

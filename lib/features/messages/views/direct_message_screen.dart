@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
@@ -9,7 +7,6 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/views/chatting_screen.dart';
-import 'package:sbas/features/messages/views/contact_detail_screen.dart';
 import 'package:sbas/features/messages/views/contact_list_screen.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 
@@ -30,7 +27,7 @@ class DirectMessageScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTabIndex = ref.watch(selecteTabProvider);
 
-    void onTap(BuildContext context, tkrmId) {
+    void enterCtRm(BuildContext context, tkrmId) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -183,7 +180,7 @@ class DirectMessageScreen extends ConsumerWidget {
               ),
               selectedTabIndex != 0
                   ? Expanded(
-                      child: TalkRoomWidget(onTap: (tkrmId) => onTap(context, tkrmId)),
+                      child: TalkRoomWidget(onTap: (tkrmId) => enterCtRm(context, tkrmId)),
                     )
                   : const Expanded(child: ContactListScreen()),
             ],

@@ -31,33 +31,41 @@ class TalkRoomWidget extends ConsumerWidget {
                     height: 36.h,
                   ),
                   Gaps.h10,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            talkRoom.tkrmNm!,
-                            style: CTS.bold(
-                              fontSize: 15,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              talkRoom.tkrmNm!,
+                              style: CTS.bold(
+                                fontSize: 15,
+                              ),
                             ),
-                          ),
-                          Gaps.h4,
-                          Image.asset(
-                            "assets/message/unread_msg.png",
-                            width: 16.w,
-                            height: 16.w,
-                          )
-                        ],
-                      ),
-                      Gaps.v8,
-                      Text(
-                        talkRoom.msg ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    ],
+                            Gaps.h4,
+                            Image.asset(
+                              "assets/message/unread_msg.png",
+                              width: 16.w,
+                              height: 16.w,
+                            )
+                          ],
+                        ),
+                        Gaps.v8,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                talkRoom.msg ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
