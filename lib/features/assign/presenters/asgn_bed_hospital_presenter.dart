@@ -49,7 +49,7 @@ class AsgnBdHospPresenter extends AsyncNotifier {
       showToast("bdasSeq is null");
       return false;
     }
-    if (ref.watch(gotoTargetProvider.notifier).state == -1) {
+    if (ref.watch(gotoTargetProvider.notifier).state == "") {
       return false;
     }
 
@@ -59,13 +59,13 @@ class AsgnBdHospPresenter extends AsyncNotifier {
   Future<bool> aprGotoHosp() async {
     String admsStatCd = '';
     switch (ref.watch(gotoTargetProvider.notifier).state) {
-      case 0:
+      case "입원":
         admsStatCd = "IOST0001";
         break;
-      case 1:
+      case "퇴원":
         admsStatCd = "IOST0002";
         break;
-      case 2:
+      case "자택귀가":
         admsStatCd = "IOST0003";
         break;
     }
@@ -85,7 +85,7 @@ class AsgnBdHospPresenter extends AsyncNotifier {
   }
 }
 
-final gotoTargetProvider = StateProvider<int>((ref) => -1);
+final gotoTargetProvider = StateProvider<String>((ref) => "");
 late AssignRepository _assignRepository;
 late AsgnBdHospReq asgnBdHospReq;
 final asgnBdHospProvider = AsyncNotifierProvider<AsgnBdHospPresenter, void>(

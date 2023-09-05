@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/gaps.dart';
@@ -25,7 +26,6 @@ class AssignBedGoHome extends ConsumerStatefulWidget {
   final Patient patient;
   final AssignItemModel assignItem;
   final TimeLine timeLine;
-
   final List<String> list = const ['의료기관명', '병실', '진료과', '병실', '담당의', '연락처', '메시지'];
   final List<String> hintList = const ['칠곡경북대병원', '병실번호', '진료과 입력', '병실번호 입력', '담당의 이름', '의료진 연락처 입력', '입원/퇴원/회송 사유 입력'];
   @override
@@ -33,6 +33,8 @@ class AssignBedGoHome extends ConsumerStatefulWidget {
 }
 
 class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +55,7 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
               weight: 24.h,
             ),
             onPressed: () {
+              ref.watch(gotoTargetProvider.notifier).update((state) => "");
               Navigator.pop(context);
             },
           ),
@@ -67,102 +70,132 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: ref.watch(asgnBdHospProvider).when(
-            loading: () => const SBASProgressIndicator(),
-            error: (error, stackTrace) => Center(
-              child: Text(
-                error.toString(),
-                style: const TextStyle(
-                  color: Palette.mainColor,
+      body: Form(
+        key: formKey,
+        child: ref.watch(asgnBdHospProvider).when(
+              loading: () => const SBASProgressIndicator(),
+              error: (error, stackTrace) => Center(
+                child: Text(
+                  error.toString(),
+                  style: const TextStyle(
+                    color: Palette.mainColor,
+                  ),
                 ),
               ),
-            ),
-            data: (_) => GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Column(
-                children: [
-                  PatientTopInfo(patient: widget.patient),
-                  Divider(
-                    color: Palette.greyText_20,
-                    height: 1,
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 24.w),
-                        child: Column(
-                          children: [
-                            Gaps.v20,
-                            _getTitle("입·퇴원 상태", true),
-                            Gaps.v16,
-                            rowSelectButton(['입원', '퇴원', '자택귀가'], ref),
-                            Gaps.v28,
-                            for (var i = 0; i < widget.list.length; i++)
-                              Column(
-                                children: [
-                                  _getTitle(widget.list[i], i == 0 ? null : false),
-                                  Gaps.v16,
-                                  i == 0
-                                      ? _getTextInputField(i: i, initalValue: widget.timeLine.chrgInstNm ?? "", isFixed: true, ref: ref)
-                                      : _getTextInputField(i: i, hint: widget.hintList[i], ref: ref),
-                                  Gaps.v28,
-                                ],
-                              )
-                          ],
+              data: (_) => GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Column(
+                  children: [
+                    PatientTopInfo(patient: widget.patient),
+                    Divider(
+                      color: Palette.greyText_20,
+                      height: 1,
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 24.w),
+                          child: Column(
+                            children: [
+                              Gaps.v20,
+                              _getTitle("입·퇴원 상태", true),
+                              Gaps.v16,
+                              FormField(
+                                builder: (field) => Column(
+                                  children: [
+                                    rowSelectButton(['입원', '퇴원', '자택귀가'], ref, field),
+                                    Gaps.v12,
+                                    if (field.hasError)
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          FieldErrorText(
+                                            field: field,
+                                          ),
+                                        ],
+                                      )
+                                  ],
+                                ),
+                                initialValue: ref.watch(gotoTargetProvider.notifier).state,
+                                autovalidateMode: AutovalidateMode.always,
+                                validator: (value) => value == null || value == "" ? '입 퇴원 상태를 선택해주세요' : null,
+                              ),
+                              Gaps.v16,
+                              for (var i = 0; i < widget.list.length; i++)
+                                Column(
+                                  children: [
+                                    _getTitle(widget.list[i], i == 0 ? null : false),
+                                    Gaps.v16,
+                                    i == 0
+                                        ? _getTextInputField(i: i, initalValue: widget.timeLine.chrgInstNm ?? "", isFixed: true, ref: ref)
+                                        : _getTextInputField(i: i, hint: widget.hintList[i], ref: ref),
+                                    Gaps.v28,
+                                  ],
+                                )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Common.bottomer(
-                    rBtnText: "처리 완료",
-                    isOneBtn: true,
-                    lBtnFunc: () {},
-                    rBtnFunc: () async {
-                      // var confirm = await Common.showModal(
-                      //     context,
-                      //     Common.commonModal(
-                      //       context: context,
-                      //       mainText: "배정 승인 하시겠습니까?",
-                      //       imageWidget: Image.asset(
-                      //         "assets/auth_group/modal_check.png",
-                      //         width: 44.h,
-                      //       ),
-                      //       button1Function: () {
-                      //         Navigator.pop(context, false);
-                      //       },
-                      //       button2Function: () {
-                      //         Navigator.pop(context, true);
-                      //       },
-                      //       imageHeight: 44.h,
-                      //     ));
+                    Common.bottomer(
+                      rBtnText: "처리 완료",
+                      isOneBtn: true,
+                      lBtnFunc: () {},
+                      rBtnFunc: () async {
+                        // var confirm = await Common.showModal(
+                        //     context,
+                        //     Common.commonModal(
+                        //       context: context,
+                        //       mainText: "배정 승인 하시겠습니까?",
+                        //       imageWidget: Image.asset(
+                        //         "assets/auth_group/modal_check.png",
+                        //         width: 44.h,
+                        //       ),
+                        //       button1Function: () {
+                        //         Navigator.pop(context, false);
+                        //       },
+                        //       button2Function: () {
+                        //         Navigator.pop(context, true);
+                        //       },
+                        //       imageHeight: 44.h,
+                        //     ));
 
-                      // if (confirm == true) {
-                      if (true) {
-                        //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
-                        ref.watch(asgnBdHospProvider.notifier).init(widget.assignItem.ptId ?? "", "Y", widget.assignItem.bdasSeq ?? -1,
-                            widget.timeLine.asgnReqSeq ?? -1, widget.timeLine.chrgInstId ?? "");
-                        if (ref.watch(asgnBdHospProvider.notifier).isValid() == true) {
-                          await ref.watch(asgnBdHospProvider.notifier).aprGotoHosp();
-                          await Future.delayed(Duration(milliseconds: 1500));
-                          await ref.watch(patientTimeLineProvider.notifier).refresh(widget.assignItem.ptId, widget.assignItem.bdasSeq);
-                          await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                        // if (confirm == true) {
+                        if (true) {
+                          //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
+                          ref.watch(asgnBdHospProvider.notifier).init(widget.assignItem.ptId ?? "", "Y", widget.assignItem.bdasSeq ?? -1,
+                              widget.timeLine.asgnReqSeq ?? -1, widget.timeLine.chrgInstId ?? "");
+                          if (ref.watch(asgnBdHospProvider.notifier).isValid() == true && validate() == true) {
+                            await ref.watch(asgnBdHospProvider.notifier).aprGotoHosp();
+                            await Future.delayed(Duration(milliseconds: 1500));
+                            await ref.watch(patientTimeLineProvider.notifier).refresh(widget.assignItem.ptId, widget.assignItem.bdasSeq);
+                            await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
 
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                          }
                         }
-                      }
-                      // } else {
-                      //   return;
-                      // }
-                    },
-                  )
-                ],
+                        // } else {
+                        //   return;
+                        // }
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
+      ),
     );
+  }
+
+  bool validate() {
+    var res = formKey.currentState?.validate() ?? false;
+    if (res) {
+      formKey.currentState?.save();
+    }
+    return res;
   }
 
   Widget _getTextInputField(
@@ -266,7 +299,7 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
     );
   }
 
-  Widget rowSelectButton(List<String> list, WidgetRef ref) {
+  Widget rowSelectButton(List<String> list, WidgetRef ref, FormFieldState<Object?> field) {
     return Stack(
       children: [
         Container(
@@ -299,7 +332,8 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                 child: InkWell(
                   onTap: () {
                     setState(() {
-                      ref.watch(gotoTargetProvider.notifier).update((state) => list.indexOf(i));
+                      field.didChange(i);
+                      ref.watch(gotoTargetProvider.notifier).update((state) => i);
                     });
                   },
                   child: Consumer(
@@ -310,13 +344,13 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                                 child: Container(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                      color: list.indexOf(i) == r.watch(gotoTargetProvider.notifier).state ? const Color(0xff538ef5) : Colors.transparent,
-                                      borderRadius: list.indexOf(i) == r.watch(gotoTargetProvider.notifier).state ? BorderRadius.circular(6) : null),
+                                      color: i == r.watch(gotoTargetProvider.notifier).state ? const Color(0xff538ef5) : Colors.transparent,
+                                      borderRadius: i == r.watch(gotoTargetProvider.notifier).state ? BorderRadius.circular(6) : null),
                                   padding: EdgeInsets.symmetric(vertical: 10.h),
                                   child: Text(i,
                                       style: CTS.bold(
                                         fontSize: 11,
-                                        color: list.indexOf(i) == r.watch(gotoTargetProvider.notifier).state ? Palette.white : Palette.greyText_60,
+                                        color: i == r.watch(gotoTargetProvider.notifier).state ? Palette.white : Palette.greyText_60,
                                       )),
                                 ),
                               ),

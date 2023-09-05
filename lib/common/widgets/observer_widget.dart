@@ -33,8 +33,6 @@ class SbasObserver extends WidgetsBindingObserver {
 
 void onReceiveCloudMessage(RemoteMessage message) {
   // show alert messages
-  final context = CustomGlobalVariable.scaffoldMessengerKey.currentContext!;
-
   final context = scaffoldMessengerKey.currentState;
   
   showNotiSnack(context, message.notification?.title ?? "", message.notification?.body ?? "");
