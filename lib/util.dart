@@ -38,27 +38,32 @@ void showErrorSnack(
   }
 }
 
-void showNotiSnack(BuildContext context, String? error) {
-  String message = '';
-
-  switch (error) {
-    default:
-      if (kDebugMode) {
-        print(error);
-      }
-      break;
-  }
-  if (message.isNotEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(
-          milliseconds: 1750,
-        ),
-        content: Text(
-          message,
-        ),
+void showNotiSnack(ScaffoldMessengerState? state, String? title, String? body) {
+  // switch (error) {
+  //   default:
+  //     if (kDebugMode) {
+  //       print(error);
+  //     }
+  //     break;
+  // }
+  if (state == null) return;
+  if (title != "" && title != null && body != null && body != "") {
+    state.showSnackBar(SnackBar(
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // 컨텐츠의 높이를 최소화하여 상하로 배치되도록 합니다.
+        children: [
+          Text(
+            title,
+            style: CTS(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 8.0.h), // Title과 Body 사이의 간격 조정
+          Text(body),
+        ],
       ),
-    );
+    ));
   }
 }
 

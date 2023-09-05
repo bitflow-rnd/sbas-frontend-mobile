@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/common/global_variable.dart';
 import 'package:sbas/common/widgets/observer_widget.dart';
 import 'package:sbas/firebase_options.dart';
 import 'package:sbas/router.dart';
@@ -13,7 +13,38 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sbas/util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async => onReceiveCloudMessage(message);
+final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+const AndroidNotificationChannel _channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  importance: Importance.max,
+);
+late AndroidInitializationSettings initialzationSettingsAndroid;
+late DarwinInitializationSettings initialzationSettingsIOS;
+
+_showLocalMessage(RemoteMessage message) async {
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+  if (notification != null && android != null) {
+    _flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          _channel.id,
+          _channel.name,
+          channelDescription: _channel.description,
+          icon: '@mipmap/launcher_icon',
+        ),
+      ),
+    );
+  }
+}
 
 Future main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -24,8 +55,43 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true, // Required to display a heads up notification
+    badge: true,
+    sound: true,
+  );
+  await _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(_channel);
+  // android 초기화
+  initialzationSettingsAndroid = const AndroidInitializationSettings('@mipmap/launcher_icon');
+
+  final FirebaseMessaging fbMessaging = FirebaseMessaging.instance;
+  await fbMessaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  // ios - 소리, 뱃지, 알림창 허용 여부
+  initialzationSettingsIOS = const DarwinInitializationSettings(
+    requestSoundPermission: true,
+    requestBadgePermission: true,
+    requestAlertPermission: true,
+  );
+  await _flutterLocalNotificationsPlugin.initialize(
+    const InitializationSettings(android: AndroidInitializationSettings('@mipmap/launcher_icon'), iOS: DarwinInitializationSettings()),
+    onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {
+      //포어그라운드 클릭시 이벤트 처리하고 싶을 때 사용
+      // _checkMessage(foregroundMessage);
+    },
+  );
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage.listen(onReceiveCloudMessage);
+  FirebaseMessaging.onMessage.listen((data) => _showLocalMessage(data));
 
   await dotenv.load(
     fileName: '.env',
@@ -57,7 +123,7 @@ class App extends ConsumerWidget {
         builder: (context, _) => MaterialApp.router(
           routerConfig: ref.watch(routerProvider),
           debugShowCheckedModeBanner: false,
-          scaffoldMessengerKey: CustomGlobalVariable.scaffoldMessengerKey,
+          scaffoldMessengerKey: scaffoldMessengerKey,
           title: '스마트병상배정시스템',
           theme: Bitflow.getTheme(),
           darkTheme: Bitflow.getDarkTheme(),
