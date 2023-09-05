@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/util.dart';
 
@@ -49,7 +50,7 @@ class PaitentCardItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '${model.ptNm} (${model.gndr}/${model.age}세) ',
+                        '${midMasking(model.ptNm)} (${model.gndr}/${model.age}세) ',
                         style: CTS.bold(
                           color: Colors.black,
                           fontSize: 15,
@@ -142,6 +143,30 @@ class PaitentCardItem extends StatelessWidget {
           ),
         ),
       );
+
+  String midMasking(String? userNm) {
+    // 사용자 이름 첫 글자
+    if (userNm == null) return "";
+    String frsName = userNm.substring(0, 1);
+
+    // 사용자 이름 중간 글자
+    String midName = userNm.substring(1, userNm.length - 1);
+
+    // 사용자 이름 중간 글자 마스킹
+    String cnvMidName = '';
+    for (int i = 0; i < midName.length; i++) {
+      cnvMidName += '*'; // 중간 글자 수만큼 '*'로 표시
+    }
+
+    // 사용자 이름 마지막 글자
+    String lstName = userNm.substring(userNm.length - 1);
+
+    // 마스킹 완성된 사용자 이름
+    String maskingName = frsName + cnvMidName + lstName;
+
+    return maskingName;
+  }
+
   final Patient model;
   final Color color;
 }

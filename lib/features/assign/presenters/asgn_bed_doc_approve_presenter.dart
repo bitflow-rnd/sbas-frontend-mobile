@@ -58,7 +58,7 @@ class AsgnBdDocPresenter extends AsyncNotifier {
   }
 
   Future<bool> patientToHosp() async {
-    var res = await _assignRepository.postAsgnHosp(asgnBdReqModel.toJson());
+    var res = await _assignRepository.postDocAsgnConfirm(asgnBdReqModel.toJson());
     return res;
   }
 }

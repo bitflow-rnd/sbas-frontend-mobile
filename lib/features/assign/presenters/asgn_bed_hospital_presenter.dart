@@ -19,6 +19,8 @@ class AsgnBdHospPresenter extends AsyncNotifier {
   }
 
 // ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
+// ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
+
   void setTextByIndex(int index, String? value) {
     switch (index) {
       // case 0: //병실

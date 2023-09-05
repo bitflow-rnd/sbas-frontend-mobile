@@ -631,7 +631,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                         ],
                       ),
                       SizedBox(height: detail != null ? 8.h : 0),
-                      detail != null
+                      detail != null && detail != ""
                           ? Text(
                               detail,
                               style: CTS(
@@ -721,7 +721,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                           fontSize: 13,
                         ),
                       ),
-                      if (detail != null)
+                      if (detail != null && detail != "" && detail != "\n")
                         Container(
                           margin: EdgeInsets.only(top: 8.h),
                           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),

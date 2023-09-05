@@ -80,6 +80,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: TextFormField(
+                              initialValue: widget.patient.bascAddr,
                               decoration: getInputDecoration(""),
                               validator: (value) {
                                 return null;

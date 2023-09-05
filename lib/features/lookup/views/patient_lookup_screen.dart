@@ -28,6 +28,34 @@ class PatientLookupScreen extends ConsumerWidget {
     '최근3개월',
     '최근1년',
   ];
+  @override
+  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
+        backgroundColor: Palette.white,
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text(
+            "환자 목록",
+            style: CTS.medium(
+              fontSize: 15,
+              color: Colors.black,
+            ),
+          ),
+          elevation: 0,
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          leading: automaticallyImplyLeading
+              ? const BackButton(
+                  color: Colors.black,
+                )
+              : null,
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+          ),
+        ),
+        body: _getGestureDetector(context, ref),
+      );
   Widget _getTopColumn(int length) => Container(
         padding: EdgeInsets.only(top: 12.h, bottom: 12.h),
         child: Column(
@@ -280,34 +308,7 @@ class PatientLookupScreen extends ConsumerWidget {
           ],
         ),
       );
-  @override
-  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
-        backgroundColor: Palette.white,
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Text(
-            "환자 목록",
-            style: CTS.medium(
-              fontSize: 15,
-              color: Colors.black,
-            ),
-          ),
-          elevation: 0,
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          leading: automaticallyImplyLeading
-              ? const BackButton(
-                  color: Colors.black,
-                )
-              : null,
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-          ),
-        ),
-        body: _getGestureDetector(context, ref),
-      );
+
   static const String routeName = 'lookup';
   static const String routeUrl = '/lookup';
 }
