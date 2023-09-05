@@ -57,9 +57,9 @@ class AsgnBdDocPresenter extends AsyncNotifier {
     return true;
   }
 
-  Future<bool> patientToHosp() async {
+  Future<dynamic> patientToHosp() async {
     var res = await _assignRepository.postDocAsgnConfirm(asgnBdReqModel.toJson());
-    return res;
+    return res["message"] == "배정 승인되었습니다.";
   }
 }
 

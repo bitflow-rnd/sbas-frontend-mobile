@@ -125,15 +125,17 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                             .watch(asgnBdDocProvider.notifier)
                             .init(assignItem.ptId ?? "", "Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? -1, timeLine.chrgInstId ?? "");
                         if (ref.watch(asgnBdDocProvider.notifier).isValid() == true) {
-                          await ref.watch(asgnBdDocProvider.notifier).patientToHosp();
-                          await Future.delayed(Duration(milliseconds: 1500));
-                          await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
-                          await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                          bool postRes = await ref.watch(asgnBdDocProvider.notifier).patientToHosp();
+                          if (postRes) {
+                            await Future.delayed(Duration(milliseconds: 1500));
+                            await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
+                            await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
 
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                          }
                         }
                       } else {
                         return;
