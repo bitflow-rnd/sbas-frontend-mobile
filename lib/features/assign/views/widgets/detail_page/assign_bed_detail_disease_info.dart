@@ -75,7 +75,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                             : Expanded(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  mainAxisSize: MainAxisSize.max,
+                                  // mainAxisSize: MainAxisSize.max,
                                   children: [
                                     for (int j = 0; j < 3; j++)
                                       Expanded(
@@ -97,7 +97,6 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                               ),
                                               child: Text(
                                                 getList1Value(i + 100, diseaseInfo), // 발병일, 진단일, 신고일
-                                                // "aaaaa",
                                                 style: CTS.medium(fontSize: 13),
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
@@ -109,7 +108,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                   ],
                                 ),
                               ),
-                        const Spacer(),
+                        if (i != 4) const Spacer(),
                         i != 4
                             ? Text(
                                 getList1Value(i, diseaseInfo),
