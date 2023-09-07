@@ -82,7 +82,7 @@ class TalkRoomWidget extends ConsumerWidget {
             ],
           ),
           onTap: () {
-            onTap(talkRoom.tkrmId!);
+            onTap(talkRoom.tkrmId!, talkRoom.tkrmNm!);
           },
         );
       },

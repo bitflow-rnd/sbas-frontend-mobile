@@ -12,12 +12,14 @@ import 'package:sbas/features/messages/views/widgets/chat_widget.dart';
 class ChattingScreen extends StatefulWidget {
   final String userId;
   final String tkrmId;
+  final String tkrmNm;
   final TalkRoomsProvider provider;
 
   const ChattingScreen({
     Key? key,
     required this.userId,
     required this.tkrmId,
+    required this.tkrmNm,
     required this.provider,
   }) : super(key: key);
 
@@ -69,7 +71,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          widget.tkrmId,
+          widget.tkrmNm,
           style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -134,15 +136,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
           InkWell(
             onTap: () async {
               // Choose the file (image) from gallery
-              final XFile? file =
-                  await _picker.pickImage(source: ImageSource.gallery);
+              final XFile? file = await _picker.pickImage(source: ImageSource.gallery);
               _talkRoomBloc.uploadFile(file);
             },
             child: Container(
               color: Palette.greyText_20,
               margin: EdgeInsets.all(2.r),
-              child: Image.asset("assets/auth_group/image_location_small.png",
-                  width: 42.h),
+              child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
             ),
           ),
           Expanded(
@@ -152,10 +152,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
               setState(() {});
               _isButtonEnabled = value.trim().isNotEmpty;
             },
-            decoration: InputDecoration(
-                hintText: '메세지 입력',
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+            decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
           )),
           InkWell(
             onTap: _isButtonEnabled
@@ -168,8 +165,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   }
                 : null,
             child: Container(
-                color:
-                    _isButtonEnabled ? Palette.mainColor : Palette.greyText_30,
+                color: _isButtonEnabled ? Palette.mainColor : Palette.greyText_30,
                 padding: EdgeInsets.all(12.r),
                 margin: EdgeInsets.all(2.r),
                 child: Icon(

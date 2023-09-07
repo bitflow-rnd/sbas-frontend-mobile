@@ -27,13 +27,14 @@ class DirectMessageScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTabIndex = ref.watch(selecteTabProvider);
 
-    void enterCtRm(BuildContext context, tkrmId) {
+    void enterCtRm(BuildContext context, tkrmId, String tkrmNm) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ChattingScreen(
             userId: ref.watch(talkRoomsProvider.notifier).userId,
             tkrmId: tkrmId,
+            tkrmNm: tkrmNm,
             provider: ref.watch(talkRoomsProvider.notifier),
           ),
         ),
@@ -180,7 +181,7 @@ class DirectMessageScreen extends ConsumerWidget {
               ),
               selectedTabIndex != 0
                   ? Expanded(
-                      child: TalkRoomWidget(onTap: (tkrmId) => enterCtRm(context, tkrmId)),
+                      child: TalkRoomWidget(onTap: (tkrmId,tkrmNm) => enterCtRm(context, tkrmId, tkrmNm)),
                     )
                   : const Expanded(child: ContactListScreen()),
             ],

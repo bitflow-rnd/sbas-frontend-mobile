@@ -122,27 +122,26 @@ class AsgnCardItem extends ConsumerWidget {
                         ? Container()
                         : Text(
                             model.chrgInstNm ?? '',
-                            style: CTS.medium(
-                              color: Palette.black,
-                              fontSize: 12,
-                            ),
+                            style: CTS.medium(color: Palette.black, fontSize: 11.sp),
                             maxLines: 1,
                           ),
                     if (model.diagNm != null && model.diagNm != '') Gaps.v4,
                     if (model.diagNm != null && model.diagNm != '')
                       Text(
                         model.diagNm ?? '',
-                        style: CTS(color: Colors.grey, fontSize: 12),
+                        style: CTS(color: Colors.grey, fontSize: 11.sp),
                         maxLines: 1,
                       ),
-                    Text(
-                      model.bascAddr ?? '',
-                      style: CTS(
-                        fontSize: 12.sp,
-                        color: Colors.grey,
+                    if (model.bascAddr != null && model.bascAddr != '') Gaps.v4,
+                    if (model.bascAddr != null && model.bascAddr != '')
+                      Text(
+                        model.bascAddr ?? '',
+                        style: CTS(
+                          fontSize: 11.sp,
+                          color: Colors.grey,
+                        ),
+                        maxLines: 1,
                       ),
-                      maxLines: 1,
-                    ),
                     Container(
                       height: 32.h,
                       width: (MediaQuery.of(context).size.width / 2).w,
