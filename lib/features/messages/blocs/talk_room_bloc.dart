@@ -29,12 +29,13 @@ class TalkRoomBloc {
   late final List<TalkMsgModel> chatDetailList;
 
   late final channel = IOWebSocketChannel.connect(
-    '$_wsUrl/$tkrmId',
+    '$_wsUrl/$tkrmId?u=$userId',
     pingInterval: const Duration(seconds: 30),
     connectTimeout: const Duration(seconds: 5),
   );
 
   void _fetchChattingRoom() async {
+    channel.sink.add("hello|$userId");
     print("message_fetchChattingRoom");
     channel.stream.listen((message) {
       print("message" + message);
