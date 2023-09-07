@@ -451,7 +451,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             onChanged: (value) {
               // setState(() {});
             },
-            decoration: InputDecoration(hintText: '메세지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+            decoration: InputDecoration(hintText: '메시지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
           )),
           InkWell(
             onTap: () {},

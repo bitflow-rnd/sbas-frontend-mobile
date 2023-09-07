@@ -120,21 +120,21 @@ class AlarmPageState extends State<AlarmPage> {
                         //     name: "김희순",
                         //     gender: "남",
                         //     age: 88,
-                        //     detail: "BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다."),
+                        //     detail: "BO의 메시지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다."),
                         // dateFragment("2023년 1월"),
                         // otherFrag(
                         //     dateTime: "02. 07 (화) 오전 11시 27분",
                         //     name: "김희순",
                         //     gender: "남",
                         //     age: 88,
-                        //     detail: "BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.",
+                        //     detail: "BO의 메시지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.",
                         //     isApp: true),
                         // otherFrag(
                         //     dateTime: "02. 07 (화) 오전 11시 27분",
                         //     name: "김희순",
                         //     gender: "남",
                         //     age: 88,
-                        //     detail: "BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.",
+                        //     detail: "BO의 메시지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.",
                         //     isApp: false),
                       ],
                     ),
@@ -220,7 +220,7 @@ class AlarmPageState extends State<AlarmPage> {
                         Expanded(
                           flex: 6,
                           child: Text(
-                            'BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.',
+                            'BO의 메시지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.',
                             style: CTS(
                               color: Palette.greyText,
                               fontSize: 12,
@@ -314,7 +314,7 @@ class AlarmPageState extends State<AlarmPage> {
                         Expanded(
                           flex: 6,
                           child: Text(
-                            'BO의 메세지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.',
+                            'BO의 메시지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.',
                             style: CTS(
                               color: Palette.greyText,
                               fontSize: 12,

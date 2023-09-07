@@ -117,7 +117,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
         return _dprtInfo.nok2Telno;
 
       case 105:
-      //메세지
+      //메시지
       case 1006:
         return _dprtInfo.msg;
 
@@ -147,7 +147,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
         return '보호자 2 연락처 입력';
       case 105:
       case 1006:
-        return '메세지 입력';
+        return '메시지 입력';
       case 1003:
         return '진료과 입력';
       case 1004:
@@ -173,7 +173,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
         break;
 
       case 105:
-      //메세지
+      //메시지
       case 1007:
         _dprtInfo.msg = text;
         break;

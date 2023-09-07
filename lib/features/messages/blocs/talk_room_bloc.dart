@@ -8,6 +8,7 @@ import 'package:sbas/features/messages/models/talk_msg_model.dart';
 import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/util.dart' as util;
 import 'package:web_socket_channel/io.dart';
+import 'dart:developer';
 
 class TalkRoomBloc {
   final String userId;
@@ -28,24 +29,30 @@ class TalkRoomBloc {
   late final List<TalkMsgModel> chatDetailList;
 
   late final channel = IOWebSocketChannel.connect(
-    '$_wsUrl/$tkrmId/$userId',
+    '$_wsUrl/$tkrmId',
     pingInterval: const Duration(seconds: 30),
     connectTimeout: const Duration(seconds: 5),
   );
 
   void _fetchChattingRoom() async {
+    print("message_fetchChattingRoom");
     channel.stream.listen((message) {
-      final parsedData = json.decode(message.replaceAll("\n", "\\n"));
-      if (parsedData is List) {
-        chatDetailList = TalkMsgModel.fromArrJson(parsedData);
-        _chatDetailListController.add(chatDetailList);
-      } else if (parsedData is Map<String, dynamic>) {
-        final addData = TalkMsgModel.fromJson(parsedData);
+      print("message" + message);
 
-        chatDetailList.add(addData);
-        _chatDetailListController.add(chatDetailList);
-      } else {
-        throw Exception('Invalid data type received from server');
+      try {
+        final parsedData = json.decode(message);
+        if (parsedData[0] is List) {
+          chatDetailList = TalkMsgModel.fromArrJson(parsedData);
+          _chatDetailListController.add(chatDetailList);
+        } else if (parsedData is Map<String, dynamic>) {
+          final addData = TalkMsgModel.fromJson(parsedData);
+          chatDetailList.add(addData);
+          _chatDetailListController.add(chatDetailList);
+        } else {
+          throw Exception('Invalid data type received from server');
+        }
+      } catch (e) {
+          log("test");
       }
     }, onError: (error) {
       _chatDetailListController.addError(error);
@@ -53,7 +60,8 @@ class TalkRoomBloc {
   }
 
   Future<void> sendMessage(String message) async {
-    channel.sink.add(message);
+    log("$userId|$message");
+    channel.sink.add("$userId|$message");
   }
 
   Future<void> uploadFile(XFile? file) async {
@@ -96,6 +104,6 @@ class TalkRoomBloc {
     _chatDetailListController.close();
   }
 
-  final String _wsUrl = '${dotenv.env['WS_URL']}/chat-rooms';
+  final String _wsUrl = '${dotenv.env['WS_URL']}/chat-rooms/room';
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/common';
 }

@@ -51,11 +51,15 @@ class TalkMsgModel {
 
   static List<TalkMsgModel> fromArrJson(List<dynamic> jsonArr) {
     List<TalkMsgModel> talkMsgList = [];
-    for (dynamic json in jsonArr) {
+    for (dynamic json in jsonArr[0]) {
       talkMsgList.add(TalkMsgModel.fromJson(json as Map<String, dynamic>));
+      // List msgs = json.first as List<dynamic>;
+      // print("msgs" + msgs.toString());
+      // talkMsgList.add(TalkMsgModel.fromJson(msgs.first as Map<String, dynamic>));
     }
     return talkMsgList;
   }
+
 }
 
 class TalkMsgId {

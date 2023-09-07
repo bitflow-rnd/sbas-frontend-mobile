@@ -145,7 +145,7 @@ class ContactListScreen extends ConsumerWidget {
                         locationItem(text: "병상배정반"),
                         locationItem(text: "의료진"),
                         locationItem(text: "구급대"),
-                        locationItem(text: "보건전산"),
+                        locationItem(text: "전산"),
                         Icon(
                           Icons.keyboard_arrow_up_outlined,
                           color: Palette.greyText_60,
