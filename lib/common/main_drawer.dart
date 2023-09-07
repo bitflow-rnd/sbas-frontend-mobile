@@ -144,19 +144,19 @@ class MainDrawer extends ConsumerWidget {
     return InkWell(
       onTap: count != null
           ? () async {
-              double x = -1.0;
+              int x = 0;
               switch (title) {
                 case "병상요청":
-                  x = -1.0;
+                  x = 0;
                   break;
                 case "배정승인":
-                  x = -0.5;
+                  x = 1;
                   break;
                 case "이송":
-                  x = 0.0;
+                  x = 2;
                   break;
                 case "입·퇴원":
-                  x = 0.5;
+                  x = 3;
                   break;
               }
               ref.read(assignBedProvider.notifier).setTopNavItem(x).then((value) => Navigator.push(

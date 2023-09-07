@@ -54,7 +54,7 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
     state = const AsyncValue.loading();
 
     try {
-      AssignListModel filteredItems = AssignListModel(count: 0, x: ref.read(assignTabXindexProvider.notifier).state, items: []);
+      AssignListModel filteredItems = AssignListModel(count: 0, x: ref.read(assignTabXindexProvider.notifier).state.toDouble(), items: []);
       for (AssignItemModel item in tempList.items) {
         if ((item.ptNm?.contains(searchTextController.text.toLowerCase()) ?? false)) {
           //::TODO 현재 assign bed item 에 환자의 이름만 있어서 이를 기준으로 검색하게만 구현. dto 변경필요
@@ -69,14 +69,13 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
     }
   }
 
-  Future<void> setTopNavItem(double x) async {
+  Future<void> setTopNavItem(int x) async {
     searchTextController.clear();
     state = await AsyncValue.guard(() async {
       final list = await _asgnRepo.lookupPatientInfo();
       final assignCountState = ref.read(assignCountProvider.notifier).state;
-      final index = (x * 2).toInt() + 2;
 
-      list[index].x = x;
+      list[x].x = x.toDouble();
       ref.watch(assignTabXindexProvider.notifier).state = x;
 
       for (int i = 0; i < list.length; i++) {
@@ -84,7 +83,7 @@ class AssignBedListPresenter extends AsyncNotifier<AssignListModel> {
 
         assignCountState[i] = list[i].count;
       }
-      _list = list[index];
+      _list = list[x];
 
       return _list;
     });
@@ -101,4 +100,4 @@ final assignBedProvider = AsyncNotifierProvider<AssignBedListPresenter, AssignLi
   () => AssignBedListPresenter(),
 );
 final assignCountProvider = StateProvider((ref) => <int>[0, 0, 0, 0, 0]);
-final assignTabXindexProvider = StateProvider((ref) => -1.0);
+final assignTabXindexProvider = StateProvider((ref) => 0);

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 
 class TopNavItem extends ConsumerWidget {
   const TopNavItem({
@@ -21,7 +20,7 @@ class TopNavItem extends ConsumerWidget {
           0,
         ),
         child: InkWell(
-          onTap: () => ref.read(assignBedProvider.notifier).setTopNavItem(x),
+          // onTap: () => ref.read(assignBedProvider.notifier).setTopNavItem(x),
           child: IntrinsicWidth(
             child: Container(
               height: 20.h,

@@ -24,19 +24,19 @@ class Dashboard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(15.r),
         splashColor: Colors.grey.shade300,
         onTap: () async {
-          double x = -1.0;
+          int x = 0;
           switch (title) {
             case "요청":
-              x = -1.0;
+              x = 0;
               break;
             case "승인":
-              x = -0.5;
+              x = 1;
               break;
             case "이송":
-              x = 0.0;
+              x = 2;
               break;
             case "입원":
-              x = 0.5;
+              x = 3;
               break;
           }
           ref.read(assignBedProvider.notifier).setTopNavItem(x).then((value) => Navigator.push(
