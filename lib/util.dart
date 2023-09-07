@@ -5,11 +5,52 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/find_id_screen.dart';
 import 'package:sbas/features/authentication/views/set_password_screen.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+extension FutureExtension<T> on Future<T> {
+  Future<T> load(BuildContext context) async {
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => const Center(
+    //     child: SBASProgressIndicator(),
+    //   ),
+    //   barrierDismissible: false,
+    // );
+    // showDialog(context: context, builder: builder)
+
+    final route = DialogRoute(
+        context: context,
+        builder: (_) => const Center(
+              child: SBASProgressIndicator(),
+            ),
+        barrierDismissible: false);
+
+    Navigator.of(context).push(route);
+    then((value) => Navigator.of(context).removeRoute(route));
+// close dialog
+
+    return this;
+    //   try {
+    //     final result = await this;
+    //     Navigator.pop(context); // Close the loading dialog
+    //     return result;
+    //   } catch (e) {
+    //     Navigator.pop(context); // Close the loading dialog on error
+    //     // Handle the error as needed
+    //     throw e;
+    //   } finally {
+    //     Navigator.pop(context); // Close the loading dialog on error
+    //     return this;
+    //   }
+    // }
+  }
+}
 
 void showErrorSnack(
   BuildContext context,

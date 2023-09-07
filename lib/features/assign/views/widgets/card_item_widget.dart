@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
@@ -27,9 +28,20 @@ class AsgnCardItem extends ConsumerWidget {
         if (isHandlingTap) return;
         isHandlingTap = true;
 
+        final route = DialogRoute(
+            context: context,
+            builder: (_) => const Center(
+                  child: SBASProgressIndicator(),
+                ),
+            barrierDismissible: false);
+        Navigator.of(context).push(route);
+
         final patient = await ref.read(patientInfoProvider.notifier).getAsync(model.ptId);
         final diseaseInfo = await ref.read(patientDiseaseInfoProvider.notifier).getAsync(model.ptId);
         final orignInfo = await ref.read(patientTransferInfoProvider.notifier).getTransInfo(model.ptId, model.bdasSeq ?? -1);
+
+        Navigator.of(context).removeRoute(route);
+
         if (context.mounted) {
           Navigator.push(
             context,
