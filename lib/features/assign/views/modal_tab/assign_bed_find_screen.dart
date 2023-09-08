@@ -83,6 +83,10 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                             ),
                             child: TextFormField(
                               initialValue: widget.patient.bascAddr,
+                              style: CTS(
+                                color: Palette.greyText,
+                                fontSize: 13.sp,
+                              ),
                               decoration: getInputDecoration(""),
                               validator: (value) {
                                 return null;
