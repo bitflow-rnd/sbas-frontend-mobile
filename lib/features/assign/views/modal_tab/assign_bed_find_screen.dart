@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -240,35 +242,66 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.asset("assets/message/hospital_icon.png", width: 36.w, height: 36.h),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset("assets/message/hospital_icon.png", width: 36.w, height: 36.h),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "가용병실",
+                                          style: CTS.medium(
+                                            color: Palette.black,
+                                            fontSize: 9.sp,
+                                          ),
+                                        ).c,
+                                      ],
+                                    ),
+                                    Text(
+                                      Random().nextInt(5).toString(),
+                                      style: CTS.medium(
+                                        color: Palette.black,
+                                        fontSize: 9.sp,
+                                      ),
+                                    ).c,
+                                  ],
+                                ),
                                 Gaps.h8,
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       children: [
-                                        Text(
-                                          '${widget.hospList.items[i].hospNm}',
-                                          style: CTS.medium(
-                                            color: Colors.black,
-                                            fontSize: 15.sp,
+                                        Container(
+                                          width: i < 3 ? 145.w : 180.w,
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Text(
+                                              '${widget.hospList.items[i].hospNm}',
+                                              style: CTS.medium(
+                                                color: Colors.black,
+                                                fontSize: 15.sp,
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                        // Gaps.h8,
-                                        // Container(
-                                        //   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                                        //   decoration: BoxDecoration(
-                                        //     color: Palette.red.withOpacity(0.12),
-                                        //     borderRadius: BorderRadius.circular(11),
-                                        //   ),
-                                        //   child: Text(
-                                        //     'AI추천',
-                                        //     style: CTS.medium(
-                                        //       color: Palette.red,
-                                        //       fontSize: 12,
-                                        //     ),
-                                        //   ),
-                                        // ),
+                                        if (i < 3)
+                                          Container(
+                                            padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                                            decoration: BoxDecoration(
+                                              color: Palette.red.withOpacity(0.12),
+                                              borderRadius: BorderRadius.circular(11),
+                                            ),
+                                            child: Text(
+                                              'AI추천',
+                                              style: CTS.medium(
+                                                color: Palette.red,
+                                                fontSize: 12.sp,
+                                              ),
+                                            ),
+                                          ),
                                       ],
                                     ),
                                     // Gaps.v8,
