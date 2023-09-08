@@ -30,7 +30,7 @@ class OriginInfomationV2 extends ConsumerStatefulWidget {
     '담당의',
     '연락처',
     // '원내 배정 여부',
-    '메세지',
+    '메시지',
   ];
   final _subTitles = [
     '배정 요청 지역',

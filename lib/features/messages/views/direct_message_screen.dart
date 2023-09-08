@@ -94,7 +94,7 @@ class DirectMessageScreen extends ConsumerWidget {
                                     ref.read(selecteTabProvider.notifier).state = 1;
                                   },
                                   child: Text(
-                                    '메세지',
+                                    '메시지',
                                     style: CTS.medium(
                                       color: Palette.black,
                                       fontSize: 13,
@@ -181,7 +181,7 @@ class DirectMessageScreen extends ConsumerWidget {
               ),
               selectedTabIndex != 0
                   ? Expanded(
-                      child: TalkRoomWidget(onTap: (tkrmId,tkrmNm) => enterCtRm(context, tkrmId, tkrmNm)),
+                      child: TalkRoomWidget(onTap: (tkrmId, tkrmNm) => enterCtRm(context, tkrmId, tkrmNm)),
                     )
                   : const Expanded(child: ContactListScreen()),
             ],

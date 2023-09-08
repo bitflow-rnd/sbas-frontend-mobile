@@ -109,15 +109,14 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                 ),
                               ),
                         if (i != 4) const Spacer(),
-                        i != 4
-                            ? Text(
-                                getList1Value(i, diseaseInfo),
-                                style: CTS.medium(fontSize: 13),
-                                textAlign: TextAlign.end,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            : Container(),
+                        if (i != 4)
+                          Text(
+                            getList1Value(i, diseaseInfo),
+                            style: CTS.medium(fontSize: 13),
+                            textAlign: TextAlign.end,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          )
                       ],
                     ),
                   ),
