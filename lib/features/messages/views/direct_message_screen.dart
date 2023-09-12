@@ -5,6 +5,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/views/user_reg_req_screen_v2.dart';
 import 'package:sbas/features/messages/views/contact_list_screen.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 
@@ -137,7 +138,14 @@ class DirectMessageScreen extends ConsumerWidget {
                     ),
                     Gaps.h32,
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UserRegisterRequestScreenV2(),
+                          ),
+                        );
+                      },
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
                         decoration: BoxDecoration(

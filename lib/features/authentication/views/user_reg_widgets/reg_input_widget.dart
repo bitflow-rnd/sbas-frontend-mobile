@@ -46,15 +46,15 @@ class _RegInputState extends ConsumerState<RegInput> {
             children: [
               Text(
                 widget.title,
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 16,
+                style: CTS.medium(
+                  color: Palette.greyText_80,
+                  fontSize: 13.sp,
                 ),
               ),
               Text(
                 widget.isRequired ? '(필수)' : '',
-                style: CTS.bold(
-                  fontSize: 13,
+                style: CTS.medium(
+                  fontSize: 13.sp,
                   color: Palette.mainColor,
                 ),
               ),
@@ -62,38 +62,43 @@ class _RegInputState extends ConsumerState<RegInput> {
           ),
         Gaps.v4,
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: TextFormField(
-                readOnly: isReadOnly,
-                keyboardType: widget.keyboardType,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                    RegExp(widget.regExp),
+              child: FormField(
+                builder: (field) => TextFormField(
+                  style: CTS(color: Palette.black, fontSize: 13.sp),
+                  readOnly: isReadOnly,
+                  keyboardType: widget.keyboardType,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(widget.regExp),
+                    ),
+                    FilteringTextInputFormatter.singleLineFormatter,
+                  ],
+                  onSaved: widget.onSaved,
+                  maxLength: widget.maxLength,
+                  validator: widget.validator,
+                  controller: editingController,
+                  decoration: InputDecoration(
+                    counterText: "",
+                    enabledBorder: _outlineInputBorder,
+                    focusedBorder: _outlineInputBorder,
+                    errorBorder: _outlineInputBorder,
+                    focusedErrorBorder: _outlineInputErrBorder,
+                    hintText: widget.hintText,
+                    hintStyle: CTS.regular(
+                      fontSize: 13.sp,
+                      color: Palette.greyText_60,
+                    ),
+                    contentPadding: EdgeInsets.only(bottom: 0.0, top: 15.h),
+                    prefix: Padding(
+                        padding: EdgeInsets.only(
+                      left: 20.0.w,
+                    )),
                   ),
-                  FilteringTextInputFormatter.singleLineFormatter,
-                ],
-                onSaved: widget.onSaved,
-                maxLength: widget.maxLength,
-                validator: widget.validator,
-                controller: editingController,
-                decoration: InputDecoration(
-                  counterText: "",
-                  enabledBorder: _outlineInputBorder,
-                  focusedBorder: _outlineInputBorder,
-                  errorBorder: _outlineInputBorder,
-                  focusedErrorBorder: _outlineInputErrBorder,
-                  hintText: widget.hintText,
-                  hintStyle: CTS.regular(
-                    fontSize: 13.sp,
-                    color: Palette.greyText_60,
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 16.h,
-                    horizontal: 20.w,
-                  ),
+                  autovalidateMode: AutovalidateMode.always,
                 ),
-                autovalidateMode: AutovalidateMode.always,
               ),
             ),
             if (widget.title == "휴대폰번호")
@@ -124,7 +129,7 @@ class _RegInputState extends ConsumerState<RegInput> {
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Container(
-                  padding: EdgeInsets.only(top: 10.h, right: 12.w, bottom: 30.h),
+                  padding: EdgeInsets.only(top: 15.h, right: 12.w),
                   child: Text(
                     "유효시간 02:59",
                     style: CTS(

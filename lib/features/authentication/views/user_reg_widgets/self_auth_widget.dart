@@ -62,7 +62,7 @@ class SelfAuth extends ConsumerWidget {
           title: '생년월일',
           isRequired: true,
           maxLength: 8,
-          keyboardType: TextInputType.number,
+          keyboardType: TextInputType.datetime,
           regExp: r'[0-9]',
           validator: (value) {
             if (value == null ||

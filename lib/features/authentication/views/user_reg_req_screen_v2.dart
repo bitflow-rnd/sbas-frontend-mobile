@@ -11,6 +11,7 @@ import 'package:sbas/features/authentication/views/user_reg_widgets/belong_agenc
 import 'package:sbas/features/authentication/views/user_reg_widgets/job_role_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/self_auth_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/top_navbar_req_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 
 class UserRegisterRequestScreenV2 extends ConsumerStatefulWidget {
   const UserRegisterRequestScreenV2({
@@ -53,7 +54,13 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
                   vertical: 32.h,
                   horizontal: 24.w,
                 ),
-                child: TopNavbarRequest(),
+                child: PatientRegTopNav(
+                  x: index == 0 ? 1 : -1,
+                  items: const [
+                    '사용자정보',
+                    '소속기관',
+                  ],
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(
@@ -84,9 +91,9 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
                         onPressed: index < 0
                             ? null
                             : () {
-                                if (_tryValidation()) {
-                                  ref.read(regIndexProvider.notifier).state--;
-                                }
+                                ref.read(regIndexProvider.notifier).state--;
+                                // if (_tryValidation()) {
+                                // }
                               },
                         text: '이전',
                       ),
@@ -118,60 +125,59 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
     );
   }
 
-  Widget _getRegIndex(double index) {
+  Widget _getRegIndex(int index) {
     if (index == 1) {
       return const BelongAgency(
         titles: [
-          '담당/근무지역',
+          '담당지역',
           '소속기관',
           '담당 환자 유형',
-          '직급',
           '소속 증명 정보',
         ],
       );
     }
+    // if (index == 0) {
+    //   return const JobRole(
+    //     title: [
+    //       '소속기관 유형',
+    //       '권한그룹 선택',
+    //       '세부 권한 선택',
+    //     ],
+    //     authGroupSelectedImages: [
+    //       'assets/auth_group/selected_request.png',
+    //       'assets/auth_group/selected_approve.png',
+    //       'assets/auth_group/selected_assign.png',
+    //       'assets/auth_group/selected_system_admin.png',
+    //     ],
+    //     authGroupDisabledImages: [
+    //       'assets/auth_group/disabled_request.png',
+    //       'assets/auth_group/disabled_approve.png',
+    //       'assets/auth_group/disabled_assign.png',
+    //       'assets/auth_group/disabled_system_admin.png',
+    //     ],
+    //     authGroupTitles: [
+    //       '병상요청그룹',
+    //       '병상승인그룹',
+    //       '병상배정그룹',
+    //       '시스템 관리자',
+    //     ],
+    //     authGroupSubTitles: [
+    //       '보건소, 병상배정반, 의료진',
+    //       '병상배정반',
+    //       '의료진',
+    //       '전산운영',
+    //     ],
+    //     detailAuthTitles: [
+    //       '일반',
+    //       '게스트',
+    //     ],
+    //     detailAuthSubTitles: [
+    //       '일반업무처리 및 사용자 초대 권한',
+    //       '업무 조회만 가능',
+    //     ],
+    //   );
+    // }
     if (index == 0) {
-      return const JobRole(
-        title: [
-          '소속기관 유형',
-          '권한그룹 선택',
-          '세부 권한 선택',
-        ],
-        authGroupSelectedImages: [
-          'assets/auth_group/selected_request.png',
-          'assets/auth_group/selected_approve.png',
-          'assets/auth_group/selected_assign.png',
-          'assets/auth_group/selected_system_admin.png',
-        ],
-        authGroupDisabledImages: [
-          'assets/auth_group/disabled_request.png',
-          'assets/auth_group/disabled_approve.png',
-          'assets/auth_group/disabled_assign.png',
-          'assets/auth_group/disabled_system_admin.png',
-        ],
-        authGroupTitles: [
-          '병상요청그룹',
-          '병상승인그룹',
-          '병상배정그룹',
-          '시스템 관리자',
-        ],
-        authGroupSubTitles: [
-          '보건소, 병상배정반, 의료진',
-          '병상배정반',
-          '의료진',
-          '전산운영',
-        ],
-        detailAuthTitles: [
-          '일반',
-          '게스트',
-        ],
-        detailAuthSubTitles: [
-          '일반업무처리 및 사용자 초대 권한',
-          '업무 조회만 가능',
-        ],
-      );
-    }
-    if (index == -1) {
       return const SelfAuth();
     }
     return const Placeholder();

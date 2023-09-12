@@ -116,7 +116,7 @@ class UserRegisterRequestScreenState extends ConsumerState<UserRegisterRequestSc
     );
   }
 
-  Widget _getRegIndex(double index) {
+  Widget _getRegIndex(int index) {
     if (index == 1) {
       return const BelongAgency(
         titles: [

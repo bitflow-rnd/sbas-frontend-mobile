@@ -11,7 +11,7 @@ class TopNavbarRequest extends ConsumerWidget {
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final width = MediaQuery.of(context).size.width - 32;
+    final width = MediaQuery.of(context).size.width - 132.w;
     final x = ref.watch(regIndexProvider);
 
     return Stack(
@@ -32,14 +32,15 @@ class TopNavbarRequest extends ConsumerWidget {
         AnimatedAlign(
           heightFactor: 9,
           alignment: Alignment(
-            x,
+            // x.toDouble(),
+            -1,
             0,
           ),
           duration: const Duration(
             milliseconds: 200,
           ),
           child: Container(
-            width: width * 0.3,
+            width: width * 0.5,
             height: 6.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
@@ -52,16 +53,11 @@ class TopNavbarRequest extends ConsumerWidget {
         const TopNavRequestItem(
           x: -1,
           index: 1,
-          text: '본인인증',
-        ),
-        const TopNavRequestItem(
-          x: 0,
-          index: 2,
-          text: '업무역할',
+          text: '사용자정보',
         ),
         const TopNavRequestItem(
           x: 1,
-          index: 3,
+          index: 2,
           text: '소속기관',
         ),
       ],
