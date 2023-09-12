@@ -8,7 +8,6 @@ import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/authentication/models/user_model.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
-import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/util.dart';
 
 class LoginBloc extends AsyncNotifier<void> {
@@ -52,7 +51,6 @@ class LoginBloc extends AsyncNotifier<void> {
         }
         showErrorSnack(context, state.error);
       } else {
-        
         await _repository.logout().then((value) => context.go(LogInScreen.routeUrl));
         ref.watch(userDetailProvider.notifier).logout();
         // ref.watch(talkRoomsProvider.notifier).dispose();

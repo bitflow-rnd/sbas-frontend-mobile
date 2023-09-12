@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/assign/model/assign_list_model.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
 class PatientAsgnHistoryPresenter extends AsyncNotifier<AssignListModel> {

@@ -3,13 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
-import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
-import 'package:sbas/features/messages/views/direct_message_screen.dart';
 
 class ContactDetailScreen extends ConsumerStatefulWidget {
   final UserContact contact;

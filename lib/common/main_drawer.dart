@@ -12,8 +12,6 @@ import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/main/views/service_policy_screen.dart';
 import 'package:sbas/features/main/views/settings_screen.dart';
 import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
-import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
-import 'package:sbas/features/messages/views/direct_message_screen.dart';
 
 class MainDrawer extends ConsumerWidget {
   const MainDrawer({super.key});
