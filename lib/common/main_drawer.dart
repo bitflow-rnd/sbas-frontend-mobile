@@ -97,12 +97,9 @@ class MainDrawer extends ConsumerWidget {
                 overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
               ),
               onPressed: () async {
-                // await ref.read(talkRoomsProvider.notifier).disconnect();
                 await ref.read(loginProvider.notifier).logout(context);
                 final container = ProviderContainer();
                 container.dispose();
-                // ref.invalidate(talkRoomsProvider);
-                // ref.read(selecteTabProvider.notifier).state = 0;
               },
               child: Text(
                 '로그아웃',

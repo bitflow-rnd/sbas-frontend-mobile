@@ -9,6 +9,7 @@ import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/util.dart';
 
 final routerProvider = Provider(
@@ -27,6 +28,7 @@ final routerProvider = Provider(
         print("FCM firebase pushKey : $pushKey");
         await provider.postAsync('admin/user/push-key', toJson({'id': prefs.getString('id'), 'pushKey': pushKey}));
         await ref.watch(userDetailProvider.notifier).getUserDetails(prefs.getString('id')!);
+        ref.watch(talkRoomsProvider.notifier).updateUserId(prefs.getString('id')!);
       }
       FlutterNativeSplash.remove();
 

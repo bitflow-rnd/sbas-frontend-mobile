@@ -167,7 +167,7 @@ class DirectMessageScreen extends ConsumerWidget {
                 height: 1,
               ),
               Expanded(
-                child: selectedTabIndex != 0 ? const TalkRoomWidget() : const ContactListScreen(),
+                child: selectedTabIndex == 0 ? const ContactListScreen() : const TalkRoomWidget(),
               ),
             ],
           ),

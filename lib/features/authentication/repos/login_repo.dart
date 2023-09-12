@@ -27,7 +27,6 @@ class LoginRepo {
         }
         if (name.isNotEmpty) {
           // TalkRoomsProvider().connect(name);
-
           await prefs.setString('userNm', userNm);
           return await prefs.setString('id', name);
         }

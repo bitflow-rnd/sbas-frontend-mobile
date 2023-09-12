@@ -7,17 +7,29 @@ import 'package:sbas/features/messages/models/talk_rooms_response_model.dart';
 import 'package:web_socket_channel/io.dart';
 
 class TalkRoomsProvider extends StateNotifier<List<TalkRoomsResponseModel>> {
-  late final String userId;
+  late String userId;
   late StreamSubscription subscription;
   TalkRoomsProvider({required this.userId}) : super([]) {
     _fetchChatRoomList();
   }
 
-  late final channel = IOWebSocketChannel.connect(
+  late var channel = IOWebSocketChannel.connect(
     '$_wsUrl/$userId',
     pingInterval: const Duration(seconds: 30),
     connectTimeout: const Duration(seconds: 5),
   );
+
+  void updateUserId(String newUserId) {
+    userId = newUserId;
+    // WebSocket 연결을 다시 설정합니다.
+    channel.sink.close();
+    channel = IOWebSocketChannel.connect(
+      '$_wsUrl/$userId',
+      pingInterval: const Duration(seconds: 30),
+      connectTimeout: const Duration(seconds: 5),
+    );
+    _fetchChatRoomList();
+  }
 
   void _fetchChatRoomList() async {
     print(userId);
