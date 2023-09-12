@@ -4,21 +4,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
+import 'package:sbas/features/messages/views/chatting_screen.dart';
 
 class TalkRoomWidget extends ConsumerWidget {
-  final Function onTap;
-
-  const TalkRoomWidget({super.key, required this.onTap});
+  const TalkRoomWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final talkRooms = ref.watch(talkRoomsProvider);
 
+    if (talkRooms.isEmpty) {
+      return Center(
+        child: Text(
+          '최근 대화 내역이 없습니다.',
+          style: CTS(
+            fontSize: 12.sp,
+          ),
+        ),
+      );
+    }
     return ListView.separated(
       itemBuilder: (context, index) {
         var talkRoom = talkRooms[index];
-
         return ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           title: Column(
@@ -82,7 +93,16 @@ class TalkRoomWidget extends ConsumerWidget {
             ],
           ),
           onTap: () {
-            onTap(talkRoom.tkrmId!, talkRoom.tkrmNm!);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChattingScreen(
+                  userId: ref.watch(userDetailProvider.notifier).userId,
+                  tkrmId: talkRoom.tkrmId!,
+                  tkrmNm: talkRoom.tkrmNm!,
+                ),
+              ),
+            );
           },
         );
       },

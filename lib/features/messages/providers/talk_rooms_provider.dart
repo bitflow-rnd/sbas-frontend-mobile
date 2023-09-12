@@ -8,7 +8,7 @@ import 'package:web_socket_channel/io.dart';
 
 class TalkRoomsProvider extends StateNotifier<List<TalkRoomsResponseModel>> {
   late final String userId;
-
+  late StreamSubscription subscription;
   TalkRoomsProvider({required this.userId}) : super([]) {
     _fetchChatRoomList();
   }
@@ -20,7 +20,8 @@ class TalkRoomsProvider extends StateNotifier<List<TalkRoomsResponseModel>> {
   );
 
   void _fetchChatRoomList() async {
-    channel.stream.listen((message) {
+    print(userId);
+    subscription = channel.stream.listen((message) {
       final parsedData = json.decode(message.toString());
       print(parsedData);
 
@@ -48,10 +49,13 @@ class TalkRoomsProvider extends StateNotifier<List<TalkRoomsResponseModel>> {
     channel.sink.add(message);
   }
 
-  @override
-  void dispose() {
-    channel.sink.close();
-    super.dispose();
+  Future<void> disconnect() async {
+    state = [];
+
+    await channel.sink.close();
+    // await subscription.cancel();
+    // await channel.stream.drain();
+    if (mounted) super.dispose();
   }
 
   final String _wsUrl = '${dotenv.env['WS_URL']}/chat-rooms';

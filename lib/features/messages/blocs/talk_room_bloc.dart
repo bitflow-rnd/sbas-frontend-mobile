@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
-import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/util.dart' as util;
 import 'package:web_socket_channel/io.dart';
 import 'dart:developer';
@@ -13,13 +12,12 @@ import 'dart:developer';
 class TalkRoomBloc {
   final String userId;
   final String tkrmId;
-  final TalkRoomsProvider provider;
+
   final _chatDetailListController = StreamController<List<TalkMsgModel>>();
 
   TalkRoomBloc({
     required this.userId,
     required this.tkrmId,
-    required this.provider,
   }) {
     _fetchChattingRoom();
   }
@@ -53,7 +51,7 @@ class TalkRoomBloc {
           throw Exception('Invalid data type received from server');
         }
       } catch (e) {
-          log("test");
+        log("test");
       }
     }, onError: (error) {
       _chatDetailListController.addError(error);
@@ -99,8 +97,8 @@ class TalkRoomBloc {
     }
   }
 
-  @override
-  void dispose() {
+  // @override
+  void close() {
     channel.sink.close();
     _chatDetailListController.close();
   }

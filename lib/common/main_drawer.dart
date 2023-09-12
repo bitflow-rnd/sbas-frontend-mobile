@@ -12,6 +12,8 @@ import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/main/views/service_policy_screen.dart';
 import 'package:sbas/features/main/views/settings_screen.dart';
 import 'package:sbas/features/main/views/user_data_handling_policy_screen.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
+import 'package:sbas/features/messages/views/direct_message_screen.dart';
 
 class MainDrawer extends ConsumerWidget {
   const MainDrawer({super.key});
@@ -94,7 +96,14 @@ class MainDrawer extends ConsumerWidget {
               style: ButtonStyle(
                 overlayColor: MaterialStateColor.resolveWith((states) => Palette.diabledGrey),
               ),
-              onPressed: () => ref.read(loginProvider.notifier).logout(context),
+              onPressed: () async {
+                // await ref.read(talkRoomsProvider.notifier).disconnect();
+                await ref.read(loginProvider.notifier).logout(context);
+                final container = ProviderContainer();
+                container.dispose();
+                // ref.invalidate(talkRoomsProvider);
+                // ref.read(selecteTabProvider.notifier).state = 0;
+              },
               child: Text(
                 '로그아웃',
                 style: CTS(fontSize: 12, color: Palette.greyText_60),

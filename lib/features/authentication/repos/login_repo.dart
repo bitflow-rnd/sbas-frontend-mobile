@@ -5,6 +5,7 @@ import 'package:sbas/features/authentication/models/jwt_model.dart';
 import 'package:sbas/features/authentication/models/user_model.dart';
 import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
 import 'package:sbas/features/authentication/providers/login_provider.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/util.dart';
 
 class LoginRepo {
@@ -15,7 +16,7 @@ class LoginRepo {
 
     if (token != null && token.isNotEmpty) {
       final map = await _auth.getUser(token);
-      
+
       if (map != null) {
         final jwt = JwtModel.fromJson(map);
         final name = jwt.token?.name ?? '';
@@ -25,6 +26,7 @@ class LoginRepo {
           userToken = jwt.token!;
         }
         if (name.isNotEmpty) {
+          // TalkRoomsProvider().connect(name);
 
           await prefs.setString('userNm', userNm);
           return await prefs.setString('id', name);
@@ -76,8 +78,11 @@ class LoginRepo {
     return null;
   }
 
-  bool logout(UserModel user) {
-    prefs.remove('auth_token');
+  Future<bool> logout() async {
+    userToken = Token.empty();
+    // ref..close();
+    await prefs.remove('auth_token');
+    await prefs.clear();
     return true;
   }
 }

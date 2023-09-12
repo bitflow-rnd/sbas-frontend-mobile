@@ -5,12 +5,13 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/views/chatting_screen.dart';
 import 'package:sbas/features/messages/views/contact_list_screen.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 
-final selecteTabProvider = StateProvider(
+final selecteTabProvider = StateProvider.autoDispose(
   //tab 전환용
   (ref) => 0,
 );
@@ -26,20 +27,6 @@ class DirectMessageScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTabIndex = ref.watch(selecteTabProvider);
-
-    void enterCtRm(BuildContext context, tkrmId, String tkrmNm) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChattingScreen(
-            userId: ref.watch(talkRoomsProvider.notifier).userId,
-            tkrmId: tkrmId,
-            tkrmNm: tkrmNm,
-            provider: ref.watch(talkRoomsProvider.notifier),
-          ),
-        ),
-      );
-    }
 
     return Scaffold(
         backgroundColor: Palette.white,
@@ -179,11 +166,9 @@ class DirectMessageScreen extends ConsumerWidget {
                 color: Palette.greyText_20,
                 height: 1,
               ),
-              selectedTabIndex != 0
-                  ? Expanded(
-                      child: TalkRoomWidget(onTap: (tkrmId, tkrmNm) => enterCtRm(context, tkrmId, tkrmNm)),
-                    )
-                  : const Expanded(child: ContactListScreen()),
+              Expanded(
+                child: selectedTabIndex != 0 ? const TalkRoomWidget() : const ContactListScreen(),
+              ),
             ],
           ),
         ));
