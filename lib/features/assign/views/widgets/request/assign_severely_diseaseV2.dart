@@ -584,11 +584,13 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                       ),
                       borderRadius: BorderRadius.circular(13.5.r),
                     ),
-                    child: Text(model.toList()[index].cdNm ?? '',
-                        style: CTS.bold(
-                          fontSize: 13,
-                          color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] == true ? Palette.white : Palette.greyText_60,
-                        )),
+                    child: Text(
+                      model.toList()[index].cdNm ?? '',
+                      style: CTS(
+                        fontSize: 12.sp,
+                        color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] == true ? Palette.white : Palette.greyText_60,
+                      ),
+                    ),
                   ),
                 ),
               )),

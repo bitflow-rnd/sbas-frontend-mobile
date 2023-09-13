@@ -99,6 +99,7 @@ class UserRegisterRequestScreenState extends ConsumerState<UserRegisterRequestSc
                             if (index.state < 1) {
                               index.state++;
                             } else {
+                              //등록요청(회원가입) 
                               ref.read(signUpProvider.notifier).signUp(context);
                             }
                           }

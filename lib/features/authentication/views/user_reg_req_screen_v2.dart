@@ -8,9 +8,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/belong_agency_widget.dart';
-import 'package:sbas/features/authentication/views/user_reg_widgets/job_role_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/self_auth_widget.dart';
-import 'package:sbas/features/authentication/views/user_reg_widgets/top_navbar_req_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 
 class UserRegisterRequestScreenV2 extends ConsumerStatefulWidget {
@@ -102,6 +100,9 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
                       width: width * 0.5,
                       child: BottomSubmitBtn(
                         onPressed: () {
+                          // final index = ref.read(regIndexProvider.notifier);
+                          // index.state++;
+                          ref.read(signUpProvider.notifier).signUp(context);
                           if (_tryValidation()) {
                             final index = ref.read(regIndexProvider.notifier);
 
@@ -126,17 +127,21 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
   }
 
   Widget _getRegIndex(int index) {
+    if (index == 0) {
+      return const SelfAuth();
+    }
     if (index == 1) {
       return const BelongAgency(
         titles: [
+          "소속기관 유형",
           '담당지역',
           '소속기관',
-          '담당 환자 유형',
-          '소속 증명 정보',
+          '담당 환자 유형(다중선택)',
+          '소속 증명 정보(선택)',
         ],
       );
     }
-    // if (index == 0) {
+    // if (index == 1) {
     //   return const JobRole(
     //     title: [
     //       '소속기관 유형',
@@ -177,9 +182,7 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
     //     ],
     //   );
     // }
-    if (index == 0) {
-      return const SelfAuth();
-    }
+
     return const Placeholder();
   }
 
