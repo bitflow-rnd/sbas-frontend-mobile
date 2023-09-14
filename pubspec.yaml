@@ -84,6 +84,7 @@ dependencies:
   url_launcher: ^6.1.10
 
   web_socket_channel: ^2.1.0
+  flutter_sms: ^2.3.3
 
 dev_dependencies:
   flutter_test:

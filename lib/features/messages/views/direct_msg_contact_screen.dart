@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
@@ -138,13 +139,17 @@ class DMContactScreen extends ConsumerWidget {
                     ),
                     Gaps.h32,
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const UserRegisterRequestScreenV2(),
-                          ),
-                        );
+                      onTap: () async {
+                        String message = '''경북대병원 이진수님이 병상배정 시스템으로 초대하였습니다. https://bit.ly/abc''';
+                        // List<String> recipents = ["821064726405"];
+                        String recipent = "01012345678";
+
+                        bool _result = await launchSms(message: message, number: recipent).catchError((onError) {
+                          print(onError);
+                          return false;
+                        });
+                        print(_result);
+                        //system message send
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
