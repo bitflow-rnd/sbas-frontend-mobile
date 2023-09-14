@@ -14,10 +14,10 @@ final selecteTabProvider = StateProvider.autoDispose(
   (ref) => 0,
 );
 
-class DirectMessageScreen extends ConsumerWidget {
+class DMContactScreen extends ConsumerWidget {
   final bool automaticallyImplyLeading;
 
-  const DirectMessageScreen({
+  const DMContactScreen({
     Key? key,
     required this.automaticallyImplyLeading,
   }) : super(key: key);

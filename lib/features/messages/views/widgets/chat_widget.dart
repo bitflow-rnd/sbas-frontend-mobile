@@ -13,13 +13,11 @@ ListView chatWidget(
     itemCount: snapshot.data!.length,
     itemBuilder: (context, index) {
       var chat = snapshot.data![index];
-      bool isMyMessage = chat.rgstUserId == currentUserId;
+      bool isMyMessage = chat.updtUserId == currentUserId;
 
       return Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 10),
-        child: isMyMessage
-            ? myChatWidget(chat, scrollController)
-            : othersChatWidget(chat, scrollController),
+        child: isMyMessage ? myChatWidget(chat, scrollController) : othersChatWidget(chat, scrollController),
       );
     },
   );

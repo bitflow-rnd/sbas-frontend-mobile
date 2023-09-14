@@ -7,7 +7,7 @@ import 'package:sbas/common/widgets/nav_tab.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/dashboard/views/dashboard_screen.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
-import 'package:sbas/features/messages/views/direct_message_screen.dart';
+import 'package:sbas/features/messages/views/direct_msg_contact_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   static const String routeName = 'mainNavigation';
@@ -66,7 +66,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 3,
-            child: const DirectMessageScreen(automaticallyImplyLeading: true),
+            child: const DMContactScreen(automaticallyImplyLeading: true),
           ),
         ],
       ),
@@ -127,7 +127,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const DirectMessageScreen(
+                    builder: (context) => const DMContactScreen(
                       automaticallyImplyLeading: false,
                     ),
                   ),
