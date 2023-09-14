@@ -264,7 +264,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                       ],
                                     ),
                                     Text(
-                                      Random().nextInt(5).toString(),
+                                      "${widget.hospList.items[i].gnbdIcu}", //가용병상
                                       style: CTS.medium(
                                         color: Palette.black,
                                         fontSize: 9.sp,

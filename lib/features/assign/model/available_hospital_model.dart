@@ -28,10 +28,13 @@ class AvailableHospitalModel {
 
 class AvailableHospital {
   String? chrgInstId; //제거필요?
-  String? hospId; 
+  String? hospId;
   String? hospNm;
   String? distance;
   String? addr;
+  int? gnbdIcu;
+  int? npidIcu;
+  int? gnbdSvrt;
   List<String>? tagList;
 
   AvailableHospital({
@@ -39,6 +42,9 @@ class AvailableHospital {
     this.hospNm,
     this.distance,
     this.addr,
+    this.gnbdIcu,
+    this.npidIcu,
+    this.gnbdSvrt,
     this.tagList,
   });
   AvailableHospital.fromJson(Map<String, dynamic> json) {
@@ -57,6 +63,15 @@ class AvailableHospital {
     if (json["addr"] is String) {
       addr = json["addr"];
     }
+    if (json["gnbdIcu"] is int) {
+      gnbdIcu = json["gnbdIcu"];
+    }
+    if (json["npidIcu"] is int) {
+      npidIcu = json["npidIcu"];
+    }
+    if (json["gnbdSvrt"] is int) {
+      gnbdSvrt = json["gnbdSvrt"];
+    }
     if (json["tagList"] is List) {
       tagList = json["tagList"] == null ? null : List<String>.from(json["tagList"]);
     }
@@ -69,6 +84,9 @@ class AvailableHospital {
     data["hospNm"] = hospNm;
     data["distance"] = distance;
     data["addr"] = addr;
+    data["gnbdIcu"] = gnbdIcu;
+    data["npidIcu"] = npidIcu;
+    data["gnbdSvrt"] = gnbdSvrt;
 
     if (tagList != null) {
       data["tagList"] = tagList;
