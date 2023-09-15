@@ -273,98 +273,104 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                   ],
                                 ),
                                 Gaps.h8,
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: i < 3 ? 145.w : 180.w,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Text(
-                                              '${widget.hospList.items[i].hospNm}',
-                                              style: CTS.medium(
-                                                color: Colors.black,
-                                                fontSize: 15.sp,
+                                Expanded(
+                                  // flex: 6,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Text(
+                                                '${widget.hospList.items[i].hospNm}',
+                                                style: CTS.medium(
+                                                  color: Colors.black,
+                                                  fontSize: 15.sp,
+                                                ),
                                               ),
                                             ),
+                                          ),
+                                          if (i < 3)
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                                                  decoration: BoxDecoration(
+                                                    color: Palette.red.withOpacity(0.12),
+                                                    borderRadius: BorderRadius.circular(11),
+                                                  ),
+                                                  child: Text(
+                                                    'AI추천',
+                                                    style: CTS.medium(
+                                                      color: Palette.red,
+                                                      fontSize: 12.sp,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                        ],
+                                      ),
+                                      // Gaps.v8,
+                                      SizedBox(
+                                        height: 30.h,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '${widget.hospList.items[i].addr}',
+                                                style: CTS(
+                                                  color: Palette.greyText_80,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        if (i < 3)
+                                      ),
+                                      Gaps.v4,
+                                      Row(
+                                        children: [
                                           Container(
-                                            padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                                            margin: EdgeInsets.only(right: 4.w),
+                                            padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
                                             decoration: BoxDecoration(
-                                              color: Palette.red.withOpacity(0.12),
-                                              borderRadius: BorderRadius.circular(11),
+                                              color: Palette.greyText_20,
+                                              borderRadius: BorderRadius.circular(4),
                                             ),
                                             child: Text(
-                                              'AI추천',
-                                              style: CTS.medium(
-                                                color: Palette.red,
-                                                fontSize: 12.sp,
-                                              ),
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                    // Gaps.v8,
-                                    SizedBox(
-                                      width: 180.w,
-                                      height: 30.h,
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              '${widget.hospList.items[i].addr}',
+                                              '#임산부',
                                               style: CTS(
                                                 color: Palette.greyText_80,
                                                 fontSize: 12,
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Gaps.v4,
-                                    Row(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(right: 4.w),
-                                          padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
-                                          decoration: BoxDecoration(
-                                            color: Palette.greyText_20,
-                                            borderRadius: BorderRadius.circular(4),
                                           ),
-                                          child: Text(
-                                            '#임산부',
-                                            style: CTS(
-                                              color: Palette.greyText_80,
-                                              fontSize: 12,
+                                          Container(
+                                            margin: EdgeInsets.only(right: 4.w),
+                                            padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                                            decoration: BoxDecoration(
+                                              color: Palette.greyText_20,
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                            child: Text(
+                                              '#음압격리',
+                                              style: CTS(
+                                                color: Palette.greyText_80,
+                                                fontSize: 12,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(right: 4.w),
-                                          padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
-                                          decoration: BoxDecoration(
-                                            color: Palette.greyText_20,
-                                            borderRadius: BorderRadius.circular(4),
-                                          ),
-                                          child: Text(
-                                            '#음압격리',
-                                            style: CTS(
-                                              color: Palette.greyText_80,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                const Spacer(),
+                                // const Spacer(),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
