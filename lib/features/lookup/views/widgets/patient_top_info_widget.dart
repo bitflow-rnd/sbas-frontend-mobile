@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
@@ -45,7 +46,7 @@ class PatientTopInfo extends StatelessWidget {
                               text: ' [${getPatientInfo(patient!)}]',
                               style: CTS(
                                 color: const Color(0xff333333),
-                                fontSize: 8,
+                                fontSize: 11.sp,
                               ),
                             ),
                           ],

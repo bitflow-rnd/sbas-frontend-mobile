@@ -98,16 +98,17 @@ String getConvertPatientInfo(int index, Patient patient) {
 String getPatientInfo(Patient patient) {
   final address = patient.bascAddr?.split(' ');
   // final phone = patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-');
-  final phone;
-  if (patient.mpno != null && patient.mpno!.isNotEmpty && patient.mpno!.length == 11 && patient.mpno!.startsWith('010')) {
-    phone = patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-');
-  } else if (patient.mpno != null && patient.mpno!.isNotEmpty) {
-    phone = patient.mpno ?? '-';
-  } else {
-    phone = '-';
-  }
+  // final phone;
+  // if (patient.mpno != null && patient.mpno!.isNotEmpty && patient.mpno!.length == 11 && patient.mpno!.startsWith('010')) {
+  //   phone = patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-');
+  // } else if (patient.mpno != null && patient.mpno!.isNotEmpty) {
+  //   phone = patient.mpno ?? '-';
+  // } else {
+  //   phone = '-';
+  // }
 
-  return '${patient.gndr} / ${patient.age}세 / ${address?[0]} ${address?[1]} / $phone';
+  // return '${patient.gndr} / ${patient.age}세 / ${address?[0]} ${address?[1]} / $phone';
+  return '${patient.gndr} / ${patient.age}세 / ${address?[0]} ${address?[1]}';
 }
 
 String getAddress(Patient? patient) {
