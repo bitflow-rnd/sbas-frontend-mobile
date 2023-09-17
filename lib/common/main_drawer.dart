@@ -73,19 +73,23 @@ class MainDrawer extends ConsumerWidget {
                   ),
                   SizedBox(height: 12.h),
                   Container(color: Palette.dividerGrey, height: 1.h),
-                  _drawerItem("병상요청", "assets/auth_group/selected_request.png", ref.watch(assignCountProvider.notifier).state[0], "", context,
+                  _drawerItem("병상요청", "assets/common_icon/timeline_approved.png", ref.watch(assignCountProvider.notifier).state[0], "", context,
                       const AssignBedScreen(automaticallyImplyLeading: false), ref),
-                  _drawerItem("배정승인", "assets/auth_group/selected_request.png", ref.watch(assignCountProvider.notifier).state[1], "", context,
+                  _drawerItem("배정승인", "assets/common_icon/timeline_bed_assign_complete.png", ref.watch(assignCountProvider.notifier).state[1], "", context,
                       const AssignBedScreen(automaticallyImplyLeading: false), ref),
-                  _drawerItem("이송", "assets/auth_group/selected_request.png", ref.watch(assignCountProvider.notifier).state[2], "", context,
+                  _drawerItem("이송", "assets/common_icon/timeline_move_complete.png", ref.watch(assignCountProvider.notifier).state[2], "", context,
                       const AssignBedScreen(automaticallyImplyLeading: false), ref),
-                  _drawerItem("입·퇴원", "assets/auth_group/selected_request.png", ref.watch(assignCountProvider.notifier).state[3], "", context,
+                  _drawerItem("입·퇴원", "assets/common_icon/timeline_go_hospital_complete.png", ref.watch(assignCountProvider.notifier).state[3], "", context,
                       const AssignBedScreen(automaticallyImplyLeading: false), ref),
                   Container(color: Palette.dividerGrey, height: 1.h),
-                  _drawerItem("공지사항", "assets/auth_group/selected_request.png", null, "", context, PublicAlarmPage(), ref),
+                  Gaps.v8,
+                  _drawerItem("공지사항", "assets/auth_group/selected_request.png", null, "", context, PublicAlarmPage(), ref), // TODO :: 수정 필요 아이콘 이미지 전달
+                  Gaps.v8,
                   Container(color: Palette.dividerGrey, height: 1.h),
-                  _drawerItem(
-                      "내활동내역", "assets/auth_group/selected_request.png", null, "", context, const AssignBedScreen(automaticallyImplyLeading: false), ref),
+                  Gaps.v8,
+                  _drawerItem("내활동내역", "assets/auth_group/selected_request.png", null, "", context, const AssignBedScreen(automaticallyImplyLeading: false),
+                      ref), // TODO :: 수정 필요 아이콘 이미지 전달
+                  Gaps.v8,
                 ],
               ),
             ),
@@ -191,7 +195,7 @@ class MainDrawer extends ConsumerWidget {
             SizedBox(width: 12.w),
             Text(
               title,
-              style: CTS.bold(color: Palette.black, fontSize: 14),
+              style: CTS.medium(color: Palette.black, fontSize: 14.sp),
             ),
             count != null && count != 0
                 ? Container(
@@ -205,7 +209,7 @@ class MainDrawer extends ConsumerWidget {
                       count.toString(),
                       style: CTS.bold(
                         color: Palette.white,
-                        fontSize: 9,
+                        fontSize: 9.sp,
                       ),
                     ),
                   )

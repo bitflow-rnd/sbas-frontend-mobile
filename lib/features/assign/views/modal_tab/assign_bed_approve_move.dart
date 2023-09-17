@@ -171,7 +171,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                 Column(
                                   children: [
                                     Row(children: [
-                                      _getTitle('연락처', true),
+                                      _getTitle(list[1], true),
                                       Container(
                                           child: Expanded(
                                               child: Container(
@@ -425,13 +425,13 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
     );
   }
 
-  Widget _getTextInputField(
-      {required int i,
-      required String hint,
-      TextInputType type = TextInputType.text,
-      int? maxLines,
-      List<TextInputFormatter>? inputFormatters,
-      FormFieldState<Object?>? field}) {
+  Widget _getTextInputField({
+    required int i,
+    required String hint,
+    TextInputType type = TextInputType.text,
+    int? maxLines,
+    FormFieldState<Object?>? field,
+  }) {
     final vm = ref.watch(asgnBdMvAprPresenter.notifier);
     return TextFormField(
       style: CTS(fontSize: 12.sp, color: Palette.black),
@@ -441,10 +441,6 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
         vm.setTextEditingController(index: i, value: newValue);
         // field?.didChange(newValue);
       },
-      onChanged: (value) {
-        vm.setTextEditingController(index: i, value: value);
-        // field?.didChange(value);
-      },
       validator: (value) {
         return null;
       },
@@ -452,7 +448,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
       inputFormatters: vm.getRegExp(index: i) != null
           ? [
               FilteringTextInputFormatter.allow(
-                RegExp(vm.getRegExp(index: i) ?? ""),
+                RegExp(vm.getRegExp(index: i)!),
               )
             ]
           : null,
