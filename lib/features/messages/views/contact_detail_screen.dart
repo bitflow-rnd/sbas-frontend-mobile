@@ -10,7 +10,8 @@ import 'package:sbas/features/messages/models/user_contact_model.dart';
 
 class ContactDetailScreen extends ConsumerStatefulWidget {
   final UserContact contact;
-  const ContactDetailScreen({Key? key, required this.contact, isRequest}) : super(key: key);
+  final bool isRequest;
+  const ContactDetailScreen({Key? key, required this.contact, this.isRequest = true}) : super(key: key);
 
   @override
   ConsumerState<ContactDetailScreen> createState() => _ContactDetailScreenState();
@@ -308,54 +309,55 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                 ),
               ),
               // ㅇㅇxpanded(
-              Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 12.h),
-                        decoration: BoxDecoration(
-                          color: Palette.white,
-                          border: Border.all(
-                            color: Palette.greyText_20,
-                            width: 1,
+              if (widget.isRequest)
+                Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          decoration: BoxDecoration(
+                            color: Palette.white,
+                            border: Border.all(
+                              color: Palette.greyText_20,
+                              width: 1,
+                            ),
                           ),
+                          child: Text(
+                            "반려",
+                            style: CTS(
+                              color: Palette.greyText_80,
+                              fontSize: 16,
+                            ),
+                          ).c,
                         ),
-                        child: Text(
-                          "반려",
-                          style: CTS(
-                            color: Palette.greyText_80,
-                            fontSize: 16,
-                          ),
-                        ).c,
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 12.h),
-                        decoration: BoxDecoration(
-                          color: Palette.mainColor,
-                          border: Border.all(
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          decoration: BoxDecoration(
                             color: Palette.mainColor,
-                            width: 1,
+                            border: Border.all(
+                              color: Palette.mainColor,
+                              width: 1,
+                            ),
                           ),
+                          child: Text(
+                            "승인",
+                            style: CTS(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ).c,
                         ),
-                        child: Text(
-                          "승인",
-                          style: CTS(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ).c,
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                )
             ],
           ),
         ],

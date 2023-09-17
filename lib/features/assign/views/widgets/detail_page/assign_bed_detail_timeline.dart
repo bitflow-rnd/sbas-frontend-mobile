@@ -124,7 +124,10 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) => ContactDetailScreen(contact: contact),
+                                                    builder: (context) => ContactDetailScreen(
+                                                      contact: contact,
+                                                      isRequest: false,
+                                                    ),
                                                   ));
                                             });
                                           }
