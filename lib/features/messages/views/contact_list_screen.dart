@@ -272,7 +272,10 @@ class ContactListScreen extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ContactDetailScreen(contact: e),
+                      builder: (context) => ContactDetailScreen(
+                        contact: e,
+                        isRequest: e.userStatCd == "URST0001",
+                      ),
                     ),
                   );
                 },
