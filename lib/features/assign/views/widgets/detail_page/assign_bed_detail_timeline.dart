@@ -18,6 +18,9 @@ import 'package:sbas/features/assign/views/modal_tab/assign_bed_go_home.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
+import 'package:sbas/features/messages/models/user_contact_model.dart';
+import 'package:sbas/features/messages/repos/contact_repo.dart';
+import 'package:sbas/features/messages/views/contact_detail_screen.dart';
 import 'package:sbas/util.dart';
 
 class AssignBedDetailTimeLine extends ConsumerWidget {
@@ -113,7 +116,21 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
 
                                 children: [
                                   for (var i = 0; i < timeLine.count!; i++)
-                                    timeLineBody(timeLine.items[i], isVisible: !timeLine.items.map((e) => e.title == "배정불가").toList().contains(true)),
+                                    GestureDetector(
+                                        onTap: () async {
+                                          if (timeLine.items[i].timeLineStatus == "complete" || timeLine.items[i].timeLineStatus == "suspend") {
+                                            ref.read(contactRepoProvider).getContactById(timeLine.items[i].chrgUserId!).load(context).then((value) {
+                                              UserContact contact = UserContact.fromJson(value);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => ContactDetailScreen(contact: contact),
+                                                  ));
+                                            });
+                                          }
+                                        },
+                                        child:
+                                            timeLineBody(timeLine.items[i], isVisible: !timeLine.items.map((e) => e.title == "배정불가").toList().contains(true))),
                                 ],
                               ),
                             ],
@@ -481,7 +498,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             by: timeLine.by ?? '',
             detail: timeLine.msg);
       case "suspend":
-        return suspendCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!), detail: timeLine.by);
+        return suspendCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!), detail: timeLine.by, timeLine: timeLine);
       case "closed":
         return isVisible ?? true ? closedCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!)) : Container();
       default:
@@ -583,6 +600,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     required String src,
     String? detail,
     bool isSelected = true,
+    required TimeLine timeLine,
   }) =>
       Container(
         margin: EdgeInsets.only(bottom: 12.h),
