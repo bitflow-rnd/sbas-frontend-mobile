@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
-import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 
 class UserDetailBloc extends AsyncNotifier<UserDetailModel> {
   late final LoginRepo _repository;
@@ -21,6 +20,7 @@ class UserDetailBloc extends AsyncNotifier<UserDetailModel> {
   get userNm => _user.userNm;
   get instNm => _user.instNm;
   get userId => _user.id;
+  get instId => _user.instId;
   logout() {
     _user.clear();
   }
@@ -35,6 +35,8 @@ class UserDetailBloc extends AsyncNotifier<UserDetailModel> {
 
         _user.userNm = u.userNm;
         _user.instNm = u.instNm;
+        _user.instId = u.instId;
+
         _user.id = u.id ?? "";
       }
 

@@ -6,6 +6,7 @@ import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
 import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
 import 'package:sbas/features/messages/views/contact_detail_screen.dart';
@@ -160,37 +161,36 @@ class ContactListScreen extends ConsumerWidget {
                     child: Column(
                       children: [
                         rowWrapper(
-                          "등록요청",
-                          1,
-                          true,
-                          ref.watch(contactRegReqIsOpenProvider.notifier).state,
-                          () {
+                          header: "등록요청",
+                          alarmCount: (contactList.contacts ?? []).where((element) => element.userStatCd == "URST0001").toList().length,
+                          isOpen: ref.watch(contactRegReqIsOpenProvider.notifier).state,
+                          function: () {
                             ref.watch(contactRegReqIsOpenProvider.notifier).state = !ref.watch(contactRegReqIsOpenProvider);
                           },
-                          contactList.contacts ?? [],
-                          context,
+                          contactList: (contactList.contacts ?? []).where((element) => element.userStatCd == "URST0001").toList(),
+                          context: context,
                         ),
                         rowWrapper(
-                          "내 조직",
-                          0,
-                          true,
-                          ref.watch(contactMyOrgIsOpenProvider.notifier).state,
-                          () {
+                          header: "내 조직",
+                          alarmCount:
+                              (contactList.contacts ?? []).where((element) => element.instId == ref.watch(userDetailProvider.notifier).instId).toList().length,
+                          isOpen: ref.watch(contactMyOrgIsOpenProvider.notifier).state,
+                          function: () {
                             ref.watch(contactMyOrgIsOpenProvider.notifier).state = !ref.watch(contactMyOrgIsOpenProvider);
                           },
-                          contactList.contacts ?? [],
-                          context,
+                          contactList:
+                              (contactList.contacts ?? []).where((element) => element.instId == ref.watch(userDetailProvider.notifier).instId).toList(),
+                          context: context,
                         ),
                         rowWrapper(
-                          "즐겨찾기",
-                          10,
-                          true,
-                          ref.watch(contactMyFavProvider.notifier).state,
-                          () {
+                          header: "즐겨찾기",
+                          alarmCount: (contactList.contacts ?? []).length,
+                          isOpen: ref.watch(contactMyFavProvider.notifier).state,
+                          function: () {
                             ref.watch(contactMyFavProvider.notifier).state = !ref.watch(contactMyFavProvider);
                           },
-                          contactList.contacts ?? [],
-                          context,
+                          contactList: contactList.contacts ?? [],
+                          context: context,
                         ),
 
                         // rowWrapper("등록요청", 1, ref.read(contactRegReqIsOpenProvider), context), // Pass ref here
@@ -204,7 +204,14 @@ class ContactListScreen extends ConsumerWidget {
         );
   }
 
-  rowWrapper(String header, int alarmCount, bool hasOpen, bool isOpen, Function()? function, List<UserContact> contactList, BuildContext context) {
+  rowWrapper(
+      {required String header,
+      required int alarmCount,
+      bool hasOpen = true,
+      required bool isOpen,
+      Function()? function,
+      required List<UserContact> contactList,
+      required BuildContext context}) {
     return Column(
       children: [
         Row(
@@ -341,5 +348,5 @@ class ContactListScreen extends ConsumerWidget {
 }
 
 final contactMyOrgIsOpenProvider = StateProvider<bool>((ref) => true);
-final contactRegReqIsOpenProvider = StateProvider<bool>((ref) => false);
+final contactRegReqIsOpenProvider = StateProvider<bool>((ref) => true);
 final contactMyFavProvider = StateProvider<bool>((ref) => false);
