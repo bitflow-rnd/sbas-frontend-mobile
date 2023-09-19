@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/top_nav_req_item_widget.dart';
 import 'package:sbas/constants/palette.dart';
 
@@ -12,7 +11,6 @@ class TopNavbarRequest extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final width = MediaQuery.of(context).size.width - 132.w;
-    final x = ref.watch(regIndexProvider);
 
     return Stack(
       children: [

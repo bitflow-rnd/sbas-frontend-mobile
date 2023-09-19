@@ -6,7 +6,6 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/views/user_reg_req_screen_v2.dart';
 import 'package:sbas/features/messages/views/contact_list_screen.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 

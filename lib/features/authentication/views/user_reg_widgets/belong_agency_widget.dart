@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
-import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/belong_agency_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_detail_widget.dart';

@@ -10,7 +10,6 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/views/widgets/card_item_widget.dart';
-import 'package:sbas/features/assign/views/widgets/top_navbar_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_search_widget.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';

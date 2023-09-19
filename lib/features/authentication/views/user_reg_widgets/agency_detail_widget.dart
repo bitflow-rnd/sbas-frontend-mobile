@@ -8,7 +8,6 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
-import 'package:sbas/features/authentication/models/info_inst_model.dart';
 
 class AgencyDetail extends ConsumerStatefulWidget {
   const AgencyDetail({
