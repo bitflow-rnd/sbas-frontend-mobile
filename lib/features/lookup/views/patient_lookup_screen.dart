@@ -40,14 +40,12 @@ class PatientLookupScreen extends ConsumerWidget {
               color: Colors.black,
             ),
           ),
-          elevation: 0,
+          elevation: 0.5,
           centerTitle: true,
           backgroundColor: Colors.white,
-          leading: automaticallyImplyLeading
-              ? const BackButton(
-                  color: Colors.black,
-                )
-              : null,
+          leading: const BackButton(
+            color: Colors.black,
+          ),
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarBrightness: Brightness.light,
             statusBarColor: Colors.transparent,

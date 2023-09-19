@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
@@ -26,10 +27,25 @@ class AssignBedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
         backgroundColor: Palette.white,
-        appBar: Bitflow.getAppBar(
-          '병상 배정 현황',
-          automaticallyImplyLeading,
-          0.5,
+        appBar: AppBar(
+          title: Text(
+            "병상 배정 현황",
+            style: CTS.medium(
+              fontSize: 15,
+              color: Colors.black,
+            ),
+          ),
+          elevation: 0.5,
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          leading: const BackButton(
+            color: Colors.black,
+          ),
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+          ),
         ),
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),

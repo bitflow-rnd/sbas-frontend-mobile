@@ -34,24 +34,20 @@ class TalkMsgModel {
 
   static TalkMsgModel fromJson(Map<String, dynamic> json) {
     return TalkMsgModel(
-      id: json['id'] == null
-          ? null
-          : TalkMsgId.fromJson(json['id'] as Map<String, dynamic>),
+      id: json['id'] == null ? null : TalkMsgId.fromJson(json['id'] as Map<String, dynamic>),
       histCd: json['histCd'] == null ? null : json['histCd'] as String,
       msg: json['msg'] == null ? null : json['msg'] as String,
       attcId: json['attcId'] == null ? null : json['attcId'] as String,
-      rgstUserId:
-          json['rgstUserId'] == null ? null : json['rgstUserId'] as String,
+      rgstUserId: json['rgstUserId'] == null ? null : json['rgstUserId'] as String,
       rgstDttm: json['rgstDttm'] == null ? null : json['rgstDttm'] as String,
-      updtUserId:
-          json['updtUserId'] == null ? null : json['updtUserId'] as String,
+      updtUserId: json['updtUserId'] == null ? null : json['updtUserId'] as String,
       updtDttm: json['updtDttm'] == null ? null : json['updtDttm'] as String,
     );
   }
 
   static List<TalkMsgModel> fromArrJson(List<dynamic> jsonArr) {
     List<TalkMsgModel> talkMsgList = [];
-    for (dynamic json in jsonArr[0]) {
+    for (dynamic json in jsonArr) {
       talkMsgList.add(TalkMsgModel.fromJson(json as Map<String, dynamic>));
       // List msgs = json.first as List<dynamic>;
       // print("msgs" + msgs.toString());
@@ -59,7 +55,6 @@ class TalkMsgModel {
     }
     return talkMsgList;
   }
-
 }
 
 class TalkMsgId {

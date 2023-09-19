@@ -40,7 +40,7 @@ class TalkRoomBloc {
 
       try {
         final parsedData = json.decode(message);
-        if (parsedData[0] is List) {
+        if (parsedData is List) {
           chatDetailList = TalkMsgModel.fromArrJson(parsedData);
           _chatDetailListController.add(chatDetailList);
         } else if (parsedData is Map<String, dynamic>) {
