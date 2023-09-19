@@ -333,9 +333,12 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                         ),
                                       ),
                                       Gaps.v4,
-                                      Row(
-                                        children: [
-                                          Container(
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                            children: List.generate(
+                                          widget.hospList.items[i].tagList?.length ?? 0,
+                                          (index) => Container(
                                             margin: EdgeInsets.only(right: 4.w),
                                             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
                                             decoration: BoxDecoration(
@@ -343,29 +346,47 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                               borderRadius: BorderRadius.circular(4),
                                             ),
                                             child: Text(
-                                              '#임산부',
+                                              '#${widget.hospList.items[i].tagList![index]}',
                                               style: CTS(
                                                 color: Palette.greyText_80,
                                                 fontSize: 12,
                                               ),
                                             ),
                                           ),
-                                          Container(
-                                            margin: EdgeInsets.only(right: 4.w),
-                                            padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
-                                            decoration: BoxDecoration(
-                                              color: Palette.greyText_20,
-                                              borderRadius: BorderRadius.circular(4),
+                                        )
+
+                                            // Container(
+                                            //   margin: EdgeInsets.only(right: 4.w),
+                                            //   padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                                            //   decoration: BoxDecoration(
+                                            //     color: Palette.greyText_20,
+                                            //     borderRadius: BorderRadius.circular(4),
+                                            //   ),
+                                            //   child: Text(
+                                            //     '#임산부',
+                                            //     style: CTS(
+                                            //       color: Palette.greyText_80,
+                                            //       fontSize: 12,
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                            // Container(
+                                            //   margin: EdgeInsets.only(right: 4.w),
+                                            //   padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                                            //   decoration: BoxDecoration(
+                                            //     color: Palette.greyText_20,
+                                            //     borderRadius: BorderRadius.circular(4),
+                                            //   ),
+                                            //   child: Text(
+                                            //     '#음압격리',
+                                            //     style: CTS(
+                                            //       color: Palette.greyText_80,
+                                            //       fontSize: 12,
+                                            //     ),
+                                            //   ),
+                                            // ),
+
                                             ),
-                                            child: Text(
-                                              '#음압격리',
-                                              style: CTS(
-                                                color: Palette.greyText_80,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
                                       )
                                     ],
                                   ),
