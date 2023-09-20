@@ -7,6 +7,7 @@ import 'package:sbas/features/authentication/blocs/job_role_bloc.dart';
 import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
+import 'package:sbas/features/authentication/views/user_reg_req_screen_v2.dart';
 
 class UserRegBloc extends AsyncNotifier {
   @override
@@ -28,7 +29,9 @@ class UserRegBloc extends AsyncNotifier {
     if (state.hasValue && state.value == 200 && context.mounted) {
       context.pop();
       context.goNamed(LogInScreen.routeName);
-      ref.read(regIndexProvider.notifier).state = -1;
+
+      ref.read(isPhoneAuthSuccess.notifier).state = false;
+      ref.read(regIndexProvider.notifier).state = 0;
       ref.read(regUserProvider).clear();
     }
   }
