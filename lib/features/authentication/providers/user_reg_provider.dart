@@ -58,6 +58,7 @@ class UserRegProvider {
       );
       return {
         'statusCode': res.statusCode,
+          'code': fromJson(res.body)['code'],
         'message': fromJson(res.body)['message'],
       };
     } catch (exception) {

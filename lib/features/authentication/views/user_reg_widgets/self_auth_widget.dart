@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
+import 'package:sbas/features/authentication/views/user_reg_req_screen_v2.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/reg_input_widget.dart';
 
 class SelfAuth extends ConsumerWidget {
@@ -127,14 +128,17 @@ class SelfAuth extends ConsumerWidget {
             }
             return null;
           },
+          pnumVerify: () async {
+            if (model.userCi != null && model.userCi!.isNotEmpty) {
+              
+            }
+          },
           onSaved: (newValue) async {
             model.userCi = newValue;
 
-            final res = await ref.read(signUpProvider.notifier).confirm(newValue ?? '');
-
-            model.pushKey = res['statusCode'] != 200 ? res['message'] : newValue;
+            // model.pushKey = res['statusCode'] != 200 ? res['message'] : newValue;
           },
-          text: model.pushKey,
+          text: ref.watch(isPhoneAuthSuccess.notifier).state ? "인증완료" : model.pushKey,
         ),
         RegInput(
           hintText: '비밀번호 입력',

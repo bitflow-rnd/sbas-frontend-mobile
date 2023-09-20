@@ -20,6 +20,8 @@ class UserRegisterRequestScreenV2 extends ConsumerStatefulWidget {
   ConsumerState<UserRegisterRequestScreenV2> createState() => UserRegisterRequestScreenV2State();
 }
 
+final isPhoneAuthSuccess = StateProvider.autoDispose<bool>((ref) => false);
+
 class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequestScreenV2> {
   @override
   Widget build(BuildContext context) {
@@ -102,8 +104,8 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
                         onPressed: () {
                           // final index = ref.read(regIndexProvider.notifier);
                           // index.state++;
-                          ref.read(signUpProvider.notifier).signUp(context);
-                          if (_tryValidation()) {
+                          // ref.read(signUpProvider.notifier).signUp(context);
+                          if (_tryValidation() && ref.watch(isPhoneAuthSuccess.notifier).state == true) {
                             final index = ref.read(regIndexProvider.notifier);
 
                             if (index.state < 1) {

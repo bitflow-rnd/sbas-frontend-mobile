@@ -9,21 +9,23 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
+import 'package:sbas/features/authentication/views/user_reg_req_screen_v2.dart';
+import 'package:sbas/util.dart';
 import 'package:telephony/telephony.dart';
 
 class RegInput extends ConsumerStatefulWidget {
-  const RegInput({
-    super.key,
-    required this.hintText,
-    required this.title,
-    required this.isRequired,
-    required this.maxLength,
-    required this.keyboardType,
-    this.validator,
-    required this.onSaved,
-    required this.regExp,
-    required this.text,
-  });
+  const RegInput(
+      {super.key,
+      required this.hintText,
+      required this.title,
+      required this.isRequired,
+      required this.maxLength,
+      required this.keyboardType,
+      this.validator,
+      required this.onSaved,
+      required this.regExp,
+      required this.text,
+      this.pnumVerify});
   final String hintText, title, regExp;
   final String? text;
   final bool isRequired;
@@ -31,6 +33,7 @@ class RegInput extends ConsumerStatefulWidget {
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
+  final void Function()? pnumVerify;
 
   @override
   ConsumerState<RegInput> createState() => _RegInputState();
@@ -98,6 +101,15 @@ class _RegInputState extends ConsumerState<RegInput> {
                     )),
                   ),
                   autovalidateMode: AutovalidateMode.always,
+
+                  // onEditingComplete: () async {
+                  //   {
+                  //     if (widget.hintText == "인증번호 6자리 입력") {
+                  //       final res = await ref.read(signUpProvider.notifier).confirm(editingController.text);
+                  //       ref.watch(isPhoneAuthSuccess.notifier).state = res["message"] == "SUCCESS";
+                  //     }
+                  //   }
+                  // }
                 ),
               ),
             ),
@@ -107,7 +119,7 @@ class _RegInputState extends ConsumerState<RegInput> {
                 child: TextButton(
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(
-                      vertical: 16.h,
+                      vertical: 14.h,
                       horizontal: 36.w,
                     ),
                     backgroundColor: Palette.primary,
@@ -115,9 +127,12 @@ class _RegInputState extends ConsumerState<RegInput> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    await ref.read(userRegReqProvider).sendAuthMessage(editingController.text);
+                    showToast("메세지 전송 완료");
+                  },
                   child: Text(
-                    "인증",
+                    "전송",
                     style: CTS(
                       color: Palette.white,
                       fontSize: 13,
@@ -126,18 +141,50 @@ class _RegInputState extends ConsumerState<RegInput> {
                 ),
               ),
             if (widget.title == "")
-              Padding(
-                padding: EdgeInsets.only(left: 20.w),
-                child: Container(
-                  padding: EdgeInsets.only(top: 15.h, right: 12.w),
-                  child: Text(
-                    "유효시간 02:59",
-                    style: CTS(
-                      color: Palette.red,
-                      fontSize: 11,
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.w),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 14.h,
+                          horizontal: 36.w,
+                        ),
+                        backgroundColor: Palette.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (editingController.text != "" && editingController.text.length == 6) {
+                          final res = await ref.read(signUpProvider.notifier).confirm(editingController.text);
+                          ref.watch(isPhoneAuthSuccess.notifier).state = res["message"] == "SUCCESS";
+                        }
+                      },
+                      child: Text(
+                        "인증",
+                        style: CTS(
+                          color: Palette.white,
+                          fontSize: 13,
+                        ),
+                      ),
                     ),
-                  ).c,
-                ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20.w),
+                    child: Container(
+                      padding: EdgeInsets.only(top: 15.h, right: 12.w),
+                      child: Text(
+                        "유효시간 02:59",
+                        style: CTS(
+                          color: Palette.red,
+                          fontSize: 11,
+                        ),
+                      ).c,
+                    ),
+                  ),
+                ],
               ),
           ],
         ),
