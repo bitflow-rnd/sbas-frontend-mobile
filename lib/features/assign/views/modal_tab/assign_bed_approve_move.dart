@@ -155,7 +155,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                             data: (publicHealthCenter) => FormField(
                                               builder: (field) => _selectSaftyCenter(publicHealthCenter, field),
                                               validator: (value) {
-                                                return value == null ? '보건소를 선택해주세요.' : null;
+                                                return value == null ? '구급대를 선택해주세요.' : null;
                                               },
                                             ),
                                           ),
