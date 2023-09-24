@@ -227,7 +227,7 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
 
   bool _tryValidation(WidgetRef ref) {
     bool isValid = formKey.currentState?.validate() ?? false;
-    // isValid = ref.watch(isPhoneAuthSuccess.notifier).state;
+    isValid = ref.watch(isPhoneAuthSuccess.notifier).state; // 인증번호 확인 주석처리시 인증번호체크 안하고 넘어감.
 
     if (isValid) {
       formKey.currentState?.save();
