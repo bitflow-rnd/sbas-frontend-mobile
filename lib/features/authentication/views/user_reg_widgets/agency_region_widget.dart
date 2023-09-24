@@ -8,6 +8,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 
 class AgencyRegion extends ConsumerStatefulWidget {
   const AgencyRegion({
@@ -93,6 +94,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                                 model.cdSeq = selectedModel.cdSeq;
                                 model.cdVal = selectedModel.cdVal;
                                 model.rmk = selectedModel.rmk;
+                                ref.watch(regUserProvider).dutyDstr1Cd = selectedModel.cdId;
 
                                 ref.read(agencyRegionProvider.notifier).exchangeTheCounty();
 
@@ -176,6 +178,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
                                 model.cdSeq = selectedModel.cdSeq;
                                 model.cdVal = selectedModel.cdVal;
                                 model.rmk = selectedModel.rmk;
+                                ref.watch(regUserProvider).dutyDstr2Cd = selectedModel.cdId;
 
                                 ref.read(agencyDetailProvider.notifier).exchangeTheAgency();
 

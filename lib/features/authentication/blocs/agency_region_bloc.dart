@@ -24,7 +24,7 @@ class AgencyRegionBloc extends AsyncNotifier<List<BaseCodeModel>> {
         final region = ref.read(selectedRegionProvider);
 
         list.addAll(await _userRegRequestRepository.getBaseCode('${region.cdGrpId}${region.cdId}'));
-
+        
         return list;
       },
     );

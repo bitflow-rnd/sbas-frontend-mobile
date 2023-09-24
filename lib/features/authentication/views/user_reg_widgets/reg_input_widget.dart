@@ -198,10 +198,10 @@ class _RegInputState extends ConsumerState<RegInput> {
     if (TextInputType.phone == widget.keyboardType) {
       MobileNumber.listenPhonePermission((isPermissionGranted) {
         if (isPermissionGranted) {
-          initMobileNumberState();
+          // initMobileNumberState();
         }
       });
-      initMobileNumberState();
+      // initMobileNumberState();
     }
     if (TextInputType.number == widget.keyboardType && widget.maxLength == 6) {
       initPlatformState();

@@ -23,6 +23,8 @@ class UserRegBloc extends AsyncNotifier {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final user = ref.read(regUserProvider);
+      user.jobCd = "PMGR0001"; // 하드코딩. 병상배정/ 병상승인 등 role  들어가야함 현재 디자인 상 없음.
+      user.authCd = "DTPM0001"; // 하드코딩. 상단 선택박스로 연결.
       return await _signUpRepository.reqUserReg(user);
     });
     if (state.hasError) {}

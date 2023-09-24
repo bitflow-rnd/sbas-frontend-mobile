@@ -105,13 +105,15 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
                           // final index = ref.read(regIndexProvider.notifier);
                           // index.state++;
                           // ref.read(signUpProvider.notifier).signUp(context);
-                          if (_tryValidation() && ref.watch(isPhoneAuthSuccess.notifier).state == true) {
+                          if (_tryValidation(ref)) {
                             final index = ref.read(regIndexProvider.notifier);
 
                             if (index.state < 1) {
                               index.state++;
                             } else {
-                              ref.read(signUpProvider.notifier).signUp(context);
+                              if (validateSumbit(ref)) {
+                                ref.read(signUpProvider.notifier).signUp(context);
+                              }
                             }
                           }
                         },
@@ -126,6 +128,41 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
         ),
       ),
     );
+  }
+
+  validateSumbit(WidgetRef ref) {
+    final user = ref.read(regUserProvider);
+    if (user.id == '' || user.id == null) {
+      return false;
+    }
+    if (user.pw == '' || user.pw == null) {
+      return false;
+    }
+    if (user.telno == '' || user.telno == null) {
+      return false;
+    }
+    if (user.jobCd == '' || user.jobCd == null) {
+      return false;
+    }
+    if (user.instId == '' || user.instId == null) {
+      return false;
+    }
+    if (user.instNm == '' || user.instNm == null) {
+      return false;
+    }
+    if (user.dutyDstr1Cd == '' || user.dutyDstr1Cd == null) {
+      return false;
+    }
+    if (user.dutyDstr2Cd == '' || user.dutyDstr2Cd == null) {
+      return false;
+    }
+    if (user.btDt == '' || user.btDt == null) {
+      return false;
+    }
+    if (user.authCd == '' || user.authCd == null) {
+      return false;
+    }
+    return true;
   }
 
   Widget _getRegIndex(int index) {
@@ -188,8 +225,9 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
     return const Placeholder();
   }
 
-  bool _tryValidation() {
+  bool _tryValidation(WidgetRef ref) {
     bool isValid = formKey.currentState?.validate() ?? false;
+    // isValid = ref.watch(isPhoneAuthSuccess.notifier).state;
 
     if (isValid) {
       formKey.currentState?.save();
