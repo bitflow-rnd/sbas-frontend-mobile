@@ -215,24 +215,23 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                       ],
                                     ),
                                   )
-                                : Center(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          'assets/lookup/history_icon.png',
-                                          height: 128.h,
+                                : Column(
+                                    children: [
+                                      SizedBox(height: 100.h),
+                                      Image.asset(
+                                        'assets/lookup/history_icon.png',
+                                        height: 128.h,
+                                      ),
+                                      const AutoSizeText(
+                                        '병상 배정 이력이 없습니다.',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
                                         ),
-                                        const AutoSizeText(
-                                          '병상 배정 이력이 없습니다.',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey,
-                                          ),
-                                          maxLines: 1,
-                                          maxFontSize: 22,
-                                        ),
-                                      ],
-                                    ),
+                                        maxLines: 1,
+                                        maxFontSize: 22,
+                                      ),
+                                    ],
                                   ),
                           ),
                 ),

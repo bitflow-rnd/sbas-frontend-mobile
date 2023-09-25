@@ -157,32 +157,36 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             lBtnText: "배정 불가",
             rBtnText: "승인",
             lBtnFunc: () async {
-              var res = await Common.showModal(
-                  context,
-                  Common.commonModal(
-                    context: context,
-                    imageWidget: Image.asset(
-                      "assets/auth_group/modal_check.png",
-                      width: 44.h,
-                    ),
-                    imageHeight: 44.h,
-                    mainText: "배정 불가 처리하시겠습니까?",
-                    button1Text: "취소",
-                    button2Text: "확인",
-                    button1Function: () {
-                      Navigator.pop(context, false);
-                    },
-                    button2Function: () {
-                      Navigator.pop(context, true);
-                    },
-                  ));
-              if (res ?? false) {
+              String? res = await _showBottomSheet(
+                  context: context,
+                  // g hintText = '메시지 입력',
+                  btnText: '확인');
+              // var res = await Common.showModal(
+              //     context,
+              //     Common.commonModal(
+              //       context: context,
+              //       imageWidget: Image.asset(
+              //         "assets/auth_group/modal_check.png",
+              //         width: 44.h,
+              //       ),
+              //       imageHeight: 44.h,
+              //       mainText: "배정 불가 처리하시겠습니까?",
+              //       button1Text: "취소",
+              //       button2Text: "확인",
+              //       button1Function: () {
+              //         Navigator.pop(context, false);
+              //       },
+              //       button2Function: () {
+              //         Navigator.pop(context, true);
+              //       },
+              //     ));
+              if (res != null) {
                 //병상 배정 불가 처리.
                 var postRes = await ref.watch(assignBedProvider.notifier).rejectReq({
                   "ptId": patient.ptId,
                   "bdasSeq": assignItem.bdasSeq,
                   "aprvYn": "N",
-                  // "msg": res.toString(),
+                  "msg": res,
                 });
                 if (postRes) {
                   await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
@@ -204,7 +208,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                     "ptId": patient.ptId,
                     "bdasSeq": assignItem.bdasSeq,
                     "aprvYn": "Y",
-                    "msg": res.toString(),
+                    "msg": res,
                   });
 
                   if (postRes) {
@@ -376,7 +380,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                               padding: EdgeInsets.symmetric(vertical: 16.h),
                               child: Text(
                                 btnText,
-                                style: CTS(color: Palette.white, fontSize: 13),
+                                style: CTS(color: Palette.white, fontSize: 12.r),
                               ),
                             ),
                             onPressed: () {

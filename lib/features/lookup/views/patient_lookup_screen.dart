@@ -254,7 +254,7 @@ class PatientLookupScreen extends ConsumerWidget {
                       _getTopColumn(patient.count ?? 0),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: patient.count,
+                          itemCount: patient.items.length,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () async {
                               final patientBasicInfo = await ref.read(patientInfoProvider.notifier).getAsync(patient.items[index].ptId);
