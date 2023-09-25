@@ -410,8 +410,8 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                 showToast("초대 성공");
               })
             }
-          else
-            {showToast("invalid data")}
+          // else
+          //   {showToast("invalid data")}
         });
   }
 

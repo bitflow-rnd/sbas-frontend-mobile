@@ -7,6 +7,7 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactDetailScreen extends ConsumerStatefulWidget {
   final UserContact contact;
@@ -136,17 +137,22 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                           borderRadius: BorderRadius.circular(4),
                                         ),
                                         child: Icon(Icons.message_rounded, color: Palette.black, size: 16.r)),
-                                    Container(
-                                      padding: EdgeInsets.all(5.r),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Palette.greyText_20,
-                                          width: 1,
+                                    GestureDetector(
+                                      onTap: () {
+                                        launch("tel://${widget.contact.telno}");
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(5.r),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Palette.greyText_20,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
-                                        borderRadius: BorderRadius.circular(4),
+                                        child: Icon(Icons.phone, color: Palette.greyText_80, size: 16.r),
                                       ),
-                                      child: Icon(Icons.phone, color: Palette.greyText_80, size: 16.r),
                                     ),
                                   ],
                                 )
@@ -173,17 +179,22 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                 Row(
                                   children: [
                                     Gaps.h48,
-                                    Container(
-                                      padding: EdgeInsets.all(5.r),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Palette.greyText_20,
-                                          width: 1,
+                                    GestureDetector(
+                                      onTap: () {
+                                        launch("tel://${widget.contact.telno}");
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(5.r),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Palette.greyText_20,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
-                                        borderRadius: BorderRadius.circular(4),
+                                        child: Icon(Icons.phone, color: Palette.greyText_80, size: 16.r),
                                       ),
-                                      child: Icon(Icons.phone, color: Palette.greyText_80, size: 16.r),
                                     ),
                                   ],
                                 )

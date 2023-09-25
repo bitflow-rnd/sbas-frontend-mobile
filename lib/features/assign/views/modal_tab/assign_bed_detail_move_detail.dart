@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_disease_info.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
 
 class AssignBedMoveDetialInfo extends ConsumerWidget {
@@ -129,13 +130,13 @@ class AssignBedMoveDetialInfo extends ConsumerWidget {
         case 0:
           return "자택";
         case 1:
-          return transferInfo.reqDstr1CdNm ?? "-";
+          return transferInfo.reqDstr1CdNm.getText;
         case 2:
-          return transferInfo.nok1Telno ?? "-";
+          return transferInfo.nok1Telno.getText;
         case 3:
-          return transferInfo.nok2Telno ?? "-";
+          return transferInfo.nok2Telno.getText;
         case 4:
-          return transferInfo.msg ?? "-";
+          return transferInfo.msg.getText;
       }
     } else if (transferInfo.dprtDstrTypeCd == "DPTP0002") {
       switch (index) {
@@ -149,27 +150,27 @@ class AssignBedMoveDetialInfo extends ConsumerWidget {
         case 0:
           return "병원";
         case 1:
-          return transferInfo.reqDstr1CdNm ?? "";
+          return transferInfo.reqDstr1CdNm.getText;
         case 2:
-          return transferInfo.deptNm ?? "-";
+          return transferInfo.deptNm.getText;
         case 3:
-          return transferInfo.spclNm ?? "-";
+          return transferInfo.spclNm.getText;
         case 4:
-          return transferInfo.chrgTelno ?? "-";
+          return transferInfo.chrgTelno.getText;
         case 5:
           return (transferInfo.inhpAsgnYn ?? "N") == "Y" ? "원내배정" : "전원요청";
         case 6:
-          return transferInfo.msg ?? "-";
+          return transferInfo.msg.getText;
       }
     } else if (transferInfo.dprtDstrTypeCd == "DPTP0003") {
       switch (index) {
         case 0:
           return "기타";
         case 1:
-          return transferInfo.reqDstr1CdNm ?? "";
+          return transferInfo.reqDstr1CdNm.getText;
 
         case 2:
-          return transferInfo.msg ?? "";
+          return transferInfo.msg.getText;
       }
     }
     return "";

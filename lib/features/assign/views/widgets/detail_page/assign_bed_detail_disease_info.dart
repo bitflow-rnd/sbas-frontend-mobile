@@ -409,37 +409,37 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
     text = "Data has to be here";
     switch (index) {
       case 0:
-        text = diseaseInfo.rcptPhc ?? defaultText;
+        text = diseaseInfo.rcptPhc.getText;
         break;
 
       case 1:
-        text = diseaseInfo.diagNm ?? defaultText;
+        text = diseaseInfo.diagNm.getText;
         break;
 
       case 2:
-        text = diseaseInfo.dfdgExamRslt ?? defaultText;
+        text = diseaseInfo.dfdgExamRslt.getText;
         break;
 
       case 3:
-        text = diseaseInfo.diagGrde ?? defaultText;
+        text = diseaseInfo.diagGrde.getText;
         break;
 
       case 104:
-        text = diseaseInfo.occrDt ?? defaultText;
+        text = diseaseInfo.occrDt.getText;
         break;
       case 105:
-        text = diseaseInfo.diagDt ?? defaultText;
+        text = diseaseInfo.diagDt.getText;
         break;
       case 106:
-        text = diseaseInfo.rptDt ?? defaultText;
+        text = diseaseInfo.rptDt.getText;
         break;
 
       case 5:
-        text = diseaseInfo.ptCatg ?? defaultText;
+        text = diseaseInfo.ptCatg.getText;
         break;
 
       case 6:
-        text = diseaseInfo.rmk ?? defaultText;
+        text = diseaseInfo.rmk.getText;
         break;
     }
     return text;
@@ -447,23 +447,22 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
 
   String getList2Value(int index, PatientDiseaseInfoModel diseaseInfo) {
     var text = '';
-    var defaultText = '-';
 
     switch (index) {
       case 0:
-        text = diseaseInfo.dnrAgreYn ?? defaultText;
+        text = diseaseInfo.dnrAgreYn.getText;
         break;
 
       case 1:
-        text = diseaseInfo.admsYn ?? defaultText;
+        text = diseaseInfo.admsYn.getText;
         break;
 
       case 2:
-        text = diseaseInfo.instNm ?? defaultText;
+        text = diseaseInfo.instNm.getText;
         break;
 
       case 3:
-        text = diseaseInfo.instId ?? defaultText;
+        text = diseaseInfo.instId.getText;
         break;
 
       case 4:
@@ -471,19 +470,19 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
         break;
 
       case 5:
-        text = diseaseInfo.instTelno ?? defaultText;
+        text = diseaseInfo.instTelno.getText;
         break;
 
       case 6:
-        text = diseaseInfo.diagDrNm ?? defaultText;
+        text = diseaseInfo.diagDrNm.getText;
         break;
 
       case 7:
-        text = diseaseInfo.rptChfNm ?? defaultText;
+        text = diseaseInfo.rptChfNm.getText;
         break;
 
       case 8:
-        text = diseaseInfo.reqBedTypeNm ?? defaultText;
+        text = diseaseInfo.reqBedTypeNm.getText;
         break;
     }
     return text;
@@ -520,5 +519,14 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
     }
 
     return text;
+  }
+}
+
+extension TextExtension on String? {
+  String get getText {
+    if (this == '' || this == null) {
+      return '-';
+    }
+    return this ?? "-";
   }
 }

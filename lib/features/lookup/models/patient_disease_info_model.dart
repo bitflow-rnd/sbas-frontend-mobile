@@ -6,7 +6,7 @@ String patientDiseaseInfoModelToJson(PatientDiseaseInfoModel data) => json.encod
 
 class PatientDiseaseInfoModel {
   String? rcptPhc;
-  dynamic diagNm;
+  String? diagNm;
   String? dfdgExamRslt;
   String? diagGrde;
   String? occrDt;
