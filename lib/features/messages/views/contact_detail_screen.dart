@@ -125,18 +125,24 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Container(
-                                        padding: EdgeInsets.all(5.r),
-                                        margin: EdgeInsets.only(right: 8.w),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Palette.greyText_20,
-                                            width: 1,
+                                    GestureDetector(
+                                      onTap: () {
+                                        launch("sms://${widget.contact.telno}");
+                                      },
+                                      child: Container(
+                                          padding: EdgeInsets.all(5.r),
+                                          // margin: EdgeInsets.only(right: 8.w),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                              color: Palette.greyText_20,
+                                              width: 1,
+                                            ),
+                                            borderRadius: BorderRadius.circular(4),
                                           ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        child: Icon(Icons.message_rounded, color: Palette.black, size: 16.r)),
+                                          child: Icon(Icons.message_rounded, color: Palette.black, size: 16.r)),
+                                    ),
+                                    Gaps.h10,
                                     GestureDetector(
                                       onTap: () {
                                         launch("tel://${widget.contact.telno}");
