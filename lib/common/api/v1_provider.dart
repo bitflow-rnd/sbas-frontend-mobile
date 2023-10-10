@@ -32,6 +32,35 @@ class V1Provider {
     throw ArgumentError();
   }
 
+  Future<dynamic> getAsyncWithJson(String route, String json) async {
+    final client = Dio();
+
+    try {
+      client.options.contentType = 'application/json';
+      client.options.headers = authToken;
+
+      final res = await client.getUri(
+        Uri.parse('$_baseUrl/$route'),
+        data: json,
+      );
+      if (kDebugMode) {
+        showToast(res.data['message']);
+      }
+      if (res.statusCode == 200) {
+        return res.data['result'];
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
   Future<dynamic> postAsync(String route, String json) async {
     final client = Dio();
 
