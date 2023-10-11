@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/views/public_alarm_detail_screen.dart';
+import 'package:sbas/features/notice/views/notice_list_widget.dart';
 
 class PublicAlarmPage extends StatefulWidget {
   const PublicAlarmPage({super.key});
@@ -29,46 +30,16 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
           ),
         ),
         actions: [
-          Container(
-            margin: EdgeInsets.only(right: 16.w, top: 3.h, bottom: 3.h),
-            height: 40.h,
-            width: 100.w,
-            child: DropdownButtonFormField(
-              borderRadius: BorderRadius.circular(4.r),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 12.w,
-                  vertical: 4.h,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Palette.greyText_30, width: 1),
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Palette.greyText_30, width: 1),
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Palette.greyText_30, width: 1),
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-              ),
-              value: selectedDropdown,
-              items: dropdownList.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: CTS(fontSize: 11, color: Palette.black),
-                  ),
-                );
-              }).toList(),
-              onChanged: (dynamic value) {
+          NoticeList(
+            dropdownList: dropdownList,
+            selectedDropdown: selectedDropdown,
+            onDropdownChanged: (value) {
+              if (value != null) {
                 setState(() {
                   selectedDropdown = value;
                 });
-              },
-            ),
+              }
+            },
           ),
         ],
         elevation: 0,
