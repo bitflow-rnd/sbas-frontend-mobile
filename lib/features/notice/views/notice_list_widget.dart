@@ -183,7 +183,7 @@ class NoticeListWidget extends ConsumerWidget {
                             : Container(),
                         SizedBox(width: 8.w),
                         Text(
-                          isRead ? "NEW" : "",
+                          isRead ? "" : "NEW",
                           style: CTS.medium(
                             color: Color(0xff538ef5),
                             fontSize: 12,
