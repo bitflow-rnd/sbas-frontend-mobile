@@ -35,7 +35,8 @@ class NoticeListWidget extends ConsumerWidget {
         isActive: true,
         searchPeriod: getPeriodCode(searchPeriod));
 
-    final noticeList = ref.read(noticePresenter.notifier).getNoticeList(request);
+    final noticeList =
+        ref.read(noticePresenter.notifier).getNoticeList(request);
 
     return FutureBuilder(
       future: noticeList,
@@ -77,8 +78,8 @@ class NoticeListWidget extends ConsumerWidget {
     );
   }
 
-  Widget alertCard(BuildContext context, String noticeId, String title, String body, String type,
-      String datetime, bool isRead, bool hasFile) {
+  Widget alertCard(BuildContext context, String noticeId, String title,
+      String body, String type, String datetime, bool isRead, bool hasFile) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6.h),
       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -87,7 +88,10 @@ class NoticeListWidget extends ConsumerWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => PublicNoticeDetailPage(noticeId: noticeId,)));
+                  builder: (context) => PublicNoticeDetailPage(
+                        noticeId: noticeId,
+                        startNoticeDt: datetime,
+                      )));
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,

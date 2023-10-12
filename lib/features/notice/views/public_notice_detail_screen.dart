@@ -9,41 +9,55 @@ class PublicNoticeDetailPage extends ConsumerWidget {
   const PublicNoticeDetailPage({
     super.key,
     required this.noticeId,
+    required this.startNoticeDt,
   });
 
   final String noticeId;
+  final String startNoticeDt;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final noticeDetail =
+        ref.read(noticePresenter.notifier).getNoticeDetail(noticeId);
 
-    final noticeDetail = ref.read(noticePresenter.notifier).getNoticeDetail(noticeId);
+    return FutureBuilder(
+        future: noticeDetail,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
 
-    return Scaffold(
-      backgroundColor: Palette.white,
-      appBar: Bitflow.getAppBar("공지사항", true, 0),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(height: 1.h, color: Palette.greyText.withOpacity(0.2)),
-              alertDetailCard(
-                  "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                  "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                  "공지",
-                  "2023.03.03",
-                  false,
-                  true),
-            ],
-          ),
-        ),
-      ),
-    );
+            final detail = snapshot.data;
+
+            return Scaffold(
+              backgroundColor: Palette.white,
+              appBar: Bitflow.getAppBar("공지사항", true, 0),
+              body: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          height: 1.h,
+                          color: Palette.greyText.withOpacity(0.2)),
+                      alertDetailCard(
+                          detail?.title ?? '',
+                          detail?.content ?? '',
+                          detail?.noticeType ?? '',
+                          startNoticeDt,
+                          true),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
   }
 
   Widget alertDetailCard(String title, String body, String type,
-      String datetime, bool isRead, bool hasFile) {
+      String datetime, bool hasFile) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 18.h),
       child: Column(
@@ -53,13 +67,13 @@ class PublicNoticeDetailPage extends ConsumerWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                 decoration: BoxDecoration(
-                  color: Color(0xff676a7a).withOpacity(0.12),
+                  color: const Color(0xff676a7a).withOpacity(0.12),
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Text(
                   type,
                   style: CTS(
-                    color: Color(0xff676a7a),
+                    color: const Color(0xff676a7a),
                     fontSize: 13,
                   ),
                 ),
@@ -74,13 +88,13 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                 ),
               ),
               SizedBox(width: 8.w),
-              Text(
-                isRead ? "NEW" : "",
-                style: CTS.medium(
-                  color: Color(0xff538ef5),
-                  fontSize: 12,
-                ),
-              ),
+              // Text(
+              //   isRead ? "NEW" : "",
+              //   style: CTS.medium(
+              //     color: const Color(0xff538ef5),
+              //     fontSize: 12,
+              //   ),
+              // ),
             ],
           ),
           SizedBox(
