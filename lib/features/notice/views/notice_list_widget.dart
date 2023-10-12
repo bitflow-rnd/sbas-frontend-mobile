@@ -32,8 +32,6 @@ class NoticeListWidget extends ConsumerWidget {
     String userId = ref.read(userDetailProvider.notifier).userId;
     NoticeListRequestModel request = NoticeListRequestModel(
         userId: userId,
-        page: 1,
-        size: 10,
         isActive: true,
         searchPeriod: getPeriodCode(searchPeriod));
 
