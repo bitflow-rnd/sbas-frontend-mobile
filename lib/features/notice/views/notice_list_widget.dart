@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
-import 'package:sbas/features/notice/blocs/notice_list_presenter.dart';
+import 'package:sbas/features/notice/blocs/notice_presenter.dart';
 import 'package:sbas/features/notice/models/notice_list_request_model.dart';
 
 import '../../../common/bitflow_theme.dart';
-import '../../alarm/views/public_alarm_detail_screen.dart';
+import 'public_notice_detail_screen.dart';
 import '../models/notice_list_model.dart';
 
 class NoticeListWidget extends ConsumerWidget {
@@ -35,7 +35,7 @@ class NoticeListWidget extends ConsumerWidget {
         isActive: true,
         searchPeriod: getPeriodCode(searchPeriod));
 
-    final noticeList = ref.read(noticeListPresenter.notifier).getAsync(request);
+    final noticeList = ref.read(noticePresenter.notifier).getNoticeList(request);
 
     return FutureBuilder(
       future: noticeList,
@@ -53,6 +53,7 @@ class NoticeListWidget extends ConsumerWidget {
           List<Widget> noticeCards = notices.map((notice) {
             return alertCard(
               context,
+              notice.noticeId,
               notice.title,
               notice.content,
               notice.noticeType,
@@ -76,7 +77,7 @@ class NoticeListWidget extends ConsumerWidget {
     );
   }
 
-  Widget alertCard(BuildContext context, String title, String body, String type,
+  Widget alertCard(BuildContext context, String noticeId, String title, String body, String type,
       String datetime, bool isRead, bool hasFile) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6.h),
@@ -86,7 +87,7 @@ class NoticeListWidget extends ConsumerWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const PublicAlarmDetailPage()));
+                  builder: (context) => PublicNoticeDetailPage(noticeId: noticeId,)));
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,

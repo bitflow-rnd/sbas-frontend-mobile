@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/notice/blocs/notice_presenter.dart';
 
-class PublicAlarmDetailPage extends StatefulWidget {
-  const PublicAlarmDetailPage({super.key});
+class PublicNoticeDetailPage extends ConsumerWidget {
+  const PublicNoticeDetailPage({
+    super.key,
+    required this.noticeId,
+  });
+
+  final String noticeId;
 
   @override
-  State<PublicAlarmDetailPage> createState() => PublicAlarmDetailPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
 
-class PublicAlarmDetailPageState extends State<PublicAlarmDetailPage> {
-  bool hasAlarm = false;
-  @override
-  Widget build(BuildContext context) {
+    final noticeDetail = ref.read(noticePresenter.notifier).getNoticeDetail(noticeId);
+
     return Scaffold(
       backgroundColor: Palette.white,
       appBar: Bitflow.getAppBar("공지사항", true, 0),
@@ -29,7 +33,7 @@ class PublicAlarmDetailPageState extends State<PublicAlarmDetailPage> {
                   "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
                   "공지",
                   "2023.03.03",
-                  true,
+                  false,
                   true),
             ],
           ),
@@ -38,7 +42,8 @@ class PublicAlarmDetailPageState extends State<PublicAlarmDetailPage> {
     );
   }
 
-  Widget alertDetailCard(String title, String body, String type, String datetime, bool isRead, bool hasFile) {
+  Widget alertDetailCard(String title, String body, String type,
+      String datetime, bool isRead, bool hasFile) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 18.h),
       child: Column(
@@ -89,7 +94,10 @@ class PublicAlarmDetailPageState extends State<PublicAlarmDetailPage> {
               height: 1.6,
             ),
           ),
-          Container(height: 1.h, margin: EdgeInsets.symmetric(vertical: 16.h), color: Palette.greyText.withOpacity(0.2)),
+          Container(
+              height: 1.h,
+              margin: EdgeInsets.symmetric(vertical: 16.h),
+              color: Palette.greyText.withOpacity(0.2)),
           Text(
             '내용을 출력합니다. 내용을 출력합니다. 내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.',
             style: CTS(
@@ -113,7 +121,10 @@ class PublicAlarmDetailPageState extends State<PublicAlarmDetailPage> {
                       hasFile
                           ? Padding(
                               padding: EdgeInsets.only(right: 6.r),
-                              child: Image.asset("assets/home/paper-clip-icon.png", width: 13.w, height: 13.h),
+                              child: Image.asset(
+                                  "assets/home/paper-clip-icon.png",
+                                  width: 13.w,
+                                  height: 13.h),
                             )
                           : Container(),
                       Text(
@@ -144,7 +155,10 @@ class PublicAlarmDetailPageState extends State<PublicAlarmDetailPage> {
                       hasFile
                           ? Padding(
                               padding: EdgeInsets.only(right: 6.r),
-                              child: Image.asset("assets/home/paper-clip-icon.png", width: 13.w, height: 13.h),
+                              child: Image.asset(
+                                  "assets/home/paper-clip-icon.png",
+                                  width: 13.w,
+                                  height: 13.h),
                             )
                           : Container(),
                       Text(
