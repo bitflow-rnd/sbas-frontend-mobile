@@ -4,12 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/notice/blocs/notice_list_presenter.dart';
 import 'package:sbas/features/notice/models/notice_list_request_model.dart';
-import 'package:sbas/util.dart';
 
 import '../../../common/bitflow_theme.dart';
 import '../../alarm/views/public_alarm_detail_screen.dart';
 import '../models/notice_list_model.dart';
-import '../models/notice_model.dart';
 
 class NoticeListWidget extends ConsumerWidget {
   NoticeListWidget({
@@ -54,16 +52,15 @@ class NoticeListWidget extends ConsumerWidget {
 
           final notices = (snapshot.data as NoticeListModel).items;
 
-          // 각 공지사항에 대한 alertCard 목록을 생성
           List<Widget> noticeCards = notices.map((notice) {
             return alertCard(
               context,
-              notice.title!,
-              notice.content!,
-              notice.noticeType!,
-              notice.startNoticeDt!,
-              notice.isRead!,
-              true,
+              notice.title,
+              notice.content,
+              notice.noticeType,
+              notice.startNoticeDt,
+              notice.isRead,
+              notice.hasFile,
             );
           }).toList();
 
@@ -141,7 +138,7 @@ class NoticeListWidget extends ConsumerWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: CTS(
-                        color: Color(0xff676a7a),
+                        color: const Color(0xff676a7a),
                         fontSize: 13,
                       ),
                     ),
@@ -152,13 +149,21 @@ class NoticeListWidget extends ConsumerWidget {
                           padding: EdgeInsets.symmetric(
                               horizontal: 6.w, vertical: 2.h),
                           decoration: BoxDecoration(
-                            color: Color(0xff676a7a).withOpacity(0.12),
+                            color: const Color(0xff676a7a).withOpacity(0.12),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           child: Text(
-                            type,
+                            (() {
+                              if (type == 'B') {
+                                return '일반';
+                              } else if (type == 'N') {
+                                return '공지';
+                              } else {
+                                return 'NEWS';
+                              }
+                            })(),
                             style: CTS(
-                              color: Color(0xff676a7a),
+                              color: const Color(0xff676a7a),
                               fontSize: 13,
                             ),
                           ),
@@ -185,7 +190,7 @@ class NoticeListWidget extends ConsumerWidget {
                         Text(
                           isRead ? "" : "NEW",
                           style: CTS.medium(
-                            color: Color(0xff538ef5),
+                            color: const Color(0xff538ef5),
                             fontSize: 12,
                           ),
                         ),

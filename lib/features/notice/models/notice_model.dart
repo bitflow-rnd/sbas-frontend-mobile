@@ -1,18 +1,20 @@
 class NoticeList {
-  String? noticeId;
-  String? title;
-  String? content;
-  String? noticeType;
-  String? startNoticeDt;
-  bool? isRead;
+  late String noticeId;
+  late String title;
+  late String content;
+  late String noticeType;
+  late String startNoticeDt;
+  late bool isRead;
+  late bool hasFile;
 
   NoticeList({
-    this.noticeId,
-    this.title,
-    this.content,
-    this.noticeType,
-    this.startNoticeDt,
-    this.isRead,
+    required this.noticeId,
+    required this.title,
+    required this.content,
+    required this.noticeType,
+    required this.startNoticeDt,
+    required this.isRead,
+    required this.hasFile,
   });
 
   NoticeList.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,9 @@ class NoticeList {
     if (json["isRead"] is bool) {
       isRead = json["isRead"];
     }
+    if (json["hasFile"] is bool) {
+      hasFile = json["hasFile"];
+    }
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -44,6 +49,7 @@ class NoticeList {
     data["noticeType"] = noticeType;
     data["startNoticeDt"] = startNoticeDt;
     data["isRead"] = isRead;
+    data["hasFile"] = hasFile;
 
     return data;
   }
