@@ -1,77 +1,28 @@
+import 'notice_model.dart';
+
 class NoticeListModel {
-  int? count;
+  int? totalCnt;
   late List<NoticeList> items;
 
   NoticeListModel({
-    this.count,
+    this.totalCnt,
     required this.items,
   });
 
   NoticeListModel.fromJson(Map<String, dynamic> json) {
-    if (json["count"] is int) {
-      count = json["count"];
+    if (json["totalCnt"] is int) {
+      totalCnt = json["totalCnt"];
     }
     if (json["items"] is List) {
-      items = (json["items"] as List).map((e) => NoticeList.fromJson(e)).toList();
+      items = (json["items"] as List).map((item) => NoticeList.fromJson(item)).toList();
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
-    data["count"] = count;
-    data["items"] = items.map((e) => e.toJson()).toList();
-
-    return data;
-  }
-}
-
-class NoticeList {
-  String? noticeId;
-  String? title;
-  String? content;
-  String? noticeType;
-  String? startNoticeDt;
-  bool? isRead;
-
-  NoticeList({
-    this.noticeId,
-    this.title,
-    this.content,
-    this.noticeType,
-    this.startNoticeDt,
-    this.isRead,
-  });
-
-  NoticeList.fromJson(Map<String, dynamic> json) {
-    if (json["noticeId"] is String) {
-      noticeId = json["noticeId"];
-    }
-    if (json["title"] is String) {
-      title = json["title"];
-    }
-    if (json["content"] is String) {
-      content = json["content"];
-    }
-    if (json["noticeType"] is String) {
-      noticeType = json["noticeType"];
-    }
-    if (json["startNoticeDt"] is String) {
-      startNoticeDt = json["startNoticeDt"];
-    }
-    if (json["isRead"] is bool) {
-      isRead = json["isRead"];
-    }
-  }
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-
-    data['noticeId'] = noticeId;
-    data['title'] = title;
-    data["content"] = content;
-    data["noticeType"] = noticeType;
-    data["startNoticeDt"] = startNoticeDt;
-    data["isRead"] = isRead;
+    data["totalCnt"] = totalCnt;
+    data["items"] = items.map((item) => item.toJson()).toList();
 
     return data;
   }

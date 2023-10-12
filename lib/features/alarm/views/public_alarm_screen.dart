@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/alarm/views/public_alarm_detail_screen.dart';
+import 'package:sbas/features/notice/views/notice_header_widget.dart';
 import 'package:sbas/features/notice/views/notice_list_widget.dart';
 
 class PublicAlarmPage extends StatefulWidget {
@@ -30,7 +30,7 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
           ),
         ),
         actions: [
-          NoticeList(
+          NoticeHeader(
             dropdownList: dropdownList,
             selectedDropdown: selectedDropdown,
             onDropdownChanged: (value) {
@@ -59,82 +59,7 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
         child: hasAlarm
             ? _emptyPage()
             : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 6.h),
-                    alertCard(
-                        "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                        "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                        "공지",
-                        "2023.03.03",
-                        true,
-                        true),
-                    alertCard(
-                        "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                        "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                        "뉴스",
-                        "2023.03.03",
-                        true,
-                        true),
-                    alertCard(
-                        "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                        "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                        "뉴스",
-                        "2023.03.03",
-                        false,
-                        false),
-                    alertCard(
-                        "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                        "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                        "공지",
-                        "2023.03.03",
-                        true,
-                        false),
-                    alertCard(
-                        "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                        "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                        "공지",
-                        "2023.03.03",
-                        false,
-                        true),
-                    alertCard(
-                        "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                        "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                        "공지",
-                        "2023.03.03",
-                        false,
-                        true),
-                    alertCard(
-                        "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                        "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                        "공지",
-                        "2023.03.03",
-                        false,
-                        true),
-                    alertCard(
-                        "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                        "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                        "공지",
-                        "2023.03.03",
-                        false,
-                        true),
-                    alertCard(
-                        "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                        "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                        "공지",
-                        "2023.03.03",
-                        false,
-                        true),
-                    alertCard(
-                        "제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.제목 1줄로 표시됩니다.",
-                        "내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및..내용 1줄 출력 및 말줄임표… 내용 1줄 출력 및...",
-                        "공지",
-                        "2023.03.03",
-                        false,
-                        true),
-                  ],
-                ),
+                child: NoticeListWidget(searchPeriod: selectedDropdown),
               ),
       ),
     );
@@ -170,120 +95,6 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget alertCard(String title, String body, String type, String datetime, bool isRead, bool hasFile) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 6.h),
-      padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => PublicAlarmDetailPage()));
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-        ),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x1a645c5c),
-                offset: Offset(0, 3),
-                blurRadius: 12,
-                spreadRadius: 0,
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: CTS.bold(
-                              color: Colors.black,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 6.h),
-                    Text(
-                      body,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: CTS(
-                        color: Color(0xff676a7a),
-                        fontSize: 13,
-                      ),
-                    ),
-                    SizedBox(height: 12.h),
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                          decoration: BoxDecoration(
-                            color: Color(0xff676a7a).withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                          child: Text(
-                            type,
-                            style: CTS(
-                              color: Color(0xff676a7a),
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          datetime,
-                          style: CTS(
-                            color: Colors.black,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        hasFile
-                            ? Padding(
-                                padding: EdgeInsets.only(left: 6.r),
-                                child: Image.asset("assets/home/paper-clip-icon.png", width: 13.w, height: 13.h),
-                              )
-                            : Container(),
-                        SizedBox(width: 8.w),
-                        Text(
-                          isRead ? "NEW" : "",
-                          style: CTS.medium(
-                            color: Color(0xff538ef5),
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(width: 20.w),
-              Image.asset("assets/home/right_arrow.png"),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

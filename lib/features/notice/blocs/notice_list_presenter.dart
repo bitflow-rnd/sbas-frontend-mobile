@@ -6,30 +6,24 @@ import 'package:sbas/features/notice/repos/notice_repo.dart';
 import '../models/notice_list_model.dart';
 import '../models/notice_list_request_model.dart';
 
-class NoticeListPresenter extends AsyncNotifier<NoticeListModel> {
-  late final NoticeListModel _noticeList;
+class NoticeListPresenter extends AsyncNotifier {
+  late final NoticeRepository _repository;
 
   @override
-  FutureOr<NoticeListModel> build() {
+  FutureOr build() async {
     _repository = ref.read(noticeRepoProvider);
-
-    _noticeList = NoticeListModel(items: []);
-
-    return _noticeList;
   }
 
-  Future<void> getAsync(NoticeListRequestModel model) async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      _noticeList = await _repository.getNoticeList(model);
+  Future<NoticeListModel> getAsync(NoticeListRequestModel model) async {
+    if(model != null) {
+      return await _repository.getNoticeList(model);
+    }
 
-      return _noticeList;
-    });
+    return NoticeListModel(items: List.empty());
   }
-
-  late final NoticeRepository _repository;
 }
 
-final noticeListPresenter = AsyncNotifierProvider<NoticeListPresenter, NoticeListModel>(
-    () => NoticeListPresenter(),
+final noticeListPresenter =
+AsyncNotifierProvider<NoticeListPresenter, void>(
+      () => NoticeListPresenter(),
 );

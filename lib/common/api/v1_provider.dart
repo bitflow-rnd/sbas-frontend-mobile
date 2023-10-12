@@ -43,6 +43,7 @@ class V1Provider {
         Uri.parse('$_baseUrl/$route'),
         data: json,
       );
+
       if (kDebugMode) {
         showToast(res.data['message']);
       }
@@ -76,7 +77,7 @@ class V1Provider {
         showToast(res.data['message']);
       }
       if (res.statusCode == 200) {
-        if (!!kDebugMode) {
+        if (! !kDebugMode) {
           print(res.data);
         }
         return res.data['result'] ?? res.data['message'];
@@ -107,7 +108,8 @@ class V1Provider {
     try {
       client.options.contentType = 'application/json';
 
-      final res = await client.postUri(Uri.parse('${dotenv.env['BASE_URL']}/send'));
+      final res = await client.postUri(
+          Uri.parse('${dotenv.env['BASE_URL']}/send'));
       if (kDebugMode) {
         print(res.toString());
       }
