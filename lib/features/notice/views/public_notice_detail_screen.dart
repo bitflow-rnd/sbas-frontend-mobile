@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/models/base_attc_model.dart';
+import 'package:sbas/common/repos/file_repo.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/notice/blocs/notice_presenter.dart';
 
@@ -39,11 +41,12 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                           height: 1.h,
                           color: Palette.greyText.withOpacity(0.2)),
                       alertDetailCard(
+                          ref,
                           detail?.title ?? '',
                           detail?.content ?? '',
                           detail?.noticeType ?? '',
                           startNoticeDt,
-                          detail?.attcGrpId != null),
+                          detail?.attcGrpId ?? ''),
                     ],
                   ),
                 ),
@@ -55,8 +58,13 @@ class PublicNoticeDetailPage extends ConsumerWidget {
         });
   }
 
-  Widget alertDetailCard(
-      String title, String body, String type, String datetime, bool hasFile) {
+  Widget alertDetailCard(WidgetRef ref, String title, String body, String type,
+      String datetime, String attcGrpId) {
+    final hasFile = attcGrpId != '';
+    Future<List<BaseAttcModel>>? fileList;
+    if (hasFile) {
+      fileList = ref.read(fileRepoProvider).getFileList(attcGrpId);
+    }
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 18.h),
       child: Column(
@@ -127,39 +135,81 @@ class PublicNoticeDetailPage extends ConsumerWidget {
               height: 1.6,
             ),
           ),
-          hasFile ?
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(8.r),
-                  margin: EdgeInsets.only(bottom: 2.h, top: 20.h),
-                  decoration: BoxDecoration(
-                    color: Palette.greyText.withOpacity(0.06),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 6.r),
-                        child: Image.asset("assets/home/paper-clip-icon.png",
-                            width: 13.w, height: 13.h),
-                      ),
-                      Text(
-                        "첨부파일명.확장자",
-                        style: CTS(
-                          color: Palette.mainColor,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ) : Container(),
-          SizedBox(height: 20.h),
-          Image.asset("assets/testImg.png"),
+          hasFile
+              ? FutureBuilder(
+                  future: fileList,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      final fileList = snapshot.data;
+                      List<String> imageList = [];
+
+                      for (var file in fileList!) {
+                        if (file.fileTypeCd == 'FLTP0001') {
+                          imageList.add(
+                              "http://dev.${file.loclPath.substring(11)}/${file.fileNm}");
+                        }
+                      }
+
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      }
+                      if (!snapshot.hasData) {
+                        return const Text('No data found');
+                      }
+
+                      return Column(children: [
+                        Column(
+                          children: [
+                            ...fileList.map((file) {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      padding: EdgeInsets.all(8.r),
+                                      margin: EdgeInsets.only(
+                                          bottom: 2.h, top: 10.h),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Palette.greyText.withOpacity(0.06),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 6.r),
+                                            child: Image.asset(
+                                                "assets/home/paper-clip-icon.png",
+                                                width: 13.w,
+                                                height: 13.h),
+                                          ),
+                                          Text(
+                                            fileList[0].fileNm,
+                                            style: CTS(
+                                              color: Palette.mainColor,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                            SizedBox(height: 20.h),
+                            ...imageList
+                                .map((url) => Image.network(url))
+                                .toList()
+                          ],
+                        )
+                      ]);
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  },
+                )
+              : Container(),
         ],
       ),
     );
