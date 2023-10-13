@@ -183,11 +183,17 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                                                 width: 13.w,
                                                 height: 13.h),
                                           ),
-                                          Text(
-                                            fileList[0].fileNm,
-                                            style: CTS(
-                                              color: Palette.mainColor,
-                                              fontSize: 12,
+                                          GestureDetector(
+                                            onTap: (() => {
+                                              print('${file.attcGrpId}${file.attcId}'),
+                                              ref.read(fileRepoProvider).downloadFile(file.attcGrpId, file.attcId)
+                                            }),
+                                            child: Text(
+                                              file.fileNm,
+                                              style: CTS(
+                                                color: Palette.mainColor,
+                                                fontSize: 12,
+                                              ),
                                             ),
                                           ),
                                         ],
