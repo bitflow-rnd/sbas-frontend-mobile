@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/notice/views/notice_header_widget.dart';
-import 'package:sbas/features/notice/views/notice_list_widget.dart';
+import 'package:sbas/features/notice/views/widgets/notice_header_widget.dart';
+import 'package:sbas/features/notice/views/widgets/notice_list_widget.dart';
 
 class PublicAlarmPage extends StatefulWidget {
   const PublicAlarmPage({super.key});

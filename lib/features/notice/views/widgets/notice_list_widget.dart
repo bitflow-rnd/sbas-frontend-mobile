@@ -5,9 +5,9 @@ import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/notice/blocs/notice_presenter.dart';
 import 'package:sbas/features/notice/models/notice_list_request_model.dart';
 
-import '../../../common/bitflow_theme.dart';
-import 'public_notice_detail_screen.dart';
-import '../models/notice_list_model.dart';
+import '../../../../common/bitflow_theme.dart';
+import '../public_notice_detail_screen.dart';
+import '../../models/notice_list_model.dart';
 
 class NoticeListWidget extends ConsumerWidget {
   NoticeListWidget({

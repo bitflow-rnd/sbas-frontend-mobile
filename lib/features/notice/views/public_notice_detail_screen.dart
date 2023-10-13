@@ -24,7 +24,6 @@ class PublicNoticeDetailPage extends ConsumerWidget {
         future: noticeDetail,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-
             final detail = snapshot.data;
 
             return Scaffold(
@@ -44,7 +43,7 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                           detail?.content ?? '',
                           detail?.noticeType ?? '',
                           startNoticeDt,
-                          true),
+                          detail?.attcGrpId != null),
                     ],
                   ),
                 ),
@@ -56,8 +55,8 @@ class PublicNoticeDetailPage extends ConsumerWidget {
         });
   }
 
-  Widget alertDetailCard(String title, String body, String type,
-      String datetime, bool hasFile) {
+  Widget alertDetailCard(
+      String title, String body, String type, String datetime, bool hasFile) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 18.h),
       child: Column(
@@ -71,7 +70,15 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Text(
-                  type,
+                  (() {
+                    if (type == 'B') {
+                      return '일반';
+                    } else if (type == 'N') {
+                      return '공지';
+                    } else {
+                      return 'NEWS';
+                    }
+                  })(),
                   style: CTS(
                     color: const Color(0xff676a7a),
                     fontSize: 13,
@@ -113,13 +120,14 @@ class PublicNoticeDetailPage extends ConsumerWidget {
               margin: EdgeInsets.symmetric(vertical: 16.h),
               color: Palette.greyText.withOpacity(0.2)),
           Text(
-            '내용을 출력합니다. 내용을 출력합니다. 내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.내용을 출력합니다.',
+            body,
             style: CTS(
               color: Palette.greyText_80,
               fontSize: 13,
               height: 1.6,
             ),
           ),
+          hasFile ?
           Row(
             children: [
               Expanded(
@@ -132,15 +140,11 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                   ),
                   child: Row(
                     children: [
-                      hasFile
-                          ? Padding(
-                              padding: EdgeInsets.only(right: 6.r),
-                              child: Image.asset(
-                                  "assets/home/paper-clip-icon.png",
-                                  width: 13.w,
-                                  height: 13.h),
-                            )
-                          : Container(),
+                      Padding(
+                        padding: EdgeInsets.only(right: 6.r),
+                        child: Image.asset("assets/home/paper-clip-icon.png",
+                            width: 13.w, height: 13.h),
+                      ),
                       Text(
                         "첨부파일명.확장자",
                         style: CTS(
@@ -153,41 +157,7 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                 ),
               ),
             ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 2.h),
-                  padding: EdgeInsets.all(8.r),
-                  decoration: BoxDecoration(
-                    color: Palette.greyText.withOpacity(0.06),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Row(
-                    children: [
-                      hasFile
-                          ? Padding(
-                              padding: EdgeInsets.only(right: 6.r),
-                              child: Image.asset(
-                                  "assets/home/paper-clip-icon.png",
-                                  width: 13.w,
-                                  height: 13.h),
-                            )
-                          : Container(),
-                      Text(
-                        "첨부파일명.확장자",
-                        style: CTS(
-                          color: Palette.mainColor,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+          ) : Container(),
           SizedBox(height: 20.h),
           Image.asset("assets/testImg.png"),
         ],
