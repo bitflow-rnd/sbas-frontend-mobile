@@ -85,7 +85,7 @@ class PublicAlarmPageState extends State<PublicAlarmPage> {
                 '수신된 알림이 없습니다.',
                 style: CTS.medium(
                   fontSize: 15,
-                  color: Color(0xff676a7a),
+                  color: const Color(0xff676a7a),
                 ),
               ),
               SizedBox(

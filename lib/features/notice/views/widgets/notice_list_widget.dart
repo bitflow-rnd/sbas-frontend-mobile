@@ -4,10 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/notice/blocs/notice_presenter.dart';
 import 'package:sbas/features/notice/models/notice_list_request_model.dart';
+import 'package:sbas/features/notice/models/read_notice_request_model.dart';
 
 import '../../../../common/bitflow_theme.dart';
+import '../../models/notice_model.dart';
 import '../public_notice_detail_screen.dart';
-import '../../models/notice_list_model.dart';
 
 class NoticeListWidget extends ConsumerWidget {
   NoticeListWidget({
@@ -29,57 +30,52 @@ class NoticeListWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String userId = ref.read(userDetailProvider.notifier).userId;
-    NoticeListRequestModel request = NoticeListRequestModel(
-        userId: userId,
-        isActive: true,
-        searchPeriod: getPeriodCode(searchPeriod));
+    return Consumer(
+      builder: (context, ref, child) {
+        String userId = ref.read(userDetailProvider.notifier).userId;
+        NoticeListRequestModel request = NoticeListRequestModel(
+          userId: userId,
+          isActive: true,
+          searchPeriod: getPeriodCode(searchPeriod),
+        );
 
-    final noticeList =
         ref.read(noticePresenter.notifier).getNoticeList(request);
 
-    return FutureBuilder(
-      future: noticeList,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-          if (!snapshot.hasData) {
-            return const Text('No data found');
-          }
+        final noticeList = ref.watch(noticeListProvider);
 
-          final notices = (snapshot.data as NoticeListModel).items;
-
-          List<Widget> noticeCards = notices.map((notice) {
-            return alertCard(
-              context,
-              notice.noticeId,
-              notice.title,
-              notice.content,
-              notice.noticeType,
-              notice.startNoticeDt,
-              notice.isRead,
-              notice.hasFile,
-            );
-          }).toList();
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 6.h),
-              ...noticeCards,
-            ],
-          );
-        } else {
+        if (noticeList == null) {
           return const CircularProgressIndicator();
         }
+
+        final notices = noticeList.items;
+
+        List<Widget> noticeCards = notices.map((notice) {
+          return alertCard(
+            context,
+            ref,
+            notice,
+            request,
+          );
+        }).toList();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 6.h),
+            ...noticeCards,
+          ],
+        );
       },
     );
+
   }
 
-  Widget alertCard(BuildContext context, String noticeId, String title,
-      String body, String type, String datetime, bool isRead, bool hasFile) {
+  Widget alertCard(
+    BuildContext context,
+    WidgetRef ref,
+    NoticeList notice,
+    NoticeListRequestModel listRequest,
+  ) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6.h),
       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -89,9 +85,15 @@ class NoticeListWidget extends ConsumerWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => PublicNoticeDetailPage(
-                        noticeId: noticeId,
-                        startNoticeDt: datetime,
+                        noticeId: notice.noticeId,
+                        startNoticeDt: notice.startNoticeDt,
                       )));
+          final userId = ref.read(userDetailProvider.notifier).userId;
+          final request =
+              ReadNoticeRequestModel(userId: userId, noticeId: notice.noticeId);
+          ref.read(noticePresenter.notifier).readNotice(request);
+
+          ref.read(noticePresenter.notifier).getNoticeList(listRequest);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
@@ -124,7 +126,7 @@ class NoticeListWidget extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            title,
+                            notice.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: CTS.bold(
@@ -137,7 +139,7 @@ class NoticeListWidget extends ConsumerWidget {
                     ),
                     SizedBox(height: 6.h),
                     Text(
-                      body,
+                      notice.content,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: CTS(
@@ -157,9 +159,9 @@ class NoticeListWidget extends ConsumerWidget {
                           ),
                           child: Text(
                             (() {
-                              if (type == 'B') {
+                              if (notice.noticeType == 'B') {
                                 return '일반';
-                              } else if (type == 'N') {
+                              } else if (notice.noticeType == 'N') {
                                 return '공지';
                               } else {
                                 return 'NEWS';
@@ -173,14 +175,14 @@ class NoticeListWidget extends ConsumerWidget {
                         ),
                         SizedBox(width: 8.w),
                         Text(
-                          datetime,
+                          notice.startNoticeDt,
                           style: CTS(
                             color: Colors.black,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        hasFile
+                        notice.hasFile
                             ? Padding(
                                 padding: EdgeInsets.only(left: 6.r),
                                 child: Image.asset(
@@ -191,7 +193,7 @@ class NoticeListWidget extends ConsumerWidget {
                             : Container(),
                         SizedBox(width: 8.w),
                         Text(
-                          isRead ? "" : "NEW",
+                          notice.isRead ? "" : "NEW",
                           style: CTS.medium(
                             color: const Color(0xff538ef5),
                             fontSize: 12,
