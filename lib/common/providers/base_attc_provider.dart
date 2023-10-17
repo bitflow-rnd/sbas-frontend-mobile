@@ -13,8 +13,9 @@ class BaseAttcProvider {
     }
   }
 
-  Future<dynamic> downloadFile(String attcGrpId, String attcId) async =>
-      await _api.getAsync('$_publicRoute/download/$attcGrpId/$attcId');
+  Future<void> downloadPublicImageFile(String attcGrpId, String attcId, String fileNm) async {
+    await _api.downloadPublicImageFile(attcGrpId, attcId, fileNm);
+  }
 
   final String _privateRoute = 'private/common';
   final String _publicRoute = 'public/common';

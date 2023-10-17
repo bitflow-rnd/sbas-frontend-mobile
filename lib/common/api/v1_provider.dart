@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sbas/util.dart';
+import 'package:http/http.dart' as http;
 
 class V1Provider {
   Future<dynamic> getAsync(String route) async {
@@ -44,9 +50,9 @@ class V1Provider {
         data: json,
       );
 
-      if (kDebugMode) {
-        showToast(res.data['message']);
-      }
+      // if (kDebugMode) {
+      //   showToast(res.data['message']);
+      // }
       if (res.statusCode == 200) {
         return res.data['result'];
       }
@@ -118,6 +124,35 @@ class V1Provider {
         print(e);
       }
     }
+  }
+
+  Future<void> downloadPublicImageFile(String attcGrpId, String attcId, String fileNm) async {
+    final url = '$_baseUrl/public/common/download/$attcGrpId/$attcId';
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final bytes = response.bodyBytes;
+      final contentDisposition = response.headers['content-disposition'];
+
+      final result = await ImageGallerySaver.saveImage(bytes);
+
+      if (result['isSuccess']) {
+        print('Image has been saved to gallery');
+      } else {
+        print('Failed to save image to gallery');
+      }
+    } else {
+      print('Error during file download: ${response.statusCode}');
+    }
+  }
+
+  String? _extractFileName(String? contentDisposition) {
+    if (contentDisposition == null) return null;
+    final match = RegExp(r'filename="(.+)"').firstMatch(contentDisposition);
+    if (match != null && match.groupCount >= 1) {
+      return match.group(1);
+    }
+    return null;
   }
 
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1';

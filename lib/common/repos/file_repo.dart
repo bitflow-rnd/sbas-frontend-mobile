@@ -7,8 +7,8 @@ class FileRepository {
   Future<List<BaseAttcModel>> getFileList(String attcGrpId) async =>
       await _fileProvider.getFileList(attcGrpId);
 
-  Future<dynamic> downloadFile(String attcGrpId, String attcId) async =>
-      await _fileProvider.downloadFile(attcGrpId, attcId);
+  Future<void> downloadPublicImageFile(String attcGrpId, String attcId, String fileNm) async =>
+      await _fileProvider.downloadPublicImageFile(attcGrpId, attcId, fileNm);
 
   final _fileProvider = BaseAttcProvider();
 }

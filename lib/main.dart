@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/observer_widget.dart';
 import 'package:sbas/firebase_options.dart';
@@ -75,6 +76,11 @@ Future main() async {
     provisional: false,
     sound: true,
   );
+
+  final storagePermission = await Permission.storage.status;
+  if (!storagePermission.isGranted) {
+    final result = await Permission.storage.request();
+  }
 
   // ios - 소리, 뱃지, 알림창 허용 여부
   initialzationSettingsIOS = const DarwinInitializationSettings(

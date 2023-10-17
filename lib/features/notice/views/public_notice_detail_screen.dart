@@ -146,7 +146,7 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                       for (var file in fileList!) {
                         if (file.fileTypeCd == 'FLTP0001') {
                           imageList.add(
-                              "http://dev.${file.loclPath.substring(11)}/${file.fileNm}");
+                              "http://${file.loclPath.substring(7)}/${file.fileNm}");
                         }
                       }
 
@@ -184,9 +184,8 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                                                 height: 13.h),
                                           ),
                                           GestureDetector(
-                                            onTap: (() => {
-                                              print('${file.attcGrpId}${file.attcId}'),
-                                              ref.read(fileRepoProvider).downloadFile(file.attcGrpId, file.attcId)
+                                            onTap: (() async => {
+                                              await ref.read(fileRepoProvider).downloadPublicImageFile(file.attcGrpId, file.attcId, file.fileNm)
                                             }),
                                             child: Text(
                                               file.fileNm,
