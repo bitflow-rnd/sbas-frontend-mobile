@@ -7,6 +7,8 @@ import 'package:sbas/common/repos/file_repo.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/notice/blocs/notice_presenter.dart';
 
+import '../../../constants/common.dart';
+
 class PublicNoticeDetailPage extends ConsumerWidget {
   const PublicNoticeDetailPage({
     super.key,
@@ -190,14 +192,44 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                                                   file.attcGrpId,
                                                   file.attcId,
                                                   file.fileNm,
-                                                ),
+                                                ).then((value) => Common.showModal(
+                                                  context,
+                                                  // ignore: use_build_context_synchronously
+                                                  Common.commonModal(
+                                                    context: context,
+                                                    imageWidget: Image.asset(
+                                                      "assets/auth_group/modal_check.png",
+                                                      width: 44.h,
+                                                    ),
+                                                    imageHeight: 44.h,
+                                                    mainText: "이미지파일 저장이 완료되었습니다.",
+                                                    button2Function: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                )),
                                               }else {
                                                 await ref.read(fileRepoProvider).downloadPublicFile(
                                                   file.attcGrpId,
                                                   file.attcId,
                                                   file.fileNm,
+                                                ).then((value) => Common.showModal(
+                                              context,
+                                              // ignore: use_build_context_synchronously
+                                              Common.commonModal(
+                                                context: context,
+                                                imageWidget: Image.asset(
+                                                  "assets/auth_group/modal_check.png",
+                                                  width: 44.h,
                                                 ),
-                                              }
+                                                imageHeight: 44.h,
+                                                mainText: "파일 저장이 완료되었습니다.",
+                                                button2Function: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            )
+                                                )}
                                             }),
                                             child: Text(
                                               file.fileNm,
