@@ -185,7 +185,19 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                                           ),
                                           GestureDetector(
                                             onTap: (() async => {
-                                              await ref.read(fileRepoProvider).downloadPublicImageFile(file.attcGrpId, file.attcId, file.fileNm)
+                                              if (file.fileTypeCd == 'FLTP0001' || file.fileTypeCd == 'FLTP0002') {
+                                                await ref.read(fileRepoProvider).downloadPublicImageFile(
+                                                  file.attcGrpId,
+                                                  file.attcId,
+                                                  file.fileNm,
+                                                ),
+                                              }else {
+                                                await ref.read(fileRepoProvider).downloadPublicFile(
+                                                  file.attcGrpId,
+                                                  file.attcId,
+                                                  file.fileNm,
+                                                ),
+                                              }
                                             }),
                                             child: Text(
                                               file.fileNm,

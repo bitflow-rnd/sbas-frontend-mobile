@@ -10,6 +10,9 @@ class FileRepository {
   Future<void> downloadPublicImageFile(String attcGrpId, String attcId, String fileNm) async =>
       await _fileProvider.downloadPublicImageFile(attcGrpId, attcId, fileNm);
 
+  Future<void> downloadPublicFile(String attcGrpId, String attcId, String fileNm) async =>
+      await _fileProvider.downloadPublicFile(attcGrpId, attcId, fileNm);
+
   final _fileProvider = BaseAttcProvider();
 }
 

@@ -17,6 +17,10 @@ class BaseAttcProvider {
     await _api.downloadPublicImageFile(attcGrpId, attcId, fileNm);
   }
 
+  Future<void> downloadPublicFile(String attcGrpId, String attcId, String fileNm) async {
+    await _api.downloadPublicFile(attcGrpId, attcId, fileNm);
+  }
+
   final String _privateRoute = 'private/common';
   final String _publicRoute = 'public/common';
 
