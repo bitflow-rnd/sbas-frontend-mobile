@@ -131,13 +131,7 @@ class V1Provider {
       final bytes = response.bodyBytes;
       response.headers['content-disposition'];
 
-      final result = await ImageGallerySaver.saveImage(bytes);
-
-      if (result['isSuccess']) {
-        showToast('Image has been saved to gallery');
-      } else {
-        showToast('Failed to save image to gallery');
-      }
+      await ImageGallerySaver.saveImage(bytes);
     } else {
       showToast('Error during file download: ${response.statusCode}');
     }
@@ -159,8 +153,6 @@ class V1Provider {
       final file = File(filePath);
 
       await file.writeAsBytes(response.data);
-
-      showToast('File downloaded and saved to $filePath');
     } catch (e) {
       showToast('Error downloading file: $e');
     }
