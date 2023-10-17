@@ -55,5 +55,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Save images to the gallery</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Access the photo gallery</string>
 </dict>
 </plist>
