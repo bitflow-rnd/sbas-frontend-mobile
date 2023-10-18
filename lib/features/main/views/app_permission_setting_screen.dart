@@ -12,12 +12,14 @@ class AppPermissionSettingPage extends StatefulWidget {
 
 class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
   bool storagePermissionEnabled = false;
+  bool cameraPermissionEnabled = false;
 
   @override
   void initState() {
     super.initState();
 
     checkStoragePermissionStatus();
+    checkCameraPermissionStatus();
   }
 
   Future<void> checkStoragePermissionStatus() async {
@@ -27,10 +29,24 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
     });
   }
 
+  Future<void> checkCameraPermissionStatus() async {
+    final status = await Permission.camera.status;
+    setState(() {
+      cameraPermissionEnabled = status.isGranted;
+    });
+  }
+
   Future<void> requestStoragePermission() async {
     final status = await Permission.storage.request();
     setState(() {
       storagePermissionEnabled = status.isGranted;
+    });
+  }
+
+  Future<void> requestCameraPermission() async {
+    final status = await Permission.camera.request();
+    setState(() {
+      cameraPermissionEnabled = status.isGranted;
     });
   }
 
@@ -101,7 +117,7 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                         ),
                         const Spacer(),
                         AnimatedSwitcher(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           child: Switch(
                             key: ValueKey<bool>(storagePermissionEnabled),
                             value: storagePermissionEnabled,
@@ -129,7 +145,7 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '저장소 접근',
+                              '카메라 접근',
                               style: CTS.medium(
                                 color: Colors.black,
                                 fontSize: 14,
@@ -137,7 +153,7 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                             ),
                             SizedBox(height: 6.h),
                             Text(
-                              '허용',
+                              cameraPermissionEnabled ? '허용' : '거부',
                               style: CTS(
                                 color: Palette.mainColor,
                                 fontSize: 12,
@@ -148,11 +164,22 @@ class _AppPermissionSettingPageState extends State<AppPermissionSettingPage> {
                         ),
                         const Spacer(),
                         AnimatedSwitcher(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           child: Switch(
-                            key: ValueKey<bool>(true),
-                            value: true,
-                            onChanged: (value) {},
+                            key: ValueKey<bool>(cameraPermissionEnabled),
+                            value: cameraPermissionEnabled,
+                            onChanged: (value) async {
+                              if(value) {
+                                final status = await Permission.camera.request();
+                                setState(() {
+                                  cameraPermissionEnabled = status.isGranted;
+                                });
+                              }else {
+                                setState(() {
+                                  cameraPermissionEnabled = false;
+                                });
+                              }
+                            },
                             activeColor: Palette.mainColor,
                           ),
                         ),
