@@ -79,7 +79,11 @@ Future main() async {
 
   final storagePermission = await Permission.storage.status;
   if (!storagePermission.isGranted) {
-    final result = await Permission.storage.request();
+    await Permission.storage.request();
+  }
+  final cameraPermission = await Permission.camera.status;
+  if (!cameraPermission.isGranted) {
+    await Permission.camera.request();
   }
 
   // ios - 소리, 뱃지, 알림창 허용 여부
