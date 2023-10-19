@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/main/blocs/terms_presenter.dart';
 
-class ServicePolicyScreen extends StatefulWidget {
+import 'body_widget.dart';
+
+class ServicePolicyScreen extends ConsumerWidget {
   const ServicePolicyScreen({super.key});
 
   @override
-  State<ServicePolicyScreen> createState() => _ServicePolicyScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.read(termsPresenter.notifier).getTermsList('02');
 
-class _ServicePolicyScreenState extends State<ServicePolicyScreen> {
-  List<String> dropdownList = ['시행일 2023.03.31', '222222', '333333'];
-  String selectedDropdown = '시행일 2023.03.31';
-  @override
-  Widget build(BuildContext context) {
+    final dropdownList = ref.read(termsPresenter.notifier).getDropdownList();
+    var selectedDropdown = 0;
+
+    final termsDetail = ref.watch(termsDetailProvider);
+    final detail = termsDetail?.detail;
+
     return Scaffold(
       backgroundColor: Palette.white,
       appBar: Bitflow.getAppBar(
@@ -42,33 +47,50 @@ class _ServicePolicyScreenState extends State<ServicePolicyScreen> {
                             vertical: 12.h,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Palette.greyText_30, width: 1),
+                            borderSide: BorderSide(
+                              color: Palette.greyText_30,
+                              width: 1,
+                            ),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Palette.greyText_30, width: 1),
+                            borderSide: BorderSide(
+                              color: Palette.greyText_30,
+                              width: 1,
+                            ),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Palette.greyText_30, width: 1),
+                            borderSide: BorderSide(
+                              color: Palette.greyText_30,
+                              width: 1,
+                            ),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                         ),
                         isExpanded: true,
                         value: selectedDropdown,
-                        items: dropdownList.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
+                        items: dropdownList.asMap().entries.map((entry) {
+                          return DropdownMenuItem<int>(
+                            value: entry.key,
                             child: Text(
-                              item,
-                              style: CTS(fontSize: 13, color: Palette.black),
+                              entry.value,
+                              style: CTS(
+                                fontSize: 13,
+                                color: Palette.black,
+                              ),
                             ),
                           );
                         }).toList(),
-                        onChanged: (dynamic value) {
-                          setState(() {
-                            selectedDropdown = value;
-                          });
+                        onChanged: (int? value) {
+                          if(value != null) {
+                            final item = ref.read(termsListProvider)?[value];
+
+                            if(item != null) {
+                              ref.read(termsPresenter.notifier).getTermsDetail(
+                                  item.id.termsType, item.id.termsVersion);
+                            }
+                          }
                         },
                       ),
                     ),
@@ -77,65 +99,12 @@ class _ServicePolicyScreenState extends State<ServicePolicyScreen> {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                    ],
-                  ),
+                  child: body(detail ?? ''),
                 ),
               )
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget header(String title) {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 20.w,
-        vertical: 12.h,
-      ),
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: CTS.bold(fontSize: 14, color: Palette.black),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget body(String content) {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 20.w,
-      ),
-      child: Text(
-        content,
-        maxLines: 9999,
-        style: CTS(fontSize: 12, color: Palette.greyText_80),
       ),
     );
   }
