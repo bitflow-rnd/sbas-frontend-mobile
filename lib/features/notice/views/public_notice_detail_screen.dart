@@ -5,6 +5,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_attc_model.dart';
 import 'package:sbas/common/repos/file_repo.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/notice/blocs/notice_presenter.dart';
 
 import '../../../constants/common.dart';
@@ -64,6 +65,8 @@ class PublicNoticeDetailPage extends ConsumerWidget {
       String datetime, String attcGrpId) {
     final hasFile = attcGrpId != '';
     Future<List<BaseAttcModel>>? fileList;
+    final typeNm = ref.read(userRegReqProvider).getBaseCodeNm(type);
+
     if (hasFile) {
       fileList = ref.read(fileRepoProvider).getFileList(attcGrpId);
     }
@@ -79,20 +82,28 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                   color: const Color(0xff676a7a).withOpacity(0.12),
                   borderRadius: BorderRadius.circular(4.r),
                 ),
-                child: Text(
-                  (() {
-                    if (type == 'B') {
-                      return '일반';
-                    } else if (type == 'N') {
-                      return '공지';
+                child: FutureBuilder(
+                  future: typeNm,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      final typeName = snapshot.data;
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      }
+                      if (!snapshot.hasData) {
+                        return const Text('No data found');
+                      }
+                      return Text(
+                        typeName!,
+                        style: CTS(
+                          color: const Color(0xff676a7a),
+                          fontSize: 13,
+                        ),
+                      );
                     } else {
-                      return 'NEWS';
+                      return const CircularProgressIndicator();
                     }
-                  })(),
-                  style: CTS(
-                    color: const Color(0xff676a7a),
-                    fontSize: 13,
-                  ),
+                  },
                 ),
               ),
               SizedBox(width: 8.w),
@@ -187,50 +198,82 @@ class PublicNoticeDetailPage extends ConsumerWidget {
                                           ),
                                           GestureDetector(
                                             onTap: (() async => {
-                                              if (file.fileTypeCd == 'FLTP0001' || file.fileTypeCd == 'FLTP0002') {
-                                                await ref.read(fileRepoProvider).downloadPublicImageFile(
-                                                  file.attcGrpId,
-                                                  file.attcId,
-                                                  file.fileNm,
-                                                ).then((value) => Common.showModal(
-                                                  context,
-                                                  // ignore: use_build_context_synchronously
-                                                  Common.commonModal(
-                                                    context: context,
-                                                    imageWidget: Image.asset(
-                                                      "assets/auth_group/modal_check.png",
-                                                      width: 44.h,
-                                                    ),
-                                                    imageHeight: 44.h,
-                                                    mainText: "이미지파일 저장이 완료되었습니다.",
-                                                    button2Function: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                )),
-                                              }else {
-                                                await ref.read(fileRepoProvider).downloadPublicFile(
-                                                  file.attcGrpId,
-                                                  file.attcId,
-                                                  file.fileNm,
-                                                ).then((value) => Common.showModal(
-                                              context,
-                                              // ignore: use_build_context_synchronously
-                                              Common.commonModal(
-                                                context: context,
-                                                imageWidget: Image.asset(
-                                                  "assets/auth_group/modal_check.png",
-                                                  width: 44.h,
-                                                ),
-                                                imageHeight: 44.h,
-                                                mainText: "파일 저장이 완료되었습니다.",
-                                                button2Function: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                            )
-                                                )}
-                                            }),
+                                                  if (file.fileTypeCd ==
+                                                          'FLTP0001' ||
+                                                      file.fileTypeCd ==
+                                                          'FLTP0002')
+                                                    {
+                                                      await ref
+                                                          .read(
+                                                              fileRepoProvider)
+                                                          .downloadPublicImageFile(
+                                                            file.attcGrpId,
+                                                            file.attcId,
+                                                            file.fileNm,
+                                                          )
+                                                          .then((value) =>
+                                                              Common.showModal(
+                                                                context,
+                                                                // ignore: use_build_context_synchronously
+                                                                Common
+                                                                    .commonModal(
+                                                                  context:
+                                                                      context,
+                                                                  imageWidget:
+                                                                      Image
+                                                                          .asset(
+                                                                    "assets/auth_group/modal_check.png",
+                                                                    width: 44.h,
+                                                                  ),
+                                                                  imageHeight:
+                                                                      44.h,
+                                                                  mainText:
+                                                                      "이미지파일 저장이 완료되었습니다.",
+                                                                  button2Function:
+                                                                      () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                              )),
+                                                    }
+                                                  else
+                                                    {
+                                                      await ref
+                                                          .read(
+                                                              fileRepoProvider)
+                                                          .downloadPublicFile(
+                                                            file.attcGrpId,
+                                                            file.attcId,
+                                                            file.fileNm,
+                                                          )
+                                                          .then((value) =>
+                                                              Common.showModal(
+                                                                context,
+                                                                // ignore: use_build_context_synchronously
+                                                                Common
+                                                                    .commonModal(
+                                                                  context:
+                                                                      context,
+                                                                  imageWidget:
+                                                                      Image
+                                                                          .asset(
+                                                                    "assets/auth_group/modal_check.png",
+                                                                    width: 44.h,
+                                                                  ),
+                                                                  imageHeight:
+                                                                      44.h,
+                                                                  mainText:
+                                                                      "파일 저장이 완료되었습니다.",
+                                                                  button2Function:
+                                                                      () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                              ))
+                                                    }
+                                                }),
                                             child: Text(
                                               file.fileNm,
                                               style: CTS(

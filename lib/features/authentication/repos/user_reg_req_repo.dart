@@ -33,6 +33,7 @@ class UserRegRequestRepository {
   }
 
   Future<List<BaseCodeModel>> getBaseCode(String route) async => await _baseCodeProvider.getBaseCode(route);
+  Future<String> getBaseCodeNm(String route) async => await _baseCodeProvider.getBaseCodeNm(route);
 
   Future<List<InfoInstModel>> getPublicHealthCenter(
     String dstrCd1,

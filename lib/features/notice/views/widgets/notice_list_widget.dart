@@ -159,9 +159,9 @@ class NoticeListWidget extends ConsumerWidget {
                           ),
                           child: Text(
                             (() {
-                              if (notice.noticeType == 'B') {
+                              if (notice.noticeType == 'NOTC0001') {
                                 return '일반';
-                              } else if (notice.noticeType == 'N') {
+                              } else if (notice.noticeType == 'NOTC0002') {
                                 return '공지';
                               } else {
                                 return 'NEWS';

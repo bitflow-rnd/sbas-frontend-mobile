@@ -34,6 +34,28 @@ class BaseCodeProvider {
     throw ArgumentError();
   }
 
+  Future<String> getBaseCodeNm(String route) async {
+    final client = RetryClient(Client());
+
+    try {
+      final res = await client.get(
+        Uri.parse('$_baseUrl/code/$route'),
+      );
+      if (res.statusCode == 200) {
+        return fromJson(res.body)['result'];
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
   Future<String> uploadImage(dio.MultipartFile file) async {
     final client = dio.Dio();
 
