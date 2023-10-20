@@ -1,18 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 
-class UserDataHandlingPolicyPage extends StatefulWidget {
+import '../blocs/terms_presenter.dart';
+
+class UserDataHandlingPolicyPage extends ConsumerStatefulWidget {
   const UserDataHandlingPolicyPage({super.key});
 
   @override
-  State<UserDataHandlingPolicyPage> createState() => _UserDataHandlingPolicyPageState();
+  ConsumerState<UserDataHandlingPolicyPage> createState() =>
+      _UserDataHandlingPolicyPageState();
 }
 
-class _UserDataHandlingPolicyPageState extends State<UserDataHandlingPolicyPage> {
-  List<String> dropdownList = ['시행일 2023.03.31', '222222', '333333'];
-  String selectedDropdown = '시행일 2023.03.31';
+class _UserDataHandlingPolicyPageState
+    extends ConsumerState<UserDataHandlingPolicyPage> {
+  List<String> dropdownList = [];
+  List<String> versionList = [];
+  int selectedDropdown = 0;
+  String detail = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadData(selectedDropdown);
+  }
+
+  Future<void> _loadData(int selectedIndex) async {
+    final termsList =
+        await ref.read(termsPresenter.notifier).getTermsList('03');
+
+    dropdownList.clear();
+    versionList.clear();
+    for (var terms in termsList) {
+      final effectiveDt = terms.id.effectiveDt;
+      final formattedDt =
+          '시행일 ${effectiveDt.substring(0, 4)}.${effectiveDt.substring(4, 6)}.${effectiveDt.substring(6)}';
+      dropdownList.add(formattedDt);
+      versionList.add(terms.id.termsVersion);
+    }
+
+    final termsDetail = await ref
+        .read(termsPresenter.notifier)
+        .getTermsDetail('03', versionList[selectedIndex]);
+
+    setState(() {
+      detail = termsDetail.detail;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,33 +80,39 @@ class _UserDataHandlingPolicyPageState extends State<UserDataHandlingPolicyPage>
                             vertical: 12.h,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Palette.greyText_30, width: 1),
+                            borderSide: BorderSide(
+                                color: Palette.greyText_30, width: 1),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Palette.greyText_30, width: 1),
+                            borderSide: BorderSide(
+                                color: Palette.greyText_30, width: 1),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Palette.greyText_30, width: 1),
+                            borderSide: BorderSide(
+                                color: Palette.greyText_30, width: 1),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                         ),
                         isExpanded: true,
                         value: selectedDropdown,
-                        items: dropdownList.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
+                        items: dropdownList.asMap().entries.map((entry) {
+                          return DropdownMenuItem<int>(
+                            value: entry.key,
                             child: Text(
-                              item,
-                              style: CTS(fontSize: 13, color: Palette.black),
+                              entry.value,
+                              style: CTS(
+                                fontSize: 13,
+                                color: Palette.black,
+                              ),
                             ),
                           );
                         }).toList(),
-                        onChanged: (dynamic value) {
-                          setState(() {
-                            selectedDropdown = value;
-                          });
+                        onChanged: (int? value) async {
+                          if (value != null) {
+                            await _loadData(value);
+                          }
                         },
                       ),
                     ),
@@ -77,32 +121,9 @@ class _UserDataHandlingPolicyPageState extends State<UserDataHandlingPolicyPage>
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                      header("제1조 (목적)"),
-                      body("내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다내용을 출력합니다"),
-                    ],
-                  ),
+                  child: body(detail ?? ''),
                 ),
-              )
+              ),
             ],
           ),
         ),

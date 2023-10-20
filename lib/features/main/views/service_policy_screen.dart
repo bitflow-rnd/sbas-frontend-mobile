@@ -7,18 +7,50 @@ import 'package:sbas/features/main/blocs/terms_presenter.dart';
 
 import 'body_widget.dart';
 
-class ServicePolicyScreen extends ConsumerWidget {
+class ServicePolicyScreen extends ConsumerStatefulWidget {
   const ServicePolicyScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(termsPresenter.notifier).getTermsList('02');
+  ConsumerState<ConsumerStatefulWidget> createState() => _ServicePolicyScreenState();
 
-    final dropdownList = ref.read(termsPresenter.notifier).getDropdownList();
-    var selectedDropdown = 0;
+}
 
-    final termsDetail = ref.watch(termsDetailProvider);
-    final detail = termsDetail?.detail;
+class _ServicePolicyScreenState extends ConsumerState<ServicePolicyScreen> {
+
+  List<String> dropdownList = [];
+  List<String> versionList = [];
+  int selectedDropdown = 0;
+  String detail = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadData(selectedDropdown);
+  }
+
+  Future<void> _loadData(int selectedIndex) async {
+    final termsList = await ref.read(termsPresenter.notifier).getTermsList('02');
+
+    dropdownList.clear();
+    versionList.clear();
+    for (var terms in termsList) {
+      final effectiveDt = terms.id.effectiveDt;
+      final formattedDt =
+          '시행일 ${effectiveDt.substring(0, 4)}.${effectiveDt.substring(4, 6)}.${effectiveDt.substring(6)}';
+      dropdownList.add(formattedDt);
+      versionList.add(terms.id.termsVersion);
+    }
+
+    final termsDetail = await ref.read(termsPresenter.notifier).getTermsDetail('02', versionList[selectedIndex]);
+
+    setState(() {
+      detail = termsDetail.detail;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
 
     return Scaffold(
       backgroundColor: Palette.white,
@@ -82,14 +114,9 @@ class ServicePolicyScreen extends ConsumerWidget {
                             ),
                           );
                         }).toList(),
-                        onChanged: (int? value) {
+                        onChanged: (int? value) async {
                           if(value != null) {
-                            final item = ref.read(termsListProvider)?[value];
-
-                            if(item != null) {
-                              ref.read(termsPresenter.notifier).getTermsDetail(
-                                  item.id.termsType, item.id.termsVersion);
-                            }
+                            await _loadData(value);
                           }
                         },
                       ),
