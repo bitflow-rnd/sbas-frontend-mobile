@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:sbas/common/api/v1_provider.dart';
 import 'package:sbas/features/authentication/models/auth_token_model.dart';
 import 'package:sbas/features/authentication/models/jwt_model.dart';
 import 'package:sbas/features/authentication/models/user_model.dart';
 import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
 import 'package:sbas/features/authentication/providers/login_provider.dart';
-import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/util.dart';
 
 class LoginRepo {
@@ -15,21 +15,16 @@ class LoginRepo {
     final token = prefs.getString('auth_token');
 
     if (token != null && token.isNotEmpty) {
-      final map = await _auth.getUser(token);
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
 
-      if (map != null) {
-        final jwt = JwtModel.fromJson(map);
-        final name = jwt.token?.name ?? '';
-        final userNm = jwt.token?.subject ?? '';
+      final name = decodedToken['upn'];
+      final userNm = decodedToken['userNm'];
+      userToken.name = name;
 
-        if (jwt.token != null) {
-          userToken = jwt.token!;
-        }
-        if (name.isNotEmpty) {
-          // TalkRoomsProvider().connect(name);
-          await prefs.setString('userNm', userNm);
-          return await prefs.setString('id', name);
-        }
+      if (name.isNotEmpty) {
+        // TalkRoomsProvider().connect(name);
+        await prefs.setString('userNm', userNm);
+        return await prefs.setString('id', name);
       }
     }
     return false;
