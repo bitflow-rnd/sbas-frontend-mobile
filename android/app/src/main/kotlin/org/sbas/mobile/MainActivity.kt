@@ -1,4 +1,4 @@
-package com.bitflow.sbas
+package org.sbas.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

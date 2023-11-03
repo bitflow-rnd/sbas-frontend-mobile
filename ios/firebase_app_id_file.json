@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:707204306778:ios:0c6645a9ff684baa534563",
-  "FIREBASE_PROJECT_ID": "sbas-4c928",
-  "GCM_SENDER_ID": "707204306778"
+  "GOOGLE_APP_ID": "1:1081633279552:ios:e8f63bb4a10caedbda99a5",
+  "FIREBASE_PROJECT_ID": "smart-bed-allocation-system",
+  "GCM_SENDER_ID": "1081633279552"
 }

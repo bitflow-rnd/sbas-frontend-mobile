@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,41 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA69tw1Jta1HD50F__fIoxMvHRzv_MOTmU',
-    appId: '1:707204306778:web:6ee88d10fd6c2e0d534563',
-    messagingSenderId: '707204306778',
-    projectId: 'sbas-4c928',
-    authDomain: 'sbas-4c928.firebaseapp.com',
-    storageBucket: 'sbas-4c928.appspot.com',
-    measurementId: 'G-51MFEGX041',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCkNyWnVzB1Hi19QXvgQ9dPZ6mhlGCXRhE',
-    appId: '1:707204306778:android:6762d9e9ce793101534563',
-    messagingSenderId: '707204306778',
-    projectId: 'sbas-4c928',
-    storageBucket: 'sbas-4c928.appspot.com',
+    apiKey: 'AIzaSyBWZWUDLW-UnxdL4QHxLWHK_i3phoN-Dfk',
+    appId: '1:1081633279552:android:a8d8d8df82ba7455da99a5',
+    messagingSenderId: '1081633279552',
+    projectId: 'smart-bed-allocation-system',
+    storageBucket: 'smart-bed-allocation-system.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC5fhMYe7hBOhGlo6YcpSaYL9--FJR1UQY',
-    appId: '1:707204306778:ios:0c6645a9ff684baa534563',
-    messagingSenderId: '707204306778',
-    projectId: 'sbas-4c928',
-    storageBucket: 'sbas-4c928.appspot.com',
-    iosClientId: '707204306778-7siio03q1m1g78beu8aek2aotrn19fp4.apps.googleusercontent.com',
-    iosBundleId: 'com.example.sbas',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC5fhMYe7hBOhGlo6YcpSaYL9--FJR1UQY',
-    appId: '1:707204306778:ios:0c6645a9ff684baa534563',
-    messagingSenderId: '707204306778',
-    projectId: 'sbas-4c928',
-    storageBucket: 'sbas-4c928.appspot.com',
-    iosClientId: '707204306778-7siio03q1m1g78beu8aek2aotrn19fp4.apps.googleusercontent.com',
-    iosBundleId: 'com.example.sbas',
+    apiKey: 'AIzaSyBysKwKzFBkp4jOhL9lokqwQWbcQsUFRq4',
+    appId: '1:1081633279552:ios:e8f63bb4a10caedbda99a5',
+    messagingSenderId: '1081633279552',
+    projectId: 'smart-bed-allocation-system',
+    storageBucket: 'smart-bed-allocation-system.appspot.com',
+    iosBundleId: 'org.sbas.mobile',
   );
 }

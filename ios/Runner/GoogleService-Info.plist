@@ -2,22 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>707204306778-7siio03q1m1g78beu8aek2aotrn19fp4.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.707204306778-7siio03q1m1g78beu8aek2aotrn19fp4</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC5fhMYe7hBOhGlo6YcpSaYL9--FJR1UQY</string>
+	<string>AIzaSyBysKwKzFBkp4jOhL9lokqwQWbcQsUFRq4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>707204306778</string>
+	<string>1081633279552</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.sbas</string>
+	<string>org.sbas.mobile</string>
 	<key>PROJECT_ID</key>
-	<string>sbas-4c928</string>
+	<string>smart-bed-allocation-system</string>
 	<key>STORAGE_BUCKET</key>
-	<string>sbas-4c928.appspot.com</string>
+	<string>smart-bed-allocation-system.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:707204306778:ios:0c6645a9ff684baa534563</string>
+	<string>1:1081633279552:ios:e8f63bb4a10caedbda99a5</string>
 </dict>
 </plist>

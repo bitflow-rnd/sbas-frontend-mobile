@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "707204306778",
-    "project_id": "sbas-4c928",
-    "storage_bucket": "sbas-4c928.appspot.com"
+    "project_number": "1081633279552",
+    "project_id": "smart-bed-allocation-system",
+    "storage_bucket": "smart-bed-allocation-system.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:707204306778:android:6762d9e9ce793101534563",
+        "mobilesdk_app_id": "1:1081633279552:android:a8d8d8df82ba7455da99a5",
         "android_client_info": {
-          "package_name": "com.bitflow.sbas"
+          "package_name": "org.sbas.mobile"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "707204306778-v08g6l6pq7atnqf20lt8ls322s3f6r91.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCkNyWnVzB1Hi19QXvgQ9dPZ6mhlGCXRhE"
+          "current_key": "AIzaSyBWZWUDLW-UnxdL4QHxLWHK_i3phoN-Dfk"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "707204306778-v08g6l6pq7atnqf20lt8ls322s3f6r91.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
