@@ -117,31 +117,53 @@ class AsgnCardItem extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    model.chrgInstNm != null && model.chrgInstNm != '' ? Gaps.v4 : Container(),
-                    model.chrgInstNm == null || model.chrgInstNm == ''
-                        ? Container()
-                        : Text(
-                            model.chrgInstNm ?? '',
-                            style: CTS.medium(color: Palette.black, fontSize: 11.sp),
-                            maxLines: 1,
-                          ),
-                    if (model.diagNm != null && model.diagNm != '') Gaps.v4,
-                    if (model.diagNm != null && model.diagNm != '')
-                      Text(
-                        model.diagNm ?? '',
-                        style: CTS(color: Colors.grey, fontSize: 11.sp),
-                        maxLines: 1,
+                    SizedBox(
+                      width: (MediaQuery.of(context).size.width / 2).w,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (model.chrgInstNm != null && model.chrgInstNm != '')
+                            Column(
+                              children: [
+                                Gaps.v4,
+                                Text(
+                                  model.chrgInstNm ?? '',
+                                  style: CTS.medium(
+                                      color: Palette.black, fontSize: 11.sp),
+                                  maxLines: 1,
+                                ),
+                              ],
+                            ),
+                          if (model.diagNm != null && model.diagNm != '')
+                            Column(children: [
+                              Gaps.v4,
+                              Text(
+                                model.diagNm ?? '',
+                                style: CTS(color: Colors.grey, fontSize: 11.sp),
+                                maxLines: 1,
+                              ),
+                            ]),
+                          if (model.bascAddr != null && model.bascAddr != '')
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Column(
+                                children: [
+                                  Gaps.v4,
+                                  Text(
+                                    model.bascAddr ?? '',
+                                    style: CTS(
+                                      fontSize: 11.sp,
+                                      color: Colors.grey,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade,
+                                  ),
+                                ],
+                              ),
+                            )
+                        ],
                       ),
-                    if (model.bascAddr != null && model.bascAddr != '') Gaps.v4,
-                    if (model.bascAddr != null && model.bascAddr != '')
-                      Text(
-                        model.bascAddr ?? '',
-                        style: CTS(
-                          fontSize: 11.sp,
-                          color: Colors.grey,
-                        ),
-                        maxLines: 1,
-                      ),
+                    ),
                     Container(
                       height: 32.h,
                       width: (MediaQuery.of(context).size.width / 2).w,
