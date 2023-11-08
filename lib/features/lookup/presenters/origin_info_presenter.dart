@@ -196,9 +196,6 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
     if (_dprtInfo.dprtDstrBascAddr == null || _dprtInfo.dprtDstrBascAddr!.isEmpty) {
       return false;
     }
-    if (_dprtInfo.dprtDstrDetlAddr == null || _dprtInfo.dprtDstrDetlAddr!.isEmpty) {
-      return false;
-    }
     if (_dprtInfo.dprtDstrTypeCd == null || _dprtInfo.dprtDstrTypeCd == "") {
       return false;
     }
