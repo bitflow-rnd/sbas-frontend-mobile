@@ -429,12 +429,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         }
         break;
 
-      case 2:
-        if (value == null || value.isEmpty) {
-          return '주소를 정확히 입력하세요.';
-        }
-        break;
-
       case 5:
         if (value == null || value.length != 11) {
           return '전화번호를 정확히 입력하세요.';

@@ -130,7 +130,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
       case 1005:
         return _dprtInfo.chrgTelno;
     }
-    return '';
+    return null;
   }
 
   String? getHintText(int index) {
@@ -174,7 +174,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
 
       case 105:
       //메시지
-      case 1007:
+      case 1006:
         _dprtInfo.msg = text;
         break;
 

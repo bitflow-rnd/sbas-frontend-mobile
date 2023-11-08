@@ -97,11 +97,11 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                                       )
                                     ],
                                   ),
-                                  Text(
-                                    "안내문구 노출 영역",
-                                    style: CTS(color: Palette.red, fontSize: 11),
-                                    textAlign: TextAlign.start,
-                                  ),
+                                  // Text(
+                                  //   "안내문구 노출 영역",
+                                  //   style: CTS(color: Palette.red, fontSize: 11),
+                                  //   textAlign: TextAlign.start,
+                                  // ),
                                   if (_selectedOriginIndex == 1) //병원 출발기준
                                     Column(
                                       children: [
@@ -411,6 +411,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
 
   Widget _initTextField(int index, bool isSingleLine) {
     final notifier = ref.watch(originInfoProvider.notifier);
+    final TextEditingController textController = TextEditingController(text: notifier.getText(index));
 
     return TextFormField(
       style: CTS.regular(fontSize: 13.sp),
@@ -458,17 +459,17 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
           ),
         if (isSingleLine) FilteringTextInputFormatter.singleLineFormatter,
       ],
-      validator: (value) {
-        return null;
-      },
+      // validator: (value) {
+      //   return null;
+      // },
       onChanged: (value) => notifier.onChanged(index, value),
       autovalidateMode: AutovalidateMode.always,
       maxLines: isSingleLine ? 1 : null,
       keyboardType: isSingleLine ? TextInputType.streetAddress : TextInputType.multiline,
       textInputAction: isSingleLine ? null : TextInputAction.newline,
-      controller: TextEditingController(
-        text: notifier.getText(index),
-      ),
+      controller: textController
+        ..selection = TextSelection.fromPosition(
+            TextPosition(offset: textController.text.length)),
       readOnly: index == 0,
     );
   }
