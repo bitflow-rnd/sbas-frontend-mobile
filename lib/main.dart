@@ -86,7 +86,7 @@ Future main() async {
     await Permission.camera.request();
   }
 
-  // ios - 소리, 뱃지, 알림창 허용 여부
+  // ios - 소리, 뱃지, 알림창 허용 여부.
   initialzationSettingsIOS = const DarwinInitializationSettings(
     requestSoundPermission: true,
     requestBadgePermission: true,
