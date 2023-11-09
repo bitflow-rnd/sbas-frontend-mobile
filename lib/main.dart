@@ -16,7 +16,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async => onReceiveCloudMessage(message);
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async =>
+    onReceiveCloudMessage(message);
 final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 const AndroidNotificationChannel _channel = AndroidNotificationChannel(
@@ -62,9 +63,13 @@ Future main() async {
     badge: true,
     sound: true,
   );
-  await _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(_channel);
+  await _flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(_channel);
   // android 초기화
-  initialzationSettingsAndroid = const AndroidInitializationSettings('@mipmap/launcher_icon');
+  initialzationSettingsAndroid =
+      const AndroidInitializationSettings('@mipmap/launcher_icon');
 
   final FirebaseMessaging fbMessaging = FirebaseMessaging.instance;
   await fbMessaging.requestPermission(
@@ -93,8 +98,11 @@ Future main() async {
     requestAlertPermission: true,
   );
   await _flutterLocalNotificationsPlugin.initialize(
-    const InitializationSettings(android: AndroidInitializationSettings('@mipmap/launcher_icon'), iOS: DarwinInitializationSettings()),
-    onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {
+    const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/launcher_icon'),
+        iOS: DarwinInitializationSettings()),
+    onDidReceiveNotificationResponse:
+        (NotificationResponse notificationResponse) async {
       //포어그라운드 클릭시 이벤트 처리하고 싶을 때 사용
       // _checkMessage(foregroundMessage);
     },

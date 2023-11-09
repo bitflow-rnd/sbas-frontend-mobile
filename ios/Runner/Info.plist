@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Sbas</string>
+	<string>병상배정시스템</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -28,12 +28,16 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Used to demonstrate image picker plugin</string>
+	<key>NSFirebaseMessaging</key>
+	<string>firebaseMessaging</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Used to capture audio for image picker plugin</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Save images to the gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Access the photo gallery</string>
+	<key>NSRemoteNotificationType</key>
+	<integer>69</integer>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
