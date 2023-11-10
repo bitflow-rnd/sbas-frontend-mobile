@@ -18,7 +18,7 @@ import '../../assign/bloc/assign_bed_bloc.dart';
 class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   @override
   FutureOr<PatientRegInfoModel> build() {
-    patientInfoModel = PatientRegInfoModel.empty();
+    patientInfoModel = PatientRegInfoModel();
     // _regRepository = ref.read(userRegReqProvider);
     _patientRepository = ref.read(patientRepoProvider);
 
@@ -34,10 +34,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   }
 
   patientInit(Patient patient) {
-    patientInfoModel.rgstUserId = patient.rgstUserId ?? "";
-    patientInfoModel.rgstDttm = patient.rgstDttm ?? "";
-    patientInfoModel.updtUserId = patient.updtUserId ?? "";
-    patientInfoModel.updtDttm = patient.updtDttm ?? "";
     patientInfoModel.ptNm = patient.ptNm ?? "";
     patientInfoModel.gndr = patient.gndr ?? "";
     patientInfoModel.rrno1 = patient.rrno1 ?? "";
@@ -53,8 +49,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     patientInfoModel.mpno = patient.mpno ?? "";
     patientInfoModel.job = patient.job ?? "";
     patientInfoModel.attcId = patient.attcId ?? "";
-    patientInfoModel.bedStatCd = patient.bedStatCd ?? "";
-    patientInfoModel.bedStatNm = patient.bedStatNm ?? "";
     patientInfoModel.bascAddr = patient.bascAddr ?? "";
     patientInfoModel.detlAddr = patient.detlAddr ?? "";
     patientInfoModel.zip = patient.zip ?? "";
@@ -81,10 +75,10 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       // Navigator.of(context).pop();
       // // Navigator.of(context).pop();
 
-      // _patientInfoModel.clear();
+      patientInfoModel.clear();
 
-      // ref.read(patientImageProvider.notifier).state = null;
-      // ref.read(patientAttcProvider.notifier).state = null;
+      ref.read(patientImageProvider.notifier).state = null;
+      ref.read(patientAttcProvider.notifier).state = null;
 
       ref.read(patientLookupProvider.notifier).refresh();
     }

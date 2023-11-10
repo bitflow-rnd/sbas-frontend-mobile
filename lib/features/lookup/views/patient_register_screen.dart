@@ -85,6 +85,7 @@ class PatientRegScreen extends ConsumerWidget {
                       if (patientAttc != null) {
                         if (_tryValidation()) {
                           ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+                          Navigator.pop(context);
                         }
                       } else {
                         if (patientImage != null) {

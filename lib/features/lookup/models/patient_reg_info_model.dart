@@ -1,8 +1,4 @@
 class PatientRegInfoModel {
-  String? rgstUserId;
-  String? rgstDttm;
-  String? updtUserId;
-  String? updtDttm;
   String? ptNm;
   String? gndr;
   String? rrno1;
@@ -18,8 +14,6 @@ class PatientRegInfoModel {
   String? mpno;
   String? job;
   String? attcId;
-  String? bedStatCd;
-  String? bedStatNm;
   String? bascAddr;
   String? detlAddr;
   String? zip;
@@ -27,12 +21,6 @@ class PatientRegInfoModel {
   String? ptId;
 
   PatientRegInfoModel({
-    this.bedStatCd,
-    this.bedStatNm,
-    this.rgstUserId,
-    this.rgstDttm,
-    this.updtUserId,
-    this.updtDttm,
     this.ptNm,
     this.gndr,
     this.rrno1,
@@ -55,46 +43,28 @@ class PatientRegInfoModel {
     this.ptId,
   });
   void clear() {
-    ptNm = '';
-    gndr = '';
-    rrno1 = '';
-    rrno2 = '';
-    dstr1Cd = '';
-    dstr2Cd = '';
-    addr = '';
-    mpno = '';
-    natiCd = '';
-    picaVer = '';
-    dethYn = '';
-    nokNm = '';
-    telno = '';
-    job = '';
-    attcId = '';
-    bascAddr = '';
-    detlAddr = '';
-    zip = '';
-    natiNm = '';
+    ptNm = null;
+    gndr = null;
+    rrno1 = null;
+    rrno2 = null;
+    dstr1Cd = null;
+    dstr2Cd = null;
+    addr = null;
+    mpno = null;
+    natiCd = null;
+    picaVer = null;
+    dethYn = null;
+    nokNm = null;
+    telno = null;
+    job = null;
+    attcId = null;
+    bascAddr = null;
+    detlAddr = null;
+    zip = null;
+    natiNm = null;
   }
 
   PatientRegInfoModel.fromJson(Map<String, dynamic> json) {
-    if (json["bedStatCd"] is String) {
-      bedStatCd = json["bedStatCd"];
-    }
-    if (json["bedStatNm"] is String) {
-      bedStatNm = json["bedStatNm"];
-    }
-    if (json["rgstUserId"] is String) {
-      rgstUserId = json["rgstUserId"];
-    }
-    if (json["rgstDttm"] is String) {
-      rgstDttm = json["rgstDttm"];
-    }
-    if (json["updtUserId"] is String) {
-      updtUserId = json["updtUserId"];
-    }
-    if (json["updtDttm"] is String) {
-      updtDttm = json["updtDttm"];
-    }
     if (json["bascAddr"] is String) {
       bascAddr = json["bascAddr"];
     }
@@ -160,10 +130,6 @@ class PatientRegInfoModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
-    data["rgstUserId"] = rgstUserId;
-    data["rgstDttm"] = rgstDttm;
-    data["updtUserId"] = updtUserId;
-    data["updtDttm"] = updtDttm;
     data['bascAddr'] = bascAddr;
     data['detlAddr'] = detlAddr;
     data['zip'] = zip;
@@ -184,20 +150,12 @@ class PatientRegInfoModel {
     data["mpno"] = mpno;
     data["job"] = job;
     data["attcId"] = attcId;
-    data['bedStatCd'] = bedStatCd;
-    data['bedStatNm'] = bedStatNm;
 
     return data;
   }
 
   PatientRegInfoModel.empty()
-      : bedStatCd = '',
-        bedStatNm = '',
-        rgstUserId = '',
-        rgstDttm = '',
-        updtUserId = '',
-        updtDttm = '',
-        ptNm = '',
+      : ptNm = '',
         gndr = '',
         rrno1 = '',
         rrno2 = '',
