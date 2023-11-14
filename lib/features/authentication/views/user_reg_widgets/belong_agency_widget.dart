@@ -121,7 +121,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
         FormField(
           autovalidateMode: AutovalidateMode.always,
           initialValue: ref.watch(checkedPTTPProvicer).containsValue(true),
-          validator: (value) => value == null || !value ? '※담당 환자 유형을 1개 이상 선택해주세요.' : null,
+          // validator: (value) => value == null || !value ? '※담당 환자 유형을 1개 이상 선택해주세요.' : null,
           builder: (field) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

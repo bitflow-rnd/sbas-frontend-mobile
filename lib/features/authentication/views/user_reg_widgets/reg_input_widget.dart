@@ -40,6 +40,8 @@ class RegInput extends ConsumerStatefulWidget {
 }
 
 class _RegInputState extends ConsumerState<RegInput> {
+  bool isAuthCompleted = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -129,6 +131,7 @@ class _RegInputState extends ConsumerState<RegInput> {
                   ),
                   onPressed: () async {
                     await ref.read(userRegReqProvider).sendAuthMessage(editingController.text);
+                    ref.read(regUserProvider).telno = editingController.text;
                     showToast("메세지 전송 완료");
                   },
                   child: Text(
@@ -160,6 +163,8 @@ class _RegInputState extends ConsumerState<RegInput> {
                         if (editingController.text != "" && editingController.text.length == 6) {
                           final res = await ref.read(signUpProvider.notifier).confirm(editingController.text);
                           ref.watch(isPhoneAuthSuccess.notifier).state = res["message"] == "SUCCESS";
+                          isAuthCompleted = true;
+                          showToast("인증 완료");
                         }
                       },
                       child: Text(
@@ -171,19 +176,20 @@ class _RegInputState extends ConsumerState<RegInput> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Container(
-                      padding: EdgeInsets.only(top: 15.h, right: 12.w),
-                      child: Text(
-                        "유효시간 02:59",
-                        style: CTS(
-                          color: Palette.red,
-                          fontSize: 11,
-                        ),
-                      ).c,
+                  if (!isAuthCompleted)
+                    Padding(
+                      padding: EdgeInsets.only(left: 20.w),
+                      child: Container(
+                        padding: EdgeInsets.only(top: 15.h, right: 12.w),
+                        child: Text(
+                          "유효시간 02:59",
+                          style: CTS(
+                            color: Palette.red,
+                            fontSize: 11,
+                          ),
+                        ).c,
+                      ),
                     ),
-                  ),
                 ],
               ),
           ],

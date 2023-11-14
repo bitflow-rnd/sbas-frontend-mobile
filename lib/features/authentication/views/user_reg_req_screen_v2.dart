@@ -138,10 +138,17 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
     if (user.pw == '' || user.pw == null) {
       return false;
     }
+    if (user.userNm == '' || user.userNm == null) {
+      return false;
+    }
     if (user.telno == '' || user.telno == null) {
       return false;
     }
-    if (user.jobCd == '' || user.jobCd == null) {
+    // TODO
+    // if (user.jobCd == '' || user.jobCd == null) {
+    //   return false;
+    // }
+    if (user.instTypeCd == '' || user.instTypeCd == null) {
       return false;
     }
     if (user.instId == '' || user.instId == null) {
@@ -159,9 +166,9 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
     if (user.btDt == '' || user.btDt == null) {
       return false;
     }
-    if (user.authCd == '' || user.authCd == null) {
-      return false;
-    }
+    // if (user.authCd == '' || user.authCd == null) {
+    //   return false;
+    // }
     return true;
   }
 

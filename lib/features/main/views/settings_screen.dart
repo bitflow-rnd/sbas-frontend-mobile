@@ -158,7 +158,7 @@ class _SettingPageState extends State<SettingPage> {
               borderRadius: BorderRadius.circular(4.r),
             ),
             child: Text(
-              'v 1.2.2',
+              'v 1.2.4',
               style: CTS(
                 color: Palette.mainColor,
                 fontSize: 13,

@@ -18,7 +18,7 @@ class SelfAuth extends ConsumerWidget {
     return Column(
       children: [
         RegInput(
-          hintText: '아이디 입력.',
+          hintText: '아이디 입력',
           title: '아이디',
           isRequired: true,
           maxLength: 15,
