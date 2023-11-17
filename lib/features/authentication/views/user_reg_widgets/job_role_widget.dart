@@ -29,6 +29,15 @@ class JobRole extends ConsumerStatefulWidget {
 }
 
 class _JobRoleState extends ConsumerState<JobRole> {
+  final authGroupCode = [
+    'PMGR0001',
+    'PMGR0002',
+    'PMGR0003',
+    'PMGR0004',
+  ];
+
+  final detailAuthCode = ['DTPM0001', 'DTPM0002'];
+
   Widget _getTitie(int index) => Row(
         children: [
           Text(
@@ -69,10 +78,10 @@ class _JobRoleState extends ConsumerState<JobRole> {
           ),
           data: (data) {
             if (authCd != null && authCd.isNotEmpty) {
-              detailAuthSelectedIndex = widget.detailAuthTitles.indexOf(authCd);
+              detailAuthSelectedIndex = detailAuthCode.indexOf(authCd);
             }
             if (jobCd != null && jobCd.isNotEmpty) {
-              authGroupSelectedIndex = widget.authGroupTitles.indexOf(jobCd);
+              authGroupSelectedIndex = authGroupCode.indexOf(jobCd);
             }
             if (instTypeCd != null && instTypeCd.isNotEmpty) {
               affiliationSelectedIndex = data.indexWhere((element) => element.cdId == instTypeCd);
@@ -153,7 +162,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                                 () {
                                   authGroupSelectedIndex = value ?? 0;
 
-                                  model.jobCd = widget.authGroupTitles[index];
+                                  model.jobCd = authGroupCode[index];
 
                                   field.didChange(model.jobCd);
                                 },
@@ -202,7 +211,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                                 () {
                                   detailAuthSelectedIndex = value ?? 0;
 
-                                  model.authCd = widget.detailAuthTitles[detailAuthSelectedIndex];
+                                  model.authCd = detailAuthCode[index];
 
                                   field.didChange(model.authCd);
                                 },

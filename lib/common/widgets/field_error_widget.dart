@@ -10,7 +10,7 @@ class FieldErrorText extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.only(
-          bottom: 24,
+          bottom: 16,
         ),
         child: Text(
           field.errorText!,

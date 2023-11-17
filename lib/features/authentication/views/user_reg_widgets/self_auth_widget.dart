@@ -85,7 +85,8 @@ class SelfAuth extends ConsumerWidget {
           },
           onSaved: (newValue) {
             model.btDt = newValue;
-            model.gndr = 'M';
+            // TODO 성별 입력 없음, 하드 코딩
+            model.gndr = '남';
           },
           text: model.btDt,
         ),

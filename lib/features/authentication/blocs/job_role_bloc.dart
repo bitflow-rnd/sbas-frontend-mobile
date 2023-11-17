@@ -20,6 +20,6 @@ final jobRoleProvider = AsyncNotifierProvider<JobRoleBloc, List<BaseCodeModel>>(
 );
 
 final regIndexProvider = StateProvider(
-  (ref) => 0,
+  (ref) => -1,
   name: 'index',
 );

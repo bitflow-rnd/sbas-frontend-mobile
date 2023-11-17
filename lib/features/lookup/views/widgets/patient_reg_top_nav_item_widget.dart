@@ -16,7 +16,7 @@ class PatientTopNavtItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final width = MediaQuery.of(context).size.width * 0.6;
+    final width = MediaQuery.of(context).size.width * 0.56;
 
     return Align(
       heightFactor: 1,

@@ -34,60 +34,8 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            _getTitle(
-              widget.titles[0],
-              true,
-            ),
-            Spacer(),
-            Checkbox(
-              activeColor: Palette.mainColor,
-              visualDensity: VisualDensity.compact,
-              value: ref.watch(isReadOnlyProvider.notifier).state,
-              onChanged: (bool? newValue) {
-                setState(() {
-                  ref.read(isReadOnlyProvider.notifier).state = newValue ?? false;
-                });
-              },
-              checkColor: Colors.white,
-              tristate: false,
-            ),
-            Text(
-              '조회전용',
-              style: CTS(
-                color: Palette.greyText,
-                fontSize: 11,
-              ),
-            ),
-          ],
-        ),
-        Gaps.v10,
-        FormField(
-          autovalidateMode: AutovalidateMode.always,
-          // initialValue: ref.watch(orgnTypeProvider.notifier).state == "",
-          initialValue: "",
-          validator: (value) => value == "" ? '※소속기관 유형을 선택해주세요.' : null,
-          builder: (field) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _rowSelectButtom(["의료진", "병상배정반", "보건소", "전산"], field),
-              if (field.hasError)
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Gaps.v16,
-                    FieldErrorText(
-                      field: field,
-                    ),
-                  ],
-                )
-            ],
-          ),
-        ),
-        Gaps.v16,
         _getTitle(
-          widget.titles[1],
+          widget.titles[0],
           true,
         ),
         Padding(
@@ -100,7 +48,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
         ),
         Gaps.v16,
         _getTitle(
-          widget.titles[2],
+          widget.titles[1],
           true,
         ),
         Padding(
@@ -114,7 +62,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
         ),
         Gaps.v16,
         _getTitle(
-          widget.titles[3],
+          widget.titles[2],
           false,
         ),
         Gaps.v12,
@@ -195,34 +143,34 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
             ],
           ),
         ),
-        // Gaps.v16,
-        // _getTitle(
-        //   widget.titles[3],
-        //   false,
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(
-        //     vertical: 8,
-        //   ),
-        //   child: TextField(
-        //     onChanged: (value) => setState(() {
-        //       user.ocpCd = value;
-        //     }),
-        //     // textAlign: TextAlign.center,
-        //     decoration: InputDecoration(
-        //       enabledBorder: _inputBorder,
-        //       focusedBorder: _inputBorder,
-        //       contentPadding: const EdgeInsets.symmetric(
-        //         vertical: 16,
-        //         horizontal: 18,
-        //       ),
-        //       hintText: '직급 또는 직무 입력',
-        //       hintStyle: const TextStyle(
-        //         color: Colors.grey,
-        //       ),
-        //     ),
-        //   ),
-        // ),
+        Gaps.v24,
+        _getTitle(
+          widget.titles[3],
+          false,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+          ),
+          child: TextField(
+            onChanged: (value) => setState(() {
+              user.ocpCd = value;
+            }),
+            // textAlign: TextAlign.center,
+            decoration: InputDecoration(
+              enabledBorder: _inputBorder,
+              focusedBorder: _inputBorder,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 16,
+                horizontal: 18,
+              ),
+              hintText: '직급 또는 직무 입력',
+              hintStyle: const TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ),
         Gaps.v16,
         _getTitle(
           widget.titles[4],

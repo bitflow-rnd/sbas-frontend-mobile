@@ -162,8 +162,10 @@ class _RegInputState extends ConsumerState<RegInput> {
                       onPressed: () async {
                         if (editingController.text != "" && editingController.text.length == 6) {
                           final res = await ref.read(signUpProvider.notifier).confirm(editingController.text);
-                          ref.watch(isPhoneAuthSuccess.notifier).state = res["message"] == "SUCCESS";
-                          isAuthCompleted = true;
+                          setState(() {
+                            ref.watch(isPhoneAuthSuccess.notifier).state = res["message"] == "SUCCESS";
+                            isAuthCompleted = true;
+                          });
                           showToast("인증 완료");
                         }
                       },
@@ -176,7 +178,7 @@ class _RegInputState extends ConsumerState<RegInput> {
                       ),
                     ),
                   ),
-                  if (!isAuthCompleted)
+                  if (isAuthCompleted == false)
                     Padding(
                       padding: EdgeInsets.only(left: 20.w),
                       child: Container(

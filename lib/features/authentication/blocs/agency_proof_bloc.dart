@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sbas/common/repos/file_repo.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 
@@ -10,7 +11,7 @@ class AgencyProofBloc extends AsyncNotifier<String> {
   @override
   FutureOr<String> build() {
     _regRepository = UserRegRequestRepository();
-
+    _fileRepository = FileRepository();
     return '';
   }
 
@@ -20,7 +21,7 @@ class AgencyProofBloc extends AsyncNotifier<String> {
       () async {
         final image = ref.read(imageProvider.notifier).state;
 
-        return image != null ? await _regRepository.uploadImage(image) : '';
+        return image != null ? await _fileRepository.uploadPrivateImage(image).then((value) => value[0]) : '';
       },
     );
     if (state.hasError) {
@@ -34,6 +35,7 @@ class AgencyProofBloc extends AsyncNotifier<String> {
   }
 
   late final UserRegRequestRepository _regRepository;
+  late final FileRepository _fileRepository;
 }
 
 final proofProvider = AsyncNotifierProvider<AgencyProofBloc, String>(
