@@ -58,7 +58,7 @@ class UserRegRequestRepository {
         'instTypecd=$typeCd&dstrCd2=$dstrCd2',
       );
 
-  Future<String> uploadImage(XFile file) async => await _baseCodeProvider.uploadImage(
+  Future<List<dynamic>> uploadImage(XFile file) async => await _baseCodeProvider.uploadImage(
         await MultipartFile.fromFile(
           file.path,
           filename: file.name,

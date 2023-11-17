@@ -56,7 +56,7 @@ class BaseCodeProvider {
     throw ArgumentError();
   }
 
-  Future<String> uploadImage(dio.MultipartFile file) async {
+  Future<List<dynamic>> uploadImage(dio.MultipartFile file) async {
     final client = dio.Dio();
 
     try {
@@ -73,7 +73,7 @@ class BaseCodeProvider {
         ),
       );
       if (res.statusCode == 200) {
-        return res.data['result'];
+        return res.data['result']['attcId'];
       }
     } catch (exception) {
       if (kDebugMode) {
