@@ -46,7 +46,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
             inputDecoration: getInputDecoration(""),
           ),
         ),
-        Gaps.v16,
+        Gaps.v8,
         _getTitle(
           widget.titles[1],
           true,
@@ -60,7 +60,7 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
             inputDecoration: getInputDecoration(""),
           ),
         ),
-        Gaps.v16,
+        Gaps.v12,
         _getTitle(
           widget.titles[2],
           false,
@@ -182,7 +182,11 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
           ),
           child: AgencyProof(),
         ),
-        Gaps.v52,
+        Text(
+          '※해당 기관 소속을 증명할 수 있는 명함 또는 신분증을 업로드해주세요.',
+          style: CTS.medium(fontSize: 11, color: Palette.greyText_60)
+        ),
+        Gaps.v64,
       ],
     );
   }
@@ -217,76 +221,4 @@ class _BelongAgencyState extends ConsumerState<BelongAgency> {
           ),
         ],
       );
-  _rowSelectButtom(List<String> list, FormFieldState<Object?> field) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xffe4e4e4),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Row(
-            children: [
-              for (int i = 0; i < list.length; i++)
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Text(list[i], style: CTS.bold(fontSize: 11, color: Colors.transparent)),
-                      ),
-                      Gaps.h1,
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            for (int i = 0; i < list.length; i++)
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      field.didChange(list[i]);
-                      ref.read(belongAgencyProvider.notifier).setOrgnType(list[i]);
-                    });
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: ref.watch(orgnTypeProvider.notifier).state == list[i] ? const Color(0xff538ef5) : Colors.transparent,
-                              borderRadius: ref.watch(orgnTypeProvider.notifier).state == list[i] ? BorderRadius.circular(6) : null),
-                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                          child: Text(list[i],
-                              style: CTS.bold(
-                                fontSize: 11.sp,
-                                color: ref.watch(orgnTypeProvider.notifier).state == list[i] ? Palette.white : Palette.greyText_60,
-                              )),
-                        ),
-                      ),
-                      list[i] != list.last
-                          ? Container(
-                              height: 12,
-                              width: 1,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff676a7a).withOpacity(0.2),
-                              ),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                ),
-              )
-          ],
-        ),
-      ],
-    );
-  }
 }

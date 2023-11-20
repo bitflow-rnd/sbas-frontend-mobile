@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
-import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/authentication/blocs/agency_proof_bloc.dart';
 import 'package:sbas/constants/palette.dart';
 
@@ -27,8 +25,6 @@ class _AgencyProofState extends ConsumerState<AgencyProof> {
 
     return FormField(
       initialValue: image == null,
-      autovalidateMode: AutovalidateMode.always,
-      validator: (value) => value == null || value ? '※해당 기관 소속을 증명할 수 있는 명함 또는 신분증을 업로드해주세요.' : null,
       builder: (field) => ref.watch(proofProvider).when(
             loading: () => const SBASProgressIndicator(),
             error: (error, stackTrace) => Center(
@@ -98,17 +94,6 @@ class _AgencyProofState extends ConsumerState<AgencyProof> {
                       ),
                     ],
                   ),
-                  Gaps.v12,
-                  if (field.hasError)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 24,
-                      ),
-                      child: Text(
-                        field.errorText!,
-                        style: CTS.medium(fontSize: 11, color: Palette.greyText_60),
-                      ),
-                    )
                 ],
               ),
             ),

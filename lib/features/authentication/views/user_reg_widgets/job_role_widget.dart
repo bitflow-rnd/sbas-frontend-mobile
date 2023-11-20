@@ -143,7 +143,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 128 * 3 + 22,
+                          height: 128 * 3 + 8,
                           child: GridView.builder(
                             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,

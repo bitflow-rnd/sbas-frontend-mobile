@@ -29,6 +29,7 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(regUserProvider);
+    final model = ref.read(selectedAgencyProvider);
 
     return ref.watch(agencyDetailProvider).when(
       loading: () => const SBASProgressIndicator(),
@@ -48,7 +49,7 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
             child: FormField(
               autovalidateMode: AutovalidateMode.always,
               initialValue: ref.watch(selectedAgencyProvider).instId,
-              validator: (value) => value == null || value.isEmpty || ref.watch(selectedAgencyProvider).instNm == null ? '소속기관을 선택해주세요.' : null,
+              validator: (value) => value == null || value == '' ? '소속기관을 선택해주세요.' : null,
               builder: (field) => SizedBox(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,9 +104,7 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
                             )
                                 .toList(),
                           ],
-                          onChanged: (value) => setState(
-                                () {
-                              final model = ref.read(selectedAgencyProvider);
+                          onChanged: (value) => setState(() {
                               textEditingController.text = '';
 
                               if (value == '직접입력') {
@@ -123,8 +122,8 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
                                 isReadOnly = true;
                                 user.instId = selectedModel.instId;
                                 user.instNm = selectedModel.instNm;
-                                field.didChange(selectedModel.instNm);
                               }
+                              field.didChange(user.instId);
                             },
                           ),
                         ),
