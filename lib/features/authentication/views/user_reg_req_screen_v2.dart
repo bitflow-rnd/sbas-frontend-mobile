@@ -10,7 +10,7 @@ import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/belong_agency_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/job_role_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/self_auth_widget.dart';
-import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
+import 'package:sbas/features/lookup/views/widgets/user_reg_top_nav_widget.dart';
 
 class UserRegisterRequestScreenV2 extends ConsumerStatefulWidget {
   const UserRegisterRequestScreenV2({
@@ -60,7 +60,7 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
                   vertical: 25.h,
                   horizontal: 24.w,
                 ),
-                child: PatientRegTopNav(
+                child: UserRegTopNav(
                   x: index.toDouble(),
                   items: navbarItems,
                 ),

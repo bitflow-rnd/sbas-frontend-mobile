@@ -5,15 +5,15 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_item_widget.dart';
 
-class PatientRegTopNav extends ConsumerWidget {
-  const PatientRegTopNav({
+class UserRegTopNav extends ConsumerWidget {
+  const UserRegTopNav({
     required this.items,
     required this.x,
     super.key,
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final width = MediaQuery.of(context).size.width * 0.5;
+    final width = MediaQuery.of(context).size.width;
 
     return Column(
       children: [
@@ -22,15 +22,21 @@ class PatientRegTopNav extends ConsumerWidget {
           children: [
             PatientTopNavtItem(
               position: x,
-              x: 1,
-              index: 1,
+              x: -1,
+              index: -1,
               text: items[0],
             ),
             PatientTopNavtItem(
               position: x,
-              x: -1,
-              index: 2,
+              x: 0,
+              index: 0,
               text: items[1],
+            ),
+            PatientTopNavtItem(
+              position: x,
+              x: 1,
+              index: 1,
+              text: items[2],
             ),
           ],
         ),
@@ -38,8 +44,9 @@ class PatientRegTopNav extends ConsumerWidget {
         Stack(
           children: [
             Align(
+              alignment: Alignment.center,
               child: Container(
-                width: width * 1.15,
+                width: width * 0.85,
                 height: 6.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(
@@ -51,14 +58,14 @@ class PatientRegTopNav extends ConsumerWidget {
             ),
             AnimatedAlign(
               alignment: Alignment(
-                -0.5 * x,
+                x,
                 0,
               ),
               duration: const Duration(
                 milliseconds: 200,
               ),
               child: Container(
-                width: width * 0.6,
+                width: width * 0.3,
                 height: 6.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(
