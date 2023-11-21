@@ -71,16 +71,11 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     });
     if (state.hasError) {}
     if (state.hasValue) {
-      //get back page
-      // Navigator.of(context).pop();
-      // // Navigator.of(context).pop();
-
-      patientInfoModel.clear();
-
       ref.read(patientImageProvider.notifier).state = null;
       ref.read(patientAttcProvider.notifier).state = null;
 
       ref.read(patientLookupProvider.notifier).refresh();
+      patientInfoModel.clear();
     }
   }
 

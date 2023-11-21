@@ -39,7 +39,7 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
       backgroundColor: Palette.white,
       appBar: Bitflow.getAppBar(
         '환자 수정',
-        false,
+        true,
         0.5,
       ),
       body: Column(
@@ -58,7 +58,7 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
               vertical: 14.h,
             ),
             child: PatientRegTopNav(
-              x: widget.patient.attcId != null ? -1 : 1,
+              x: patientAttc != null ? -1 : 1,
               items: const [
                 '역학조사서',
                 '환자 기본정보',
@@ -66,7 +66,7 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
             ),
           ),
           Expanded(
-            child: widget.patient.attcId != null ? PatientRegInfoV2(formKey: formKey) : const PatientRegReport(),
+            child: patientAttc != null ? PatientRegInfoV2(formKey: formKey) : const PatientRegReport(),
             // child: patientAttc != null ? PatientRegInfo(formKey: formKey) : const PatientRegReport(),
           ),
           Row(
@@ -75,13 +75,16 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
                 width: width * 0.5,
                 child: BottomSubmitBtn(
                   mainColor: Palette.white,
-                  text: widget.patient.attcId != null ? '이전' : '취소',
-                  onPressed: widget.patient.attcId != null
-                      ? () {
+                  text: patientAttc != null ? '이전' : '취소',
+                  onPressed: patientAttc != null ? () {
                     ref.read(patientIsUploadProvider.notifier).state = true;
                     ref.read(patientAttcProvider.notifier).state = null;
-                  }
-                      : () => Navigator.pop(context),
+                    ref.watch(patientImageProvider.notifier).state;
+                  } : () {
+                    ref.read(patientAttcProvider.notifier).state = null;
+                    ref.watch(patientImageProvider.notifier).state = null;
+                    Navigator.pop(context);
+                  },
                   // ? () => Navigator.pop(context)
                   //   : () {
                   //     ref.read(patientIsUploadProvider.notifier).state = true;
@@ -94,13 +97,14 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
                 child: BottomSubmitBtn(
                     text: '다음',
                     onPressed: () {
-                      if (widget.patient.attcId != null) {
-                        print(widget.patient.attcId);
+                      if (patientAttc != null) {
+                        print(patientAttc);
                         if (_tryValidation()) {
                           print("hellooooooo");
                           // print(ref.watch(patientRegProvider).value?.ptNm);
-                          // ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
-                          // Navigator.pop(context);
+                          ref.read(patientRegProvider.notifier).registry(widget.patient.ptId, context);
+
+                          Navigator.pop(context);
                         }
                       } else {
                         if (patientImage != null) {
@@ -123,6 +127,7 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
     if (isValid) {
       formKey.currentState?.save();
     }
+    print(ref.watch(patientAttcProvider.notifier).state);
     print(isValid);
     return isValid;
   }

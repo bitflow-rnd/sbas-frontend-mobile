@@ -7,6 +7,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/lookup/blocs/patient_asgn_history.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
@@ -265,8 +266,9 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                 text: '수정',
                 function: () async {
                   ref.watch(patientRegProvider.notifier).patientInit(patient);
+                  ref.watch(patientAttcProvider.notifier).state = patient.attcId;
 
-                  await Navigator.push(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PatientModifyScreen(
@@ -274,9 +276,6 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                       ),
                     ),
                   );
-                  if (context.mounted) {
-                    Navigator.pop(context);
-                  }
                 },
               ),
             )
