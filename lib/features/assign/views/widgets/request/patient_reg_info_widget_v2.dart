@@ -90,7 +90,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                               ),
                               controller: TextEditingController(
                                 text: vm.getTextEditingController(i, report),
-                              ),
+                              )..selection = TextSelection.fromPosition(
+                                  TextPosition(offset: vm.getTextEditingController(i, report).length)),
                               onSaved: (newValue) => vm.setTextEditingController(i, newValue),
                               onChanged: (value) => vm.setTextEditingController(i, value),
                               validator: (value) => vm.isFieldValid(i, value),
@@ -150,7 +151,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
               ),
               controller: TextEditingController(
                 text: vm.getTextEditingController(index, report),
-              ),
+              )..selection = TextSelection.fromPosition(
+                  TextPosition(offset: vm.getTextEditingController(index, report).length)),
               onSaved: (newValue) => vm.setTextEditingController(index, newValue),
               onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(index, value),
               validator: (value) => vm.isFieldValid(index, value),
@@ -180,7 +182,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                     decoration: getInputDecoration(''),
                     controller: TextEditingController(
                       text: vm.getTextEditingController(index + 100, report),
-                    ),
+                    )..selection = TextSelection.fromPosition(
+                        TextPosition(offset: vm.getTextEditingController(index + 100, report).length)),
                     onSaved: (newValue) => vm.setTextEditingController(index + 100, newValue),
                     onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(index + 100, value),
                     validator: (value) => vm.isFieldValid(index + 100, value),
@@ -489,7 +492,9 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
               Container(
                 width: 130.w,
                 child: TextFormField(
-                  controller: TextEditingController(text: vm.patientInfoModel.natiNm),
+                  controller: TextEditingController(text: vm.patientInfoModel.natiNm)
+                    ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: vm.patientInfoModel.natiNm!.length)),
                   decoration: getInputDecoration(report.natiCd == 'NATI0001' ? '' : '직접입력'),
                   onSaved: (newValue) => vm.setTextEditingController(104, newValue),
                   onChanged: (value) => vm.setTextEditingController(104, value),

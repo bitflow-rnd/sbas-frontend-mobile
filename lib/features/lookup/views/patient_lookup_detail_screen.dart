@@ -14,7 +14,7 @@ import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_detail_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
-import 'package:sbas/features/lookup/views/patient_register_screen.dart';
+import 'package:sbas/features/lookup/views/patient_modify_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/bed_assign_history_card.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/constants/palette.dart';
@@ -264,12 +264,12 @@ class PatientLookupDetailScreen extends ConsumerWidget {
               child: BottomPositionedSubmitButton(
                 text: '수정',
                 function: () async {
-                  ref.read(patientRegProvider.notifier).init();
+                  ref.watch(patientRegProvider.notifier).patientInit(patient);
 
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PatientRegScreen(
+                      builder: (context) => PatientModifyScreen(
                         patient: patient,
                       ),
                     ),
