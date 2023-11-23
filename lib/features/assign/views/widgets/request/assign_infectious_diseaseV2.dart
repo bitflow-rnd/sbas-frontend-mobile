@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_code_model.dart';
@@ -318,6 +319,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                       )
                                     ],
                                   )
+                                else if (i == 5 || i == 6 || i == 7)
+                                  getDatePicker(widget.hintList[i], vm, i)
                                 else
                                   _getTextInputField(hint: widget.hintList[i], vm: vm, i: i)
                               ],
@@ -363,6 +366,33 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
       autovalidateMode: AutovalidateMode.always,
       keyboardType: type,
       maxLength: maxLength,
+    );
+  }
+
+  Widget getDatePicker(String hint, InfectiousDiseaseBloc vm, int i) {
+    return TextFormField(
+      style: CTS(
+        fontSize: 13.sp,
+      ),
+      decoration: getInputDecoration(hint),
+      controller: TextEditingController(
+        text: vm.init(i, widget.report),
+      ),
+      readOnly: true,
+      onTap: () {
+        showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2100),
+        ).then((selectedDate) {
+          if (selectedDate != null) {
+            setState(() {
+              vm.setTextEditingController(i, DateFormat('yyyy-MM-dd').format(selectedDate));
+            });
+          }
+        });
+      },
     );
   }
 
