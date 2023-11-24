@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
-import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/blocs/patient_asgn_history_bloc.dart';
@@ -19,6 +18,7 @@ import 'package:sbas/features/lookup/views/widgets/bed_assign_history_card.dart'
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
+import '../../../common/widgets/progress_indicator_widget.dart';
 import '../../../constants/common.dart';
 import '../../assign/bloc/assign_bed_bloc.dart';
 import '../models/patient_history_model.dart';
@@ -197,46 +197,17 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                           ],
                         )
                       : ref.watch(patientAsgnHistoryProvider).when(
-                            loading: () => const SBASProgressIndicator(),
-                            error: (error, stackTrace) => Center(
-                              child: Text(
-                                error.toString(),
-                                style: const TextStyle(
-                                  color: Palette.mainColor,
-                                ),
+                          loading: () => const SBASProgressIndicator(),
+                          error: (error, stackTrace) => Center(
+                            child: Text(
+                              error.toString(),
+                              style: const TextStyle(
+                                color: Palette.mainColor,
                               ),
                             ),
-                            data: (history) => history.count != 0
-                                ? SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        for (PatientHistoryModel i in history.items)
-                                          BedAssignHistoryCardItem(
-                                            item: i,
-                                            patient: patient,
-                                          ),
-                                      ],
-                                    ),
-                                  )
-                                : Column(
-                                    children: [
-                                      SizedBox(height: 100.h),
-                                      Image.asset(
-                                        'assets/lookup/history_icon.png',
-                                        height: 128.h,
-                                      ),
-                                      const AutoSizeText(
-                                        '병상 배정 이력이 없습니다.',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey,
-                                        ),
-                                        maxLines: 1,
-                                        maxFontSize: 22,
-                                      ),
-                                    ],
-                                  ),
                           ),
+                          data: (history) => buildHistoryList(history),
+                        ),
                 ),
               ),
             ],
@@ -305,6 +276,41 @@ class PatientLookupDetailScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Widget buildHistoryList(PatientHistoryList history) {
+    if (history.count != 0) {
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            for (PatientHistoryModel i in history.items)
+              BedAssignHistoryCardItem(
+                item: i,
+                patient: patient,
+              ),
+          ],
+        ),
+      );
+    } else {
+      return Column(
+        children: [
+          SizedBox(height: 100.h),
+          Image.asset(
+            'assets/lookup/history_icon.png',
+            height: 128.h,
+          ),
+          const AutoSizeText(
+            '병상 배정 이력이 없습니다.',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+            ),
+            maxLines: 1,
+            maxFontSize: 22,
+          ),
+        ],
+      );
+    }
   }
 
   final List<String> list = [

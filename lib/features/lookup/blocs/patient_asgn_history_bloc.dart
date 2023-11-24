@@ -8,7 +8,7 @@ class PatientAsgnHistoryBloc extends AsyncNotifier<PatientHistoryList> {
   @override
   FutureOr<PatientHistoryList> build() {
     _repository = ref.read(patientRepoProvider);
-    // _historyList = PatientHistoryList(count: 0, items: []);
+    _historyList = PatientHistoryList(count: 0, items: []);
     return _historyList;
   }
 
@@ -30,11 +30,9 @@ class PatientAsgnHistoryBloc extends AsyncNotifier<PatientHistoryList> {
   }
 
   bool checkBedAssignCompletion() {
-    print(_historyList.count);
-    print(_historyList.items);
-    if (_historyList.count == 0) return false;
-    if (_historyList.items.last.bedStatCd == "BAST0007" ||
-        _historyList.items.last.bedStatCd == "BAST0008") {
+    if (state.value?.count == 0) return false;
+    if (state.value?.items.last.bedStatCd == "BAST0007" ||
+        state.value?.items.last.bedStatCd == "BAST0008") {
       return true;
     }
     return false;
