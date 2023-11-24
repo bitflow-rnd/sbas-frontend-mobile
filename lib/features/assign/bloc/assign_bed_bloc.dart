@@ -435,7 +435,7 @@ class AssignNewBedPresenter extends AsyncNotifier<PatientRegInfoModel> {
   // late final UserRegRequestRepository _regRepository;
 }
 
-final assignBedProvider = AsyncNotifierProvider<AssignNewBedPresenter, PatientRegInfoModel>(
+final assignNewBedProvider = AsyncNotifierProvider<AssignNewBedPresenter, PatientRegInfoModel>(
   () => AssignNewBedPresenter(),
 );
 final patientImageProvider = StateProvider<XFile?>((ref) => null);

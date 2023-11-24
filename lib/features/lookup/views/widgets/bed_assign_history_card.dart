@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/views/patient_bed_assign_detail_screen.dart';
+
+import '../../../../util.dart';
+import '../../models/patient_history_model.dart';
 
 class BedAssignHistoryCardItem extends StatelessWidget {
   const BedAssignHistoryCardItem({
@@ -16,7 +18,7 @@ class BedAssignHistoryCardItem extends StatelessWidget {
   });
 
   final Patient patient;
-  final AssignItemModel item;
+  final PatientHistoryModel item;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -79,7 +81,7 @@ class BedAssignHistoryCardItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        patient.ptNm ?? "",
+                        item.hospNm ?? "병원 미배정",
                         style: CTS.bold(
                           color: Colors.black,
                           fontSize: 15,
@@ -89,11 +91,11 @@ class BedAssignHistoryCardItem extends StatelessWidget {
                       ),
                     ],
                   ),
-                  item.chrgInstNm != null ? Gaps.v4 : Container(),
-                  item.chrgInstNm == null
+                  item.diagNm != null ? Gaps.v4 : Container(),
+                  item.diagNm == null
                       ? Container()
                       : Text(
-                          item.chrgInstNm ?? '알수없음',
+                          item.diagNm ?? '알수없음',
                           style: CTS.medium(
                             color: Palette.black,
                             fontSize: 12,
@@ -108,7 +110,7 @@ class BedAssignHistoryCardItem extends StatelessWidget {
                     // maxFontSize: 12,
                   ),
                   Text(
-                    item.updtDttm ?? "",
+                    getDateTimeFormatFull(item.updtDttm ?? ""),
                     style: CTS(
                       fontSize: 12,
                       color: Colors.grey,
@@ -116,36 +118,40 @@ class BedAssignHistoryCardItem extends StatelessWidget {
                     maxLines: 1,
                     // maxFontSize: 18,
                   ),
-                  item.tagList != null && item.tagList!.isNotEmpty
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 6.h,
+                  if (item.tagList != null && item.tagList!.isNotEmpty)
+                    Center(
+                      child: Container(
+                        height: 33.h,
+                        width: MediaQuery.of(context).size.width - 150.w,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 6.h,
+                        ),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: item.tagList?.length ?? 0,
+                          itemBuilder: (_, index) => Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 2.5.h,
+                              horizontal: 6.w,
+                            ),
+                            margin: EdgeInsets.only(right: 8.w),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                4.r,
+                              ),
+                              color: Colors.grey.shade100,
+                            ),
+                            child: AutoSizeText(
+                              '#${item.tagList?[index]}',
+                              style: CTS.bold(
+                                color: Colors.grey,
+                              ),
+                              maxFontSize: 12,
+                            ),
                           ),
-                          child: Row(
-                              children: List.generate(
-                                  item.tagList?.length ?? 0,
-                                  (index) => Container(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 1.h,
-                                          horizontal: 6.w,
-                                        ),
-                                        margin: EdgeInsets.only(right: 8.w),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            4.r,
-                                          ),
-                                          color: Colors.grey.shade100,
-                                        ),
-                                        child: AutoSizeText(
-                                          '#${item.tagList?[index]}',
-                                          style: CTS.bold(
-                                            color: Colors.grey,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ))),
-                        )
-                      : Container()
+                        ),
+                      ),
+                    ),
                 ],
               ),
               Expanded(

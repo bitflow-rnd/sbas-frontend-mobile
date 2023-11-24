@@ -7,21 +7,21 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
-import 'package:sbas/features/assign/model/assign_item_model.dart';
-import 'package:sbas/features/lookup/blocs/patient_asgn_history.dart';
-import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
-import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';
+import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/lookup/blocs/patient_asgn_history_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_detail_bloc.dart';
+import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';
 import 'package:sbas/features/lookup/views/patient_modify_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/bed_assign_history_card.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
-import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
 import '../../../constants/common.dart';
+import '../../assign/bloc/assign_bed_bloc.dart';
+import '../models/patient_history_model.dart';
 
 class PatientLookupDetailScreen extends ConsumerWidget {
   PatientLookupDetailScreen({
@@ -91,7 +91,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                   child: GestureDetector(
                     onTap: () {
                       progress == 0 ? ref.read(patientProgressProvider.notifier).state++ : ref.read(patientProgressProvider.notifier).state--;
-                      ref.watch(patientAsgnHistoryPresenter.notifier).getAsync(patient.ptId);
+                      ref.watch(patientAsgnHistoryProvider.notifier).refresh(patient.ptId);
                     },
                     child: PatientRegTopNav(
                       x: progress == 0 ? 1 : -1,
@@ -196,7 +196,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                               ),
                           ],
                         )
-                      : ref.watch(patientAsgnHistoryPresenter).when(
+                      : ref.watch(patientAsgnHistoryProvider).when(
                             loading: () => const SBASProgressIndicator(),
                             error: (error, stackTrace) => Center(
                               child: Text(
@@ -210,7 +210,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                 ? SingleChildScrollView(
                                     child: Column(
                                       children: [
-                                        for (AssignItemModel i in history.items)
+                                        for (PatientHistoryModel i in history.items)
                                           BedAssignHistoryCardItem(
                                             item: i,
                                             patient: patient,
@@ -270,7 +270,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                   child: BottomPositionedSubmitButton(
                     text: '병상 요청',
                     function: () {
-                      if (ref.watch(patientAsgnHistoryPresenter.notifier).checkBedAssignCompletion()) {
+                      if (ref.watch(patientAsgnHistoryProvider.notifier).checkBedAssignCompletion()) {
                         Common.showModal(
                           context,
                           Common.commonModal(

@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sbas/features/assign/model/assign_list_model.dart';
 import 'package:sbas/features/lookup/api/private_patient_provider.dart';
 import 'package:sbas/features/lookup/models/bed_assgin_request_model.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
@@ -12,6 +11,8 @@ import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/providers/patient_provider.dart';
 import 'package:sbas/util.dart';
 
+import '../models/patient_history_model.dart';
+
 class PatientRepository {
   Future<PatientListModel> lookupPatientInfo() async =>
       await _privatePatientProvider.lookupPatientInfo();
@@ -19,7 +20,7 @@ class PatientRepository {
   Future<Patient> getPatientInfo(String ptId) async =>
       await _privatePatientProvider.getPatientInfo(ptId);
 
-  Future<AssignListModel> getPatientHistory(String ptId) async =>
+  Future<PatientHistoryList> getPatientHistory(String ptId) async =>
       await _privatePatientProvider.getPatientHistory(ptId);
 
   Future<dynamic> registerPatientInfo(Map<String, dynamic> map) async =>
