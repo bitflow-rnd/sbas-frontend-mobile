@@ -21,6 +21,8 @@ import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.da
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
+import '../../../constants/common.dart';
+
 class PatientLookupDetailScreen extends ConsumerWidget {
   PatientLookupDetailScreen({
     super.key,
@@ -239,65 +241,67 @@ class PatientLookupDetailScreen extends ConsumerWidget {
               ),
             ],
           ),
-          // Positioned(
-          //   bottom: 0,
-          //   left: 0,
-          //   right: 0,
-          //   child: BottomPositionedSubmitButton(
-          //     text: progress == 0 ? '다음' : '신규 병상 요청',
-          //     function: () => progress == 0
-          //         ? ref.read(patientProgressProvider.notifier).state++
-          //         : Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //               builder: (context) => HospitalBedRequestScreen(
-          //                 patient: patient,
-          //               ),
-          //             ),
-          //           ),
-          //   ),
-          // ),
-          if (progress == 0) // 환자정보 - 수정
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: BottomPositionedSubmitButton(
-                text: '수정',
-                function: () async {
-                  ref.watch(patientRegProvider.notifier).patientInit(patient);
-                  ref.watch(patientAttcProvider.notifier).state = patient.attcId;
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Row(
+              children: [
+                Expanded(
+                  child: BottomPositionedSubmitButton(
+                      text: '수정',
+                      function: () async {
+                        ref.watch(patientRegProvider.notifier).patientInit(patient);
+                        ref.watch(patientAttcProvider.notifier).state = patient.attcId;
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PatientModifyScreen(
-                        patient: patient,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            )
-          else // 병상배정이력 - 병상요청
-            Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: BottomPositionedSubmitButton(
-                    text: '병상 요청',
-                    function: () {
-                      ref.read(patientRegProvider.notifier).init();
-                      Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HospitalBedRequestScreenV2(
-                              // builder: (context) => HospitalBedRequestScreen(
-                              isPatientRegister: false,
+                            builder: (context) => PatientModifyScreen(
                               patient: patient,
                             ),
-                          ));
-                    })),
+                          ),
+                        );
+                      },
+                    ),
+                ),
+                Gaps.h1,
+                Expanded(
+                  child: BottomPositionedSubmitButton(
+                    text: '병상 요청',
+                    function: () {
+                      if (ref.watch(patientAsgnHistoryPresenter.notifier).checkBedAssignCompletion()) {
+                        Common.showModal(
+                          context,
+                          Common.commonModal(
+                            context: context,
+                            mainText: "병상배정이 진행중입니다.",
+                            imageWidget: Image.asset(
+                              "assets/auth_group/modal_check.png",
+                              width: 44.h,
+                            ),
+                            imageHeight: 44.h,
+                          ),
+                        );
+                        return;
+                      }
+                      ref.read(patientRegProvider.notifier).init();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HospitalBedRequestScreenV2(
+                            // builder: (context) => HospitalBedRequestScreen(
+                            isPatientRegister: false,
+                            patient: patient,
+                          ),
+                        )
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          )
         ],
       ),
     );

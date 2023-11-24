@@ -30,6 +30,16 @@ class PatientAsgnHistoryPresenter extends AsyncNotifier<AssignListModel> {
 
   late final PatientRepository _repository;
   late final AssignListModel _assignListModel;
+
+  bool checkBedAssignCompletion() {
+    if (_assignListModel.count == 0) return false;
+    if (_assignListModel.items.last.bedStatCd == "BAST0007" ||
+        _assignListModel.items.last.bedStatCd == "BAST0008") {
+      return true;
+    }
+    return false;
+  }
+
 }
 
 final patientAsgnHistoryPresenter = AsyncNotifierProvider<PatientAsgnHistoryPresenter, AssignListModel>(
