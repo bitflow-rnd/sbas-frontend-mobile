@@ -184,7 +184,7 @@ class PatientLookupScreen extends ConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HospitalBedRequestScreenV2(patient: null, isPatientRegister: true),
+                    builder: (context) => PatientRegScreen(patient: null),
                     // builder: (context) => PatientRegScreen(patient: null,),
                   ),
                 );
