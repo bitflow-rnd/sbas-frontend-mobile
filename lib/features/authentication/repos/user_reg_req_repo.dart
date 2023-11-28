@@ -35,28 +35,18 @@ class UserRegRequestRepository {
   Future<List<BaseCodeModel>> getBaseCode(String route) async => await _baseCodeProvider.getBaseCode(route);
   Future<String> getBaseCodeNm(String route) async => await _baseCodeProvider.getBaseCodeNm(route);
 
-  Future<List<InfoInstModel>> getPublicHealthCenter(
-    String dstrCd1,
-  ) async =>
-      await _baseOrganProvider.getOrganCode(
-        // 'instTypecd=ORGN0003&dstrCd1=$dstrCd1',
-        // ORGN003 으로 안나와서 002로 수정.
-        'instTypecd=ORGN0003&dstrCd1=$dstrCd1',
-      );
-  Future<List<InfoInstModel>> getCodeDstr1OrgnCd(
-    String typeCd,
-    String dstrCd1,
-  ) async =>
-      await _baseOrganProvider.getOrganCode(
-        'instTypecd=$typeCd&dstrCd1=$dstrCd1',
-      );
   Future<List<InfoInstModel>> getOrganCode(
-    String typeCd,
-    String dstrCd2,
-  ) async =>
-      await _baseOrganProvider.getOrganCode(
-        'instTypecd=$typeCd&dstrCd2=$dstrCd2',
-      );
+    String? typeCd,
+    String? dstrCd1,
+    String? dstrCd2,
+  ) async {
+    final Map<String, String?> query = {
+      'instTypecd': typeCd,
+      'dstrCd1': dstrCd1,
+      'dstrCd2': dstrCd2,
+    };
+    return await _baseOrganProvider.getOrganCode(query);
+  }
 
   Future<List<dynamic>> uploadImage(XFile file) async => await _baseCodeProvider.uploadImage(
         await MultipartFile.fromFile(

@@ -12,7 +12,7 @@ class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
   FutureOr<List<InfoInstModel>> build() async {
     _infoInstRepository = ref.read(userRegReqProvider);
 
-    list = await _infoInstRepository.getOrganCode('', '');
+    list = await _infoInstRepository.getOrganCode('', '', '');
 
     return list;
   }
@@ -22,11 +22,12 @@ class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
 
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final agency = ref.read(selectedCountyProvider);
+      final region = ref.read(selectedRegionProvider);
+      final county = ref.read(selectedCountyProvider);
 
       final user = ref.read(regUserProvider);
 
-      list.addAll(await _infoInstRepository.getOrganCode(user.instTypeCd ?? '', agency.cdId ?? ''));
+      list.addAll(await _infoInstRepository.getOrganCode(user.instTypeCd, region.cdId, county.cdId));
 
       return list;
     });
@@ -42,7 +43,7 @@ class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
 
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      list.addAll(await _infoInstRepository.getPublicHealthCenter(id));
+      list.addAll(await _infoInstRepository.getOrganCode('ORGN0003', id, null));
 
       return list;
     });
