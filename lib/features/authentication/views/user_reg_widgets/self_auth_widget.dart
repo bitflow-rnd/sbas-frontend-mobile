@@ -14,6 +14,7 @@ class SelfAuth extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final model = ref.watch(regUserProvider);
+    String? confirmPassword;
 
     return Column(
       children: [
@@ -33,7 +34,7 @@ class SelfAuth extends ConsumerWidget {
             return null;
           },
           regExp: r'[a-z|0-9]',
-          onSaved: (newValue) => model.id = newValue,
+          onChanged: (newValue) => model.id = newValue,
           text: model.id,
         ),
         RegInput(
@@ -55,7 +56,7 @@ class SelfAuth extends ConsumerWidget {
             return null;
           },
           regExp: r'[가-힝|ㄱ-ㅎ|ㆍ|ᆢ]',
-          onSaved: (newValue) => model.userNm = newValue,
+          onChanged: (newValue) => model.userNm = newValue,
           text: model.userNm,
         ),
         RegInput(
@@ -83,7 +84,7 @@ class SelfAuth extends ConsumerWidget {
             }
             return null;
           },
-          onSaved: (newValue) {
+          onChanged: (newValue) {
             model.btDt = newValue;
             // TODO 성별 입력 없음, 하드 코딩
             model.gndr = '남';
@@ -107,7 +108,7 @@ class SelfAuth extends ConsumerWidget {
                   }
                   return null;
                 },
-                onSaved: (newValue) => model.telno = newValue,
+                onChanged: (newValue) => model.telno = newValue,
                 text: model.telno,
               ),
             ),
@@ -134,7 +135,7 @@ class SelfAuth extends ConsumerWidget {
               
             }
           },
-          onSaved: (newValue) async {
+          onChanged: (newValue) async {
             model.userCi = newValue;
 
             // model.pushKey = res['statusCode'] != 200 ? res['message'] : newValue;
@@ -167,8 +168,8 @@ class SelfAuth extends ConsumerWidget {
             }
             return null;
           },
-          regExp: r'[a-z|0-9|~!@#$%^&*()_-]',
-          onSaved: (newValue) => model.pw = newValue,
+          regExp: r'[a-zA-z|0-9|~!@#$%^&*()_-]',
+          onChanged: (newValue) => model.pw = newValue,
           text: model.pw,
         ),
         RegInput(
@@ -194,11 +195,13 @@ class SelfAuth extends ConsumerWidget {
               RegExp(r'[~!@#$%^&*()_-]'),
             )) {
               return '특수문자를 입력해주세요.';
+            } else if (model.pw != confirmPassword) {
+              return '비밀번호가 일치하지 않습니다.';
             }
             return null;
           },
-          regExp: r'[a-z|0-9|~!@#$%^&*()_-]',
-          onSaved: (newValue) => model.pw = newValue,
+          regExp: r'[a-zA-Z|0-9|~!@#$%^&*()_-]',
+          onChanged: (newValue) => confirmPassword = newValue,
           text: model.pw,
         ),
         SizedBox(height: 44.h)

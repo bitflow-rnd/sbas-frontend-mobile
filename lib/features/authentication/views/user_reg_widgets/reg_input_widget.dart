@@ -22,7 +22,7 @@ class RegInput extends ConsumerStatefulWidget {
       required this.maxLength,
       required this.keyboardType,
       this.validator,
-      required this.onSaved,
+      required this.onChanged,
       required this.regExp,
       required this.text,
       this.pnumVerify});
@@ -32,7 +32,7 @@ class RegInput extends ConsumerStatefulWidget {
   final int maxLength;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
-  final void Function(String?)? onSaved;
+  final void Function(String?)? onChanged;
   final void Function()? pnumVerify;
 
   @override
@@ -81,7 +81,7 @@ class _RegInputState extends ConsumerState<RegInput> {
                     ),
                     FilteringTextInputFormatter.singleLineFormatter,
                   ],
-                  onSaved: widget.onSaved,
+                  onChanged: widget.onChanged,
                   maxLength: widget.maxLength,
                   validator: widget.validator,
                   controller: editingController,
@@ -102,7 +102,7 @@ class _RegInputState extends ConsumerState<RegInput> {
                       left: 20.0.w,
                     )),
                   ),
-                  autovalidateMode: AutovalidateMode.always,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
 
                   // onEditingComplete: () async {
                   //   {

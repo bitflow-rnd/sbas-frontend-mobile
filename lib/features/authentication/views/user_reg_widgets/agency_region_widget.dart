@@ -41,7 +41,7 @@ class _AgencyRegionState extends ConsumerState<AgencyRegion> {
               flex: 1,
               child: FormField(
                 initialValue: ref.watch(selectedRegionProvider).cdNm,
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) => value == null || value.isEmpty ? '\'시/도\'를 선택해주세요.' : null,
                 builder: (field) => SizedBox(
                   child: Column(

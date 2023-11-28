@@ -47,7 +47,7 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
           Expanded(
             flex: 1,
             child: FormField(
-              autovalidateMode: AutovalidateMode.always,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               initialValue: ref.watch(selectedAgencyProvider).instId,
               validator: (value) => value == null || value == '' ? '소속기관을 선택해주세요.' : null,
               builder: (field) => SizedBox(
@@ -74,7 +74,7 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
                           value: ref.watch(selectedAgencyProvider).instNm,
                           items: [
                             DropdownMenuItem(
-                              value: "직접입력",
+                              value: '직접입력',
                               child: SizedBox(
                                 width: 150,
                                 child: Text(
@@ -144,7 +144,7 @@ class _AgencyDetailState extends ConsumerState<AgencyDetail> {
             child: TextFormField(
               readOnly: isReadOnly,
               controller: textEditingController,
-              autovalidateMode: AutovalidateMode.always,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) => user.instNm == null || user.instNm == '' ? '소속기관을 입력해주세요.' : null,
               style: CTS(fontSize: 13.sp, color: Palette.black),
               textAlign: TextAlign.left,

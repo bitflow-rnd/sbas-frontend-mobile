@@ -93,7 +93,7 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
                       child: BottomSubmitBtn(
                         onPressed: index == -1
                             ? () {
-                                ref.read(regIndexProvider.notifier).state;
+                                Navigator.pop(context);
                               }
                             : () {
                                 ref.read(regIndexProvider.notifier).state--;
@@ -160,9 +160,6 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
       return false;
     }
     if (user.dutyDstr1Cd == '' || user.dutyDstr1Cd == null) {
-      return false;
-    }
-    if (user.dutyDstr2Cd == '' || user.dutyDstr2Cd == null) {
       return false;
     }
     if (user.btDt == '' || user.btDt == null) {
