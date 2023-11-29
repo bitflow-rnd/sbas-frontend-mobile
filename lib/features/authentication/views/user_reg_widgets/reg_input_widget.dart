@@ -130,9 +130,14 @@ class _RegInputState extends ConsumerState<RegInput> {
                     ),
                   ),
                   onPressed: () async {
-                    await ref.read(userRegReqProvider).sendAuthMessage(editingController.text);
-                    ref.read(regUserProvider).telno = editingController.text;
-                    showToast("메세지 전송 완료");
+                    await ref.read(userRegReqProvider).sendAuthMessage(editingController.text).then((value) {
+                      if (value == 200) {
+                        ref.read(regUserProvider).telno = editingController.text;
+                        showToast("인증번호가 발송되었습니다.");
+                      } else {
+                        showToast("휴대폰번호를 확인해주세요.");
+                      }
+                    });
                   },
                   child: Text(
                     "전송",
@@ -143,7 +148,7 @@ class _RegInputState extends ConsumerState<RegInput> {
                   ),
                 ),
               ),
-            if (widget.title == "")
+            if (widget.title == "인증")
               Column(
                 children: [
                   Padding(
@@ -166,7 +171,7 @@ class _RegInputState extends ConsumerState<RegInput> {
                             ref.watch(isPhoneAuthSuccess.notifier).state = res["message"] == "SUCCESS";
                             isAuthCompleted = true;
                           });
-                          showToast("인증 완료");
+                          showToast("인증이 완료되었습니다.");
                         }
                       },
                       child: Text(
@@ -247,41 +252,6 @@ class _RegInputState extends ConsumerState<RegInput> {
     }
 
     if (!mounted) return;
-  }
-
-  Future<void> initMobileNumberState() async {
-    if (!await MobileNumber.hasPhonePermission) {
-      await MobileNumber.requestPhonePermission;
-
-      return;
-    }
-    try {
-      final mobileNumber = await MobileNumber.mobileNumber ?? '';
-      final simCard = await MobileNumber.getSimCards ?? [];
-
-      for (var element in simCard) {
-        if (mobileNumber.endsWith(element.number ?? ' ')) {
-          final prefix = element.countryPhonePrefix;
-
-          if (prefix != null && prefix.isNotEmpty) {
-            final phoneNumber = element.number?.replaceAll('+$prefix', '0');
-
-            if (phoneNumber != null && phoneNumber.isNotEmpty) {
-              editingController.text = phoneNumber;
-
-              if (mounted) {
-                setState(
-                  () => isReadOnly = true,
-                );
-                await ref.read(userRegReqProvider).sendAuthMessage(phoneNumber);
-              }
-            }
-          }
-        }
-      }
-    } on PlatformException catch (e) {
-      debugPrint("Failed to get mobile number because of '${e.message}'");
-    }
   }
 
   InputBorder get _outlineInputBorder => OutlineInputBorder(

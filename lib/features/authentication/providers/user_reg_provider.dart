@@ -5,15 +5,16 @@ import 'package:http/retry.dart';
 import 'package:sbas/util.dart';
 
 class UserRegProvider {
-  Future<void> sendAuthMessage(Map<String, dynamic> map) async {
+  Future<int> sendAuthMessage(Map<String, dynamic> map) async {
     final client = RetryClient(Client());
 
     try {
-      await client.post(
+      final res = await client.post(
         Uri.parse('$_baseUrl/smssend'),
         headers: json,
         body: toJson(map),
       );
+      return res.statusCode;
     } catch (exception) {
       if (kDebugMode) {
         print({
@@ -23,6 +24,7 @@ class UserRegProvider {
     } finally {
       client.close();
     }
+    return 0;
   }
 
   Future<int> reqUserReg(Map<String, dynamic> map) async {

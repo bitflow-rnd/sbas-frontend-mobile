@@ -12,8 +12,8 @@ import 'package:sbas/features/authentication/providers/info_inst_provider.dart';
 import 'package:sbas/features/authentication/providers/user_reg_provider.dart';
 
 class UserRegRequestRepository {
-  Future<void> sendAuthMessage(String phoneNumber) async {
-    await _userRegProvider.sendAuthMessage({
+  Future<int> sendAuthMessage(String phoneNumber) async {
+    return await _userRegProvider.sendAuthMessage({
       'to': phoneNumber,
     });
   }

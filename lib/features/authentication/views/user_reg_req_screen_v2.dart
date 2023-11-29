@@ -105,9 +105,6 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
                       width: width * 0.5,
                       child: BottomSubmitBtn(
                         onPressed: () {
-                          // final index = ref.read(regIndexProvider.notifier);
-                          // index.state++;
-                          // ref.read(signUpProvider.notifier).signUp(context);
                           if (_tryValidation(ref, index)) {
                             final index = ref.read(regIndexProvider.notifier);
 

@@ -103,7 +103,7 @@ class SelfAuth extends ConsumerWidget {
                 keyboardType: TextInputType.phone,
                 regExp: r'[0-9]',
                 validator: (value) {
-                  if (value == null || value.length != 11) {
+                  if (value == null || value.length != 11 || !RegExp(r'^01([0-2])[0-9]{3,4}[0-9]{4}$').hasMatch(value)) {
                     return '휴대폰 번호를 정확히 입력하세요.';
                   }
                   return null;
@@ -116,7 +116,7 @@ class SelfAuth extends ConsumerWidget {
         ),
         RegInput(
           hintText: '인증번호 6자리 입력',
-          title: '',
+          title: '인증',
           isRequired: false,
           maxLength: 6,
           keyboardType: TextInputType.number,
@@ -132,12 +132,11 @@ class SelfAuth extends ConsumerWidget {
           },
           pnumVerify: () async {
             if (model.userCi != null && model.userCi!.isNotEmpty) {
-              
+
             }
           },
           onChanged: (newValue) async {
             model.userCi = newValue;
-
             // model.pushKey = res['statusCode'] != 200 ? res['message'] : newValue;
           },
           text: ref.watch(isPhoneAuthSuccess.notifier).state ? "인증완료" : model.pushKey,
