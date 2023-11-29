@@ -40,6 +40,17 @@ class AssignBedScreen extends ConsumerWidget {
           leading: const BackButton(
             color: Colors.black,
           ),
+          actions: [
+            IconButton(
+                icon: const Icon(
+                  Icons.refresh,
+                  color: Colors.black,
+                ),
+                onPressed: () async {
+                  await ref.watch(assignBedProvider.notifier).reloadPatients();
+                },
+            )
+          ],
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarBrightness: Brightness.light,
             statusBarColor: Colors.transparent,
