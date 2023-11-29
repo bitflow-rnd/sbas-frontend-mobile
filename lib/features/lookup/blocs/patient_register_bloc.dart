@@ -239,7 +239,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         birthday = '19${patientInfoModel.rrno1}';
       }
     } else {
-      birthday = '19700101';
+      return '';
     }
 
     final difference = DateTime.now().difference(DateTime.tryParse(birthday) ?? DateTime.now());
