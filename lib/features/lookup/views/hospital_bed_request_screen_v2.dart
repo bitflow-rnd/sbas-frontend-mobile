@@ -206,7 +206,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   Expanded(
                       child: Padding(
                     padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                    child: PatientRegInfoV2(formKey: patientBasicFormKey),
+                    child: PatientRegInfoV2(),
                   )),
 
                 if (order == 2) Expanded(child: InfectiousDiseaseV2(formKey: infectiousDisFormKey, report: report)), //감염병정보

@@ -53,7 +53,7 @@ final routerProvider = Provider(
           GoRoute(
             name: PatientLookupScreen.routeName,
             path: PatientLookupScreen.routeUrl,
-            builder: (context, state) => PatientLookupScreen(
+            builder: (context, state) => const PatientLookupScreen(
               automaticallyImplyLeading: false,
             ),
           ),

@@ -12,16 +12,23 @@ import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dar
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
-class PatientRegScreen extends ConsumerWidget {
-  PatientRegScreen({
+class PatientRegScreen extends ConsumerStatefulWidget {
+  const PatientRegScreen({
     this.patient,
     super.key,
   });
 
-  final formKey = GlobalKey<FormState>();
   final Patient? patient;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PatientRegScreen> createState() => PatientRegScreenState();
+}
+
+class PatientRegScreenState extends ConsumerState<PatientRegScreen> {
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final patientImage = ref.watch(patientImageProvider);
     final patientAttc = ref.watch(patientAttcProvider);
@@ -38,7 +45,7 @@ class PatientRegScreen extends ConsumerWidget {
       body: Column(
         children: [
           PatientTopInfo(
-            patient: patient,
+            patient: widget.patient,
           ),
           Container(
             color: Palette.dividerGrey,
@@ -59,8 +66,10 @@ class PatientRegScreen extends ConsumerWidget {
             ),
           ),
           Expanded(
-            child: patientAttc != null ? PatientRegInfoV2(formKey: formKey) : const PatientRegReport(),
-            // child: patientAttc != null ? PatientRegInfo(formKey: formKey) : const PatientRegReport(),
+            child: Form(
+              key: formKey,
+              child: patientAttc != null ? PatientRegInfoV2() : const PatientRegReport(),
+            ),
           ),
           Row(
             children: [
@@ -84,7 +93,7 @@ class PatientRegScreen extends ConsumerWidget {
                     onPressed: () {
                       if (patientAttc != null) {
                         if (_tryValidation()) {
-                          ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+                          ref.read(patientRegProvider.notifier).registry(widget.patient?.ptId, context);
                           Navigator.pop(context);
                         }
                       } else {

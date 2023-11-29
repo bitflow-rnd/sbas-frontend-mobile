@@ -17,7 +17,7 @@ class InfoInstProvider {
       if (res.statusCode == 200) {
         final List<InfoInstModel> list = [];
         final items = fromJson(res.body);
-        print(items['result']['items']);
+        debugPrint(items['result']['items']);
         items['result']['items'].forEach((element) {
           list.add(InfoInstModel.fromJson(element));
         });

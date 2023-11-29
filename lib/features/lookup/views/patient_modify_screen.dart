@@ -66,8 +66,10 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
             ),
           ),
           Expanded(
-            child: patientAttc != null ? PatientRegInfoV2(formKey: formKey) : const PatientRegReport(),
-            // child: patientAttc != null ? PatientRegInfo(formKey: formKey) : const PatientRegReport(),
+            child: Form(
+              key: formKey,
+              child: patientAttc != null ? PatientRegInfoV2() : const PatientRegReport(),
+            ),
           ),
           Row(
             children: [
@@ -98,12 +100,10 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
                     text: '다음',
                     onPressed: () {
                       if (patientAttc != null) {
-                        print(patientAttc);
                         if (_tryValidation()) {
-                          print("hellooooooo");
                           // print(ref.watch(patientRegProvider).value?.ptNm);
                           ref.read(patientRegProvider.notifier).registry(widget.patient.ptId, context);
-
+                          // TODO 화면 이동후 새로고침
                           Navigator.pop(context);
                         }
                       } else {
@@ -127,8 +127,6 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
     if (isValid) {
       formKey.currentState?.save();
     }
-    print(ref.watch(patientAttcProvider.notifier).state);
-    print(isValid);
     return isValid;
   }
 

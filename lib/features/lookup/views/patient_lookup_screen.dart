@@ -10,27 +10,37 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
-import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_detail_screen.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_list_card_item.dart';
 import 'package:sbas/util.dart';
 
-class PatientLookupScreen extends ConsumerWidget {
-  PatientLookupScreen({
+class PatientLookupScreen extends ConsumerStatefulWidget {
+  const PatientLookupScreen({
     required this.automaticallyImplyLeading,
     super.key,
   });
+
   final bool automaticallyImplyLeading;
+
+  static String routeName = 'lookup';
+  static String routeUrl = '/lookup';
+
+  @override
+  ConsumerState<PatientLookupScreen> createState() => PatientLookupScreenState();
+}
+
+class PatientLookupScreenState extends ConsumerState<PatientLookupScreen> {
   final String selectedDropdown = '최근등록순';
   final List<String> dropdownList = [
     '최근등록순',
     '최근3개월',
     '최근1년',
   ];
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         backgroundColor: Palette.white,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -184,8 +194,7 @@ class PatientLookupScreen extends ConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PatientRegScreen(patient: null),
-                    // builder: (context) => PatientRegScreen(patient: null,),
+                    builder: (context) => const PatientRegScreen(patient: null),
                   ),
                 );
               }),
@@ -316,6 +325,4 @@ class PatientLookupScreen extends ConsumerWidget {
         ),
       );
 
-  static const String routeName = 'lookup';
-  static const String routeUrl = '/lookup';
 }

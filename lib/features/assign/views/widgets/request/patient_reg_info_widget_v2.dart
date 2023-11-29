@@ -13,8 +13,7 @@ import 'package:sbas/util.dart';
 import 'package:sbas/constants/palette.dart';
 
 class PatientRegInfoV2 extends ConsumerStatefulWidget {
-  PatientRegInfoV2({super.key, required this.formKey});
-  final GlobalKey<FormState> formKey;
+  PatientRegInfoV2({super.key});
   final list = [
     '환자이름',
     '주민등록번호',
@@ -59,10 +58,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                   ),
                 ),
               ),
-              data: (report) => Form(
-                key: widget.formKey,
-                autovalidateMode: AutovalidateMode.always,
-                child: Column(
+              data: (report) => Column(
                   children: [
                     for (int i = 0; i < widget.list.length; i++)
                       Column(
@@ -102,7 +98,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                                 FilteringTextInputFormatter.singleLineFormatter,
                               ],
                               keyboardType: vm.getKeyboardType(i),
-                              autovalidateMode: AutovalidateMode.always,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               maxLength: vm.getMaxLength(i),
                             ),
                           Gaps.v12,
@@ -130,7 +126,6 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                     Gaps.v20,
                   ],
                 ),
-              ),
             ),
       ),
     );
@@ -162,7 +157,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                 ),
               ],
               keyboardType: vm.getKeyboardType(index),
-              autovalidateMode: AutovalidateMode.always,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               maxLength: vm.getMaxLength(index),
             ),
           ),
@@ -193,7 +188,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                       ),
                     ],
                     keyboardType: vm.getKeyboardType(index + 100),
-                    autovalidateMode: AutovalidateMode.always,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     maxLength: vm.getMaxLength(index + 100),
                   ),
                 ),
