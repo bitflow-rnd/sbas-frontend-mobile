@@ -113,8 +113,8 @@ class AlarmPageState extends ConsumerState<AlarmPage> {
                         // dateFragment("2023년 2월"),
                         for (var alarmItem in widget.alarmItemList)
                           alarmItemCard(
-                              title: alarmItem.title!,
-                              body: alarmItem.body!,
+                              title: alarmItem.title ?? '',
+                              body: alarmItem.body ?? '',
                               dateTime: alarmItem.dateTime!,
                           ),
                       ],
