@@ -17,10 +17,12 @@ class UserRegisterRequestScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<UserRegisterRequestScreen> createState() => UserRegisterRequestScreenState();
+  ConsumerState<UserRegisterRequestScreen> createState() =>
+      UserRegisterRequestScreenState();
 }
 
-class UserRegisterRequestScreenState extends ConsumerState<UserRegisterRequestScreen> {
+class UserRegisterRequestScreenState
+    extends ConsumerState<UserRegisterRequestScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -99,7 +101,7 @@ class UserRegisterRequestScreenState extends ConsumerState<UserRegisterRequestSc
                             if (index.state < 1) {
                               index.state++;
                             } else {
-                              //등록요청(회원가입) 
+                              //등록요청(회원가입)
                               ref.read(signUpProvider.notifier).signUp(context);
                             }
                           }
@@ -161,11 +163,11 @@ class UserRegisterRequestScreenState extends ConsumerState<UserRegisterRequestSc
         ],
         detailAuthTitles: [
           '일반',
-          '게스트',
+          // '게스트',
         ],
         detailAuthSubTitles: [
           '일반업무처리 및 사용자 초대 권한',
-          '업무 조회만 가능',
+          // '업무 조회만 가능',
         ],
       );
     }

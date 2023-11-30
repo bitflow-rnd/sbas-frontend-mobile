@@ -18,12 +18,14 @@ class UserRegisterRequestScreenV2 extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<UserRegisterRequestScreenV2> createState() => UserRegisterRequestScreenV2State();
+  ConsumerState<UserRegisterRequestScreenV2> createState() =>
+      UserRegisterRequestScreenV2State();
 }
 
 final isPhoneAuthSuccess = StateProvider.autoDispose<bool>((ref) => false);
 
-class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequestScreenV2> {
+class UserRegisterRequestScreenV2State
+    extends ConsumerState<UserRegisterRequestScreenV2> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -112,7 +114,9 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
                               index.state++;
                             } else {
                               if (validateSumbit(ref)) {
-                                ref.read(signUpProvider.notifier).signUp(context);
+                                ref
+                                    .read(signUpProvider.notifier)
+                                    .signUp(context);
                               }
                             }
                           }
@@ -204,11 +208,11 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
         ],
         detailAuthTitles: [
           '일반',
-          '게스트',
+          // '게스트',
         ],
         detailAuthSubTitles: [
           '일반업무처리 및 사용자 초대 권한',
-          '업무 조회만 가능',
+          // '업무 조회만 가능',
         ],
       );
     } else if (index == 1) {
@@ -229,7 +233,9 @@ class UserRegisterRequestScreenV2State extends ConsumerState<UserRegisterRequest
   bool _tryValidation(WidgetRef ref, int index) {
     bool isValid = formKey.currentState?.validate() ?? false;
     if (index == -1) {
-      isValid = ref.watch(isPhoneAuthSuccess.notifier).state; // 인증번호 확인 주석처리시 인증번호체크 안하고 넘어감.
+      isValid = ref
+          .watch(isPhoneAuthSuccess.notifier)
+          .state; // 인증번호 확인 주석처리시 인증번호체크 안하고 넘어감.
     }
     if (isValid) {
       formKey.currentState?.save();

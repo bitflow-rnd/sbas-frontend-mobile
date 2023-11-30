@@ -22,7 +22,14 @@ class JobRole extends ConsumerStatefulWidget {
     required this.title,
     super.key,
   });
-  final List<String> title, authGroupSelectedImages, authGroupDisabledImages, authGroupTitles, authGroupSubTitles, detailAuthTitles, detailAuthSubTitles;
+
+  final List<String> title,
+      authGroupSelectedImages,
+      authGroupDisabledImages,
+      authGroupTitles,
+      authGroupSubTitles,
+      detailAuthTitles,
+      detailAuthSubTitles;
 
   @override
   ConsumerState<JobRole> createState() => _JobRoleState();
@@ -36,7 +43,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
     'PMGR0004',
   ];
 
-  final detailAuthCode = ['DTPM0001', 'DTPM0002'];
+  // final detailAuthCode = ['DTPM0001', 'DTPM0002'];
+  final detailAuthCode = ['DTPM0001'];
 
   Widget _getTitie(int index) => Row(
         children: [
@@ -56,7 +64,9 @@ class _JobRoleState extends ConsumerState<JobRole> {
           ),
         ],
       );
-  int affiliationSelectedIndex = -1, authGroupSelectedIndex = -1, detailAuthSelectedIndex = -1;
+  int affiliationSelectedIndex = -1,
+      authGroupSelectedIndex = -1,
+      detailAuthSelectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +94,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
               authGroupSelectedIndex = authGroupCode.indexOf(jobCd);
             }
             if (instTypeCd != null && instTypeCd.isNotEmpty) {
-              affiliationSelectedIndex = data.indexWhere((element) => element.cdId == instTypeCd);
+              affiliationSelectedIndex =
+                  data.indexWhere((element) => element.cdId == instTypeCd);
             }
             return SingleChildScrollView(
               child: Column(
@@ -93,7 +104,9 @@ class _JobRoleState extends ConsumerState<JobRole> {
                   FormField(
                     initialValue: instTypeCd,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) => value == null || value.isEmpty ? '소속기관 유형을 선택해주세요.' : null,
+                    validator: (value) => value == null || value.isEmpty
+                        ? '소속기관 유형을 선택해주세요.'
+                        : null,
                     builder: (field) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -104,7 +117,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
                               vertical: 12,
                             ),
                             itemCount: data.length,
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               mainAxisSpacing: 12,
                               crossAxisSpacing: 24,
@@ -118,7 +132,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
                                 () {
                                   affiliationSelectedIndex = value ?? 0;
 
-                                  model.instTypeCd = data[affiliationSelectedIndex].cdId;
+                                  model.instTypeCd =
+                                      data[affiliationSelectedIndex].cdId;
 
                                   field.didChange(model.instTypeCd);
                                 },
@@ -138,14 +153,16 @@ class _JobRoleState extends ConsumerState<JobRole> {
                   FormField(
                     initialValue: jobCd,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) => value == null || value.isEmpty ? '권한그룹을 선택해주세요.' : null,
+                    validator: (value) =>
+                        value == null || value.isEmpty ? '권한그룹을 선택해주세요.' : null,
                     builder: (field) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
                           height: 128 * 3 + 8,
                           child: GridView.builder(
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: 16,
                               crossAxisSpacing: 16,
@@ -154,8 +171,10 @@ class _JobRoleState extends ConsumerState<JobRole> {
                             itemBuilder: (context, index) => AuthorizationGroup(
                               selectedIndex: authGroupSelectedIndex,
                               index: index,
-                              disabledImage: widget.authGroupDisabledImages[index],
-                              selectedImage: widget.authGroupSelectedImages[index],
+                              disabledImage:
+                                  widget.authGroupDisabledImages[index],
+                              selectedImage:
+                                  widget.authGroupSelectedImages[index],
                               title: widget.authGroupTitles[index],
                               subTitle: widget.authGroupSubTitles[index],
                               onChanged: (value) => setState(
@@ -185,7 +204,8 @@ class _JobRoleState extends ConsumerState<JobRole> {
                   FormField(
                     initialValue: authCd,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) => value == null || value.isEmpty ? '권한을 선택해주세요.' : null,
+                    validator: (value) =>
+                        value == null || value.isEmpty ? '권한을 선택해주세요.' : null,
                     builder: (field) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -196,13 +216,15 @@ class _JobRoleState extends ConsumerState<JobRole> {
                               vertical: 12,
                             ),
                             itemCount: widget.detailAuthTitles.length,
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 1,
                               mainAxisSpacing: 12,
                               crossAxisSpacing: 16,
                               childAspectRatio: 8.75 / 1,
                             ),
-                            itemBuilder: (context, index) => DetailAuthorization(
+                            itemBuilder: (context, index) =>
+                                DetailAuthorization(
                               title: widget.detailAuthTitles[index],
                               subTitle: widget.detailAuthSubTitles[index],
                               index: index,
