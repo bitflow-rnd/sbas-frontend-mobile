@@ -1,17 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/observer_widget.dart';
+import 'package:sbas/features/alarm/alarm_item_database_service.dart';
+import 'package:sbas/features/alarm/model/alarm_item_model.dart';
 import 'package:sbas/firebase_options.dart';
 import 'package:sbas/router.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sbas/util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,6 +36,19 @@ _showLocalMessage(RemoteMessage message) async {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
   if (notification != null && android != null) {
+    var now = DateTime.now();
+    var dateTime = DateFormat('MM.d (EE) aa h시 mm분', 'ko').format(now);
+
+    var alarmItemModel = AlarmItemModel(
+      title: notification.title, body: notification.body,
+      year: now.year, month: now.month,
+      dateTime: dateTime,
+    );
+
+    AlarmItemDatabaseService()
+        .databaseConfig()
+        .then((value) => AlarmItemDatabaseService().insert(alarmItemModel));
+
     _flutterLocalNotificationsPlugin.show(
       notification.hashCode,
       notification.title,
