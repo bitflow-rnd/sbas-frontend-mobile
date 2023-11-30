@@ -66,7 +66,7 @@ class _JobRoleState extends ConsumerState<JobRole> {
       );
   int affiliationSelectedIndex = -1,
       authGroupSelectedIndex = -1,
-      detailAuthSelectedIndex = 0;
+      detailAuthSelectedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
