@@ -11,6 +11,7 @@ import 'package:sbas/features/authentication/views/user_reg_widgets/belong_agenc
 import 'package:sbas/features/authentication/views/user_reg_widgets/job_role_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/self_auth_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/user_reg_top_nav_widget.dart';
+import 'package:sbas/util.dart';
 
 class UserRegisterRequestScreenV2 extends ConsumerStatefulWidget {
   const UserRegisterRequestScreenV2({
@@ -111,7 +112,16 @@ class UserRegisterRequestScreenV2State
                             final index = ref.read(regIndexProvider.notifier);
 
                             if (index.state < 1) {
-                              index.state++;
+                              // TODO showToast 말고 다른걸로
+                              final user = ref.read(regUserProvider);
+                              ref.watch(signUpProvider.notifier).existId(user.id).then((value) {
+                                if (value) {
+                                  showToast("사용중인 아이디입니다.");
+                                  return;
+                                } else {
+                                  index.state++;
+                                }
+                              });
                             } else {
                               if (validateSumbit(ref)) {
                                 ref

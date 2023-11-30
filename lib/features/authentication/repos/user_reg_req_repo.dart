@@ -32,6 +32,10 @@ class UserRegRequestRepository {
     });
   }
 
+  Future<bool> existId(String? userId) async {
+    return await _userRegProvider.existId(userId);
+  }
+
   Future<List<BaseCodeModel>> getBaseCode(String route) async => await _baseCodeProvider.getBaseCode(route);
   Future<String> getBaseCodeNm(String route) async => await _baseCodeProvider.getBaseCodeNm(route);
 
