@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/alarm/model/alarm_item_model.dart';
 
-class AlarmPage extends StatefulWidget {
-  const AlarmPage({super.key});
+class AlarmPage extends ConsumerStatefulWidget {
+  const AlarmPage({
+    required this.alarmItemList,
+    super.key,
+  });
+
+  final List<AlarmItemModel> alarmItemList;
 
   @override
-  State<AlarmPage> createState() => AlarmPageState();
+  ConsumerState<AlarmPage> createState() => AlarmPageState();
 }
 
-class AlarmPageState extends State<AlarmPage> {
+class AlarmPageState extends ConsumerState<AlarmPage> {
   List<String> dropdownList = ['최근1개월', '최근3개월', '최근1년'];
   String selectedDropdown = '최근1개월';
-  bool hasAlarm = false;
+
   @override
   Widget build(BuildContext context) {
+    bool hasAlarm = widget.alarmItemList.isEmpty;
+
     return Scaffold(
       backgroundColor: Palette.dividerGrey,
       appBar: AppBar(
@@ -89,53 +98,25 @@ class AlarmPageState extends State<AlarmPage> {
             : SingleChildScrollView(
                 child: IntrinsicHeight(
                   child: Stack(children: [
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: 14.w),
-                    //   child: Column(children: [
-                    //     Expanded(
-                    //       child: CustomPaint(painter: DashedLineVerticalPainter(), size: const Size(1, double.infinity)),
-                    //     ),
-                    //   ]),
-                    // ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 14.w),
+                      child: Column(children: [
+                        Expanded(
+                          child: CustomPaint(painter: DashedLineVerticalPainter(), size: const Size(1, double.infinity)),
+                        ),
+                      ]),
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          height: 150.h,
-                          child: Center(
-                            child: Text("알림이 없습니다"),
-                          ),
-                        )
+                        dateFragment("${widget.alarmItemList[0].year}년 ${widget.alarmItemList[0].month}월"),
                         // dateFragment("2023년 2월"),
-                        // moveCompleteCard(
-                        //     dateTime: "02. 07 (화) 오전 11시 27분",
-                        //     name: "김희순",
-                        //     gender: "남",
-                        //     age: 88,
-                        //     departure: "영남대병원 (2/7  08:12)",
-                        //     arrival: "칠곡경북대병원 (2/7  08:12)",
-                        //     moveBy: "이동국 (대구 제2구급대)"),
-                        // reqBed(
-                        //     dateTime: "02. 07 (화) 오전 11시 27분",
-                        //     name: "김희순",
-                        //     gender: "남",
-                        //     age: 88,
-                        //     detail: "BO의 메시지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다."),
-                        // dateFragment("2023년 1월"),
-                        // otherFrag(
-                        //     dateTime: "02. 07 (화) 오전 11시 27분",
-                        //     name: "김희순",
-                        //     gender: "남",
-                        //     age: 88,
-                        //     detail: "BO의 메시지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.",
-                        //     isApp: true),
-                        // otherFrag(
-                        //     dateTime: "02. 07 (화) 오전 11시 27분",
-                        //     name: "김희순",
-                        //     gender: "남",
-                        //     age: 88,
-                        //     detail: "BO의 메시지 등록정보에 등록된 데이터가 그대로 노출됩니다. 이미지가 있는 경우 우측에 표시됩니다.",
-                        //     isApp: false),
+                        for (var alarmItem in widget.alarmItemList)
+                          alarmItemCard(
+                              title: alarmItem.title!,
+                              body: alarmItem.body!,
+                              dateTime: alarmItem.dateTime!,
+                          ),
                       ],
                     ),
                   ]),
@@ -341,6 +322,68 @@ class AlarmPageState extends State<AlarmPage> {
                           ),
                         ),
                       ],
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget alarmItemCard({
+    required String title,
+    required String body,
+    required String dateTime,
+  }) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            Expanded(
+              flex: 7,
+              child: Container(
+                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x1a645c5c),
+                      offset: Offset(0, 3),
+                      blurRadius: 12,
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          dateTime,
+                          style: CTS.medium(
+                            color: Palette.greyText,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      '$title $body',
+                      style: CTS(
+                        color: Colors.black,
+                        fontSize: 13,
+                        fontFamily: 'SpoqaHanSansNeo',
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
