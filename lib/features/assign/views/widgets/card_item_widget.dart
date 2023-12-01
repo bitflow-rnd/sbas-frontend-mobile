@@ -36,9 +36,14 @@ class AsgnCardItem extends ConsumerWidget {
             barrierDismissible: false);
         Navigator.of(context).push(route);
 
-        final patient = await ref.read(patientInfoProvider.notifier).getAsync(model.ptId);
-        final diseaseInfo = await ref.read(patientDiseaseInfoProvider.notifier).getAsync(model.ptId);
-        final orignInfo = await ref.read(patientTransferInfoProvider.notifier).getTransInfo(model.ptId, model.bdasSeq ?? -1);
+        final patient =
+            await ref.read(patientInfoProvider.notifier).getAsync(model.ptId);
+        final diseaseInfo = await ref
+            .read(patientDiseaseInfoProvider.notifier)
+            .getAsync(model.ptId);
+        final orignInfo = await ref
+            .read(patientTransferInfoProvider.notifier)
+            .getTransInfo(model.ptId, model.bdasSeq ?? -1);
 
         Navigator.of(context).removeRoute(route);
 
@@ -46,7 +51,11 @@ class AsgnCardItem extends ConsumerWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AssignBedDetailScreen(patient: patient, assignItem: model, diseaseInfo: diseaseInfo, transferInfo: orignInfo),
+              builder: (context) => AssignBedDetailScreen(
+                  patient: patient,
+                  assignItem: model,
+                  diseaseInfo: diseaseInfo,
+                  transferInfo: orignInfo),
             ),
           ).then((_) {
             isHandlingTap = false;
@@ -88,7 +97,7 @@ class AsgnCardItem extends ConsumerWidget {
                     Row(
                       children: [
                         Text(
-                          '${model.ptNm} (${model.gndr}/${model.age}세) ',
+                          '${model.ptNm} (${model.gndr}/${model.age}세/${model.rrno1}) ',
                           style: CTS.bold(
                             color: Colors.black,
                             fontSize: 15,
@@ -122,7 +131,8 @@ class AsgnCardItem extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (model.chrgInstNm != null && model.chrgInstNm != '')
+                          if (model.chrgInstNm != null &&
+                              model.chrgInstNm != '')
                             Column(
                               children: [
                                 Gaps.v4,
