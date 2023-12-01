@@ -97,7 +97,7 @@ class AsgnCardItem extends ConsumerWidget {
                     Row(
                       children: [
                         Text(
-                          '${model.ptNm} (${model.gndr}/${model.age}세/${model.rrno1}) ',
+                          '${model.ptNm} (${model.gndr}/${model.rrno1})',
                           style: CTS.bold(
                             color: Colors.black,
                             fontSize: 15,
