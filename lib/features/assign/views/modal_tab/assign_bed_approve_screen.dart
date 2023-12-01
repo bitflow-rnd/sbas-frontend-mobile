@@ -27,7 +27,14 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
   final TimeLine timeLine;
 
   final List<String> list = const ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
-  final List<String> hintList = const ['칠곡경북대병원', '병실번호', '진료과 이름', '담당의 이름', '의료진 연락처 입력', '메시지 입력'];
+  final List<String> hintList = const [
+    '칠곡경북대병원',
+    '병실번호',
+    '진료과 이름',
+    '담당의 이름',
+    '의료진 연락처 입력',
+    '메시지 입력'
+  ];
   // 이부분 의료기관명 readonly 로 들어갈부분.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -86,8 +93,14 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                                   _getTitle(list[i], i == 0 ? null : false),
                                   Gaps.v16,
                                   i == 0
-                                      ? _getTextInputField(i: i, initalValue: timeLine.chrgInstNm ?? "", isFixed: true, ref: ref)
-                                      : _getTextInputField(i: i, hint: hintList[i], ref: ref),
+                                      ? _getTextInputField(
+                                          i: i,
+                                          initalValue:
+                                              timeLine.chrgInstNm ?? "",
+                                          isFixed: true,
+                                          ref: ref)
+                                      : _getTextInputField(
+                                          i: i, hint: hintList[i], ref: ref),
                                   Gaps.v28,
                                 ],
                               )
@@ -121,15 +134,26 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
 
                       if (confirm == true) {
                         //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
-                        ref
-                            .watch(asgnBdDocProvider.notifier)
-                            .init(assignItem.ptId ?? "", "Y", assignItem.bdasSeq ?? -1, timeLine.asgnReqSeq ?? -1, timeLine.chrgInstId ?? "");
-                        if (ref.watch(asgnBdDocProvider.notifier).isValid() == true) {
-                          bool postRes = await ref.watch(asgnBdDocProvider.notifier).patientToHosp();
+                        ref.watch(asgnBdDocProvider.notifier).init(
+                            assignItem.ptId ?? "",
+                            "Y",
+                            assignItem.bdasSeq ?? -1,
+                            timeLine.asgnReqSeq ?? -1,
+                            timeLine.chrgInstId ?? "");
+                        if (ref.watch(asgnBdDocProvider.notifier).isValid() ==
+                            true) {
+                          bool postRes = await ref
+                              .watch(asgnBdDocProvider.notifier)
+                              .patientToHosp();
                           if (postRes) {
-                            await Future.delayed(Duration(milliseconds: 1500));
-                            await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
-                            await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                            await Future.delayed(
+                                const Duration(milliseconds: 1500));
+                            await ref
+                                .watch(patientTimeLineProvider.notifier)
+                                .refresh(assignItem.ptId, assignItem.bdasSeq);
+                            await ref
+                                .watch(assignBedProvider.notifier)
+                                .reloadPatients(); // 리스트 갱신
 
                             // ignore: use_build_context_synchronously
                             Navigator.pop(context);
@@ -219,7 +243,9 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                     : "(선택)",
             style: CTS.medium(
               fontSize: 13,
-              color: !(isRequired ?? false) ? Colors.grey.shade600 : Palette.mainColor,
+              color: !(isRequired ?? false)
+                  ? Colors.grey.shade600
+                  : Palette.mainColor,
             ),
           ),
         ],

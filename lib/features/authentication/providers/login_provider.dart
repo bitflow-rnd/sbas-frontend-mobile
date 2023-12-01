@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
@@ -15,6 +16,10 @@ class LoginProvider {
         body: toJson(map),
       );
       if (res.statusCode == 200) {
+        if (fromJson(res.body)['code'] == '02') {
+          showToast(fromJson(res.body)['message']);
+          return null;
+        }
         return fromJson(res.body);
       }
     } catch (exception) {
@@ -31,7 +36,7 @@ class LoginProvider {
 
   Future<Map<String, dynamic>?> getUser(String token) async {
     final client = RetryClient(Client());
-  
+
     try {
       final res = await client.get(
         Uri.parse('$_baseUrl/v1/test/user'),
