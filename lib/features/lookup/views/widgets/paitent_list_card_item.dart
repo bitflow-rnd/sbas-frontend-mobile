@@ -49,7 +49,7 @@ class PaitentCardItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '${midMasking(model.ptNm)} (${model.gndr}/${model.age}세) ',
+                        '${midMasking(model.ptNm)} (${model.gndr}/${formatRrno1(model.rrno1)}) ',
                         style: CTS.bold(
                           color: Colors.black,
                           fontSize: 15,
@@ -164,6 +164,13 @@ class PaitentCardItem extends StatelessWidget {
     String maskingName = frsName + cnvMidName + lstName;
 
     return maskingName;
+  }
+
+  String formatRrno1(String? rrno1) {
+    if (rrno1?.length == 6) {
+      return "${rrno1?.substring(0, 2)}.${rrno1?.substring(2, 4)}.${rrno1?.substring(4, 6)}";
+    }
+    return rrno1 ?? '';
   }
 
   final Patient model;
