@@ -15,6 +15,8 @@ import 'package:sbas/features/assign/views/modal_tab/assign_bed_approve_screen.d
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_cancel_screen.dart';
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_find_screen.dart';
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_go_home.dart';
+import 'package:sbas/features/authentication/blocs/login_bloc.dart';
+import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
@@ -64,7 +66,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               if (titleOrder[a.title] == null || titleOrder[b.title] == null) {
                 return 0;
               }
-              final titleComparison = titleOrder[a.title]!.compareTo(titleOrder[b.title]!);
+              final titleComparison =
+                  titleOrder[a.title]!.compareTo(titleOrder[b.title]!);
               if (titleComparison != 0) {
                 return titleComparison;
               } else {
@@ -86,7 +89,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        dateFragment(getDateTimeFormatDay(assignItem.updtDttm!)),
+                        dateFragment(
+                            getDateTimeFormatDay(assignItem.updtDttm!)),
                         IntrinsicHeight(
                           child: Stack(
                             children: [
@@ -118,13 +122,25 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                   for (var i = 0; i < timeLine.count!; i++)
                                     GestureDetector(
                                         onTap: () async {
-                                          if (timeLine.items[i].timeLineStatus == "complete" || timeLine.items[i].timeLineStatus == "suspend") {
-                                            ref.read(contactRepoProvider).getContactById(timeLine.items[i].chrgUserId!).load(context).then((value) {
-                                              UserContact contact = UserContact.fromJson(value);
+                                          if (timeLine.items[i]
+                                                      .timeLineStatus ==
+                                                  "complete" ||
+                                              timeLine.items[i]
+                                                      .timeLineStatus ==
+                                                  "suspend") {
+                                            ref
+                                                .read(contactRepoProvider)
+                                                .getContactById(timeLine
+                                                    .items[i].chrgUserId!)
+                                                .load(context)
+                                                .then((value) {
+                                              UserContact contact =
+                                                  UserContact.fromJson(value);
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) => ContactDetailScreen(
+                                                    builder: (context) =>
+                                                        ContactDetailScreen(
                                                       contact: contact,
                                                       isRequest: false,
                                                     ),
@@ -132,8 +148,11 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                             });
                                           }
                                         },
-                                        child:
-                                            timeLineBody(timeLine.items[i], isVisible: !timeLine.items.map((e) => e.title == "배정불가").toList().contains(true))),
+                                        child: timeLineBody(timeLine.items[i],
+                                            isVisible: !timeLine.items
+                                                .map((e) => e.title == "배정불가")
+                                                .toList()
+                                                .contains(true))),
                                 ],
                               ),
                             ],
@@ -143,94 +162,116 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                     ),
                   ),
                 ),
-                _whichBottomer(assignItem.bedStatCdNm ?? '', context, ref, timeLine),
+                _whichBottomer(
+                    assignItem.bedStatCdNm ?? '', context, ref, timeLine),
               ],
             );
           }),
     );
   }
 
-  Widget _whichBottomer(String type, BuildContext context, WidgetRef ref, PatientTimelineModel timeLine) {
+  Widget _whichBottomer(String type, BuildContext context, WidgetRef ref,
+      PatientTimelineModel timeLine) {
+    var jobCd = ref.read(userDetailProvider.notifier).jobCd;
     switch (type) {
       case '승인대기':
-        return _bottomer(
-            lBtnText: "배정 불가",
-            rBtnText: "승인",
-            lBtnFunc: () async {
-              String? res = await _showBottomSheet(
-                  context: context,
-                  // g hintText = '메시지 입력',
-                  btnText: '확인');
-              // var res = await Common.showModal(
-              //     context,
-              //     Common.commonModal(
-              //       context: context,
-              //       imageWidget: Image.asset(
-              //         "assets/auth_group/modal_check.png",
-              //         width: 44.h,
-              //       ),
-              //       imageHeight: 44.h,
-              //       mainText: "배정 불가 처리하시겠습니까?",
-              //       button1Text: "취소",
-              //       button2Text: "확인",
-              //       button1Function: () {
-              //         Navigator.pop(context, false);
-              //       },
-              //       button2Function: () {
-              //         Navigator.pop(context, true);
-              //       },
-              //     ));
-              if (res != null) {
-                //병상 배정 불가 처리.
-                var postRes = await ref.watch(assignBedProvider.notifier).rejectReq({
-                  "ptId": patient.ptId,
-                  "bdasSeq": assignItem.bdasSeq,
-                  "aprvYn": "N",
-                  "msg": res,
-                });
-                if (postRes) {
-                  await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
-                  await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
-                  Navigator.pop(context);
-                }
-              }
-            },
-            rBtnFunc: () async {
-              if (context.mounted) {
-                bool postRes;
-                //원내배정
-                if (assignItem.inhpAsgnYn == "Y") {
+        return jobCd == "PMGR0002"
+            ? _bottomer(
+                lBtnText: "배정 불가",
+                rBtnText: "승인",
+                lBtnFunc: () async {
                   String? res = await _showBottomSheet(
-                    context: context,
-                  );
-                  //원내배정
-                  postRes = await ref.watch(assignBedProvider.notifier).approveReq({
-                    "ptId": patient.ptId,
-                    "bdasSeq": assignItem.bdasSeq,
-                    "aprvYn": "Y",
-                    "msg": res,
-                  });
-
-                  if (postRes) {
-                    //승인성공
-                    await ref.watch(patientTimeLineProvider.notifier).refresh(assignItem.ptId, assignItem.bdasSeq);
-                    await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
-                    await Future.delayed(Duration(microseconds: 1500));
-                    Navigator.pop(context);
-
-                    Navigator.pop(context);
+                      context: context,
+                      // g hintText = '메시지 입력',
+                      btnText: '확인');
+                  // var res = await Common.showModal(
+                  //     context,
+                  //     Common.commonModal(
+                  //       context: context,
+                  //       imageWidget: Image.asset(
+                  //         "assets/auth_group/modal_check.png",
+                  //         width: 44.h,
+                  //       ),
+                  //       imageHeight: 44.h,
+                  //       mainText: "배정 불가 처리하시겠습니까?",
+                  //       button1Text: "취소",
+                  //       button2Text: "확인",
+                  //       button1Function: () {
+                  //         Navigator.pop(context, false);
+                  //       },
+                  //       button2Function: () {
+                  //         Navigator.pop(context, true);
+                  //       },
+                  //     ));
+                  if (res != null) {
+                    //병상 배정 불가 처리.
+                    var postRes =
+                        await ref.watch(assignBedProvider.notifier).rejectReq({
+                      "ptId": patient.ptId,
+                      "bdasSeq": assignItem.bdasSeq,
+                      "aprvYn": "N",
+                      "msg": res,
+                    });
+                    if (postRes) {
+                      await ref
+                          .watch(patientTimeLineProvider.notifier)
+                          .refresh(assignItem.ptId, assignItem.bdasSeq);
+                      await ref
+                          .watch(assignBedProvider.notifier)
+                          .reloadPatients(); // 리스트 갱신
+                      Navigator.pop(context);
+                    }
                   }
-                }
-                //원외배정
-                else {
-                  await ref.watch(availableHospitalProvider.notifier).getAsync(patient.ptId, assignItem.bdasSeq).then((value) => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AssignBedFindScreen(patient: patient, bdasSeq: assignItem.bdasSeq, hospList: value),
-                      ))); //병상요청시 가능한 병원 목록 조회
-                }
-              }
-            });
+                },
+                rBtnFunc: () async {
+                  if (context.mounted) {
+                    bool postRes;
+                    //원내배정
+                    if (assignItem.inhpAsgnYn == "Y") {
+                      String? res = await _showBottomSheet(
+                        context: context,
+                      );
+                      //원내배정
+                      postRes = await ref
+                          .watch(assignBedProvider.notifier)
+                          .approveReq({
+                        "ptId": patient.ptId,
+                        "bdasSeq": assignItem.bdasSeq,
+                        "aprvYn": "Y",
+                        "msg": res,
+                      });
+
+                      if (postRes) {
+                        //승인성공
+                        await ref
+                            .watch(patientTimeLineProvider.notifier)
+                            .refresh(assignItem.ptId, assignItem.bdasSeq);
+                        await ref
+                            .watch(assignBedProvider.notifier)
+                            .reloadPatients(); // 리스트 갱신
+                        await Future.delayed(Duration(microseconds: 1500));
+                        Navigator.pop(context);
+
+                        Navigator.pop(context);
+                      }
+                    }
+                    //원외배정
+                    else {
+                      await ref
+                          .watch(availableHospitalProvider.notifier)
+                          .getAsync(patient.ptId, assignItem.bdasSeq)
+                          .then((value) => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AssignBedFindScreen(
+                                    patient: patient,
+                                    bdasSeq: assignItem.bdasSeq,
+                                    hospList: value),
+                              ))); //병상요청시 가능한 병원 목록 조회
+                    }
+                  }
+                })
+            : Container();
       case '배정대기':
       case "원내배정":
         return _bottomer(
@@ -244,7 +285,9 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                     patient: patient,
                     assignItem: assignItem,
                     timeLine: timeLine.items
-                        .where((element) => (element.chrgInstId != null && element.asgnReqSeq != null && element.timeLineStatus == "suspend"))
+                        .where((element) => (element.chrgInstId != null &&
+                            element.asgnReqSeq != null &&
+                            element.timeLineStatus == "suspend"))
                         .first,
                   ),
                 ),
@@ -258,47 +301,55 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                     patient: patient,
                     assignItem: assignItem,
                     timeLine: timeLine.items
-                        .where((element) => (element.chrgInstId != null && element.asgnReqSeq != null && element.timeLineStatus == "suspend"))
+                        .where((element) => (element.chrgInstId != null &&
+                            element.asgnReqSeq != null &&
+                            element.timeLineStatus == "suspend"))
                         .first, //TODO:: Timeline 에서 현재 사용자의 chrgInstId 가 있는 데이터를 가져오도록 추후구현
                   ),
                 ),
               );
             });
       case '이송대기':
-        return Common.bottomer(
-            isOneBtn: true,
-            rBtnText: "이송 처리",
-            lBtnFunc: () {},
-            rBtnFunc: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AssignBedApproveMoveScreen(
-                    patient: patient,
+        return jobCd == "PMGR0002"
+            ? Common.bottomer(
+                isOneBtn: true,
+                rBtnText: "이송 처리",
+                lBtnFunc: () {},
+                rBtnFunc: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AssignBedApproveMoveScreen(
+                        patient: patient,
 
-                    bdasSeq: assignItem.bdasSeq,
-                    // timeLine: timeLine.items.where((element) => (element.chrgInstId != null && element.asgnReqSeq != null)).first,
-                  ),
-                ),
-              );
-            });
+                        bdasSeq: assignItem.bdasSeq,
+                        // timeLine: timeLine.items.where((element) => (element.chrgInstId != null && element.asgnReqSeq != null)).first,
+                      ),
+                    ),
+                  );
+                })
+            : Container();
       case '이송중':
-        return Common.bottomer(
-            isOneBtn: true,
-            rBtnText: "입퇴원 처리",
-            lBtnFunc: () {},
-            rBtnFunc: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AssignBedGoHome(
-                    patient: patient,
-                    assignItem: assignItem,
-                    timeLine: timeLine.items.where((element) => (element.title == "입원")).first,
-                  ),
-                ),
-              );
-            });
+        return jobCd == "PMGR0003"
+            ? Common.bottomer(
+                isOneBtn: true,
+                rBtnText: "입퇴원 처리",
+                lBtnFunc: () {},
+                rBtnFunc: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AssignBedGoHome(
+                        patient: patient,
+                        assignItem: assignItem,
+                        timeLine: timeLine.items
+                            .where((element) => (element.title == "입원"))
+                            .first,
+                      ),
+                    ),
+                  );
+                })
+            : Container();
       case '입원':
         return _msgBottomer();
       default:
@@ -306,11 +357,16 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     }
   }
 
-  _showBottomSheet({required BuildContext context, String header = '배정 승인', String hintText = '메시지 입력', String btnText = '승인'}) async {
+  _showBottomSheet(
+      {required BuildContext context,
+      String header = '배정 승인',
+      String hintText = '메시지 입력',
+      String btnText = '승인'}) async {
     TextEditingController textEditingController = TextEditingController();
     final focusNode = FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => focusNode.requestFocus());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => focusNode.requestFocus());
     return showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -330,7 +386,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             },
             child: Container(
               height: 400.h,
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Container(
                 padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
                 child: Column(
@@ -380,7 +437,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                               padding: EdgeInsets.symmetric(vertical: 16.h),
                               child: Text(
                                 btnText,
-                                style: CTS(color: Palette.white, fontSize: 12.r),
+                                style:
+                                    CTS(color: Palette.white, fontSize: 12.r),
                               ),
                             ),
                             onPressed: () {
@@ -402,7 +460,11 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     );
   }
 
-  Widget _bottomer({String lBtnText = '배정 불가', String rBtnText = "승인", required Function lBtnFunc, required Function rBtnFunc}) {
+  Widget _bottomer(
+      {String lBtnText = '배정 불가',
+      String rBtnText = "승인",
+      required Function lBtnFunc,
+      required Function rBtnFunc}) {
     return Row(
       children: [
         Expanded(
@@ -467,7 +529,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           Container(
             color: Palette.greyText_20,
             margin: EdgeInsets.all(2.r),
-            child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
+            child: Image.asset("assets/auth_group/image_location_small.png",
+                width: 42.h),
           ),
           Expanded(
               child: TextField(
@@ -475,7 +538,10 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             onChanged: (value) {
               // setState(() {});
             },
-            decoration: InputDecoration(hintText: '메시지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+            decoration: InputDecoration(
+                hintText: '메시지 입력',
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
           )),
           InkWell(
             onTap: () {},
@@ -505,9 +571,16 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             by: timeLine.by ?? '',
             detail: timeLine.msg);
       case "suspend":
-        return suspendCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!), detail: timeLine.by, timeLine: timeLine);
+        return suspendCard(
+            title: timeLine.title!,
+            src: getImageSrcBy(timeLine.title!),
+            detail: timeLine.by,
+            timeLine: timeLine);
       case "closed":
-        return isVisible ?? true ? closedCard(title: timeLine.title!, src: getImageSrcBy(timeLine.title!)) : Container();
+        return isVisible ?? true
+            ? closedCard(
+                title: timeLine.title!, src: getImageSrcBy(timeLine.title!))
+            : Container();
       default:
         return Container();
     }
@@ -621,7 +694,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               Expanded(
                 child: Container(
                   margin: EdgeInsets.only(left: 12.w),
-                  padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                  padding: EdgeInsets.only(
+                      left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: isSelected
@@ -693,7 +767,8 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               Expanded(
                 child: Container(
                   margin: EdgeInsets.only(left: 12.w),
-                  padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                  padding: EdgeInsets.only(
+                      left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: isSelected
@@ -748,15 +823,19 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                       if (detail != null && detail != "" && detail != "\n")
                         Container(
                           margin: EdgeInsets.only(top: 8.h),
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8.w, vertical: 4.h),
                           decoration: BoxDecoration(
-                            color: isBlue ? Palette.mainColor.withOpacity(0.16) : const Color(0xff676a7a).withOpacity(0.12),
+                            color: isBlue
+                                ? Palette.mainColor.withOpacity(0.16)
+                                : const Color(0xff676a7a).withOpacity(0.12),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           child: Text(
                             detail,
                             style: CTS(
-                              color: isBlue ? Palette.mainColor : Palette.greyText,
+                              color:
+                                  isBlue ? Palette.mainColor : Palette.greyText,
                               fontSize: 13,
                             ),
                           ),
