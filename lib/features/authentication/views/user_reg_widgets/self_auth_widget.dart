@@ -201,7 +201,7 @@ class SelfAuth extends ConsumerWidget {
           },
           regExp: r'[a-zA-Z|0-9|~!@#$%^&*()_-]',
           onChanged: (newValue) => confirmPassword = newValue,
-          text: model.pw,
+          text: confirmPassword,
         ),
         SizedBox(height: 44.h)
       ],

@@ -36,6 +36,8 @@ class UserRegBloc extends AsyncNotifier {
     }
   }
 
+  Future<bool> existId(String? userId) async => _signUpRepository.existId(userId);
+
   late final UserRegRequestRepository _signUpRepository;
 }
 

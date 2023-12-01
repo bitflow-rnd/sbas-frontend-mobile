@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
@@ -73,6 +74,34 @@ class UserRegProvider {
       client.close();
     }
     return {};
+  }
+
+  Future<bool> existId(String? userId) async {
+    final client = Dio();
+
+    try {
+      client.options.contentType = 'application/json';
+
+      final res = await client.post(
+        '$_baseUrl/existid',
+        data: toJson({'userId': userId}),
+      );
+
+      if (res.statusCode == 200) {
+        return res.data['result'];
+      } else {
+        return false;
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    return false;
   }
 
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/user';
