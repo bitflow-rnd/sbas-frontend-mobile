@@ -13,6 +13,8 @@ import 'package:sbas/features/authentication/views/user_reg_widgets/self_auth_wi
 import 'package:sbas/features/lookup/views/widgets/user_reg_top_nav_widget.dart';
 import 'package:sbas/util.dart';
 
+import '../../../constants/common.dart';
+
 class UserRegisterRequestScreenV2 extends ConsumerStatefulWidget {
   const UserRegisterRequestScreenV2({
     super.key,
@@ -127,6 +129,23 @@ class UserRegisterRequestScreenV2State
                                 ref
                                     .read(signUpProvider.notifier)
                                     .signUp(context);
+                                Common.showModal(
+                                  context,
+                                  Common.commonModal(
+                                    context: context,
+                                    mainText: "사용자 등록 요청이 완료되었습니다.\n관리자 승인후 로그인이 가능합니다.",
+                                    imageWidget: Image.asset(
+                                      "assets/auth_group/modal_check.png",
+                                      width: 44.h,
+                                    ),
+                                    imageHeight: 44.h,
+                                    button2Function: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.pop(context, true);
+                                      ref.read(regIndexProvider.notifier).state = -1;
+                                    },
+                                  ),
+                                );
                               }
                             }
                           }
