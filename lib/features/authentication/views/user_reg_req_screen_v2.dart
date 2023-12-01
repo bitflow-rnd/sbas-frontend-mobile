@@ -116,7 +116,10 @@ class UserRegisterRequestScreenV2State
                             if (index.state < 1) {
                               // TODO showToast 말고 다른걸로
                               final user = ref.read(regUserProvider);
-                              ref.watch(signUpProvider.notifier).existId(user.id).then((value) {
+                              ref
+                                  .watch(signUpProvider.notifier)
+                                  .existId(user.id)
+                                  .then((value) {
                                 if (value) {
                                   showToast("사용중인 아이디입니다.");
                                   return;
@@ -133,7 +136,8 @@ class UserRegisterRequestScreenV2State
                                   context,
                                   Common.commonModal(
                                     context: context,
-                                    mainText: "사용자 등록 요청이 완료되었습니다.\n관리자 승인후 로그인이 가능합니다.",
+                                    mainText:
+                                        "사용자 등록 요청이 완료되었습니다.\n관리자 승인후 로그인이 가능합니다.",
                                     imageWidget: Image.asset(
                                       "assets/auth_group/modal_check.png",
                                       width: 44.h,
@@ -142,7 +146,9 @@ class UserRegisterRequestScreenV2State
                                     button2Function: () {
                                       Navigator.pop(context, true);
                                       Navigator.pop(context, true);
-                                      ref.read(regIndexProvider.notifier).state = -1;
+                                      ref
+                                          .read(regIndexProvider.notifier)
+                                          .state = -1;
                                     },
                                   ),
                                 );
@@ -224,16 +230,16 @@ class UserRegisterRequestScreenV2State
           'assets/auth_group/disabled_system_admin.png',
         ],
         authGroupTitles: [
-          '병상요청그룹',
-          '병상승인그룹',
-          '병상배정그룹',
+          '보건소',
+          '병상배정반',
+          '의료진',
           '시스템 관리자',
         ],
         authGroupSubTitles: [
-          '보건소, 병상배정반, 의료진',
-          '병상배정반',
-          '의료진',
-          '전산운영',
+          '병상요청',
+          '병상요청, 병상승인, 이송처리',
+          '병상요청, 병상배정',
+          '모니터링, 테스트',
         ],
         detailAuthTitles: [
           '일반',
