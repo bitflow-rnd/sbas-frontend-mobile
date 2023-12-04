@@ -22,7 +22,8 @@ class TalkRoomBloc {
     _fetchChattingRoom();
   }
 
-  Stream<List<TalkMsgModel>> get chatDetailListStream => _chatDetailListController.stream;
+  Stream<List<TalkMsgModel>> get chatDetailListStream =>
+      _chatDetailListController.stream;
 
   late final List<TalkMsgModel> chatDetailList;
 
@@ -65,10 +66,18 @@ class TalkRoomBloc {
 
   Future<void> uploadFile(XFile? file) async {
     var client = dio.Dio();
+    const int maxFileSize = 1024 * 1024;
     var uploadFile = await dio.MultipartFile.fromFile(
       file!.path,
       filename: file.name,
     );
+
+    if (uploadFile.length > maxFileSize) {
+      util.showToast("파일 용량이 너무 큽니다. 1MB 미만의 파일을 사용해 주세요.");
+      client.close();
+      return;
+    }
+
     try {
       client.options.contentType = 'multipart/form-data';
       client.options.headers = util.authToken;
