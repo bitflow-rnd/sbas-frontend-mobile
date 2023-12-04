@@ -17,6 +17,7 @@ class AlarmPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<String> dropdownList = ['최근1개월', '최근3개월', '최근1년'];
     String selectedDropdown = '최근1개월';
+    ref.invalidate(alarmScreenProvider);
 
     return Scaffold(
       backgroundColor: Palette.dividerGrey,
@@ -84,7 +85,7 @@ class AlarmPage extends ConsumerWidget {
         ),
       ),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => ref.invalidate(alarmScreenProvider),
         child: ref.watch(alarmScreenProvider).when(
           loading: () => const SBASProgressIndicator(),
           error: (error, stackTrace) => Center(
