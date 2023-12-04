@@ -12,8 +12,7 @@ import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/dashboard/views/widgets/dashboard_widget.dart';
 import 'package:sbas/util.dart';
 
-import '../../alarm/alarm_item_database_service.dart';
-import '../../alarm/model/alarm_item_model.dart';
+import '../../alarm/provider/alarm_screen_presenter.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -37,16 +36,11 @@ class DashboardScreen extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () async {
-              Future<List<AlarmItemModel>> selectItem = AlarmItemDatabaseService()
-                  .databaseConfig()
-                  .then((_) => AlarmItemDatabaseService().select());
-              List<AlarmItemModel> alarmItemList = [];
-              selectItem.then((value) => alarmItemList.addAll(value));
-
+              ref.read(alarmScreenProvider.notifier).getAlarmItem();
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AlarmPage(alarmItemList: alarmItemList),
+                  builder: (context) => const AlarmPage(),
                 ),
               );
             },

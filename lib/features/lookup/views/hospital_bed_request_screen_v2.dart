@@ -45,6 +45,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   final Patient? patient;
   final List<String> headerList = ["역학조사서", "환자정보", "감염병정보", "중증정보", "출발정보"];
   final bool isRight = false;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     attcId = patient?.attcId ?? '';
@@ -70,15 +71,19 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
       }
       //patient 가 null 이 아닐 때 patientRegProvider.patientINit 으로 init
     });
+
     return Scaffold(
       backgroundColor: Palette.white,
       appBar: AppBar(
         title: Text(
-          isPatientRegister ? "환자 등록" : "병상요청",
+          "병상 요청",
           style: CTS.medium(
             fontSize: 15,
             color: Colors.black,
           ),
+        ),
+        leading: const BackButton(
+          color: Colors.black,
         ),
         actions: [
           Container(
@@ -206,7 +211,10 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   Expanded(
                       child: Padding(
                     padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                    child: PatientRegInfoV2(),
+                    child: Form(
+                      key: patientBasicFormKey,
+                      child: PatientRegInfoV2(),
+                    ),
                   )),
 
                 if (order == 2) Expanded(child: InfectiousDiseaseV2(formKey: infectiousDisFormKey, report: report)), //감염병정보

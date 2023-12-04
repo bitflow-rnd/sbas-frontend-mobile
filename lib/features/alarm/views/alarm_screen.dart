@@ -3,28 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/alarm/model/alarm_item_model.dart';
 
-class AlarmPage extends ConsumerStatefulWidget {
+import '../provider/alarm_screen_presenter.dart';
+
+class AlarmPage extends ConsumerWidget {
   const AlarmPage({
-    required this.alarmItemList,
     super.key,
   });
 
-  final List<AlarmItemModel> alarmItemList;
-
   @override
-  ConsumerState<AlarmPage> createState() => AlarmPageState();
-}
-
-class AlarmPageState extends ConsumerState<AlarmPage> {
-  List<String> dropdownList = ['최근1개월', '최근3개월', '최근1년'];
-  String selectedDropdown = '최근1개월';
-
-  @override
-  Widget build(BuildContext context) {
-    bool hasAlarm = widget.alarmItemList.isEmpty;
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<String> dropdownList = ['최근1개월', '최근3개월', '최근1년'];
+    String selectedDropdown = '최근1개월';
 
     return Scaffold(
       backgroundColor: Palette.dividerGrey,
@@ -72,9 +64,9 @@ class AlarmPageState extends ConsumerState<AlarmPage> {
                 );
               }).toList(),
               onChanged: (dynamic value) {
-                setState(() {
-                  selectedDropdown = value;
-                });
+                // setState(() {
+                //   selectedDropdown = value;
+                // });
               },
             ),
           ),
@@ -93,35 +85,47 @@ class AlarmPageState extends ConsumerState<AlarmPage> {
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: hasAlarm
-            ? _emptyPage()
-            : SingleChildScrollView(
-                child: IntrinsicHeight(
-                  child: Stack(children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14.w),
-                      child: Column(children: [
-                        Expanded(
-                          child: CustomPaint(painter: DashedLineVerticalPainter(), size: const Size(1, double.infinity)),
-                        ),
-                      ]),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        dateFragment("${widget.alarmItemList[0].year}년 ${widget.alarmItemList[0].month}월"),
-                        // dateFragment("2023년 2월"),
-                        for (var alarmItem in widget.alarmItemList)
-                          alarmItemCard(
-                              title: alarmItem.title ?? '',
-                              body: alarmItem.body ?? '',
-                              dateTime: alarmItem.dateTime!,
-                          ),
-                      ],
+        child: ref.watch(alarmScreenProvider).when(
+          loading: () => const SBASProgressIndicator(),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              error.toString(),
+              style: const TextStyle(
+                color: Palette.mainColor,
+              ),
+            ),
+          ),
+          data: (list) => list.isEmpty
+              ? _emptyPage()
+              : SingleChildScrollView(
+            child: IntrinsicHeight(
+              child: Stack(children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 14.w),
+                  child: Column(children: [
+                    Expanded(
+                      child: CustomPaint(
+                          painter: DashedLineVerticalPainter(),
+                          size: const Size(1, double.infinity)),
                     ),
                   ]),
                 ),
-              ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    dateFragment("${list[0].year}년 ${list[0].month}월"),
+                    for (var alarmItem in list)
+                      alarmItemCard(
+                        title: alarmItem.title ?? '',
+                        body: alarmItem.body ?? '',
+                        dateTime: alarmItem.dateTime!,
+                      ),
+                  ],
+                ),
+              ]),
+            ),
+          ),
+        ),
       ),
     );
   }
