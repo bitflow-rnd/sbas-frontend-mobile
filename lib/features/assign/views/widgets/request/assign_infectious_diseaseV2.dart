@@ -351,7 +351,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
       controller: TextEditingController(
         text: vm.init(i, widget.report),
       )..selection = TextSelection.fromPosition(
-          TextPosition(offset: vm.init(i, widget.report)!.length)),
+          TextPosition(offset: vm.init(i, widget.report)?.length ?? 0)),
       onSaved: (newValue) => vm.setTextEditingController(i, newValue),
       onChanged: (value) => vm.setTextEditingController(i, value),
       validator: (value) {

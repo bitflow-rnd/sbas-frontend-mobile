@@ -36,7 +36,6 @@ class DashboardScreen extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () async {
-              ref.read(alarmScreenProvider.notifier).getAlarmItem();
               Navigator.push(
                 context,
                 MaterialPageRoute(
