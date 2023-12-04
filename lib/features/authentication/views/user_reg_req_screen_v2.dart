@@ -267,11 +267,6 @@ class UserRegisterRequestScreenV2State
 
   bool _tryValidation(WidgetRef ref, int index) {
     bool isValid = formKey.currentState?.validate() ?? false;
-    if (index == -1) {
-      isValid = ref
-          .watch(isPhoneAuthSuccess.notifier)
-          .state; // 인증번호 확인 주석처리시 인증번호체크 안하고 넘어감.
-    }
     if (isValid) {
       formKey.currentState?.save();
     }
