@@ -14,7 +14,7 @@ class AlarmScreenPresenter extends AsyncNotifier<List<AlarmItemModel>> {
   Future<List<AlarmItemModel>> getAlarmItem() async {
     Future<List<AlarmItemModel>> selectItem = AlarmItemDatabaseService()
         .databaseConfig()
-        .then((_) => AlarmItemDatabaseService().select());
+        .then((_) => AlarmItemDatabaseService().selectAllByUserId());
     return selectItem;
   }
 
