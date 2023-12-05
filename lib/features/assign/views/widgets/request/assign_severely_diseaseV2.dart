@@ -87,10 +87,10 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _getTitle(widget._subTitles[i], true),
-                            Gaps.v16,
+                            Gaps.v8,
                             _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
                             // _initRowClassification(model.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
-                            Gaps.v6,
+                            Gaps.v8,
                             if (_selectedIndex == 1 && _score == 0)
                               Visibility(
                                 visible: _selectedIndex == 1 && _score == 0,
@@ -99,7 +99,7 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                             if (_selectedIndex == 1)
                               Column(
                                 children: [
-                                  Gaps.v28,
+                                  Gaps.v8,
                                   _getTitle("중증도 분석 결과", true),
                                 ],
                               ),
@@ -130,11 +130,10 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                             if (_selectedIndex == 0 || _selectedIndex == 1)
                               Column(
                                 children: [
-                                  Gaps.v16,
+                                  Gaps.v8,
                                   _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVTP')),
                                   // 이부분도 디자인과 다름. 디자인상 중증/준중증/준등증 으로 되어있지만.
                                   //실제 SVTP 로 조회시 무증상~사망의 7개 나옴. 일단 디자인과 동일하게 구현.
-                                  Gaps.v28
                                 ],
                               ),
                           ],
@@ -142,26 +141,27 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                       else if (i == 1)
                         Column(
                           children: [
+                            Gaps.v24,
                             _getTitle(widget._subTitles[i], true),
-                            Gaps.v16,
+                            Gaps.v8,
                             _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'BDTP')),
                           ],
                         )
                       else if (i == 2)
                         Column(
                           children: [
-                            Gaps.v28,
+                            Gaps.v24,
                             _getTitle(widget._subTitles[i], true),
-                            Gaps.v16,
+                            Gaps.v8,
                             _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'DNRA')),
                           ],
                         )
                       else if (i == 3)
                         Column(
                           children: [
-                            Gaps.v28,
+                            Gaps.v24,
                             _getTitle(widget._subTitles[i], true),
-                            Gaps.v16,
+                            Gaps.v8,
                             rowMultiSelectButton(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'PTTP'), i),
                           ],
                         )

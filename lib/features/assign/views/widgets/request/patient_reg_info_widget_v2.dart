@@ -308,7 +308,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                     color: Palette.mainColor,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 15.h),
+                  padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 12.5.h),
                   child: Text(
                     "주소검색",
                     style: CTS(
