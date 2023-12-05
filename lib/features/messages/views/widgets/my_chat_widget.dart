@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/models/base_attc_model.dart';
+import 'package:sbas/common/repos/file_repo.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
@@ -10,6 +12,12 @@ Row myChatPhotoAttachedWidget(
   TalkMsgModel input,
   ScrollController scrollController,
 ) {
+  final fileRepository = FileRepository();
+
+  Future<List<BaseAttcModel>> getFileList() {
+    return fileRepository.getFileList(input.attcId!);
+  }
+
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
     crossAxisAlignment: CrossAxisAlignment.end,
@@ -37,11 +45,30 @@ Row myChatPhotoAttachedWidget(
           ),
           child: Column(
             children: [
-              Image.asset(
-                "assets/auth_group/image_location_small.png",
-                height: 70.h,
-                width: 80.w,
+              FutureBuilder(
+                future: getFileList(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Image.network(
+                      "http://dev.smartbas.org/${snapshot.data!.first.uriPath}/${snapshot.data!.first.fileNm}",
+                      height: 70.h,
+                      width: 100.w,
+                    );
+                  } else if (snapshot.hasError) {
+                    return Image.asset(
+                      "assets/auth_group/image_location_small.png",
+                      height: 70.h,
+                    );
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                },
               ),
+              // Image.asset(
+              //   "assets/auth_group/image_location_small.png",
+              //   height: 70.h,
+              //   width: 80.w,
+              // ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
