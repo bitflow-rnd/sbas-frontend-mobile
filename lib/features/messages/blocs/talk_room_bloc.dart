@@ -64,7 +64,7 @@ class TalkRoomBloc {
     channel.sink.add("$userId|$message");
   }
 
-  Future<void> uploadFile(XFile? file) async {
+  Future<void> uploadFile(XFile? file, String? msg) async {
     var client = dio.Dio();
     const int maxFileSize = 1024 * 1024;
     var uploadFile = await dio.MultipartFile.fromFile(
@@ -93,7 +93,7 @@ class TalkRoomBloc {
       );
       if (res.statusCode == 200) {
         var attcId = res.data['result'];
-        sendMessage('attcId:$attcId');
+        sendMessage('attcId:${attcId}|$msg');
       }
     } catch (exception) {
       if (kDebugMode) {
