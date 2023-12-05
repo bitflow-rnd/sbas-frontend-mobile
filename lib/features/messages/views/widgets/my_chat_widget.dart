@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sbas/util.dart' as util;
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_attc_model.dart';
 import 'package:sbas/common/repos/file_repo.dart';
@@ -16,6 +17,17 @@ Row myChatPhotoAttachedWidget(
 
   Future<List<BaseAttcModel>> getFileList() {
     return fileRepository.getFileList(input.attcId!);
+  }
+
+  Future<void> downloadFile(
+      String attcGrpId, String attcId, String fileNm) async {
+    try {
+      await fileRepository.downloadPublicImageFile(attcGrpId, attcId, fileNm);
+
+      util.showToast("파일 다운로드 성공");
+    } catch (e) {
+      util.showToast("파일 다운로드 실패");
+    }
   }
 
   return Row(
@@ -54,10 +66,19 @@ Row myChatPhotoAttachedWidget(
                         spacing: 0.8,
                         runSpacing: 0.8,
                         children: snapshot.data!
-                            .map((file) => Image.network(
-                                  "http://dev.smartbas.org/${file.uriPath}/${file.fileNm}",
-                                  height: 150.h,
-                                  width: 100.w,
+                            .map((file) => GestureDetector(
+                                  child: Image.network(
+                                    "http://dev.smartbas.org/${file.uriPath}/${file.fileNm}",
+                                    height: 150.h,
+                                    width: 100.w,
+                                  ),
+                                  onTap: () => {
+                                    downloadFile(
+                                      file.attcGrpId,
+                                      file.attcId,
+                                      file.fileNm,
+                                    )
+                                  },
                                 ))
                             .toList(),
                       );
