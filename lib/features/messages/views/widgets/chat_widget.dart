@@ -22,7 +22,9 @@ ListView chatWidget(
             ? (isText
                 ? myChatWidget(chat, scrollController)
                 : myChatPhotoAttachedWidget(chat, scrollController))
-            : othersChatWidget(chat, scrollController),
+            : (isText
+                ? othersChatWidget(chat, scrollController)
+                : othersPhotoChatWidget(chat, scrollController)),
       );
     },
   );
