@@ -90,8 +90,12 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      progress == 0 ? ref.read(patientProgressProvider.notifier).state++ : ref.read(patientProgressProvider.notifier).state--;
-                      ref.watch(patientAsgnHistoryProvider.notifier).refresh(patient.ptId);
+                      progress == 0
+                          ? ref.read(patientProgressProvider.notifier).state++
+                          : ref.read(patientProgressProvider.notifier).state--;
+                      ref
+                          .watch(patientAsgnHistoryProvider.notifier)
+                          .refresh(patient.ptId);
                     },
                     child: PatientRegTopNav(
                       x: progress == 0 ? 1 : -1,
@@ -144,7 +148,8 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                         vertical: 12.h,
                                       ),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
                                           Row(
                                             children: [
@@ -197,17 +202,17 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                           ],
                         )
                       : ref.watch(patientAsgnHistoryProvider).when(
-                          loading: () => const SBASProgressIndicator(),
-                          error: (error, stackTrace) => Center(
-                            child: Text(
-                              error.toString(),
-                              style: const TextStyle(
-                                color: Palette.mainColor,
+                            loading: () => const SBASProgressIndicator(),
+                            error: (error, stackTrace) => Center(
+                              child: Text(
+                                error.toString(),
+                                style: const TextStyle(
+                                  color: Palette.mainColor,
+                                ),
                               ),
                             ),
+                            data: (history) => buildHistoryList(history),
                           ),
-                          data: (history) => buildHistoryList(history),
-                        ),
                 ),
               ),
             ],
@@ -220,28 +225,33 @@ class PatientLookupDetailScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: BottomPositionedSubmitButton(
-                      text: '수정',
-                      function: () async {
-                        ref.watch(patientRegProvider.notifier).patientInit(patient);
-                        ref.watch(patientAttcProvider.notifier).state = patient.attcId;
+                    text: '수정',
+                    function: () async {
+                      ref
+                          .watch(patientRegProvider.notifier)
+                          .patientInit(patient);
+                      ref.watch(patientAttcProvider.notifier).state =
+                          patient.attcId;
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PatientModifyScreen(
-                              patient: patient,
-                            ),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PatientModifyScreen(
+                            patient: patient,
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
                 Gaps.h1,
                 Expanded(
                   child: BottomPositionedSubmitButton(
                     text: '병상 요청',
                     function: () {
-                      if (ref.watch(patientAsgnHistoryProvider.notifier).checkBedAssignCompletion()) {
+                      if (ref
+                          .watch(patientAsgnHistoryProvider.notifier)
+                          .checkBedAssignCompletion()) {
                         Common.showModal(
                           context,
                           Common.commonModal(
@@ -258,15 +268,14 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                       }
                       ref.read(patientRegProvider.notifier).init();
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HospitalBedRequestScreenV2(
-                            // builder: (context) => HospitalBedRequestScreen(
-                            isPatientRegister: false,
-                            patient: patient,
-                          ),
-                        )
-                      );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HospitalBedRequestScreenV2(
+                              // builder: (context) => HospitalBedRequestScreen(
+                              isPatientRegister: false,
+                              patient: patient,
+                            ),
+                          ));
                     },
                   ),
                 )
