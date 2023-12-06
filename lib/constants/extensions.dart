@@ -7,11 +7,22 @@ extension TextExtension on Text {
 
 extension PatientExtension on Patient {
   int getAge() {
+    final now = DateTime.now();
+
     final birth = int.tryParse(rrno1?.substring(0, 2) ?? '') ?? 0;
+    final year = (int.tryParse(rrno2?[0] ?? '') ?? 0) > 2 ? 2000 : 1900;
 
-    final year = (int.tryParse(rrno2 ?? '') ?? 0) > 2 ? 2000 : 1900;
+    var age = now.year - year - birth;
 
-    return DateTime.now().year - year - birth + 1;
+    final birthMonth = int.tryParse(rrno1?.substring(2, 4) ?? '') ?? 0;
+    final birthDate = int.tryParse(rrno1?.substring(4, 6) ?? '') ?? 0;
+
+    if (birthMonth > now.month ||
+        (birthMonth == now.month && birthDate > now.day)) {
+      age--;
+    }
+
+    return age;
   }
 
   String getSex() {
