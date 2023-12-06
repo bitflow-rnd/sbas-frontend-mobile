@@ -453,12 +453,10 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       case 4:
         return r'[A-Z|a-z|-|가-힝|ㄱ-ㅎ|ㆍ|ᆢ]';
 
-      case 101:
-        return r'[0-9]';
-
       case 1:
       case 5:
       case 6:
+      case 101:
         return r'[0-9]';
 
       default:
