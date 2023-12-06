@@ -60,7 +60,8 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       if (id == null) {
-        patientInfoModel.ptId = (await _patientRepository.registerPatientInfo(patientInfoModel.toJson()))["result"];
+        patientInfoModel.ptId = (await _patientRepository
+            .registerPatientInfo(patientInfoModel.toJson()))["result"];
       } else {
         await _patientRepository.amendPatientInfo(
           id,
@@ -91,7 +92,8 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         patientInfoModel.detlAddr = report.dtlAddr;
         patientInfoModel.zip = report.zip;
         patientInfoModel.attcId = report.attcId;
-        patientInfoModel.gndr = report.rrno2 == '1' || report.rrno2 == '3' ? '남' : '여';
+        patientInfoModel.gndr =
+            report.rrno2?[0] == '1' || report.rrno2?[0] == '3' ? '남' : '여';
         patientInfoModel.job = report.job;
         patientInfoModel.ptNm = report.ptNm;
         patientInfoModel.rrno1 = report.rrno1;
@@ -125,10 +127,16 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     state = await AsyncValue.guard(() async {
       if (patientInfoModel.rrno1 != null) {
         if (gender == '여') {
-          patientInfoModel.rrno2 = '20'.compareTo(patientInfoModel.rrno1!.substring(0, 2)) < 0 ? '2' : '4';
+          patientInfoModel.rrno2 =
+              '20'.compareTo(patientInfoModel.rrno1!.substring(0, 2)) < 0
+                  ? '2'
+                  : '4';
         }
         if (gender == '남') {
-          patientInfoModel.rrno2 = '20'.compareTo(patientInfoModel.rrno1!.substring(0, 2)) < 0 ? '1' : '3';
+          patientInfoModel.rrno2 =
+              '20'.compareTo(patientInfoModel.rrno1!.substring(0, 2)) < 0
+                  ? '1'
+                  : '3';
         }
         patientInfoModel.gndr = gender;
       }
@@ -242,7 +250,8 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       return '';
     }
 
-    final difference = DateTime.now().difference(DateTime.tryParse(birthday) ?? DateTime.now());
+    final difference = DateTime.now()
+        .difference(DateTime.tryParse(birthday) ?? DateTime.now());
 
     return (difference.inDays ~/ 365.25).toString();
   }
@@ -283,7 +292,8 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       case 101:
         patientInfoModel.rrno2 = value;
 
-        patientInfoModel.gndr = value == '1' || value == '3' ? '남' : '여';
+        patientInfoModel.gndr =
+            value?[0] == '1' || value?[0] == '3' ? '남' : '여';
         return;
 
       case 2:
@@ -323,6 +333,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     switch (index) {
       case 0:
       case 7:
+      case 101:
         return 7;
 
       case 1:
@@ -335,9 +346,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       case 4:
       case 8:
         return 9;
-
-      case 101:
-        return 1;
     }
     return null;
   }
@@ -407,13 +415,18 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         break;
 
       case 1:
-        if (value == null || value.length != 6 || !RegExp(r'^\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$').hasMatch(value)) {
+        if (value == null ||
+            value.length != 6 ||
+            !RegExp(r'^\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$')
+                .hasMatch(value)) {
           return '생년월일을 정확히 입력하세요.';
         }
         break;
 
       case 101:
-        if (value == null || value.length != 1 || !RegExp(r'[1-4]').hasMatch(value)) {
+        if (value == null ||
+            (value.length != 7 && value.length != 1) ||
+            !RegExp(r'([1-4])|([1-4]\\d{6})').hasMatch(value)) {
           return '주민번호를 정확히 입력하세요.';
         }
         break;
@@ -441,7 +454,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         return r'[A-Z|a-z|-|가-힝|ㄱ-ㅎ|ㆍ|ᆢ]';
 
       case 101:
-        return r'[1-4]';
+        return r'[0-9]';
 
       case 1:
       case 5:
@@ -477,9 +490,10 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
 
   late final PatientRegInfoModel patientInfoModel;
   late final PatientRepository _patientRepository;
-  // late final UserRegRequestRepository _regRepository;
+// late final UserRegRequestRepository _regRepository;
 }
 
-final patientRegProvider = AsyncNotifierProvider<PatientRegisterPresenter, PatientRegInfoModel>(
+final patientRegProvider =
+    AsyncNotifierProvider<PatientRegisterPresenter, PatientRegInfoModel>(
   () => PatientRegisterPresenter(),
 );

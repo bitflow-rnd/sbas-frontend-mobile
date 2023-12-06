@@ -34,7 +34,8 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
     '기타',
   ];
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => PatientRegInfoV2State();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      PatientRegInfoV2State();
 }
 
 class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
@@ -59,73 +60,79 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                 ),
               ),
               data: (report) => Column(
-                  children: [
-                    for (int i = 0; i < widget.list.length; i++)
-                      Column(
-                        children: [
-                          i != 3
-                              ? getSubTitlt(
-                                  widget.list[i],
-                                  i > 5,
-                                )
-                              : Container(),
-                          Gaps.v4,
-                          if (i == 2) _addrInput(vm),
-                          if (i == 3) _isAlive(vm),
-                          if (i == 4) _nation(report, vm),
-                          if (i == 4 && report.natiCd != 'NATI0001') Gaps.v8,
-                          if (i != 1 && i != 3 && i != 4)
-                            TextFormField(
-                              scrollPadding: EdgeInsets.only(bottom: 150),
-                              decoration: getInputDecoration(
-                                i == 8
-                                    ? '직업을 알 수 있는 경우 기재'
-                                    : i == 2
-                                        ? '나머지 ${widget.list[i]} 입력'
-                                        : '${widget.list[i]} 입력',
+                children: [
+                  for (int i = 0; i < widget.list.length; i++)
+                    Column(
+                      children: [
+                        i != 3
+                            ? getSubTitlt(
+                                widget.list[i],
+                                i > 5,
+                              )
+                            : Container(),
+                        Gaps.v4,
+                        if (i == 2) _addrInput(vm),
+                        if (i == 3) _isAlive(vm),
+                        if (i == 4) _nation(report, vm),
+                        if (i == 4 && report.natiCd != 'NATI0001') Gaps.v8,
+                        if (i != 1 && i != 3 && i != 4)
+                          TextFormField(
+                            scrollPadding: EdgeInsets.only(bottom: 150),
+                            decoration: getInputDecoration(
+                              i == 8
+                                  ? '직업을 알 수 있는 경우 기재'
+                                  : i == 2
+                                      ? '나머지 ${widget.list[i]} 입력'
+                                      : '${widget.list[i]} 입력',
+                            ),
+                            controller: TextEditingController(
+                              text: vm.getTextEditingController(i, report),
+                            )..selection = TextSelection.fromPosition(
+                                TextPosition(
+                                    offset: vm
+                                        .getTextEditingController(i, report)
+                                        .length)),
+                            onSaved: (newValue) =>
+                                vm.setTextEditingController(i, newValue),
+                            onChanged: (value) =>
+                                vm.setTextEditingController(i, value),
+                            validator: (value) => vm.isFieldValid(i, value),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(vm.getRegExp(i)),
                               ),
-                              controller: TextEditingController(
-                                text: vm.getTextEditingController(i, report),
-                              )..selection = TextSelection.fromPosition(
-                                  TextPosition(offset: vm.getTextEditingController(i, report).length)),
-                              onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-                              onChanged: (value) => vm.setTextEditingController(i, value),
-                              validator: (value) => vm.isFieldValid(i, value),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                  RegExp(vm.getRegExp(i)),
-                                ),
-                                FilteringTextInputFormatter.singleLineFormatter,
-                              ],
-                              keyboardType: vm.getKeyboardType(i),
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              maxLength: vm.getMaxLength(i),
-                            ),
-                          Gaps.v12,
-                          if (i == 1)
-                            Column(
-                              children: [
-                                _inputResidentRegistrationNumber(vm, report, i),
-                                Gaps.v14,
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: _inputGender(vm),
-                                    ),
-                                    Gaps.h8,
-                                    Expanded(
-                                      child: _inputAge(vm),
-                                    ),
-                                  ],
-                                ),
-                                Gaps.v32,
-                              ],
-                            ),
-                        ],
-                      ),
-                    Gaps.v20,
-                  ],
-                ),
+                              FilteringTextInputFormatter.singleLineFormatter,
+                            ],
+                            keyboardType: vm.getKeyboardType(i),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            maxLength: vm.getMaxLength(i),
+                          ),
+                        Gaps.v12,
+                        if (i == 1)
+                          Column(
+                            children: [
+                              _inputResidentRegistrationNumber(vm, report, i),
+                              Gaps.v14,
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _inputGender(vm),
+                                  ),
+                                  Gaps.h8,
+                                  Expanded(
+                                    child: _inputAge(vm),
+                                  ),
+                                ],
+                              ),
+                              Gaps.v32,
+                            ],
+                          ),
+                      ],
+                    ),
+                  Gaps.v20,
+                ],
+              ),
             ),
       ),
     );
@@ -146,10 +153,13 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
               ),
               controller: TextEditingController(
                 text: vm.getTextEditingController(index, report),
-              )..selection = TextSelection.fromPosition(
-                  TextPosition(offset: vm.getTextEditingController(index, report).length)),
-              onSaved: (newValue) => vm.setTextEditingController(index, newValue),
-              onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(index, value),
+              )..selection = TextSelection.fromPosition(TextPosition(
+                  offset: vm.getTextEditingController(index, report).length)),
+              onSaved: (newValue) =>
+                  vm.setTextEditingController(index, newValue),
+              onChanged: (value) => ref
+                  .read(patientRegProvider.notifier)
+                  .setTextEditingController(index, value),
               validator: (value) => vm.isFieldValid(index, value),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
@@ -177,10 +187,15 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                     decoration: getInputDecoration(''),
                     controller: TextEditingController(
                       text: vm.getTextEditingController(index + 100, report),
-                    )..selection = TextSelection.fromPosition(
-                        TextPosition(offset: vm.getTextEditingController(index + 100, report).length)),
-                    onSaved: (newValue) => vm.setTextEditingController(index + 100, newValue),
-                    onChanged: (value) => ref.read(patientRegProvider.notifier).setTextEditingController(index + 100, value),
+                    )..selection = TextSelection.fromPosition(TextPosition(
+                        offset: vm
+                            .getTextEditingController(index + 100, report)
+                            .length)),
+                    onSaved: (newValue) =>
+                        vm.setTextEditingController(index + 100, newValue),
+                    onChanged: (value) => ref
+                        .read(patientRegProvider.notifier)
+                        .setTextEditingController(index + 100, value),
                     validator: (value) => vm.isFieldValid(index + 100, value),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
@@ -192,26 +207,26 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                     maxLength: vm.getMaxLength(index + 100),
                   ),
                 ),
-                Row(
-                  children: [
-                    for (var k = 0; k < 6; k++)
-                      Container(
-                        height: 8.h,
-                        width: 8.w,
-                        margin: EdgeInsets.only(
-                          top: 20.h,
-                          left: 7.w,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(
-                            99,
-                          ),
-                        ),
-                      ),
-                    Gaps.h16,
-                  ],
-                )
+                // Row(
+                //   children: [
+                //     for (var k = 0; k < 6; k++)
+                //       Container(
+                //         height: 8.h,
+                //         width: 8.w,
+                //         margin: EdgeInsets.only(
+                //           top: 20.h,
+                //           left: 7.w,
+                //         ),
+                //         decoration: BoxDecoration(
+                //           color: Colors.black,
+                //           borderRadius: BorderRadius.circular(
+                //             99,
+                //           ),
+                //         ),
+                //       ),
+                //     Gaps.h16,
+                //   ],
+                // )
               ],
             ),
           ),
@@ -247,7 +262,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           getSubTitlt('나이', true),
           Gaps.v8,
           Container(
-            padding: EdgeInsets.only(left: 20.w, top: 12.h, bottom: 12.h, right: 12.w),
+            padding: EdgeInsets.only(
+                left: 20.w, top: 12.h, bottom: 12.h, right: 12.w),
             decoration: BoxDecoration(
               color: const Color(0xffecedef).withOpacity(0.2),
               border: Border.all(
@@ -308,7 +324,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                     color: Palette.mainColor,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 15.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 28.w, vertical: 15.h),
                   child: Text(
                     "주소검색",
                     style: CTS(
@@ -336,7 +353,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                   Row(
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 28.w, vertical: 10.h),
                         child: Text(i,
                             style: CTS.bold(
                               fontSize: 11,
@@ -358,13 +376,22 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                       onTap: () => vm.setSurvivalStatus(i),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: widget.isAliveList[vm.isSurvivalStatus] == i ? const Color(0xff538ef5) : Colors.transparent,
-                            borderRadius: widget.isAliveList[vm.isSurvivalStatus] == i ? BorderRadius.circular(6) : null),
-                        padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
+                            color: widget.isAliveList[vm.isSurvivalStatus] == i
+                                ? const Color(0xff538ef5)
+                                : Colors.transparent,
+                            borderRadius:
+                                widget.isAliveList[vm.isSurvivalStatus] == i
+                                    ? BorderRadius.circular(6)
+                                    : null),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 28.w, vertical: 10.h),
                         child: Text(i,
                             style: CTS.bold(
                               fontSize: 11,
-                              color: widget.isAliveList[vm.isSurvivalStatus] == i ? Palette.white : Palette.greyText_60,
+                              color:
+                                  widget.isAliveList[vm.isSurvivalStatus] == i
+                                      ? Palette.white
+                                      : Palette.greyText_60,
                             )),
                       ),
                     ),
@@ -409,7 +436,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                   Row(
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 28.w, vertical: 10.h),
                         child: Text(i,
                             style: CTS.bold(
                               fontSize: 11,
@@ -428,16 +456,37 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: () => vm.setNation(i == "대한민국" ? "NATI0001" : "NATI0002"),
+                      onTap: () =>
+                          vm.setNation(i == "대한민국" ? "NATI0001" : "NATI0002"),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: widget.nationSel[vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i ? const Color(0xff538ef5) : Colors.transparent,
-                            borderRadius: widget.nationSel[vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i ? BorderRadius.circular(6) : null),
-                        padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 10.h),
+                            color: widget.nationSel[
+                                        vm.patientInfoModel.natiCd == "NATI0001"
+                                            ? 0
+                                            : 1] ==
+                                    i
+                                ? const Color(0xff538ef5)
+                                : Colors.transparent,
+                            borderRadius: widget.nationSel[
+                                        vm.patientInfoModel.natiCd == "NATI0001"
+                                            ? 0
+                                            : 1] ==
+                                    i
+                                ? BorderRadius.circular(6)
+                                : null),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 28.w, vertical: 10.h),
                         child: Text(i,
                             style: CTS.bold(
                               fontSize: 11,
-                              color: widget.nationSel[vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i ? Palette.white : Palette.greyText_60,
+                              color: widget.nationSel[
+                                          vm.patientInfoModel.natiCd ==
+                                                  "NATI0001"
+                                              ? 0
+                                              : 1] ==
+                                      i
+                                  ? Palette.white
+                                  : Palette.greyText_60,
                             )),
                       ),
                     ),
@@ -456,7 +505,8 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           ),
         ],
       );
-  Widget _nation(PatientRegInfoModel report, PatientRegisterPresenter vm) => Column(
+  Widget _nation(PatientRegInfoModel report, PatientRegisterPresenter vm) =>
+      Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -487,11 +537,14 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
               Container(
                 width: 130.w,
                 child: TextFormField(
-                  controller: TextEditingController(text: vm.patientInfoModel.natiNm)
-                    ..selection = TextSelection.fromPosition(
-                        TextPosition(offset: vm.patientInfoModel.natiNm!.length)),
-                  decoration: getInputDecoration(report.natiCd == 'NATI0001' ? '' : '직접입력'),
-                  onSaved: (newValue) => vm.setTextEditingController(104, newValue),
+                  controller:
+                      TextEditingController(text: vm.patientInfoModel.natiNm)
+                        ..selection = TextSelection.fromPosition(TextPosition(
+                            offset: vm.patientInfoModel.natiNm!.length)),
+                  decoration: getInputDecoration(
+                      report.natiCd == 'NATI0001' ? '' : '직접입력'),
+                  onSaved: (newValue) =>
+                      vm.setTextEditingController(104, newValue),
                   onChanged: (value) => vm.setTextEditingController(104, value),
                   validator: (value) {
                     return null;
