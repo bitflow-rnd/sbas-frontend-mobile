@@ -108,7 +108,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     curve: Curves.easeOut,
                   );
                 });
-                return chatWidget(userToken.name!, snapshot, _scrollController);
+                return chatWidget(userToken.name!, snapshot, _scrollController, context);
               },
             ),
           ),

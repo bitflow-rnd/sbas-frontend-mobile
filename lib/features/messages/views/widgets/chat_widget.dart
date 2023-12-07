@@ -7,6 +7,7 @@ ListView chatWidget(
   String currentUserId,
   AsyncSnapshot<List<TalkMsgModel>> snapshot,
   ScrollController scrollController,
+  BuildContext context,
 ) {
   return ListView.builder(
     controller: scrollController,
@@ -21,10 +22,10 @@ ListView chatWidget(
         child: isMyMessage
             ? (isText
                 ? myChatWidget(chat, scrollController)
-                : myChatPhotoAttachedWidget(chat, scrollController))
+                : myChatPhotoAttachedWidget(chat, scrollController, context))
             : (isText
                 ? othersChatWidget(chat, scrollController)
-                : othersPhotoChatWidget(chat, scrollController)),
+                : othersPhotoChatWidget(chat, scrollController, context)),
       );
     },
   );

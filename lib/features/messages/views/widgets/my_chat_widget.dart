@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sbas/util.dart' as util;
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_attc_model.dart';
 import 'package:sbas/common/repos/file_repo.dart';
@@ -8,10 +7,12 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
+import 'package:sbas/constants/common.dart';
 
 Row myChatPhotoAttachedWidget(
   TalkMsgModel input,
   ScrollController scrollController,
+  BuildContext context,
 ) {
   final fileRepository = FileRepository();
 
@@ -21,13 +22,22 @@ Row myChatPhotoAttachedWidget(
 
   Future<void> downloadFile(
       String attcGrpId, String attcId, String fileNm) async {
-    try {
-      await fileRepository.downloadPublicImageFile(attcGrpId, attcId, fileNm);
-
-      util.showToast("파일 다운로드 성공");
-    } catch (e) {
-      util.showToast("파일 다운로드 실패");
-    }
+    await fileRepository
+        .downloadPublicImageFile(attcGrpId, attcId, fileNm)
+        .then((value) => {
+              Common.showModal(
+                context,
+                Common.commonModal(
+                  context: context,
+                  mainText: "파일 다운로드 완료",
+                  imageWidget: Image.asset(
+                    "assets/auth_group/modal_check.png",
+                    width: 44.h,
+                  ),
+                  imageHeight: 44.h,
+                ),
+              )
+            });
   }
 
   return Row(
@@ -83,9 +93,25 @@ Row myChatPhotoAttachedWidget(
                             .toList(),
                       );
                     } else if (snapshot.hasError) {
-                      return Image.asset(
-                        "assets/auth_group/image_location_small.png",
-                        height: 70.h,
+                      return GestureDetector(
+                        onTap: () => {
+                          Common.showModal(
+                            context,
+                            Common.commonModal(
+                              context: context,
+                              mainText: "해당 파일이 없습니다.",
+                              imageWidget: Image.asset(
+                                "assets/auth_group/modal_cross.png",
+                                width: 44.h,
+                              ),
+                              imageHeight: 44.h,
+                            ),
+                          )
+                        },
+                        child: Image.asset(
+                          "assets/auth_group/image_location_small.png",
+                          height: 70.h,
+                        ),
                       );
                     } else {
                       return const CircularProgressIndicator();
