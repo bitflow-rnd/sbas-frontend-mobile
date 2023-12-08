@@ -201,9 +201,9 @@ class UserRegisterRequestScreenV2State
     if (user.btDt == '' || user.btDt == null) {
       return false;
     }
-    if (user.authCd == '' || user.authCd == null) {
-      return false;
-    }
+    // if (user.authCd == '' || user.authCd == null) {
+    //   return false;
+    // }
     return true;
   }
 
