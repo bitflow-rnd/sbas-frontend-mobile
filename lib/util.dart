@@ -171,19 +171,14 @@ Color getStateColor(String? code) {
 // cdNm: 배정불가
 // rmk: 배정불가처리완료
 
-int getAge(Patient? patient) {
-  final birth = int.tryParse(patient?.rrno1?.substring(0, 2) ?? '') ?? 0;
-
-  final year = (int.tryParse(patient?.rrno2 ?? '') ?? 0) > 2 ? 2000 : 1900;
-
-  return DateTime.now().year - year - birth + 1;
-}
-
 String getPhoneFormat(String? mpno) {
   if (mpno == null || mpno.isEmpty) {
     return '';
   }
-  return mpno.replaceRange(3, 3, '-').replaceRange(8, 8, '-').replaceRange(4, 8, '****');
+  return mpno
+      .replaceRange(3, 3, '-')
+      .replaceRange(8, 8, '-')
+      .replaceRange(4, 8, '****');
 }
 
 String getDateTimeFormatFull(String dt) {
@@ -208,7 +203,8 @@ String getTimeLineDateFormat(String dt) {
   return DateFormat('aa h시 mm분').format(dateTime ?? DateTime.now());
 }
 
-String format(int remainingTime) => Duration(seconds: remainingTime).toString().substring(2, 7);
+String format(int remainingTime) =>
+    Duration(seconds: remainingTime).toString().substring(2, 7);
 
 String toJson(Map<String, dynamic> map) => jsonEncode(map);
 

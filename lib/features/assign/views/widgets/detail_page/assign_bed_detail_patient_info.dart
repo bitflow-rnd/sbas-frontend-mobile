@@ -7,7 +7,6 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
-import 'package:sbas/util.dart';
 
 class AssignBedDetailPatientInfo extends ConsumerWidget {
   AssignBedDetailPatientInfo({
@@ -85,7 +84,8 @@ class AssignBedDetailPatientInfo extends ConsumerWidget {
                                           color: Palette.greyText_20,
                                           width: 1,
                                         ),
-                                        borderRadius: BorderRadius.circular(13.5.r),
+                                        borderRadius:
+                                            BorderRadius.circular(13.5.r),
                                       ),
                                       child: Text(
                                         tags?[index] ?? '',
@@ -144,7 +144,7 @@ class AssignBedDetailPatientInfo extends ConsumerWidget {
                               ),
                               Gaps.h10,
                               Text(
-                                '${getAge(patient)}세',
+                                '${patient.age}세',
                                 style: CTS.medium(fontSize: 13),
                                 textAlign: TextAlign.end,
                                 maxLines: 2,

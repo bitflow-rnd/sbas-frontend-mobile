@@ -30,6 +30,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
   late final TextEditingController _messageController;
   late final ScrollController _scrollController;
   final ImagePicker _picker = ImagePicker();
+  XFile? file;
   late bool _isButtonEnabled;
 
   @override
@@ -107,7 +108,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     curve: Curves.easeOut,
                   );
                 });
-                return chatWidget(userToken.name!, snapshot, _scrollController);
+                return chatWidget(userToken.name!, snapshot, _scrollController, context);
               },
             ),
           ),
@@ -133,13 +134,22 @@ class _ChattingScreenState extends State<ChattingScreen> {
           InkWell(
             onTap: () async {
               // Choose the file (image) from gallery
-              final XFile? file = await _picker.pickImage(source: ImageSource.gallery);
-              _talkRoomBloc.uploadFile(file);
+              final XFile? pickedFile =
+                  await _picker.pickImage(source: ImageSource.gallery);
+
+              if (pickedFile != null) {
+                setState(() {
+                  file = pickedFile;
+                  _isButtonEnabled = true;
+                });
+              }
+              ;
             },
             child: Container(
               color: Palette.greyText_20,
               margin: EdgeInsets.all(2.r),
-              child: Image.asset("assets/auth_group/image_location_small.png", width: 42.h),
+              child: Image.asset("assets/auth_group/image_location_small.png",
+                  width: 42.h),
             ),
           ),
           Expanded(
@@ -149,20 +159,30 @@ class _ChattingScreenState extends State<ChattingScreen> {
               setState(() {});
               _isButtonEnabled = value.trim().isNotEmpty;
             },
-            decoration: InputDecoration(hintText: '메시지 입력', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+            decoration: InputDecoration(
+                hintText: '메시지 입력',
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
           )),
           InkWell(
             onTap: _isButtonEnabled
                 ? () {
-                    _talkRoomBloc.sendMessage(_messageController.text);
+                    if (file != null) {
+                      _talkRoomBloc.uploadFile(file, _messageController.text);
+                    } else {
+                      print('text');
+                      _talkRoomBloc.sendMessage(_messageController.text);
+                    }
                     _messageController.clear();
                     setState(() {
+                      file = null;
                       _isButtonEnabled = false;
                     });
                   }
                 : null,
             child: Container(
-                color: _isButtonEnabled ? Palette.mainColor : Palette.greyText_30,
+                color:
+                    _isButtonEnabled ? Palette.mainColor : Palette.greyText_30,
                 padding: EdgeInsets.all(12.r),
                 margin: EdgeInsets.all(2.r),
                 child: Icon(

@@ -34,7 +34,7 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 1:
-      text = '${patient.rrno1}-${patient.rrno2}******';
+      text = '${patient.rrno1}-${patient.rrno2?[0]}******';
       break;
 
     case 2:
@@ -60,8 +60,12 @@ String getConvertPatientInfo(int index, Patient patient) {
       break;
 
     case 5:
-      if (patient.mpno != null && patient.mpno!.isNotEmpty && patient.mpno!.length == 11 && patient.mpno!.startsWith('010')) {
-        text = patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ?? text;
+      if (patient.mpno != null &&
+          patient.mpno!.isNotEmpty &&
+          patient.mpno!.length == 11 &&
+          patient.mpno!.startsWith('010')) {
+        text = patient.mpno?.replaceRange(3, 3, '-').replaceRange(8, 8, '-') ??
+            text;
       } else if (patient.mpno != null && patient.mpno!.isNotEmpty) {
         text = patient.mpno ?? text;
       } else {
@@ -75,7 +79,8 @@ String getConvertPatientInfo(int index, Patient patient) {
       if (telno == null || telno.isEmpty) {
         text = '-';
       } else {
-        text = telno.replaceFirstMapped(RegExp(r'^(02|\d{3})(\d{3,4})(\d{4})$'), (match) => '${match[1]}-${match[2]}-${match[3]}');
+        text = telno.replaceFirstMapped(RegExp(r'^(02|\d{3})(\d{3,4})(\d{4})$'),
+            (match) => '${match[1]}-${match[2]}-${match[3]}');
       }
 
       break;
@@ -121,6 +126,7 @@ String getAddress(Patient? patient) {
   return '${address?[0]} ${address?[1]} / $phone';
 }
 
-final patientLookupProvider = AsyncNotifierProvider<PatientLookupBloc, PatientListModel>(
+final patientLookupProvider =
+    AsyncNotifierProvider<PatientLookupBloc, PatientListModel>(
   () => PatientLookupBloc(),
 );

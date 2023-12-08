@@ -80,7 +80,7 @@ class V1Provider {
         showToast(res.data['message']);
       }
       if (res.statusCode == 200) {
-        if (! !kDebugMode) {
+        if (kDebugMode) {
           print(res.data);
         }
         return res.data['result'] ?? res.data['message'];
@@ -111,8 +111,8 @@ class V1Provider {
     try {
       client.options.contentType = 'application/json';
 
-      final res = await client.postUri(
-          Uri.parse('${dotenv.env['BASE_URL']}/send'));
+      final res =
+          await client.postUri(Uri.parse('${dotenv.env['BASE_URL']}/send'));
       if (kDebugMode) {
         print(res.toString());
       }
@@ -123,7 +123,8 @@ class V1Provider {
     }
   }
 
-  Future<void> downloadPublicImageFile(String attcGrpId, String attcId, String fileNm) async {
+  Future<void> downloadPublicImageFile(
+      String attcGrpId, String attcId, String fileNm) async {
     final url = '$_baseUrl/public/common/download/$attcGrpId/$attcId';
     final response = await http.get(Uri.parse(url));
 
@@ -137,7 +138,8 @@ class V1Provider {
     }
   }
 
-  Future<void> downloadPublicFile(String attcGrpId, String attcId, String fileNm) async {
+  Future<void> downloadPublicFile(
+      String attcGrpId, String attcId, String fileNm) async {
     final url = '$_baseUrl/public/common/download/$attcGrpId/$attcId';
 
     Dio dio = Dio();
