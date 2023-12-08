@@ -116,7 +116,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           TextFormField(
             inputFormatters: [
               FilteringTextInputFormatter.allow(
-                RegExp(r'[a-z|0-9|~!@#$%^&*()_-]'),
+                RegExp(r'[a-zA-Z0-9~!@#$%^&*()_-]'),
               ),
               FilteringTextInputFormatter.singleLineFormatter,
             ],
