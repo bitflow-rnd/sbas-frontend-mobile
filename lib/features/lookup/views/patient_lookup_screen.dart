@@ -153,15 +153,13 @@ class PatientLookupScreenState extends ConsumerState<PatientLookupScreen> {
                   itemCount: patient.items.length,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () async {
-                      final patientBasicInfo = await ref.read(patientInfoProvider.notifier).getAsync(patient.items[index].ptId);
-
+                      ref.watch(patientIdProvider.notifier).state = patient.items[index].ptId;
+                      ref.invalidate(patientInfoProvider);
                       if (context.mounted) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => PatientLookupDetailScreen(
-                              patient: patientBasicInfo,
-                            ),
+                            builder: (_) => PatientLookupDetailScreen(),
                           ),
                         );
                       }
