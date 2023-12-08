@@ -1,13 +1,16 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
-class PatientInfoPresenter extends AsyncNotifier {
+class PatientInfoPresenter extends AsyncNotifier<Patient> {
   @override
-  FutureOr build() {
-    _repository = ref.read(patientRepoProvider);
+  FutureOr<Patient> build() {
+    String? ptId = ref.read(patientIdProvider);
+    debugPrint("build $ptId");
+    return getAsync(ptId);
   }
 
   Future<Patient> getAsync(String? ptId) async {
@@ -17,9 +20,10 @@ class PatientInfoPresenter extends AsyncNotifier {
     return Patient();
   }
 
-  late final PatientRepository _repository;
+  final PatientRepository _repository = PatientRepository();
 }
 
-final patientInfoProvider = AsyncNotifierProvider<PatientInfoPresenter, void>(
+final patientInfoProvider = AsyncNotifierProvider<PatientInfoPresenter, Patient>(
   () => PatientInfoPresenter(),
 );
+final patientIdProvider = StateProvider.autoDispose<String?>((ref) => '');

@@ -7,6 +7,7 @@ import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
+import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
@@ -68,6 +69,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
           patientInfoModel.toJson(),
         );
       }
+      ref.invalidate(patientInfoProvider);
       return patientInfoModel;
     });
     if (state.hasError) {}
@@ -75,7 +77,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       ref.read(patientImageProvider.notifier).state = null;
       ref.read(patientAttcProvider.notifier).state = null;
 
+      ref.read(patientIdProvider.notifier).state = id;
       ref.read(patientLookupProvider.notifier).refresh();
+
       patientInfoModel.clear();
     }
   }

@@ -87,11 +87,6 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
                     ref.watch(patientImageProvider.notifier).state = null;
                     Navigator.pop(context);
                   },
-                  // ? () => Navigator.pop(context)
-                  //   : () {
-                  //     ref.read(patientIsUploadProvider.notifier).state = true;
-                  //     ref.read(patientAttcProvider.notifier).state = null;
-                  //   },
                 ),
               ),
               SizedBox(
@@ -101,9 +96,7 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
                     onPressed: () {
                       if (patientAttc != null) {
                         if (_tryValidation()) {
-                          // print(ref.watch(patientRegProvider).value?.ptNm);
                           ref.read(patientRegProvider.notifier).registry(widget.patient.ptId, context);
-                          // TODO 화면 이동후 새로고침
                           Navigator.pop(context);
                         }
                       } else {

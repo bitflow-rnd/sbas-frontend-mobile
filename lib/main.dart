@@ -38,11 +38,13 @@ _showLocalMessage(RemoteMessage message) async {
   if (notification != null && android != null) {
     var now = DateTime.now();
     var dateTime = DateFormat('MM.d (EE) aa h시 mm분', 'ko').format(now);
+    var userId = prefs.getString("id");
 
     var alarmItemModel = AlarmItemModel(
       title: notification.title, body: notification.body,
       year: now.year, month: now.month,
-      dateTime: dateTime,
+      dateTime: dateTime, userId: userId,
+      receivedTime: now.toString(),
     );
 
     AlarmItemDatabaseService()
