@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kpostal/kpostal.dart';
-import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
@@ -126,74 +125,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     return true;
   }
 
-  Future<void> uploadPatientGender(String gender) async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      if (patientInfoModel.rrno1 != null) {
-        if (gender == '여') {
-          patientInfoModel.rrno2 =
-              '20'.compareTo(patientInfoModel.rrno1!.substring(0, 2)) < 0
-                  ? '2'
-                  : '4';
-        }
-        if (gender == '남') {
-          patientInfoModel.rrno2 =
-              '20'.compareTo(patientInfoModel.rrno1!.substring(0, 2)) < 0
-                  ? '1'
-                  : '3';
-        }
-        patientInfoModel.gndr = gender;
-      }
-      return patientInfoModel;
-    });
-    if (state.hasError) {}
-    if (state.hasValue) {}
-  }
-
-  Future<void> updatePatientRegion(BaseCodeModel region) async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      patientInfoModel.dstr1Cd = region.cdId;
-
-      return patientInfoModel;
-    });
-    if (state.hasError) {}
-    if (state.hasValue) {}
-  }
-
-  Future<void> updatePatientCounty(BaseCodeModel region) async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      patientInfoModel.dstr2Cd = region.cdId;
-
-      return patientInfoModel;
-    });
-    if (state.hasError) {}
-    if (state.hasValue) {}
-  }
-
-  Future<void> updatePatientNationality(String nationality) async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      patientInfoModel.natiCd = nationality;
-
-      return patientInfoModel;
-    });
-    if (state.hasError) {}
-    if (state.hasValue) {}
-  }
-
-  Future<void> updatePatientCrossroadsOfLife(String life) async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      patientInfoModel.dethYn = life;
-
-      return patientInfoModel;
-    });
-    if (state.hasError) {}
-    if (state.hasValue) {}
-  }
-
   Future<void> setAddress(Kpostal postal) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
@@ -225,19 +156,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       return patientInfoModel;
     });
   }
-
-  // Future<void> setNation(PatientRegInfoModel report) async {
-  //   state = const AsyncLoading();
-  //   state = await AsyncValue.guard(() async {
-  //     report.natiCd = report.natiCd == 'NATI0001' ? 'NATI0002' : 'NATI0001';
-  //     report.natiNm = report.natiCd == 'NATI0001' ? '대한민국' : '';
-
-  //     patientInfoModel.natiCd = report.natiCd;
-  //     patientInfoModel.natiNm = report.natiNm;
-
-  //     return patientInfoModel;
-  //   });
-  // }
 
   String? get sex => patientInfoModel.gndr;
 
@@ -350,16 +268,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       case 4:
       case 8:
         return 9;
-    }
-    return null;
-  }
-
-  String? findPatientAddress(List<BaseCodeModel> list, String? findValue) {
-    if (list.any((element) => element.cdId == findValue)) {
-      return list.firstWhere((e) => e.cdId == findValue).cdNm;
-    }
-    if (list.any((element) => element.cdNm == findValue)) {
-      return findValue;
     }
     return null;
   }

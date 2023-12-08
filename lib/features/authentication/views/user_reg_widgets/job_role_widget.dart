@@ -200,55 +200,55 @@ class _JobRoleState extends ConsumerState<JobRole> {
                       ],
                     ),
                   ),
-                  _getTitie(2),
-                  FormField(
-                    initialValue: authCd,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) =>
-                        value == null || value.isEmpty ? '권한을 선택해주세요.' : null,
-                    builder: (field) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 128,
-                          child: GridView.builder(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                            ),
-                            itemCount: widget.detailAuthTitles.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 1,
-                              mainAxisSpacing: 12,
-                              crossAxisSpacing: 16,
-                              childAspectRatio: 8.75 / 1,
-                            ),
-                            itemBuilder: (context, index) =>
-                                DetailAuthorization(
-                              title: widget.detailAuthTitles[index],
-                              subTitle: widget.detailAuthSubTitles[index],
-                              index: index,
-                              selectedIndex: detailAuthSelectedIndex,
-                              onChanged: (value) => setState(
-                                () {
-                                  detailAuthSelectedIndex = value ?? 0;
-
-                                  model.authCd = detailAuthCode[index];
-
-                                  field.didChange(model.authCd);
-                                },
-                              ),
-                            ),
-                            physics: const NeverScrollableScrollPhysics(),
-                          ),
-                        ),
-                        if (field.hasError)
-                          FieldErrorText(
-                            field: field,
-                          )
-                      ],
-                    ),
-                  ),
+                  // _getTitie(2),
+                  // FormField(
+                  //   initialValue: authCd,
+                  //   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  //   validator: (value) =>
+                  //       value == null || value.isEmpty ? '권한을 선택해주세요.' : null,
+                  //   builder: (field) => Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       SizedBox(
+                  //         height: 128,
+                  //         child: GridView.builder(
+                  //           padding: const EdgeInsets.symmetric(
+                  //             vertical: 12,
+                  //           ),
+                  //           itemCount: widget.detailAuthTitles.length,
+                  //           gridDelegate:
+                  //               const SliverGridDelegateWithFixedCrossAxisCount(
+                  //             crossAxisCount: 1,
+                  //             mainAxisSpacing: 12,
+                  //             crossAxisSpacing: 16,
+                  //             childAspectRatio: 8.75 / 1,
+                  //           ),
+                  //           itemBuilder: (context, index) =>
+                  //               DetailAuthorization(
+                  //             title: widget.detailAuthTitles[index],
+                  //             subTitle: widget.detailAuthSubTitles[index],
+                  //             index: index,
+                  //             selectedIndex: detailAuthSelectedIndex,
+                  //             onChanged: (value) => setState(
+                  //               () {
+                  //                 detailAuthSelectedIndex = value ?? 0;
+                  //
+                  //                 model.authCd = detailAuthCode[index];
+                  //
+                  //                 field.didChange(model.authCd);
+                  //               },
+                  //             ),
+                  //           ),
+                  //           physics: const NeverScrollableScrollPhysics(),
+                  //         ),
+                  //       ),
+                  //       if (field.hasError)
+                  //         FieldErrorText(
+                  //           field: field,
+                  //         )
+                  //     ],
+                  //   ),
+                  // ),
                   Gaps.v52
                 ],
               ),

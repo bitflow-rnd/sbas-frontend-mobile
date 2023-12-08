@@ -20,6 +20,7 @@ class UserRegBloc extends AsyncNotifier {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final user = ref.read(regUserProvider);
+      user.authCd = 'DTPM0001';
       return await _signUpRepository.reqUserReg(user);
     });
     if (state.hasError) {}
