@@ -11,15 +11,15 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/blocs/bio_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 
+import '../../../../../common/widgets/field_error_widget.dart';
+
 class SeverelyDiseaseV2 extends ConsumerStatefulWidget {
   SeverelyDiseaseV2({
-    required this.formKey,
     required this.ptId,
     super.key,
   });
 
   final String ptId;
-  final GlobalKey<FormState> formKey;
   final List<String> _subTitles = [
     '중증여부', //  2     : SVTP (cpGrpId)
     '요청병상유형', //  3  : BDTP (cpGrpId)
@@ -60,124 +60,120 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Form(
-        key: widget.formKey,
-        autovalidateMode: AutovalidateMode.always,
-        child: ref.watch(severelyDiseaseProvider).when(
-              loading: () => const SBASProgressIndicator(),
-              error: (error, stackTrace) => Center(
-                child: Text(
-                  error.toString(),
-                  style: const TextStyle(
-                    color: Palette.mainColor,
-                  ),
-                ),
-              ),
-              data: (model) => SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 14,
-                  horizontal: 18,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (int i = 0; i < widget._subTitles.length; i++)
-                      if (i == 0)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _getTitle(widget._subTitles[i], true),
-                            Gaps.v8,
-                            _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
-                            // _initRowClassification(model.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
-                            Gaps.v8,
-                            if (_selectedIndex == 1 && _score == 0)
-                              Visibility(
-                                visible: _selectedIndex == 1 && _score == 0,
-                                child: _initBioInfo(),
-                              ),
-                            if (_selectedIndex == 1)
-                              Column(
-                                children: [
-                                  Gaps.v8,
-                                  _getTitle("중증도 분석 결과", true),
-                                ],
-                              ),
-                            if (_selectedIndex == 1 && _score > 0)
-                              Column(
-                                children: [
-                                  Gaps.v20,
-                                  Text(
-                                    'NEWS Score: $_score',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const Divider(
-                                    color: Colors.grey,
-                                  ),
-                                  const Text(
-                                    '※중증도 분석 A.I.시스템의 분석 값 입니다.',
-                                    style: TextStyle(
-                                      color: Palette.mainColor,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            if (_selectedIndex == 0 || _selectedIndex == 1)
-                              Column(
-                                children: [
-                                  Gaps.v8,
-                                  _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVTP')),
-                                  // 이부분도 디자인과 다름. 디자인상 중증/준중증/준등증 으로 되어있지만.
-                                  //실제 SVTP 로 조회시 무증상~사망의 7개 나옴. 일단 디자인과 동일하게 구현.
-                                ],
-                              ),
-                          ],
-                        )
-                      else if (i == 1)
+      child: ref.watch(severelyDiseaseProvider).when(
+        loading: () => const SBASProgressIndicator(),
+        error: (error, stackTrace) => Center(
+          child: Text(
+            error.toString(),
+            style: const TextStyle(
+              color: Palette.mainColor,
+            ),
+          ),
+        ),
+        data: (model) => SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            vertical: 14,
+            horizontal: 18,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (int i = 0; i < widget._subTitles.length; i++)
+                if (i == 0)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _getTitle(widget._subTitles[i], true),
+                      Gaps.v8,
+                      _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
+                      // _initRowClassification(model.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
+                      Gaps.v8,
+                      if (_selectedIndex == 1 && _score == 0)
+                        Visibility(
+                          visible: _selectedIndex == 1 && _score == 0,
+                          child: _initBioInfo(),
+                        ),
+                      if (_selectedIndex == 1)
                         Column(
                           children: [
-                            Gaps.v24,
-                            _getTitle(widget._subTitles[i], true),
                             Gaps.v8,
-                            _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'BDTP')),
-                          ],
-                        )
-                      else if (i == 2)
-                        Column(
-                          children: [
-                            Gaps.v24,
-                            _getTitle(widget._subTitles[i], true),
-                            Gaps.v8,
-                            _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'DNRA')),
-                          ],
-                        )
-                      else if (i == 3)
-                        Column(
-                          children: [
-                            Gaps.v24,
-                            _getTitle(widget._subTitles[i], true),
-                            Gaps.v8,
-                            rowMultiSelectButton(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'PTTP'), i),
-                          ],
-                        )
-                      else if (i == 4)
-                        Column(
-                          children: [
-                            Gaps.v28,
-                            _getTitle(widget._subTitles[i], true),
-                            Gaps.v16,
-                            rowMultiSelectButton(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'UDDS'), i),
+                            _getTitle("중증도 분석 결과", true),
                           ],
                         ),
-                  ],
-                ),
-              ),
-            ),
+                      if (_selectedIndex == 1 && _score > 0)
+                        Column(
+                          children: [
+                            Gaps.v20,
+                            Text(
+                              'NEWS Score: $_score',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Divider(
+                              color: Colors.grey,
+                            ),
+                            const Text(
+                              '※중증도 분석 A.I.시스템의 분석 값 입니다.',
+                              style: TextStyle(
+                                color: Palette.mainColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      if (_selectedIndex == 0 || _selectedIndex == 1)
+                        Column(
+                          children: [
+                            Gaps.v8,
+                            _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVTP')),
+                            // 이부분도 디자인과 다름. 디자인상 중증/준중증/준등증 으로 되어있지만.
+                            //실제 SVTP 로 조회시 무증상~사망의 7개 나옴. 일단 디자인과 동일하게 구현.
+                          ],
+                        ),
+                    ],
+                  )
+                else if (i == 1)
+                  Column(
+                    children: [
+                      Gaps.v8,
+                      _getTitle(widget._subTitles[i], true),
+                      Gaps.v8,
+                      _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'BDTP')),
+                    ],
+                  )
+                else if (i == 2)
+                  Column(
+                    children: [
+                      Gaps.v8,
+                      _getTitle(widget._subTitles[i], true),
+                      Gaps.v8,
+                      _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'DNRA')),
+                    ],
+                  )
+                else if (i == 3)
+                  Column(
+                    children: [
+                      Gaps.v8,
+                      _getTitle(widget._subTitles[i], true),
+                      Gaps.v8,
+                      rowMultiSelectButton(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'PTTP'), i),
+                    ],
+                  )
+                else if (i == 4)
+                  Column(
+                    children: [
+                      Gaps.v28,
+                      _getTitle(widget._subTitles[i], false),
+                      Gaps.v16,
+                      rowMultiSelectButton(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'UDDS'), i),
+                    ],
+                  ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -413,10 +409,10 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
               ),
             ],
           ));
-
+  final _formKey = GlobalKey<FormState>();
   Future<void> _submit() async {
-    if (widget.formKey.currentState != null && widget.formKey.currentState!.validate()) {
-      widget.formKey.currentState!.save();
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
       _score = await ref.read(bioInfoProvider.notifier).analyze(widget.ptId);
     }
@@ -431,98 +427,123 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
     } else {
       if (list.length > 3) list = list.sublist(0, 3); // 기존 디자인과 다르기에 3개만 보여줌.
     }
-
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xffe4e4e4),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Row(
+    var severelyDiseaseModel = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel;
+    return FormField(
+      validator: (value) {
+        if (list.first == '직접선택') {
+          return severelyDiseaseModel.svrtTypeCd == null || severelyDiseaseModel.svrtTypeCd == ''
+              ? '중증여부를 선택해주세요.' : null;
+        } else if (list.first == '미분류') {
+          return severelyDiseaseModel.reqBedTypeCd == null || severelyDiseaseModel.reqBedTypeCd == ''
+              ? '요청병상유형을 선택해주세요.' : null;
+        } else if (list.first == '동의') {
+          return severelyDiseaseModel.dnrAgreYn == null || severelyDiseaseModel.dnrAgreYn == ''
+              ? '요청병상유형을 선택해주세요.' : null;
+        }
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      builder: (field) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
             children: [
-              for (int i = 0; i < list.length; i++)
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Text(list[i] ?? "", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
-                      ),
-                      Gaps.h1,
-                    ],
-                  ),
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xffe4e4e4),
+                  borderRadius: BorderRadius.circular(6),
                 ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            for (int i = 0; i < list.length; i++)
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      if (isFirst == true && _selectedIndex != i) {
-                        _selectedIndex = i;
-                      }
-                      final key = model.toList()[i].cdId;
-
-                      if (key != null && key.isNotEmpty) {
-                        final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
-
-                        if (isChecked != null) {
-                          setState(() {
-                            final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
-
-                            if (state[key] == true) return;
-
-                            state[key] = !isChecked;
-
-                            for (var e in state.keys) {
-                              if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
-                                state[e] = isChecked;
-                              }
-                            }
-                          });
-                        }
-                      }
-                    });
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                child: Row(
+                  children: [
+                    for (int i = 0; i < list.length; i++)
                       Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? const Color(0xff538ef5) : Colors.transparent,
-                              borderRadius: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? BorderRadius.circular(6) : null),
-                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                          child: Text(list[i] ?? '',
-                              style: CTS.bold(
-                                fontSize: 11,
-                                color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? Palette.white : Palette.greyText_60,
-                              )),
+                        flex: 1,
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
+                              child: Text(list[i] ?? "", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                            ),
+                            Gaps.h1,
+                          ],
                         ),
                       ),
-                      list[i] != list.last
-                          ? Container(
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  for (int i = 0; i < list.length; i++)
+                    Expanded(
+                      child: InkWell(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? const Color(0xff538ef5) : Colors.transparent,
+                                    borderRadius: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? BorderRadius.circular(6) : null),
+                                padding: EdgeInsets.symmetric(vertical: 10.h),
+                                child: Text(list[i] ?? '',
+                                    style: CTS.bold(
+                                      fontSize: 11,
+                                      color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? Palette.white : Palette.greyText_60,
+                                    )),
+                              ),
+                            ),
+                            list[i] != list.last
+                                ? Container(
                               height: 12,
                               width: 1,
                               decoration: BoxDecoration(
                                 color: const Color(0xff676a7a).withOpacity(0.2),
                               ),
                             )
-                          : Container(),
-                    ],
-                  ),
-                ),
-              )
-          ],
-        ),
-      ],
+                                : Container(),
+                          ],
+                        ),
+                        onTap: () {
+                          setState(() {
+                            if (isFirst == true && _selectedIndex != i) {
+                              _selectedIndex = i;
+                            }
+                            final key = model.toList()[i].cdId;
+
+                            if (key != null && key.isNotEmpty) {
+                              final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
+
+                              if (isChecked != null) {
+                                setState(() {
+                                  final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
+
+                                  if (state[key] == true) return;
+
+                                  state[key] = !isChecked;
+
+                                  for (var e in state.keys) {
+                                    if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
+                                      state[e] = isChecked;
+                                    }
+                                  }
+                                });
+                              }
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+          Gaps.v10,
+          if (field.hasError)
+            FieldErrorText(
+              field: field,
+            )
+        ],
+      )
     );
   }
 
@@ -544,137 +565,86 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
       );
 
   Widget rowMultiSelectButton(Iterable<BaseCodeModel> model, int subIndex) {
-    return Row(
-      children: [
-        Expanded(
-          child: Wrap(
-              spacing: 11.w,
-              runSpacing: 12.h,
-              direction: Axis.horizontal,
-              children: List.generate(
-                model.length,
-                (index) => GestureDetector(
-                  onTap: () {
-                    final key = model.toList()[index].cdId;
-
-                    if (key != null && key.isNotEmpty) {
-                      final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
-
-                      if (isChecked != null) {
-                        setState(() {
-                          final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
-                          state[key] = !isChecked;
-                          //여러개 체크할수 있도록 수정
-                          // for (var e in state.keys) {
-                          //   if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
-                          //     state[e] = isChecked;
-                          //   }
-                          // }
-                        });
-                      }
-                    }
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
-                    decoration: BoxDecoration(
-                      color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] != true ? Colors.white : Palette.mainColor,
-                      border: Border.all(
-                        color: Palette.greyText_20,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(13.5.r),
-                    ),
-                    child: Text(
-                      model.toList()[index].cdNm ?? '',
-                      style: CTS(
-                        fontSize: 12.sp,
-                        color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] == true ? Palette.white : Palette.greyText_60,
-                      ),
-                    ),
-                  ),
-                ),
-              )),
-        ),
-      ],
-    );
-  }
-
-  Widget rowSelectButton(list, selected, WidgetRef ref, p) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xffe4e4e4),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Row(
-            children: [
-              for (var i in list)
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Text(i, style: CTS.bold(fontSize: 11, color: Colors.transparent)),
-                      ),
-                      Gaps.h1,
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            for (var i in list)
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    print(i);
-                    selected = list.indexOf(i);
-                    ref.watch(p.notifier).state = selected;
-                  },
-                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: list[selected] == i ? const Color(0xff538ef5) : Colors.transparent,
-                            borderRadius: list[selected] == i ? BorderRadius.circular(6) : null),
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Text(i,
-                            style: CTS.bold(
-                              fontSize: 11,
-                              color: list[selected] == i ? Palette.white : Palette.greyText_60,
-                            )),
-                      ),
-                    ),
-                  ]),
-                ),
-              )
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _getTextInputField({required String hint, TextInputType type = TextInputType.text, int? maxLength, List<TextInputFormatter>? inputFormatters}) {
-    return TextFormField(
-      style: CTS.medium(fontSize: 13.sp),
-      decoration: getInputDecoration(hint),
-      controller: TextEditingController(
-          // text: vm.init(i, widget.report),
-          ),
-      // onSaved: (newValue) => vm.setTextEditingController(i, newValue),
-      // onChanged: (value) => vm.setTextEditingController(i, value),
+    var severelyDiseaseModel = ref.watch(severelyDiseaseProvider.notifier).severelyDiseaseModel;
+    var list = model.toList();
+    return FormField(
       validator: (value) {
-        return null;
+        if (list.first.cdNm == '일반') {
+          print(severelyDiseaseModel.pttp);
+          print(severelyDiseaseModel.ptTypeCd);
+          return severelyDiseaseModel.pttp.isEmpty
+            ? '환자유형을 선택해주세요.' : null;
+        }
       },
-      inputFormatters: inputFormatters,
-      autovalidateMode: AutovalidateMode.always,
-      keyboardType: type,
-      maxLength: maxLength,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      builder: (field) => Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Wrap(
+                  spacing: 11.w,
+                  runSpacing: 12.h,
+                  direction: Axis.horizontal,
+                  children: List.generate(
+                    model.length,
+                        (index) => GestureDetector(
+                      onTap: () {
+                        final key = model.toList()[index].cdId;
+                        if (key != null && key.isNotEmpty) {
+                          final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
+
+                          if (isChecked != null) {
+                            if (!isChecked) {
+                              severelyDiseaseModel.pttp.add(key);
+                            } else {
+                              severelyDiseaseModel.pttp.remove(key);
+                            }
+                            setState(() {
+                              final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
+                              state[key] = !isChecked;
+                              //여러개 체크할수 있도록 수정
+                              // for (var e in state.keys) {
+                              //   if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
+                              //     state[e] = isChecked;
+                              //   }
+                              // }
+                            });
+                          }
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                        decoration: BoxDecoration(
+                          color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] != true ? Colors.white : Palette.mainColor,
+                          border: Border.all(
+                            color: Palette.greyText_20,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(13.5.r),
+                        ),
+                        child: Text(
+                          model.toList()[index].cdNm ?? '',
+                          style: CTS(
+                            fontSize: 12.sp,
+                            color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[index].cdId] == true ? Palette.white : Palette.greyText_60,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ),
+                Gaps.v12,
+                if (field.hasError)
+                  FieldErrorText(
+                    field: field,
+                  )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -688,7 +658,7 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
             ),
           ),
           Text(
-            (title == '환자 유형' || title == '기저 질환') ? '(다중선택)' : '(필수)',
+            ((title == '환자유형' || title == '기저질환') ? '(다중선택)' : '') + (isRequired ? '(필수)' : ''),
             style: CTS.medium(
               fontSize: 13,
               color: (title == '환자 유형' || title == '기저 질환') ? Colors.grey.shade600 : Palette.mainColor,
