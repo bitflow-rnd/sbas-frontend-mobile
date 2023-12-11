@@ -107,7 +107,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                   ),
               Column(
                 children: [
-                  Gaps.v14,
+                  Gaps.v8,
                   Row(
                     children: [
                       Expanded(child: _initTextField(0, true)),
@@ -165,7 +165,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                       widget._assignedToTheFloorTitles,
                       true,
                     ),
-                    Gaps.v16,
+                    Gaps.v8,
                     for (int i = 0; i < widget._hospitalTitles.length; i++)
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,82 +186,108 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
   }
 
   Widget _initRowClassification(List<String> list, bool isAssign) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xffe4e4e4),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Row(
+    String? value;
+
+    var dprtDstrTypeCd = ref.read(originInfoProvider.notifier).getDprtDstrTypeCd();
+    var inhpAsgnYn = ref.read(originInfoProvider.notifier).getInhpAsgnYn();
+
+    return FormField(
+      initialValue: list[0] == '자택' ? dprtDstrTypeCd : inhpAsgnYn,
+      validator: (value) {
+        print(value);
+        return 'hello';
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      builder: (field) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
             children: [
-              for (int i = 0; i < list.length; i++)
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Text(list[i], style: CTS.bold(fontSize: 11, color: Colors.transparent)),
-                      ),
-                      Gaps.h1,
-                    ],
-                  ),
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xffe4e4e4),
+                  borderRadius: BorderRadius.circular(6),
                 ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            for (int i = 0; i < list.length; i++)
-              Expanded(
-                child: InkWell(
-                  onTap: () async {
-                    if (isAssign) {
-                      var val = await ref.read(originInfoProvider.notifier).setAssignedToTheFloor(i);
-                      setState(() {
-                        _assignedToTheFloor = val;
-                      });
-                    } else {
-                      var val = await ref.read(originInfoProvider.notifier).setOriginIndex(i);
-                      setState(() {
-                        _selectedOriginIndex = val;
-                      });
-                    }
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                child: Row(
+                  children: [
+                    for (int i = 0; i < list.length; i++)
                       Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? const Color(0xff538ef5) : Colors.transparent,
-                              borderRadius: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? BorderRadius.circular(6) : null),
-                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                          child: Text(list[i],
-                              style: CTS.bold(
-                                fontSize: 11,
-                                color: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? Palette.white : Palette.greyText_60,
-                              )),
+                        flex: 1,
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
+                              child: Text(list[i], style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                            ),
+                            Gaps.h1,
+                          ],
                         ),
                       ),
-                      list[i] != list.last
-                          ? Container(
-                              height: 12,
-                              width: 1,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff676a7a).withOpacity(0.2),
-                              ),
-                            )
-                          : Container(),
-                    ],
-                  ),
+                  ],
                 ),
-              )
-          ],
-        ),
-      ],
+              ),
+              Row(
+                children: [
+                  for (int i = 0; i < list.length; i++)
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          if (isAssign) {
+                            var val = await ref.read(originInfoProvider.notifier).setAssignedToTheFloor(i);
+                            field.didChange(inhpAsgnYn);
+                            setState(() {
+                              _assignedToTheFloor = val;
+                            });
+                          } else {
+                            print("hello2 $isAssign");
+                            var val = await ref.read(originInfoProvider.notifier).setOriginIndex(i);
+                            field.didChange(dprtDstrTypeCd);
+                            setState(() {
+                              _selectedOriginIndex = val;
+                            });
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? const Color(0xff538ef5) : Colors.transparent,
+                                    borderRadius: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? BorderRadius.circular(6) : null),
+                                padding: EdgeInsets.symmetric(vertical: 10.h),
+                                child: Text(list[i],
+                                    style: CTS.bold(
+                                      fontSize: 11,
+                                      color: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? Palette.white : Palette.greyText_60,
+                                    )),
+                              ),
+                            ),
+                            list[i] != list.last
+                              ? Container(
+                                  height: 12,
+                                  width: 1,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff676a7a).withOpacity(0.2),
+                                  ),
+                                )
+                              : Container(),
+                          ],
+                        ),
+                      ),
+                    )
+                ],
+              ),
+            ],
+          ),
+          Gaps.v10,
+          if (field.hasError)
+            FieldErrorText(
+              field: field,
+            )
+        ],
+      )
     );
   }
 
@@ -349,39 +375,6 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
             ),
           ),
         );
-  }
-
-  Widget rowMultiSelectButton(list, selectList) {
-    return Row(
-      children: [
-        Expanded(
-          child: Wrap(
-            spacing: 11.w,
-            runSpacing: 12.h,
-            direction: Axis.horizontal,
-            children: [
-              for (var i in list)
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
-                  decoration: BoxDecoration(
-                    color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
-                    border: Border.all(
-                      color: Palette.greyText_20,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(13.5.r),
-                  ),
-                  child: Text(i,
-                      style: CTS.bold(
-                        fontSize: 13,
-                        color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
-                      )),
-                )
-            ],
-          ),
-        ),
-      ],
-    );
   }
 
   Widget _getTitle(String title, bool isRequired) => Row(

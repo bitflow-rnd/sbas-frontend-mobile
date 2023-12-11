@@ -504,14 +504,14 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                               ),
                             ),
                             list[i] != list.last
-                                ? Container(
-                              height: 12,
-                              width: 1,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff676a7a).withOpacity(0.2),
-                              ),
-                            )
-                                : Container(),
+                              ? Container(
+                                  height: 12,
+                                  width: 1,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff676a7a).withOpacity(0.2),
+                                  ),
+                                )
+                              : Container(),
                           ],
                         ),
                         onTap: () {

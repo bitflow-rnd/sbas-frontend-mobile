@@ -211,6 +211,14 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
     }
   }
 
+  String? getDprtDstrTypeCd() {
+    return _dprtInfo.dprtDstrTypeCd;
+  }
+
+  String? getInhpAsgnYn() {
+    return _dprtInfo.inhpAsgnYn;
+  }
+
   late final PatientRepository _repository;
 
   final OriginInfoModel _dprtInfo = OriginInfoModel();
