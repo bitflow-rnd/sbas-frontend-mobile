@@ -17,9 +17,7 @@ import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 class OriginInfomationV2 extends ConsumerStatefulWidget {
   OriginInfomationV2({
     super.key,
-    required this.formKey,
   });
-  final GlobalKey<FormState> formKey;
   final _homeTitles = [
     '보호자 1 연락처',
     '보호자 2 연락처',
@@ -54,146 +52,133 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Form(
-        key: widget.formKey,
-        autovalidateMode: AutovalidateMode.always,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.w,
-                    vertical: 18.h,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: ref.watch(originInfoProvider).when(
+        loading: () => const SBASProgressIndicator(),
+        error: (error, stackTrace) => Center(
+          child: Text(
+            error.toString(),
+            style: CTS(
+              color: Palette.mainColor,
+            ),
+          ),
+        ),
+        data: (origin) => SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            vertical: 14,
+            horizontal: 18,
+          ),
+          child: Column(
+            children: [
+              for (int i = 0; i < widget._subTitles.length; i++)
+                if (i == 0)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _getTitle(widget._subTitles[i], true),
+                      Gaps.v8,
+                      Row(
+                        children: [
+                          Expanded(
+                              child: _selectRegion(origin.reqDstr1Cd)
+                          ),
+                          Expanded(
+                            child: Text(
+                              "※ 병상배정 지자체 선택",
+                              style: CTS(color: Palette.mainColor, fontSize: 12),
+                            ).c,
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+                else if (i == 1)
+                  Column(
+                    children: [
+                      Gaps.v16,
+                      _getTitle("환자 출발지 유형", true),
+                      Gaps.v8,
+                      _initRowClassification(
+                        widget._classification,
+                        false,
+                      ),
+                    ],
                   ),
-                  child: ref.watch(originInfoProvider).when(
-                        loading: () => const SBASProgressIndicator(),
-                        error: (error, stackTrace) => Center(
-                          child: Text(
-                            error.toString(),
-                            style: CTS(
-                              color: Palette.mainColor,
+              Column(
+                children: [
+                  Gaps.v14,
+                  Row(
+                    children: [
+                      Expanded(child: _initTextField(0, true)),
+                      InkWell(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => KpostalView(
+                              kakaoKey: dotenv.env['KAKAO'] ?? '',
+                              callback: (postal) => ref.read(originInfoProvider.notifier).setAddress(postal),
                             ),
                           ),
                         ),
-                        data: (origin) => Column(children: [
-                          for (int i = 0; i < widget._subTitles.length; i++)
-                            if (i == 0)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _getTitle(widget._subTitles[i], true),
-                                  Gaps.v12,
-                                  Row(
-                                    children: [
-                                      Expanded(child: _selectRegion(origin.reqDstr1Cd)),
-                                      Expanded(
-                                        child: Text(
-                                          "※ 병상배정 지자체 선택",
-                                          style: CTS(color: Palette.mainColor, fontSize: 12),
-                                        ).c,
-                                      )
-                                    ],
-                                  ),
-                                  // Text(
-                                  //   "안내문구 노출 영역",
-                                  //   style: CTS(color: Palette.red, fontSize: 11),
-                                  //   textAlign: TextAlign.start,
-                                  // ),
-                                  if (_selectedOriginIndex == 1) //병원 출발기준
-                                    Column(
-                                      children: [
-                                        Gaps.v28,
-                                        _getTitle("원내 배정 여부", true),
-                                        Gaps.v16,
-                                        _initRowClassification(
-                                          widget._assignedToTheFloorTitles,
-                                          true,
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              )
-                            else if (i == 1)
-                              Column(
-                                children: [
-                                  Gaps.v28,
-                                  _getTitle("환자 출발지", false),
-                                  Gaps.v16,
-                                  _initRowClassification(
-                                    widget._classification,
-                                    false,
-                                  ),
-                                ],
-                              ),
-                          Column(
-                            children: [
-                              Gaps.v14,
-                              Row(
-                                children: [
-                                  Expanded(child: _initTextField(0, true)),
-                                  InkWell(
-                                    onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => KpostalView(
-                                          kakaoKey: dotenv.env['KAKAO'] ?? '',
-                                          callback: (postal) => ref.read(originInfoProvider.notifier).setAddress(postal),
-                                        ),
-                                      ),
-                                    ),
-                                    child: Container(
-                                      margin: EdgeInsets.only(left: 7.w),
-                                      decoration: BoxDecoration(
-                                        color: Palette.mainColor,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
-                                      child: Text(
-                                        "주소검색",
-                                        style: CTS(
-                                          fontSize: 13,
-                                          color: Palette.white,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Gaps.v10,
-                              _initTextField(100, true),
-                              Gaps.v28,
-                            ],
+                        child: Container(
+                          margin: EdgeInsets.only(left: 7.w),
+                          decoration: BoxDecoration(
+                            color: Palette.mainColor,
+                            borderRadius: BorderRadius.circular(4),
                           ),
-                          if (_selectedOriginIndex == 0)
-                            for (int i = 0; i < widget._homeTitles.length; i++)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _getTitle(widget._homeTitles[i], false),
-                                  Gaps.v4,
-                                  _initTextField(i + 103, true),
-                                  Gaps.v36,
-                                ],
-                              )
-                          else if (_selectedOriginIndex == 1)
-                            for (int i = 0; i < widget._hospitalTitles.length; i++)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _getTitle(widget._hospitalTitles[i], false),
-                                  Gaps.v8,
-                                  _initTextField(i + 3 + 1000, false),
-                                  Gaps.v36,
-                                ],
-                              ),
-                        ]),
+                          padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
+                          child: Text(
+                            "주소검색",
+                            style: CTS(
+                              fontSize: 13,
+                              color: Palette.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Gaps.v10,
+                  _initTextField(100, true),
+                  Gaps.v24,
+                ],
+              ),
+              if (_selectedOriginIndex == 0)
+                for (int i = 0; i < widget._homeTitles.length; i++)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _getTitle(widget._homeTitles[i], false),
+                      Gaps.v8,
+                      _initTextField(i + 103, true),
+                      Gaps.v16,
+                    ],
+                  )
+              else if (_selectedOriginIndex == 1)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _getTitle("원내 배정 여부", true),
+                    Gaps.v8,
+                    _initRowClassification(
+                      widget._assignedToTheFloorTitles,
+                      true,
+                    ),
+                    Gaps.v16,
+                    for (int i = 0; i < widget._hospitalTitles.length; i++)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _getTitle(widget._hospitalTitles[i], false),
+                          Gaps.v8,
+                          _initTextField(i + 3 + 1000, false),
+                          Gaps.v16,
+                        ],
                       ),
-                ),
-              ],
-            ),
+                  ],
+                )
+            ]
           ),
         ),
       ),
@@ -293,8 +278,16 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
           ),
           data: (region) => FormField(
             initialValue: ref.watch(selectedRegionProvider).cdId,
+            validator: (value) {
+              return ref.watch(selectedRegionProvider).cdId == null ||
+                      ref.watch(selectedRegionProvider).cdId == ''
+                  ? '배정 요청 지역을 선택해주세요.'
+                  : null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             builder: (field) => SizedBox(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InputDecorator(
                     decoration: getInputDecoration(""),
@@ -309,7 +302,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                                   width: 150,
                                   child: Text(
                                     e.cdNm ?? '',
-                                    style: TextStyle(fontSize: 13, color: Palette.black),
+                                    style: const TextStyle(fontSize: 13, color: Palette.black),
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
@@ -331,8 +324,9 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                             try {
                               final selectRegion = region.firstWhere((e) => value == e.cdId);
                               ref.read(originInfoProvider.notifier).selectLocalGovernment(selectRegion);
+                              field.didChange(value);
                             } catch (e) {
-                              print("erro${e.toString()}");
+                              debugPrint("error ${e.toString()}");
                             }
                           }
                         },
@@ -400,10 +394,10 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
             ),
           ),
           Text(
-            !isRequired ? '(선택)' : '(필수)',
+            isRequired ? '(필수)' : '(선택)',
             style: CTS.medium(
               fontSize: 13,
-              color: !isRequired ? Colors.grey.shade600 : Palette.mainColor,
+              color: Palette.mainColor,
             ),
           ),
         ],

@@ -229,9 +229,12 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     )
                   ), //중증정보
                 if (order == 4)
-                  OriginInfomationV2(
-                    formKey: orignFormKey,
-                  ), //출발정보
+                  Expanded(
+                    child: Form(
+                      key: orignFormKey,
+                      child: OriginInfomationV2(),
+                    ), //출발정보
+                  ),
                 _bottomer(ref, patientImage, patientAttc, context, hasPatient: patient != null),
               ],
             ),
