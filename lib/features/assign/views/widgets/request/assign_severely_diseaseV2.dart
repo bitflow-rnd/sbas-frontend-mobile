@@ -58,9 +58,6 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
   int _selectedIndex = -1, _selectedStateIndex = -1, _selectedOxygenIndex = -1, _score = 0;
   @override
   Widget build(BuildContext context) {
-    var svrtIptTypeCd = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel.svrtIptTypeCd;
-    svrtIptTypeCd == 'SVIP0001' ? _selectedIndex = 0 : _selectedIndex = 1;
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: ref.watch(severelyDiseaseProvider).when(
@@ -178,237 +175,244 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
     );
   }
 
-  Widget _initBioInfo() => ref.watch(bioInfoProvider).when(
+  Widget _initBioInfo() {
+    var svrtIptTypeCd = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel.svrtIptTypeCd;
+    svrtIptTypeCd == 'SVIP0001' ? _selectedIndex = 0 : _selectedIndex = 1;
+
+    return ref.watch(bioInfoProvider).when(
       loading: () => const SBASProgressIndicator(),
       error: (error, stackTrace) => Center(
-            child: Text(
-              error.toString(),
-              style: const TextStyle(
-                color: Palette.mainColor,
-              ),
-            ),
+        child: Text(
+          error.toString(),
+          style: const TextStyle(
+            color: Palette.mainColor,
           ),
+        ),
+      ),
       data: (bio) => Column(
-            children: [
-              Divider(
-                color: Palette.greyText_20,
-                height: 1.2,
-              ),
-              Gaps.v8,
-              FormField(
-                autovalidateMode: AutovalidateMode.always,
-                builder: (field) => Column(
+        children: [
+          Divider(
+            color: Palette.greyText_20,
+            height: 1.2,
+          ),
+          Gaps.v8,
+          FormField(
+            autovalidateMode: AutovalidateMode.always,
+            builder: (field) => Column(
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          '의식상태',
-                          style: CTS(color: Palette.greyText, fontSize: 13),
-                        ),
-                        const Spacer(),
-                        Stack(
-                          children: [
-                            Container(
-                              width: 110.w,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffe4e4e4),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Row(
-                                children: [
-                                  for (int i = 0; i < 2; i++)
-                                    Expanded(
-                                      flex: 1,
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.symmetric(vertical: 10.h),
-                                            child: Text("", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
-                                          ),
-                                          Gaps.h1,
-                                        ],
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                for (int i = 0; i < 2; i++)
-                                  _initClassification(
-                                    widget._classification[i],
-                                    _selectedStateIndex,
-                                    i,
-                                    () => setState(
-                                      () {
-                                        _selectedStateIndex = i;
-                                        bio.avpu = i == 0 ? 'A' : 'U';
-                                        field.didChange(bio.avpu);
-                                      },
-                                    ),
-                                  ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
+                    Text(
+                      '의식상태',
+                      style: CTS(color: Palette.greyText, fontSize: 13),
                     ),
-                  ],
-                ),
-                validator: (value) => value != null ? null : '의식상태를 선택하세요.',
-              ),
-              Gaps.v8,
-              FormField(
-                autovalidateMode: AutovalidateMode.always,
-                validator: (value) => value != null ? null : '산소 투여 여부를 선택하세요.',
-                builder: (field) => Column(
-                  children: [
-                    Row(
+                    const Spacer(),
+                    Stack(
                       children: [
-                        Text(
-                          '산소 투여 여부',
-                          style: CTS(color: Palette.greyText, fontSize: 13),
-                        ),
-                        const Spacer(),
-                        Stack(
-                          children: [
-                            Container(
-                              width: 110.w,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffe4e4e4),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Row(
-                                children: [
-                                  for (int i = 0; i < 2; i++)
-                                    Expanded(
-                                      flex: 1,
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.symmetric(vertical: 10.h),
-                                            child: Text("", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
-                                          ),
-                                          Gaps.h1,
-                                        ],
+                        Container(
+                          width: 110.w,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffe4e4e4),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Row(
+                            children: [
+                              for (int i = 0; i < 2; i++)
+                                Expanded(
+                                  flex: 1,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                                        child: Text("", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
                                       ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                for (int i = 2; i < 4; i++)
-                                  _initClassification(
-                                    widget._classification[i],
-                                    _selectedOxygenIndex,
-                                    i,
-                                    () => setState(() {
-                                      _selectedOxygenIndex = i;
-                                      bio.o2Apply = i == 4 ? 'N' : 'Y';
-                                      field.didChange(bio.o2Apply);
-                                    }),
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 300.h,
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.57,
-                  ),
-                  itemBuilder: (context, index) => Padding(
-                    padding:
-                        EdgeInsets.only(top: 12.h, bottom: 12.h, right: index % 2 == 0 ? 6.w : 0, left: index % 2 == 1 ? 6.w : 0), //왼쪽 줄, 오른쪽 줄 위젯 안쪽만 패딩줌.
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget._labelTitles[index],
-                          style: CTS.medium(color: Palette.greyText, fontSize: 13),
-                        ),
-                        Gaps.v8,
-                        index != 5
-                            ? TextFormField(
-                                style: CTS.regular(fontSize: 13.sp, color: Palette.black),
-                                decoration: getInputDecoration(widget._labelTitlesHint[index]),
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                    RegExp(r'[0-9|.]'),
-                                  ),
-                                  FilteringTextInputFormatter.singleLineFormatter,
-                                ],
-                                validator: (value) {
-                                  if (value != null && value.isNotEmpty && (int.tryParse(value) is int || double.tryParse(value) is double)) {
-                                    return null;
-                                  }
-                                  return null;
-                                  // return '수치를 정확히 입력하세요.';
-                                },
-                                onSaved: (newValue) {
-                                  if (newValue != null && newValue.isNotEmpty) {
-                                    switch (index) {
-                                      case 0:
-                                        bio.bdTemp = double.tryParse(newValue);
-                                        break;
-                                      case 1:
-                                        bio.pulse = int.tryParse(newValue);
-                                        break;
-                                      case 2:
-                                        bio.breath = int.tryParse(newValue);
-                                        break;
-                                      case 3:
-                                        bio.spo2 = double.tryParse(newValue);
-                                        break;
-                                      case 4:
-                                        bio.sbp = int.tryParse(newValue);
-                                        break;
-                                    }
-                                  }
-                                },
-                                autovalidateMode: AutovalidateMode.always,
-                              )
-                            : Expanded(
-                                child: InkWell(
-                                  onTap: () {
-                                    _submit();
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
-                                    decoration: BoxDecoration(
-                                      color: Palette.white,
-                                      border: Border.all(
-                                        color: Palette.mainColor,
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(4.r),
-                                    ),
-                                    child: Text('분석',
-                                        style: CTS.bold(
-                                          fontSize: 13,
-                                          color: Palette.mainColor,
-                                        )).c,
+                                      Gaps.h1,
+                                    ],
                                   ),
                                 ),
-                              )
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            for (int i = 0; i < 2; i++)
+                              _initClassification(
+                                widget._classification[i],
+                                _selectedStateIndex,
+                                i,
+                                    () => setState(
+                                      () {
+                                    _selectedStateIndex = i;
+                                    bio.avpu = i == 0 ? 'A' : 'U';
+                                    field.didChange(bio.avpu);
+                                  },
+                                ),
+                              ),
+                          ],
+                        )
                       ],
                     ),
-                  ),
-                  itemCount: widget._labelTitles.length,
-                  physics: const NeverScrollableScrollPhysics(),
+                  ],
+                ),
+              ],
+            ),
+            validator: (value) => value != null ? null : '의식상태를 선택하세요.',
+          ),
+          Gaps.v8,
+          FormField(
+            autovalidateMode: AutovalidateMode.always,
+            validator: (value) => value != null ? null : '산소 투여 여부를 선택하세요.',
+            builder: (field) => Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      '산소 투여 여부',
+                      style: CTS(color: Palette.greyText, fontSize: 13),
+                    ),
+                    const Spacer(),
+                    Stack(
+                      children: [
+                        Container(
+                          width: 110.w,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffe4e4e4),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Row(
+                            children: [
+                              for (int i = 0; i < 2; i++)
+                                Expanded(
+                                  flex: 1,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                                        child: Text("", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                                      ),
+                                      Gaps.h1,
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            for (int i = 2; i < 4; i++)
+                              _initClassification(
+                                widget._classification[i],
+                                _selectedOxygenIndex,
+                                i,
+                                    () => setState(() {
+                                  _selectedOxygenIndex = i;
+                                  bio.o2Apply = i == 4 ? 'N' : 'Y';
+                                  field.didChange(bio.o2Apply);
+                                }),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 300.h,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1.57,
+              ),
+              itemBuilder: (context, index) => Padding(
+                padding:
+                EdgeInsets.only(top: 12.h, bottom: 12.h, right: index % 2 == 0 ? 6.w : 0, left: index % 2 == 1 ? 6.w : 0), //왼쪽 줄, 오른쪽 줄 위젯 안쪽만 패딩줌.
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget._labelTitles[index],
+                      style: CTS.medium(color: Palette.greyText, fontSize: 13),
+                    ),
+                    Gaps.v8,
+                    index != 5
+                        ? TextFormField(
+                      style: CTS.regular(fontSize: 13.sp, color: Palette.black),
+                      decoration: getInputDecoration(widget._labelTitlesHint[index]),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'[0-9|.]'),
+                        ),
+                        FilteringTextInputFormatter.singleLineFormatter,
+                      ],
+                      validator: (value) {
+                        if (value != null && value.isNotEmpty && (int.tryParse(value) is int || double.tryParse(value) is double)) {
+                          return null;
+                        }
+                        return null;
+                        // return '수치를 정확히 입력하세요.';
+                      },
+                      onSaved: (newValue) {
+                        if (newValue != null && newValue.isNotEmpty) {
+                          switch (index) {
+                            case 0:
+                              bio.bdTemp = double.tryParse(newValue);
+                              break;
+                            case 1:
+                              bio.pulse = int.tryParse(newValue);
+                              break;
+                            case 2:
+                              bio.breath = int.tryParse(newValue);
+                              break;
+                            case 3:
+                              bio.spo2 = double.tryParse(newValue);
+                              break;
+                            case 4:
+                              bio.sbp = int.tryParse(newValue);
+                              break;
+                          }
+                        }
+                      },
+                      autovalidateMode: AutovalidateMode.always,
+                    )
+                        : Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          _submit();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                          decoration: BoxDecoration(
+                            color: Palette.white,
+                            border: Border.all(
+                              color: Palette.mainColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                          child: Text('분석',
+                              style: CTS.bold(
+                                fontSize: 13,
+                                color: Palette.mainColor,
+                              )).c,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-            ],
-          ));
+              itemCount: widget._labelTitles.length,
+              physics: const NeverScrollableScrollPhysics(),
+            ),
+          ),
+        ],
+      )
+    );
+  }
+
   final _formKey = GlobalKey<FormState>();
   Future<void> _submit() async {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
