@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
@@ -83,6 +84,7 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
       return false;
     }
     if (state.hasValue) {
+      debugPrint(state.value?.toJson().toString());
       return true;
     }
     return false;
@@ -93,12 +95,12 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
     if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA', orElse: () => const MapEntry("null", false)).key == "null") {
       return false;
     }
-    if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'UDDS', orElse: () => const MapEntry("null", false)).key == "null") {
-      return false;
-    }
-    if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'PTTP', orElse: () => const MapEntry("null", false)).key == "null") {
-      return false;
-    }
+    // if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'UDDS', orElse: () => const MapEntry("null", false)).key == "null") {
+    //   return false;
+    // }
+    // if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'PTTP', orElse: () => const MapEntry("null", false)).key == "null") {
+    //   return false;
+    // }
     if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP', orElse: () => const MapEntry("null", false)).key == "null") {
       return false;
     }

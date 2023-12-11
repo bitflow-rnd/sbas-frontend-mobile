@@ -21,7 +21,7 @@ class SeverelyDiseaseV2 extends ConsumerStatefulWidget {
 
   final String ptId;
   final List<String> _subTitles = [
-    '중증여부', //  2     : SVTP (cpGrpId)
+    '중증도 분류', //  2     : SVTP (cpGrpId)
     '요청병상유형', //  3  : BDTP (cpGrpId)
     'DNR 동의 여부', //4  : DNRA (cpGrpId)
     '환자유형', //0    : PPTP (cpGrpId)
@@ -58,6 +58,9 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
   int _selectedIndex = -1, _selectedStateIndex = -1, _selectedOxygenIndex = -1, _score = 0;
   @override
   Widget build(BuildContext context) {
+    var svrtIptTypeCd = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel.svrtIptTypeCd;
+    svrtIptTypeCd == 'SVIP0001' ? _selectedIndex = 0 : _selectedIndex = 1;
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: ref.watch(severelyDiseaseProvider).when(
@@ -87,16 +90,13 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                       Gaps.v8,
                       _initRowClassification(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
                       // _initRowClassification(model.where((e) => e.cdGrpId == 'SVIP'), isFirst: true),
-                      Gaps.v8,
-                      if (_selectedIndex == 1 && _score == 0)
-                        Visibility(
-                          visible: _selectedIndex == 1 && _score == 0,
-                          child: _initBioInfo(),
-                        ),
+                      Visibility(
+                        visible: _selectedIndex == 1 && _score == 0,
+                        child: _initBioInfo(),
+                      ),
                       if (_selectedIndex == 1)
                         Column(
                           children: [
-                            Gaps.v8,
                             _getTitle("중증도 분석 결과", true),
                           ],
                         ),
@@ -165,9 +165,9 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                 else if (i == 4)
                   Column(
                     children: [
-                      Gaps.v28,
+                      Gaps.v8,
                       _getTitle(widget._subTitles[i], false),
-                      Gaps.v16,
+                      Gaps.v8,
                       rowMultiSelectButton(ref.watch(severelyDiseaseProvider.notifier).list.where((e) => e.cdGrpId == 'UDDS'), i),
                     ],
                   ),
@@ -427,16 +427,23 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
     } else {
       if (list.length > 3) list = list.sublist(0, 3); // 기존 디자인과 다르기에 3개만 보여줌.
     }
-    var severelyDiseaseModel = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel;
+
+    var severelyDiseaseModel = ref.watch(severelyDiseaseProvider.notifier).severelyDiseaseModel;
+    String? initValue;
+
     return FormField(
+      initialValue: initValue,
       validator: (value) {
-        if (list.first == '직접선택') {
+        if (model.first.cdGrpId == 'SVIP') {
+          return severelyDiseaseModel.svrtIptTypeCd == null || severelyDiseaseModel.svrtIptTypeCd == ''
+              ? '중증도 입력유형을 선택해주세요.' : null;
+        } else if (model.first.cdGrpId == 'SVTP') {
           return severelyDiseaseModel.svrtTypeCd == null || severelyDiseaseModel.svrtTypeCd == ''
-              ? '중증여부를 선택해주세요.' : null;
-        } else if (list.first == '미분류') {
+              ? '중증도를 선택해주세요.' : null;
+        } else if (model.first.cdGrpId == 'BDTP') {
           return severelyDiseaseModel.reqBedTypeCd == null || severelyDiseaseModel.reqBedTypeCd == ''
               ? '요청병상유형을 선택해주세요.' : null;
-        } else if (list.first == '동의') {
+        } else if (model.first.cdGrpId == 'DNRA') {
           return severelyDiseaseModel.dnrAgreYn == null || severelyDiseaseModel.dnrAgreYn == ''
               ? '요청병상유형을 선택해주세요.' : null;
         }
@@ -511,22 +518,32 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                             final key = model.toList()[i].cdId;
 
                             if (key != null && key.isNotEmpty) {
+                              if (model.first.cdGrpId == 'SVIP') {
+                                severelyDiseaseModel.svrtIptTypeCd = key;
+                              } else if (model.first.cdGrpId == 'SVTP') {
+                                severelyDiseaseModel.svrtTypeCd = key;
+                              } else if (model.first.cdGrpId == 'BDTP') {
+                                severelyDiseaseModel.reqBedTypeCd = key;
+                              } else if (model.first.cdGrpId == 'DNRA') {
+                                severelyDiseaseModel.dnrAgreYn = key;
+                              }
+
+                              field.didChange(key);
+
                               final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
 
                               if (isChecked != null) {
-                                setState(() {
-                                  final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
+                                final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
 
-                                  if (state[key] == true) return;
+                                if (state[key] == true) return;
 
-                                  state[key] = !isChecked;
+                                state[key] = !isChecked;
 
-                                  for (var e in state.keys) {
-                                    if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
-                                      state[e] = isChecked;
-                                    }
+                                for (var e in state.keys) {
+                                  if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
+                                    state[e] = isChecked;
                                   }
-                                });
+                                }
                               }
                             }
                           });
@@ -568,10 +585,9 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
     var severelyDiseaseModel = ref.watch(severelyDiseaseProvider.notifier).severelyDiseaseModel;
     var list = model.toList();
     return FormField(
+      initialValue: severelyDiseaseModel.pttp,
       validator: (value) {
         if (list.first.cdNm == '일반') {
-          print(severelyDiseaseModel.pttp);
-          print(severelyDiseaseModel.ptTypeCd);
           return severelyDiseaseModel.pttp.isEmpty
             ? '환자유형을 선택해주세요.' : null;
         }
@@ -601,6 +617,7 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                             } else {
                               severelyDiseaseModel.pttp.remove(key);
                             }
+                            field.didChange(severelyDiseaseModel.pttp);
                             setState(() {
                               final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
                               state[key] = !isChecked;
