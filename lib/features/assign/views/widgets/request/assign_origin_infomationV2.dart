@@ -48,10 +48,12 @@ class OriginInfomationV2 extends ConsumerStatefulWidget {
 }
 
 class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
-  int _selectedOriginIndex = -1, _assignedToTheFloor = -1;
+  int selectedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
+    int selectedOriginIndex = ref.watch(selectedOriginIndexProvider.notifier).state;
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: ref.watch(originInfoProvider).when(
@@ -81,12 +83,12 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                       Row(
                         children: [
                           Expanded(
-                              child: _selectRegion(origin.reqDstr1Cd)
+                              child: _selectRegion(origin.reqDstr1Cd),
                           ),
                           Expanded(
                             child: Text(
                               "※ 병상배정 지자체 선택",
-                              style: CTS(color: Palette.mainColor, fontSize: 12),
+                              style: CTS(color: Palette.mainColor, fontSize: 13),
                             ).c,
                           )
                         ],
@@ -99,10 +101,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                       Gaps.v16,
                       _getTitle("환자 출발지 유형", true),
                       Gaps.v8,
-                      _initRowClassification(
-                        widget._classification,
-                        false,
-                      ),
+                      _initRowClassification(widget._classification, false, ref),
                     ],
                   ),
               Column(
@@ -127,7 +126,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                             color: Palette.mainColor,
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
+                          padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
                           child: Text(
                             "주소검색",
                             style: CTS(
@@ -144,7 +143,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                   Gaps.v24,
                 ],
               ),
-              if (_selectedOriginIndex == 0)
+              if (selectedOriginIndex == 0)
                 for (int i = 0; i < widget._homeTitles.length; i++)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,16 +154,13 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                       Gaps.v16,
                     ],
                   )
-              else if (_selectedOriginIndex == 1)
+              else if (selectedOriginIndex == 1)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _getTitle("원내 배정 여부", true),
                     Gaps.v8,
-                    _initRowClassification(
-                      widget._assignedToTheFloorTitles,
-                      true,
-                    ),
+                    _initRowClassification(widget._assignedToTheFloorTitles, true, ref),
                     Gaps.v8,
                     for (int i = 0; i < widget._hospitalTitles.length; i++)
                       Column(
@@ -185,17 +181,22 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
     );
   }
 
-  Widget _initRowClassification(List<String> list, bool isAssign) {
-    String? value;
+  Widget _initRowClassification(List<String> list, bool isAssign, WidgetRef ref) {
 
-    var dprtDstrTypeCd = ref.read(originInfoProvider.notifier).getDprtDstrTypeCd();
-    var inhpAsgnYn = ref.read(originInfoProvider.notifier).getInhpAsgnYn();
+    String? dprtDstrTypeCd = ref.read(originInfoProvider.notifier).getDprtDstrTypeCd();
+    String? inhpAsgnYn = ref.read(originInfoProvider.notifier).getInhpAsgnYn();
+
+    int selectedOriginIndex = ref.watch(selectedOriginIndexProvider.notifier).state;
+    int assignedToTheFloor = ref.watch(selectedIndexProvider.notifier).state;
 
     return FormField(
       initialValue: list[0] == '자택' ? dprtDstrTypeCd : inhpAsgnYn,
       validator: (value) {
-        print(value);
-        return 'hello';
+        if (list[0] == '자택') {
+          return dprtDstrTypeCd == null || dprtDstrTypeCd == '' ? '환자 출발지 유형을 선택해 주세요.' : null;
+        } else if (list[0] == '전원요청') {
+          return inhpAsgnYn == null ? '원내 배정 여부를 선택해 주세요.' : null;
+        }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       builder: (field) => Column(
@@ -234,17 +235,12 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                         onTap: () async {
                           if (isAssign) {
                             var val = await ref.read(originInfoProvider.notifier).setAssignedToTheFloor(i);
+                            ref.read(selectedIndexProvider.notifier).update((state) => state = val);
                             field.didChange(inhpAsgnYn);
-                            setState(() {
-                              _assignedToTheFloor = val;
-                            });
                           } else {
-                            print("hello2 $isAssign");
                             var val = await ref.read(originInfoProvider.notifier).setOriginIndex(i);
+                            ref.read(selectedOriginIndexProvider.notifier).update((state) => state = val);
                             field.didChange(dprtDstrTypeCd);
-                            setState(() {
-                              _selectedOriginIndex = val;
-                            });
                           }
                         },
                         child: Row(
@@ -254,14 +250,16 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                               child: Container(
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                    color: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? const Color(0xff538ef5) : Colors.transparent,
-                                    borderRadius: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? BorderRadius.circular(6) : null),
+                                    color: (isAssign ? assignedToTheFloor : selectedOriginIndex) == i ? const Color(0xff538ef5) : Colors.transparent,
+                                    borderRadius: (isAssign ? assignedToTheFloor : selectedOriginIndex) == i ? BorderRadius.circular(6) : null),
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
-                                child: Text(list[i],
-                                    style: CTS.bold(
-                                      fontSize: 11,
-                                      color: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? Palette.white : Palette.greyText_60,
-                                    )),
+                                child: Text(
+                                  list[i],
+                                  style: CTS.bold(
+                                    fontSize: 11,
+                                    color: (isAssign ? assignedToTheFloor : selectedOriginIndex) == i ? Palette.white : Palette.greyText_60,
+                                  ),
+                                ),
                               ),
                             ),
                             list[i] != list.last
@@ -324,25 +322,19 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                               (e) => DropdownMenuItem(
                                 alignment: Alignment.center,
                                 value: e.cdId,
-                                child: SizedBox(
-                                  width: 150,
-                                  child: Text(
+                                child: Text(
                                     e.cdNm ?? '',
                                     style: const TextStyle(fontSize: 13, color: Palette.black),
                                     textAlign: TextAlign.left,
                                   ),
-                                ),
                               ),
                             )
                             .toList(),
-                        hint: SizedBox(
-                          width: 150,
-                          child: Text(
+                        hint: Text(
                             '시/도 선택',
                             style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
                             textAlign: TextAlign.left,
                           ),
-                        ),
                         isDense: true,
                         isExpanded: true,
                         onChanged: (value) {

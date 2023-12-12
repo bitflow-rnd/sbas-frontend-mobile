@@ -62,6 +62,8 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
 
       if (index != 1) {
         _dprtInfo.inhpAsgnYn = 'N';
+      } else {
+        _dprtInfo.inhpAsgnYn = null;
       }
       return _dprtInfo;
     });
@@ -227,3 +229,5 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
 final originInfoProvider = AsyncNotifierProvider<OriginInfoPresenter, OriginInfoModel>(
   () => OriginInfoPresenter(),
 );
+final selectedOriginIndexProvider = StateProvider<int>((ref) => -1);
+final selectedIndexProvider = StateProvider<int>((ref) => -1);

@@ -467,7 +467,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   bool tryOrignInfoValidation(WidgetRef ref) {
     bool isValid = orignFormKey.currentState?.validate() ?? false;
     // isValid = ref.watch(severelyDiseaseProvider.notifier).isValid();
-    isValid = ref.watch(originInfoProvider.notifier).isValid();
+    // isValid = ref.watch(originInfoProvider.notifier).isValid();
     if (isValid) {
       orignFormKey.currentState?.save();
     }

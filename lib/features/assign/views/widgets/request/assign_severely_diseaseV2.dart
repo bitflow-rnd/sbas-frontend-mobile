@@ -440,16 +440,16 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
       validator: (value) {
         if (model.first.cdGrpId == 'SVIP') {
           return severelyDiseaseModel.svrtIptTypeCd == null || severelyDiseaseModel.svrtIptTypeCd == ''
-              ? '중증도 입력유형을 선택해주세요.' : null;
+              ? '중증도 입력유형을 선택해 주세요.' : null;
         } else if (model.first.cdGrpId == 'SVTP') {
           return severelyDiseaseModel.svrtTypeCd == null || severelyDiseaseModel.svrtTypeCd == ''
-              ? '중증도를 선택해주세요.' : null;
+              ? '중증도를 선택해 주세요.' : null;
         } else if (model.first.cdGrpId == 'BDTP') {
           return severelyDiseaseModel.reqBedTypeCd == null || severelyDiseaseModel.reqBedTypeCd == ''
-              ? '요청병상유형을 선택해주세요.' : null;
+              ? '요청병상유형을 선택해 주세요.' : null;
         } else if (model.first.cdGrpId == 'DNRA') {
           return severelyDiseaseModel.dnrAgreYn == null || severelyDiseaseModel.dnrAgreYn == ''
-              ? '요청병상유형을 선택해주세요.' : null;
+              ? 'DNR 동의 여부를 선택해 주세요.' : null;
         }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
