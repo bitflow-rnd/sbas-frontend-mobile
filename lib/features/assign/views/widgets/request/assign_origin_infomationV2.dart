@@ -53,6 +53,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
   @override
   Widget build(BuildContext context) {
     int selectedOriginIndex = ref.watch(selectedOriginIndexProvider.notifier).state;
+    String? dprtDstrBascAddr = ref.read(originInfoProvider.notifier).getDprtDstrBascAddr();
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -104,44 +105,58 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                       _initRowClassification(widget._classification, false, ref),
                     ],
                   ),
-              Column(
-                children: [
-                  Gaps.v8,
-                  Row(
-                    children: [
-                      Expanded(child: _initTextField(0, true)),
-                      InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => KpostalView(
-                              kakaoKey: dotenv.env['KAKAO'] ?? '',
-                              callback: (postal) => ref.read(originInfoProvider.notifier).setAddress(postal),
+              FormField(
+                validator: (value) {
+                  return dprtDstrBascAddr == null || dprtDstrBascAddr == '' ? '주소를 입력해 주세요.' : null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                builder: (field) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(child: _initTextField(0, true)),
+                        InkWell(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => KpostalView(
+                                kakaoKey: dotenv.env['KAKAO'] ?? '',
+                                callback: (postal) {
+                                  ref.read(originInfoProvider.notifier).setAddress(postal);
+                                  field.didChange(dprtDstrBascAddr);
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                        child: Container(
-                          margin: EdgeInsets.only(left: 7.w),
-                          decoration: BoxDecoration(
-                            color: Palette.mainColor,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
-                          child: Text(
-                            "주소검색",
-                            style: CTS(
-                              fontSize: 13,
-                              color: Palette.white,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 7.w),
+                            decoration: BoxDecoration(
+                              color: Palette.mainColor,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
+                            child: Text(
+                              "주소검색",
+                              style: CTS(
+                                fontSize: 13,
+                                color: Palette.white,
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Gaps.v10,
-                  _initTextField(100, true),
-                  Gaps.v24,
-                ],
+                        )
+                      ],
+                    ),
+                    Gaps.v8,
+                    _initTextField(100, true),
+                    Gaps.v10,
+                    if (field.hasError)
+                      FieldErrorText(
+                        field: field,
+                      ),
+                    Gaps.v8,
+                  ],
+                ),
               ),
               if (selectedOriginIndex == 0)
                 for (int i = 0; i < widget._homeTitles.length; i++)
