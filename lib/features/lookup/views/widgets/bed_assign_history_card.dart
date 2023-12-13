@@ -6,9 +6,8 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/views/patient_bed_assign_detail_screen.dart';
-
-import '../../../../util.dart';
-import '../../models/patient_history_model.dart';
+import 'package:sbas/util.dart';
+import 'package:sbas/features/lookup/models/patient_history_model.dart';
 
 class BedAssignHistoryCardItem extends StatelessWidget {
   const BedAssignHistoryCardItem({
