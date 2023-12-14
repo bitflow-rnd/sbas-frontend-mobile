@@ -170,7 +170,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     if (file != null) {
                       _talkRoomBloc.uploadFile(file, _messageController.text);
                     } else {
-                      print('text');
                       _talkRoomBloc.sendMessage(_messageController.text);
                     }
                     _messageController.clear();

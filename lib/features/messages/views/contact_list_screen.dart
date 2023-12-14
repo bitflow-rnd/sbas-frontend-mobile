@@ -15,6 +15,9 @@ class ContactListScreen extends ConsumerWidget {
   const ContactListScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    final userInstTypeCd = ref.read(userDetailProvider.notifier).instTypeCd;
+
     return ref.watch(contactListProvider).when(
           loading: () => const SBASProgressIndicator(),
           error: (error, stackTrace) => Center(
@@ -160,6 +163,7 @@ class ContactListScreen extends ConsumerWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        userInstTypeCd == 'ORGN0005' ?
                         rowWrapper(
                           header: "등록요청",
                           alarmCount: (contactList.contacts ?? []).where((element) => element.userStatCd == "URST0001").toList().length,
@@ -168,6 +172,16 @@ class ContactListScreen extends ConsumerWidget {
                             ref.watch(contactRegReqIsOpenProvider.notifier).state = !ref.watch(contactRegReqIsOpenProvider);
                           },
                           contactList: (contactList.contacts ?? []).where((element) => element.userStatCd == "URST0001").toList(),
+                          context: context,
+                        ) : Container(),
+                        rowWrapper(
+                          header: "즐겨찾기",
+                          alarmCount: (contactList.contacts ?? []).length,
+                          isOpen: ref.watch(contactMyFavProvider.notifier).state,
+                          function: () {
+                            ref.watch(contactMyFavProvider.notifier).state = !ref.watch(contactMyFavProvider);
+                          },
+                          contactList: contactList.contacts ?? [],
                           context: context,
                         ),
                         rowWrapper(
@@ -180,16 +194,6 @@ class ContactListScreen extends ConsumerWidget {
                           },
                           contactList:
                               (contactList.contacts ?? []).where((element) => element.instId == ref.watch(userDetailProvider.notifier).instId).toList(),
-                          context: context,
-                        ),
-                        rowWrapper(
-                          header: "즐겨찾기",
-                          alarmCount: (contactList.contacts ?? []).length,
-                          isOpen: ref.watch(contactMyFavProvider.notifier).state,
-                          function: () {
-                            ref.watch(contactMyFavProvider.notifier).state = !ref.watch(contactMyFavProvider);
-                          },
-                          contactList: contactList.contacts ?? [],
                           context: context,
                         ),
 
