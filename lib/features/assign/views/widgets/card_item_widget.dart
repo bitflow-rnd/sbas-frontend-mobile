@@ -210,8 +210,8 @@ class AsgnCardItem extends ConsumerWidget {
               ],
             ),
             Positioned(
-              top: 2,
-              right: 4,
+              top: 28,
+              right: 8,
               child: Text(
                 _markTimeAgo(model.updtDttm),
                 style: CTS(
