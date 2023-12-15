@@ -126,26 +126,8 @@ class SeverelyDiseaseModel {
     data["resp"] = resp;
     data["sbp"] = sbp;
     data["newsScore"] = newsScore;
-
-    ptTypeCd = '';
-    undrDsesCd = '';
-
-    for (int i = 0; i < pttp.length; i++) {
-      if (i == pttp.length - 1) {
-        ptTypeCd = '$ptTypeCd${pttp[i]}';
-      } else {
-        ptTypeCd = '$ptTypeCd${pttp[i]};';
-      }
-    }
-    for (int i = 0; i < udds.length; i++) {
-      if (i == udds.length - 1) {
-        undrDsesCd = '$undrDsesCd${udds[i]}';
-      } else {
-        undrDsesCd = '$undrDsesCd${udds[i]};';
-      }
-    }
-    data["ptTypeCd"] = ptTypeCd;
-    data["undrDsesCd"] = undrDsesCd;
+    data["ptTypeCd"] = pttp.join(";");
+    data["undrDsesCd"] = udds.isEmpty ? null : udds.join(";");
 
     return data;
   }

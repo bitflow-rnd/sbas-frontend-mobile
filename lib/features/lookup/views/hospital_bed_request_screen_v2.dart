@@ -221,15 +221,20 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 //상단 2개는 신규일때만 들어갈수있도록?!
                 if (order == 3)
                   Expanded(
-                    child: SeverelyDiseaseV2(
-                      formKey: severelyDisFormKey,
-                      ptId: patient?.ptId ?? a.ptId ?? '',
-                    ),
+                    child: Form(
+                      key: severelyDisFormKey,
+                      child: SeverelyDiseaseV2(
+                        ptId: patient?.ptId ?? a.ptId ?? '',
+                      ),
+                    )
                   ), //중증정보
                 if (order == 4)
-                  OriginInfomationV2(
-                    formKey: orignFormKey,
-                  ), //출발정보
+                  Expanded(
+                    child: Form(
+                      key: orignFormKey,
+                      child: OriginInfomationV2(),
+                    ), //출발정보
+                  ),
                 _bottomer(ref, patientImage, patientAttc, context, hasPatient: patient != null),
               ],
             ),
@@ -300,26 +305,26 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 } else if (order == 2) {
                   //예외처리 추가 필요.
                   if (tryInfectDisValidation()) {
-                    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
+                    final patientInfoModel = ref.watch(patientRegProvider.notifier).patientInfoModel;
 
-                    bool infectRes = await ref.read(infectiousDiseaseProvider.notifier).registry(a.ptId ?? '');
+                    bool infectRes = await ref.read(infectiousDiseaseProvider.notifier).registry(patientInfoModel.ptId ?? '');
                     if (infectRes) {
                       ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                     }
                   }
                 } else if (order == 3) {
                   if (trySeverelyDisValidation(ref)) {
-                    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
+                    final patientInfoModel = ref.watch(patientRegProvider.notifier).patientInfoModel;
 
-                    bool severeRes = await ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(a.ptId ?? '');
+                    bool severeRes = await ref.read(severelyDiseaseProvider.notifier).saveDiseaseInfo(patientInfoModel.ptId ?? '');
                     if (severeRes) {
                       ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                     }
                   }
                 } else if (order == 4) {
                   if (tryOrignInfoValidation(ref)) {
-                    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
-                    bool orignRes = await ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(a.ptId ?? '');
+                    final patientInfoModel = ref.watch(patientRegProvider.notifier).patientInfoModel;
+                    bool orignRes = await ref.read(originInfoProvider.notifier).orignSeverelyDiseaseRegistry(patientInfoModel.ptId ?? '');
                     if (orignRes) {
                       await Future.delayed(Duration(milliseconds: 1500));
 
@@ -448,8 +453,10 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   }
 
   bool trySeverelyDisValidation(WidgetRef ref) {
+    print(severelyDisFormKey.currentState?.validate());
     bool isValid = severelyDisFormKey.currentState?.validate() ?? false;
-    isValid = ref.watch(severelyDiseaseProvider.notifier).isValid();
+
+    // isValid = ref.watch(severelyDiseaseProvider.notifier).isValid();
 
     if (isValid) {
       severelyDisFormKey.currentState?.save();
@@ -459,8 +466,8 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
 
   bool tryOrignInfoValidation(WidgetRef ref) {
     bool isValid = orignFormKey.currentState?.validate() ?? false;
-    isValid = ref.watch(severelyDiseaseProvider.notifier).isValid();
-    isValid = ref.watch(originInfoProvider.notifier).isValid();
+    // isValid = ref.watch(severelyDiseaseProvider.notifier).isValid();
+    // isValid = ref.watch(originInfoProvider.notifier).isValid();
     if (isValid) {
       orignFormKey.currentState?.save();
     }

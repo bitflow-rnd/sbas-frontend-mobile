@@ -17,9 +17,7 @@ import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 class OriginInfomationV2 extends ConsumerStatefulWidget {
   OriginInfomationV2({
     super.key,
-    required this.formKey,
   });
-  final GlobalKey<FormState> formKey;
   final _homeTitles = [
     '보호자 1 연락처',
     '보호자 2 연락처',
@@ -50,233 +48,259 @@ class OriginInfomationV2 extends ConsumerStatefulWidget {
 }
 
 class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
-  int _selectedOriginIndex = -1, _assignedToTheFloor = -1;
+  int selectedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Form(
-        key: widget.formKey,
-        autovalidateMode: AutovalidateMode.always,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.w,
-                    vertical: 18.h,
+    int selectedOriginIndex = ref.watch(selectedOriginIndexProvider.notifier).state;
+    String? dprtDstrBascAddr = ref.read(originInfoProvider.notifier).getDprtDstrBascAddr();
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: ref.watch(originInfoProvider).when(
+        loading: () => const SBASProgressIndicator(),
+        error: (error, stackTrace) => Center(
+          child: Text(
+            error.toString(),
+            style: CTS(
+              color: Palette.mainColor,
+            ),
+          ),
+        ),
+        data: (origin) => SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            vertical: 14,
+            horizontal: 18,
+          ),
+          child: Column(
+            children: [
+              for (int i = 0; i < widget._subTitles.length; i++)
+                if (i == 0)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _getTitle(widget._subTitles[i], true),
+                      Gaps.v8,
+                      Row(
+                        children: [
+                          Expanded(
+                              child: _selectRegion(origin.reqDstr1Cd),
+                          ),
+                          Expanded(
+                            child: Text(
+                              "※ 병상배정 지자체 선택",
+                              style: CTS(color: Palette.mainColor, fontSize: 13),
+                            ).c,
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+                else if (i == 1)
+                  Column(
+                    children: [
+                      Gaps.v16,
+                      _getTitle("환자 출발지 유형", true),
+                      Gaps.v8,
+                      _initRowClassification(widget._classification, false, ref),
+                    ],
                   ),
-                  child: ref.watch(originInfoProvider).when(
-                        loading: () => const SBASProgressIndicator(),
-                        error: (error, stackTrace) => Center(
-                          child: Text(
-                            error.toString(),
-                            style: CTS(
-                              color: Palette.mainColor,
+              FormField(
+                validator: (value) {
+                  return dprtDstrBascAddr == null || dprtDstrBascAddr == '' ? '주소를 입력해 주세요.' : null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                builder: (field) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(child: _initTextField(0, true)),
+                        InkWell(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => KpostalView(
+                                kakaoKey: dotenv.env['KAKAO'] ?? '',
+                                callback: (postal) {
+                                  ref.read(originInfoProvider.notifier).setAddress(postal);
+                                  field.didChange(dprtDstrBascAddr);
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                        data: (origin) => Column(children: [
-                          for (int i = 0; i < widget._subTitles.length; i++)
-                            if (i == 0)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _getTitle(widget._subTitles[i], true),
-                                  Gaps.v12,
-                                  Row(
-                                    children: [
-                                      Expanded(child: _selectRegion(origin.reqDstr1Cd)),
-                                      Expanded(
-                                        child: Text(
-                                          "※ 병상배정 지자체 선택",
-                                          style: CTS(color: Palette.mainColor, fontSize: 12),
-                                        ).c,
-                                      )
-                                    ],
-                                  ),
-                                  // Text(
-                                  //   "안내문구 노출 영역",
-                                  //   style: CTS(color: Palette.red, fontSize: 11),
-                                  //   textAlign: TextAlign.start,
-                                  // ),
-                                  if (_selectedOriginIndex == 1) //병원 출발기준
-                                    Column(
-                                      children: [
-                                        Gaps.v28,
-                                        _getTitle("원내 배정 여부", true),
-                                        Gaps.v16,
-                                        _initRowClassification(
-                                          widget._assignedToTheFloorTitles,
-                                          true,
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              )
-                            else if (i == 1)
-                              Column(
-                                children: [
-                                  Gaps.v28,
-                                  _getTitle("환자 출발지", false),
-                                  Gaps.v16,
-                                  _initRowClassification(
-                                    widget._classification,
-                                    false,
-                                  ),
-                                ],
+                          child: Container(
+                            margin: EdgeInsets.only(left: 7.w),
+                            decoration: BoxDecoration(
+                              color: Palette.mainColor,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
+                            child: Text(
+                              "주소검색",
+                              style: CTS(
+                                fontSize: 13,
+                                color: Palette.white,
                               ),
-                          Column(
-                            children: [
-                              Gaps.v14,
-                              Row(
-                                children: [
-                                  Expanded(child: _initTextField(0, true)),
-                                  InkWell(
-                                    onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => KpostalView(
-                                          kakaoKey: dotenv.env['KAKAO'] ?? '',
-                                          callback: (postal) => ref.read(originInfoProvider.notifier).setAddress(postal),
-                                        ),
-                                      ),
-                                    ),
-                                    child: Container(
-                                      margin: EdgeInsets.only(left: 7.w),
-                                      decoration: BoxDecoration(
-                                        color: Palette.mainColor,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
-                                      child: Text(
-                                        "주소검색",
-                                        style: CTS(
-                                          fontSize: 13,
-                                          color: Palette.white,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Gaps.v10,
-                              _initTextField(100, true),
-                              Gaps.v28,
-                            ],
+                            ),
                           ),
-                          if (_selectedOriginIndex == 0)
-                            for (int i = 0; i < widget._homeTitles.length; i++)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _getTitle(widget._homeTitles[i], false),
-                                  Gaps.v4,
-                                  _initTextField(i + 103, true),
-                                  Gaps.v36,
-                                ],
-                              )
-                          else if (_selectedOriginIndex == 1)
-                            for (int i = 0; i < widget._hospitalTitles.length; i++)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _getTitle(widget._hospitalTitles[i], false),
-                                  Gaps.v8,
-                                  _initTextField(i + 3 + 1000, false),
-                                  Gaps.v36,
-                                ],
-                              ),
-                        ]),
+                        )
+                      ],
+                    ),
+                    Gaps.v8,
+                    _initTextField(100, true),
+                    Gaps.v10,
+                    if (field.hasError)
+                      FieldErrorText(
+                        field: field,
                       ),
+                    Gaps.v8,
+                  ],
                 ),
-              ],
-            ),
+              ),
+              if (selectedOriginIndex == 0)
+                for (int i = 0; i < widget._homeTitles.length; i++)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _getTitle(widget._homeTitles[i], false),
+                      Gaps.v8,
+                      _initTextField(i + 103, true),
+                      Gaps.v16,
+                    ],
+                  )
+              else if (selectedOriginIndex == 1)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _getTitle("원내 배정 여부", true),
+                    Gaps.v8,
+                    _initRowClassification(widget._assignedToTheFloorTitles, true, ref),
+                    Gaps.v8,
+                    for (int i = 0; i < widget._hospitalTitles.length; i++)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _getTitle(widget._hospitalTitles[i], false),
+                          Gaps.v8,
+                          _initTextField(i + 3 + 1000, false),
+                          Gaps.v16,
+                        ],
+                      ),
+                  ],
+                )
+            ]
           ),
         ),
       ),
     );
   }
 
-  Widget _initRowClassification(List<String> list, bool isAssign) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xffe4e4e4),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Row(
+  Widget _initRowClassification(List<String> list, bool isAssign, WidgetRef ref) {
+
+    String? dprtDstrTypeCd = ref.read(originInfoProvider.notifier).getDprtDstrTypeCd();
+    String? inhpAsgnYn = ref.read(originInfoProvider.notifier).getInhpAsgnYn();
+
+    int selectedOriginIndex = ref.watch(selectedOriginIndexProvider.notifier).state;
+    int assignedToTheFloor = ref.watch(selectedIndexProvider.notifier).state;
+
+    return FormField(
+      initialValue: list[0] == '자택' ? dprtDstrTypeCd : inhpAsgnYn,
+      validator: (value) {
+        if (list[0] == '자택') {
+          return dprtDstrTypeCd == null || dprtDstrTypeCd == '' ? '환자 출발지 유형을 선택해 주세요.' : null;
+        } else if (list[0] == '전원요청') {
+          return inhpAsgnYn == null ? '원내 배정 여부를 선택해 주세요.' : null;
+        }
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      builder: (field) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
             children: [
-              for (int i = 0; i < list.length; i++)
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Text(list[i], style: CTS.bold(fontSize: 11, color: Colors.transparent)),
-                      ),
-                      Gaps.h1,
-                    ],
-                  ),
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xffe4e4e4),
+                  borderRadius: BorderRadius.circular(6),
                 ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            for (int i = 0; i < list.length; i++)
-              Expanded(
-                child: InkWell(
-                  onTap: () async {
-                    if (isAssign) {
-                      var val = await ref.read(originInfoProvider.notifier).setAssignedToTheFloor(i);
-                      setState(() {
-                        _assignedToTheFloor = val;
-                      });
-                    } else {
-                      var val = await ref.read(originInfoProvider.notifier).setOriginIndex(i);
-                      setState(() {
-                        _selectedOriginIndex = val;
-                      });
-                    }
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                child: Row(
+                  children: [
+                    for (int i = 0; i < list.length; i++)
                       Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? const Color(0xff538ef5) : Colors.transparent,
-                              borderRadius: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? BorderRadius.circular(6) : null),
-                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                          child: Text(list[i],
-                              style: CTS.bold(
-                                fontSize: 11,
-                                color: (isAssign ? _assignedToTheFloor : _selectedOriginIndex) == i ? Palette.white : Palette.greyText_60,
-                              )),
+                        flex: 1,
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
+                              child: Text(list[i], style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                            ),
+                            Gaps.h1,
+                          ],
                         ),
                       ),
-                      list[i] != list.last
-                          ? Container(
-                              height: 12,
-                              width: 1,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff676a7a).withOpacity(0.2),
-                              ),
-                            )
-                          : Container(),
-                    ],
-                  ),
+                  ],
                 ),
-              )
-          ],
-        ),
-      ],
+              ),
+              Row(
+                children: [
+                  for (int i = 0; i < list.length; i++)
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          if (isAssign) {
+                            var val = await ref.read(originInfoProvider.notifier).setAssignedToTheFloor(i);
+                            ref.read(selectedIndexProvider.notifier).update((state) => state = val);
+                            field.didChange(inhpAsgnYn);
+                          } else {
+                            var val = await ref.read(originInfoProvider.notifier).setOriginIndex(i);
+                            ref.read(selectedOriginIndexProvider.notifier).update((state) => state = val);
+                            field.didChange(dprtDstrTypeCd);
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: (isAssign ? assignedToTheFloor : selectedOriginIndex) == i ? const Color(0xff538ef5) : Colors.transparent,
+                                    borderRadius: (isAssign ? assignedToTheFloor : selectedOriginIndex) == i ? BorderRadius.circular(6) : null),
+                                padding: EdgeInsets.symmetric(vertical: 10.h),
+                                child: Text(
+                                  list[i],
+                                  style: CTS.bold(
+                                    fontSize: 11,
+                                    color: (isAssign ? assignedToTheFloor : selectedOriginIndex) == i ? Palette.white : Palette.greyText_60,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            list[i] != list.last
+                              ? Container(
+                                  height: 12,
+                                  width: 1,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff676a7a).withOpacity(0.2),
+                                  ),
+                                )
+                              : Container(),
+                          ],
+                        ),
+                      ),
+                    )
+                ],
+              ),
+            ],
+          ),
+          Gaps.v10,
+          if (field.hasError)
+            FieldErrorText(
+              field: field,
+            )
+        ],
+      )
     );
   }
 
@@ -293,8 +317,16 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
           ),
           data: (region) => FormField(
             initialValue: ref.watch(selectedRegionProvider).cdId,
+            validator: (value) {
+              return ref.watch(selectedRegionProvider).cdId == null ||
+                      ref.watch(selectedRegionProvider).cdId == ''
+                  ? '배정 요청 지역을 선택해주세요.'
+                  : null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             builder: (field) => SizedBox(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InputDecorator(
                     decoration: getInputDecoration(""),
@@ -305,25 +337,19 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                               (e) => DropdownMenuItem(
                                 alignment: Alignment.center,
                                 value: e.cdId,
-                                child: SizedBox(
-                                  width: 150,
-                                  child: Text(
+                                child: Text(
                                     e.cdNm ?? '',
-                                    style: TextStyle(fontSize: 13, color: Palette.black),
+                                    style: const TextStyle(fontSize: 13, color: Palette.black),
                                     textAlign: TextAlign.left,
                                   ),
-                                ),
                               ),
                             )
                             .toList(),
-                        hint: SizedBox(
-                          width: 150,
-                          child: Text(
+                        hint: Text(
                             '시/도 선택',
                             style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
                             textAlign: TextAlign.left,
                           ),
-                        ),
                         isDense: true,
                         isExpanded: true,
                         onChanged: (value) {
@@ -331,8 +357,9 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                             try {
                               final selectRegion = region.firstWhere((e) => value == e.cdId);
                               ref.read(originInfoProvider.notifier).selectLocalGovernment(selectRegion);
+                              field.didChange(value);
                             } catch (e) {
-                              print("erro${e.toString()}");
+                              debugPrint("error ${e.toString()}");
                             }
                           }
                         },
@@ -357,39 +384,6 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
         );
   }
 
-  Widget rowMultiSelectButton(list, selectList) {
-    return Row(
-      children: [
-        Expanded(
-          child: Wrap(
-            spacing: 11.w,
-            runSpacing: 12.h,
-            direction: Axis.horizontal,
-            children: [
-              for (var i in list)
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
-                  decoration: BoxDecoration(
-                    color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
-                    border: Border.all(
-                      color: Palette.greyText_20,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(13.5.r),
-                  ),
-                  child: Text(i,
-                      style: CTS.bold(
-                        fontSize: 13,
-                        color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
-                      )),
-                )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _getTitle(String title, bool isRequired) => Row(
         children: [
           Text(
@@ -400,10 +394,10 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
             ),
           ),
           Text(
-            !isRequired ? '(선택)' : '(필수)',
+            isRequired ? '(필수)' : '(선택)',
             style: CTS.medium(
               fontSize: 13,
-              color: !isRequired ? Colors.grey.shade600 : Palette.mainColor,
+              color: Palette.mainColor,
             ),
           ),
         ],

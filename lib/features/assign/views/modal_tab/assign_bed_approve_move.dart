@@ -362,7 +362,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                     hint: SizedBox(
                       width: 150,
                       child: Text(
-                        '보건소 선택',
+                        '구급대 선택',
                         style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
                         textAlign: TextAlign.left,
                       ),

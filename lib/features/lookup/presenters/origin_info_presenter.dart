@@ -62,6 +62,8 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
 
       if (index != 1) {
         _dprtInfo.inhpAsgnYn = 'N';
+      } else {
+        _dprtInfo.inhpAsgnYn = null;
       }
       return _dprtInfo;
     });
@@ -211,6 +213,18 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
     }
   }
 
+  String? getDprtDstrTypeCd() {
+    return _dprtInfo.dprtDstrTypeCd;
+  }
+
+  String? getInhpAsgnYn() {
+    return _dprtInfo.inhpAsgnYn;
+  }
+
+  String? getDprtDstrBascAddr() {
+    return _dprtInfo.dprtDstrBascAddr;
+  }
+
   late final PatientRepository _repository;
 
   final OriginInfoModel _dprtInfo = OriginInfoModel();
@@ -219,3 +233,5 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
 final originInfoProvider = AsyncNotifierProvider<OriginInfoPresenter, OriginInfoModel>(
   () => OriginInfoPresenter(),
 );
+final selectedOriginIndexProvider = StateProvider<int>((ref) => -1);
+final selectedIndexProvider = StateProvider<int>((ref) => -1);

@@ -171,6 +171,7 @@ class UserRegisterRequestScreenV2State
 
   validateSumbit(WidgetRef ref) {
     final user = ref.read(regUserProvider);
+    debugPrint(user.toJson().toString());
     if (user.id == '' || user.id == null) {
       return false;
     }
