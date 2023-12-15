@@ -98,7 +98,9 @@ class PatientRegScreenState extends ConsumerState<PatientRegScreen> {
                         }
                       } else {
                         if (patientImage != null) {
-                          ref.read(patientRegProvider.notifier).uploadImage(patientImage);
+                          ref.read(patientRegProvider.notifier).uploadImage(patientImage).then(
+                            (value) => PatientRegInfoModal().epidUploadConfirmModal(context)
+                          );
                         } else {
                           ref.read(patientAttcProvider.notifier).state = '';
                         }

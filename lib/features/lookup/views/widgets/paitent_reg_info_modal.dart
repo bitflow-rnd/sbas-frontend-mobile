@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/common.dart';
@@ -8,21 +7,22 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 
 class PatientRegInfoModal {
-  showModal1(context) {
+  epidUploadConfirmModal(context) {
     Common.showModal(
-        context,
-        Common.commonModal(
-          context: context,
-          mainText: "역학조사서 파일을 기반으로\n환자정보를 자동입력 하였습니다.\n내용을 확인해주세요.",
-          imageWidget: Image.asset(
-            "assets/auth_group/modal_check.png",
-            width: 44.h,
-          ),
-          imageHeight: 44.h,
-        ));
+      context,
+      Common.commonModal(
+        context: context,
+        mainText: "역학조사서 파일을 기반으로\n환자정보를 자동입력 하였습니다.\n내용을 확인해주세요.",
+        imageWidget: Image.asset(
+          "assets/auth_group/modal_check.png",
+          width: 44.h,
+        ),
+        imageHeight: 44.h,
+      )
+    );
   }
 
-  showModal2(context, paitentInfo) {
+  patientDuplicateCheckModal(context, patient) {
     return Common.showModal(
         context,
         IntrinsicWidth(
@@ -60,10 +60,10 @@ class PatientRegInfoModal {
                         ),
                       ],
                     ),
-                    modal2frag(true, "이름 : 김억자 (남/88세)"),
-                    modal2frag(true, "주민등록번호 : 780412-1******"),
+                    modal2frag(true, "이름 : ${patient.ptNm}"),
+                    modal2frag(true, "주민등록번호 : ${patient.rrno1}-1******"),
                     modal2frag(true, "주소 : 대구시 북구"),
-                    modal2frag(false, "연락처 : 010-1234-5678"),
+                    modal2frag(false, "연락처 : ${patient.telno}"),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 16.r),
                       child: Text(
