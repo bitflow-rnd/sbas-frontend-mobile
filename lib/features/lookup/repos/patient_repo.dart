@@ -5,6 +5,7 @@ import 'package:sbas/features/lookup/api/private_patient_provider.dart';
 import 'package:sbas/features/lookup/models/bed_assgin_request_model.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
+import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
 import 'package:sbas/features/lookup/models/patient_list_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
@@ -84,6 +85,11 @@ class PatientRepository {
         model.toJson(),
       );
 
+  Future<dynamic> postExist(PatientDuplicateCheckModel model) async =>
+      await _privatePatientProvider.postExist(
+        model.toJson(),
+      );
+
   Future<PatientDiseaseInfoModel> getDiseaseInfo(String ptId) async =>
       await _privatePatientProvider.getDiseaseInfo(
         ptId,
@@ -94,6 +100,7 @@ class PatientRepository {
 
   Future<PatientTimelineModel> getTimeLine(String ptId, int bdasSeq) async =>
       await _privatePatientProvider.getTimeLine(ptId, bdasSeq);
+
   final _patientProvider = PatientProvider();
   final _privatePatientProvider = PrivatePatientProvider();
 }
