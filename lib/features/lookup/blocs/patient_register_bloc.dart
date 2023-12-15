@@ -28,6 +28,8 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   init() {
     patientInfoModel.clear();
     ref.watch(patientInfoIsChangedProvider.notifier).state = false;
+    ref.invalidate(patientImageProvider);
+    ref.invalidate(patientImageProvider);
     patientInfoModel.natiCd = "NATI0001";
     patientInfoModel.natiNm = "대한민국"; //대한민국 기본 Default
     patientInfoModel.dethYn = "N"; //생존으로 initialization
