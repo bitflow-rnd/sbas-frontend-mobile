@@ -19,7 +19,7 @@ class PrivatePatientProvider {
 
   Future<dynamic> postBedAssignRequest(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/bedassignreq', toJson(map));
 
-  Future<dynamic> postExist(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/exist', toJson(map));
+  Future<Map<String, dynamic>> postExist(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/exist', toJson(map));
 
   Future<PatientDiseaseInfoModel> getDiseaseInfo(String ptId) async =>
       PatientDiseaseInfoModel.fromJson(await _api.getAsync('$_privateRoute/disease-info/$ptId'));

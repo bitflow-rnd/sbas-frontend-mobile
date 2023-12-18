@@ -9,6 +9,7 @@ import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
+import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
@@ -29,7 +30,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     patientInfoModel.clear();
     ref.watch(patientInfoIsChangedProvider.notifier).state = false;
     ref.invalidate(patientImageProvider);
-    ref.invalidate(patientImageProvider);
+    ref.invalidate(patientAttcProvider);
     patientInfoModel.natiCd = "NATI0001";
     patientInfoModel.natiNm = "대한민국"; //대한민국 기본 Default
     patientInfoModel.dethYn = "N"; //생존으로 initialization
@@ -85,6 +86,28 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     }
   }
 
+  Future<void> updatePatient(String? id, BuildContext context) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      if (id != null) {
+        await _patientRepository.amendPatientInfo(id, patientInfoModel.toJson());
+      }
+
+      ref.invalidate(patientInfoProvider);
+      return patientInfoModel;
+    });
+    if (state.hasError) {}
+    if (state.hasValue) {
+      ref.read(patientImageProvider.notifier).state = null;
+      ref.read(patientAttcProvider.notifier).state = null;
+
+      ref.read(patientIdProvider.notifier).state = id;
+      ref.read(patientLookupProvider.notifier).refresh();
+
+      patientInfoModel.clear();
+    }
+  }
+
   Future<bool> uploadImage(XFile imageFile) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
@@ -125,6 +148,19 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
       return true;
     }
     return true;
+  }
+
+  Future<Map<String, dynamic>> exist() async {
+    var model = PatientDuplicateCheckModel(
+      ptNm: patientInfoModel.ptNm,
+      rrno1: patientInfoModel.rrno1,
+      rrno2: patientInfoModel.rrno2,
+      dstr1Cd: patientInfoModel.dstr1Cd,
+      dstr2Cd: patientInfoModel.dstr2Cd,
+      mpno: patientInfoModel.mpno,
+    );
+
+    return await _patientRepository.postExist(model);
   }
 
   Future<void> setAddress(Kpostal postal) async {
