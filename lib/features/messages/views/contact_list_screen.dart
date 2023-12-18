@@ -9,7 +9,6 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
 import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
-import 'package:sbas/features/messages/presenters/favorite_contact_list_presenter.dart';
 import 'package:sbas/features/messages/views/contact_detail_screen.dart';
 import 'package:sbas/features/messages/views/widgets/contact_item_widget.dart';
 
@@ -169,57 +168,36 @@ class ContactListScreen extends ConsumerWidget {
                         userInstTypeCd == 'ORGN0005'
                             ? rowWrapper(
                                 header: "등록요청",
-                                alarmCount: (contactList.contacts ?? [])
+                                alarmCount: (contactList.contactListMap['contacts']?.contacts ?? [])
                                     .where((element) =>
                                         element.userStatCd == "URST0001")
                                     .toList()
                                     .length,
-                                isOpen: ref
-                                    .watch(contactRegReqIsOpenProvider.notifier)
-                                    .state,
+                                isOpen: ref.watch(contactRegReqIsOpenProvider.notifier).state,
                                 function: () {
-                                  ref
-                                          .watch(contactRegReqIsOpenProvider
-                                              .notifier)
-                                          .state =
+                                  ref.watch(contactRegReqIsOpenProvider.notifier).state =
                                       !ref.watch(contactRegReqIsOpenProvider);
                                 },
-                                contactList: (contactList.contacts ?? [])
+                                contactList: (contactList.contactListMap['contacts']?.contacts ?? [])
                                     .where((element) =>
                                         element.userStatCd == "URST0001")
                                     .toList(),
                                 context: context,
                               )
                             : Container(),
-                        FutureBuilder(
-                          future: ref.read(favoriteContactsProvider.future),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.done) {
-                              final favoriteList = snapshot.data;
-                              if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              }
-                              if (!snapshot.hasData) {
-                                return const Text('No data found');
-                              }
-                              return rowWrapper(
+                        rowWrapper(
                                 header: "즐겨찾기",
-                                alarmCount: (favoriteList?.contacts ?? []).length,
+                                alarmCount: (contactList.contactListMap['favorites']?.contacts ?? []).length,
                                 isOpen: ref.watch(contactMyFavProvider.notifier).state,
                                 function: () {
                                   ref.watch(contactMyFavProvider.notifier).state = !ref.watch(contactMyFavProvider);
                                 },
-                                contactList: favoriteList?.contacts ?? [],
+                                contactList: contactList.contactListMap['favorites']?.contacts ?? [],
                                 context: context,
-                              );
-                            } else {
-                              return const CircularProgressIndicator();
-                            }
-                          },
-                        ),
+                              ),
                         rowWrapper(
                           header: "내 조직",
-                          alarmCount: (contactList.contacts ?? [])
+                          alarmCount: (contactList.contactListMap['contacts']?.contacts ?? [])
                               .where((element) =>
                                   element.instId ==
                                   ref.watch(userDetailProvider.notifier).instId)
@@ -233,7 +211,7 @@ class ContactListScreen extends ConsumerWidget {
                                 .watch(contactMyOrgIsOpenProvider.notifier)
                                 .state = !ref.watch(contactMyOrgIsOpenProvider);
                           },
-                          contactList: (contactList.contacts ?? [])
+                          contactList: (contactList.contactListMap['contacts']?.contacts ?? [])
                               .where((element) =>
                                   element.instId ==
                                   ref.watch(userDetailProvider.notifier).instId)
@@ -371,4 +349,4 @@ class ContactListScreen extends ConsumerWidget {
 
 final contactMyOrgIsOpenProvider = StateProvider<bool>((ref) => true);
 final contactRegReqIsOpenProvider = StateProvider<bool>((ref) => true);
-final contactMyFavProvider = StateProvider<bool>((ref) => false);
+final contactMyFavProvider = StateProvider<bool>((ref) => true);
