@@ -9,13 +9,15 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
 import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
+import 'package:sbas/features/messages/presenters/favorite_contact_list_presenter.dart';
 import 'package:sbas/features/messages/views/contact_detail_screen.dart';
+import 'package:sbas/features/messages/views/widgets/contact_item_widget.dart';
 
 class ContactListScreen extends ConsumerWidget {
   const ContactListScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final userInstTypeCd = ref.read(userDetailProvider.notifier).instTypeCd;
 
     return ref.watch(contactListProvider).when(
@@ -56,7 +58,8 @@ class ContactListScreen extends ConsumerWidget {
                                       height: 40.h,
                                       width: 45.w,
                                       decoration: BoxDecoration(
-                                        color: Color(0xffecedef).withOpacity(0.6),
+                                        color: const Color(0xffecedef)
+                                            .withOpacity(0.6),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
@@ -163,37 +166,78 @@ class ContactListScreen extends ConsumerWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        userInstTypeCd == 'ORGN0005' ?
-                        rowWrapper(
-                          header: "등록요청",
-                          alarmCount: (contactList.contacts ?? []).where((element) => element.userStatCd == "URST0001").toList().length,
-                          isOpen: ref.watch(contactRegReqIsOpenProvider.notifier).state,
-                          function: () {
-                            ref.watch(contactRegReqIsOpenProvider.notifier).state = !ref.watch(contactRegReqIsOpenProvider);
+                        userInstTypeCd == 'ORGN0005'
+                            ? rowWrapper(
+                                header: "등록요청",
+                                alarmCount: (contactList.contacts ?? [])
+                                    .where((element) =>
+                                        element.userStatCd == "URST0001")
+                                    .toList()
+                                    .length,
+                                isOpen: ref
+                                    .watch(contactRegReqIsOpenProvider.notifier)
+                                    .state,
+                                function: () {
+                                  ref
+                                          .watch(contactRegReqIsOpenProvider
+                                              .notifier)
+                                          .state =
+                                      !ref.watch(contactRegReqIsOpenProvider);
+                                },
+                                contactList: (contactList.contacts ?? [])
+                                    .where((element) =>
+                                        element.userStatCd == "URST0001")
+                                    .toList(),
+                                context: context,
+                              )
+                            : Container(),
+                        FutureBuilder(
+                          future: ref.read(favoriteContactsProvider.future),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.done) {
+                              final favoriteList = snapshot.data;
+                              if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              }
+                              if (!snapshot.hasData) {
+                                return const Text('No data found');
+                              }
+                              return rowWrapper(
+                                header: "즐겨찾기",
+                                alarmCount: (favoriteList?.contacts ?? []).length,
+                                isOpen: ref.watch(contactMyFavProvider.notifier).state,
+                                function: () {
+                                  ref.watch(contactMyFavProvider.notifier).state = !ref.watch(contactMyFavProvider);
+                                },
+                                contactList: favoriteList?.contacts ?? [],
+                                context: context,
+                              );
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
                           },
-                          contactList: (contactList.contacts ?? []).where((element) => element.userStatCd == "URST0001").toList(),
-                          context: context,
-                        ) : Container(),
-                        rowWrapper(
-                          header: "즐겨찾기",
-                          alarmCount: (contactList.contacts ?? []).length,
-                          isOpen: ref.watch(contactMyFavProvider.notifier).state,
-                          function: () {
-                            ref.watch(contactMyFavProvider.notifier).state = !ref.watch(contactMyFavProvider);
-                          },
-                          contactList: contactList.contacts ?? [],
-                          context: context,
                         ),
                         rowWrapper(
                           header: "내 조직",
-                          alarmCount:
-                              (contactList.contacts ?? []).where((element) => element.instId == ref.watch(userDetailProvider.notifier).instId).toList().length,
-                          isOpen: ref.watch(contactMyOrgIsOpenProvider.notifier).state,
+                          alarmCount: (contactList.contacts ?? [])
+                              .where((element) =>
+                                  element.instId ==
+                                  ref.watch(userDetailProvider.notifier).instId)
+                              .toList()
+                              .length,
+                          isOpen: ref
+                              .watch(contactMyOrgIsOpenProvider.notifier)
+                              .state,
                           function: () {
-                            ref.watch(contactMyOrgIsOpenProvider.notifier).state = !ref.watch(contactMyOrgIsOpenProvider);
+                            ref
+                                .watch(contactMyOrgIsOpenProvider.notifier)
+                                .state = !ref.watch(contactMyOrgIsOpenProvider);
                           },
-                          contactList:
-                              (contactList.contacts ?? []).where((element) => element.instId == ref.watch(userDetailProvider.notifier).instId).toList(),
+                          contactList: (contactList.contacts ?? [])
+                              .where((element) =>
+                                  element.instId ==
+                                  ref.watch(userDetailProvider.notifier).instId)
+                              .toList(),
                           context: context,
                         ),
 
@@ -229,7 +273,7 @@ class ContactListScreen extends ConsumerWidget {
                     Text(
                       header,
                       style: CTS.medium(
-                        color: Color(0xff676a7a),
+                        color: const Color(0xff676a7a),
                         fontSize: 13,
                       ),
                     ),
@@ -254,7 +298,9 @@ class ContactListScreen extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(16.r),
                         onTap: function,
                         child: Icon(
-                          isOpen ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_up_outlined,
+                          isOpen
+                              ? Icons.keyboard_arrow_down_outlined
+                              : Icons.keyboard_arrow_up_outlined,
                           color: Palette.greyText_60,
                           size: 22.h,
                         ),
@@ -267,8 +313,10 @@ class ContactListScreen extends ConsumerWidget {
         ),
         if (isOpen)
           ListView.separated(
-            shrinkWrap: true, // Adjust this based on your layout
-            physics: const NeverScrollableScrollPhysics(), // Prevent scrolling within the ListView
+            shrinkWrap: true,
+            // Adjust this based on your layout
+            physics: const NeverScrollableScrollPhysics(),
+            // Prevent scrolling within the ListView
             itemCount: contactList.length,
             separatorBuilder: (context, index) => Divider(
               height: 1.h,
@@ -278,7 +326,9 @@ class ContactListScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final e = contactList[index];
               return InkWell(
-                child: contactItem(e),
+                child: ContactItem(
+                  userContact: e,
+                ),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -304,48 +354,16 @@ class ContactListScreen extends ConsumerWidget {
       decoration: BoxDecoration(
           color: isSelected == null ? Palette.white : Palette.mainColor,
           borderRadius: BorderRadius.circular(13.5.r),
-          border: Border.all(color: isSelected == null ? Palette.greyText_20 : Palette.mainColor, width: 1)),
+          border: Border.all(
+              color:
+                  isSelected == null ? Palette.greyText_20 : Palette.mainColor,
+              width: 1)),
       child: Text(
         text,
         style: CTS(
           color: isSelected == null ? Palette.greyText : Colors.white,
           fontSize: 12,
         ),
-      ),
-    );
-  }
-
-  contactItem(UserContact userContact) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-      child: Row(
-        children: [
-          Image.asset(
-            "assets/message/doctor_icon.png",
-            height: 36.h,
-          ),
-          SizedBox(width: 10.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                userContact.userNm ?? "",
-                style: CTS.medium(
-                  color: Colors.black,
-                  fontSize: 15.sp,
-                ),
-              ),
-              Gaps.v8,
-              Text(
-                "${userContact.instNm ?? ""} / ${userContact.ocpCd ?? ""}",
-                style: CTS(
-                  color: Palette.greyText_80,
-                  fontSize: 12.sp,
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
