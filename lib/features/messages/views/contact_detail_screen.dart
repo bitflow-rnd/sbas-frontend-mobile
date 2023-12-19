@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
@@ -12,13 +13,24 @@ import 'package:url_launcher/url_launcher.dart';
 class ContactDetailScreen extends ConsumerStatefulWidget {
   final UserContact contact;
   final bool isRequest;
-  const ContactDetailScreen({Key? key, required this.contact, this.isRequest = true}) : super(key: key);
+
+  const ContactDetailScreen(
+      {Key? key, required this.contact, this.isRequest = true})
+      : super(key: key);
 
   @override
-  ConsumerState<ContactDetailScreen> createState() => _ContactDetailScreenState();
+  ConsumerState<ContactDetailScreen> createState() =>
+      _ContactDetailScreenState();
 }
 
 class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
+
+  void toggleFavorite() {
+    setState(() {
+      widget.contact.isFavorite = !widget.contact.isFavorite!;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,11 +50,18 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.star_border_sharp,
-              color: Color(0xFF696969),
-            ),
+            onPressed: () {
+              toggleFavorite();
+            },
+            icon: widget.contact.isFavorite ?? false
+                ? const Icon(
+                    Icons.star_outlined,
+                    color: Color(0xFFD0A72F),
+                  )
+                : const Icon(
+                    Icons.star_border_sharp,
+                    color: Color(0xFF696969),
+                  ),
           ),
         ],
       ),
@@ -62,12 +81,16 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
               SizedBox(height: 220.h),
               Expanded(
                 child: Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(24.r), topRight: Radius.circular(24.r)), color: Colors.white),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(24.r),
+                          topRight: Radius.circular(24.r)),
+                      color: Colors.white),
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 32.w, vertical: 16.h),
                         child: Row(
                           children: [
                             Image.asset(
@@ -100,10 +123,14 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
-                        child: Divider(thickness: 1, height: 1, color: Palette.greyText_20),
+                        child: Divider(
+                            thickness: 1,
+                            height: 1,
+                            color: Palette.greyText_20),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 24),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 32.w, vertical: 24),
                         child: Column(
                           children: [
                             Row(
@@ -127,7 +154,7 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        launch("sms://${widget.contact.telno}");
+                                        launchSms(number: widget.contact.telno);
                                       },
                                       child: Container(
                                           padding: EdgeInsets.all(5.r),
@@ -138,9 +165,12 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                               color: Palette.greyText_20,
                                               width: 1,
                                             ),
-                                            borderRadius: BorderRadius.circular(4),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
                                           ),
-                                          child: Icon(Icons.message_rounded, color: Palette.black, size: 16.r)),
+                                          child: Icon(Icons.message_rounded,
+                                              color: Palette.black,
+                                              size: 16.r)),
                                     ),
                                     Gaps.h10,
                                     GestureDetector(
@@ -155,9 +185,12 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                             color: Palette.greyText_20,
                                             width: 1,
                                           ),
-                                          borderRadius: BorderRadius.circular(4),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
                                         ),
-                                        child: Icon(Icons.phone, color: Palette.greyText_80, size: 16.r),
+                                        child: Icon(Icons.phone,
+                                            color: Palette.greyText_80,
+                                            size: 16.r),
                                       ),
                                     ),
                                   ],
@@ -197,9 +230,12 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                             color: Palette.greyText_20,
                                             width: 1,
                                           ),
-                                          borderRadius: BorderRadius.circular(4),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
                                         ),
-                                        child: Icon(Icons.phone, color: Palette.greyText_80, size: 16.r),
+                                        child: Icon(Icons.phone,
+                                            color: Palette.greyText_80,
+                                            size: 16.r),
                                       ),
                                     ),
                                   ],
@@ -222,14 +258,16 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                     Row(
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 12.w, vertical: 5.h),
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             border: Border.all(
                                               color: Palette.greyText_20,
                                               width: 1,
                                             ),
-                                            borderRadius: BorderRadius.circular(13.5.r),
+                                            borderRadius:
+                                                BorderRadius.circular(13.5.r),
                                           ),
                                           child: Text(
                                             '임산부',
@@ -243,14 +281,16 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                     ),
                                     Gaps.h10,
                                     Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 12.w, vertical: 5.h),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         border: Border.all(
                                           color: Palette.greyText_20,
                                           width: 1,
                                         ),
-                                        borderRadius: BorderRadius.circular(13.5.r),
+                                        borderRadius:
+                                            BorderRadius.circular(13.5.r),
                                       ),
                                       child: Text(
                                         '신생아',
@@ -262,14 +302,16 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                     ),
                                     Gaps.h10,
                                     Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 12.w, vertical: 5.h),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         border: Border.all(
                                           color: Palette.greyText_20,
                                           width: 1,
                                         ),
-                                        borderRadius: BorderRadius.circular(13.5.r),
+                                        borderRadius:
+                                            BorderRadius.circular(13.5.r),
                                       ),
                                       child: Text(
                                         '응급',
@@ -297,14 +339,16 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                 Row(
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 12.w, vertical: 5.h),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         border: Border.all(
                                           color: Palette.greyText_20,
                                           width: 1,
                                         ),
-                                        borderRadius: BorderRadius.circular(13.5.r),
+                                        borderRadius:
+                                            BorderRadius.circular(13.5.r),
                                       ),
                                       child: Text(
                                         '일반',
@@ -385,7 +429,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
   void _showBottomSheet(BuildContext context) {
     TextEditingController _textEditingController = TextEditingController();
     final _focusNode = FocusNode();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _focusNode.requestFocus());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _focusNode.requestFocus());
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -400,14 +445,17 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
             child: GestureDetector(
               onTap: () {
                 FocusScopeNode currentFocus = FocusScope.of(context);
-                if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                if (!currentFocus.hasPrimaryFocus &&
+                    currentFocus.focusedChild != null) {
                   currentFocus.focusedChild?.unfocus();
                 }
               },
               child: Container(
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: Container(
-                  padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
+                  padding:
+                      EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -455,7 +503,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                 padding: EdgeInsets.symmetric(vertical: 16.h),
                                 child: Text(
                                   '승인',
-                                  style: CTS(color: Palette.white, fontSize: 13),
+                                  style:
+                                      CTS(color: Palette.white, fontSize: 13),
                                 ),
                               ),
                               onPressed: () {

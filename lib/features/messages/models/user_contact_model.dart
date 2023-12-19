@@ -1,3 +1,5 @@
+
+
 class UserContact {
   String? id;
   String? pw;
@@ -25,6 +27,7 @@ class UserContact {
   String? rgstDttm;
   String? updtUserId;
   String? updtDttm;
+  bool? isFavorite;
 
   UserContact({
     this.id,
@@ -53,6 +56,7 @@ class UserContact {
     this.rgstDttm,
     this.updtUserId,
     this.updtDttm,
+    this.isFavorite,
   });
 
   UserContact.fromJson(Map<String, dynamic> json)
@@ -81,7 +85,8 @@ class UserContact {
         rgstUserId = json['rgstUserId'] as String?,
         rgstDttm = json['rgstDttm'] as String?,
         updtUserId = json['updtUserId'] as String?,
-        updtDttm = json['updtDttm'] as String?;
+        updtDttm = json['updtDttm'] as String?,
+        isFavorite = json['isFavorite'] as bool?;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -109,6 +114,7 @@ class UserContact {
         'rgstUserId': rgstUserId,
         'rgstDttm': rgstDttm,
         'updtUserId': updtUserId,
-        'updtDttm': updtDttm
+        'updtDttm': updtDttm,
+        'isFavorite': isFavorite,
       };
 }

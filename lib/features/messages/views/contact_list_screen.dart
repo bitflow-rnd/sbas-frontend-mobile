@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
@@ -22,6 +21,8 @@ class ContactListScreen extends ConsumerWidget {
 
     var presenter = ref.watch(contactListProvider.notifier);
     var contactList = presenter.contactListMap;
+
+    print('length : ${contactList.contactListMap['contacts']?.contacts?.length}');
 
     return GestureDetector(
       onTap: () {

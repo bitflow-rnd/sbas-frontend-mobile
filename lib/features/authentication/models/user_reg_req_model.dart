@@ -18,6 +18,7 @@ class UserDetailModel {
   String? attcId;
   String? btDt;
   String? authCd;
+  bool? isFavorite;
 
   UserDetailModel({
     this.id,
@@ -39,7 +40,9 @@ class UserDetailModel {
     this.attcId,
     this.btDt,
     this.authCd,
+    this.isFavorite,
   });
+
   void clear() {
     id = '';
     pw = '';
@@ -60,6 +63,7 @@ class UserDetailModel {
     attcId = '';
     btDt = '';
     authCd = '';
+    isFavorite = false;
   }
 
   UserDetailModel.empty()
@@ -81,7 +85,8 @@ class UserDetailModel {
         dutyAddr = '',
         attcId = null,
         btDt = '',
-        authCd = '';
+        authCd = '',
+        isFavorite = false;
 
   UserDetailModel.fromJson(Map<String, dynamic> json) {
     if (json["id"] is String) {
@@ -141,6 +146,9 @@ class UserDetailModel {
     if (json["authCd"] is String) {
       authCd = json["authCd"];
     }
+    if (json["isFavorite"] is bool) {
+      isFavorite = json["isFavorite"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -165,6 +173,7 @@ class UserDetailModel {
     data["attcId"] = attcId;
     data["btDt"] = btDt;
     data["authCd"] = authCd;
+    data["isFavorite"] = isFavorite;
 
     return data;
   }
