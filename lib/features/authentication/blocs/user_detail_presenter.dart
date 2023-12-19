@@ -23,6 +23,7 @@ class UserDetailBloc extends AsyncNotifier<UserDetailModel> {
   get instId => _user.instId;
   get jobCd => _user.jobCd;
   get instTypeCd => _user.instTypeCd;
+  get dutyDstr2Cd => _user.dutyDstr2Cd;
   logout() {
     _user.clear();
   }
@@ -40,6 +41,8 @@ class UserDetailBloc extends AsyncNotifier<UserDetailModel> {
         _user.instId = u.instId;
         _user.jobCd = u.jobCd;
         _user.instTypeCd = u.instTypeCd;
+        _user.dutyDstr2Cd = u.dutyDstr2Cd;
+        print('id: ${u.id}, instNm: ${u.instNm}, instId: ${u.instId}, jobCd: ${u.jobCd}, instTypeCd: ${u.instTypeCd}');
 
         _user.id = u.id ?? "";
       }

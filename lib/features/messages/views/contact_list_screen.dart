@@ -17,217 +17,223 @@ class ContactListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userInstTypeCd = ref.read(userDetailProvider.notifier).instTypeCd;
+    final userDetail = ref.read(userDetailProvider.notifier);
+    final userInstTypeCd = userDetail.instTypeCd;
 
-    return ref.watch(contactListProvider).when(
-          loading: () => const SBASProgressIndicator(),
-          error: (error, stackTrace) => Center(
-            child: Text(
-              error.toString(),
-              style: const TextStyle(
-                color: Palette.mainColor,
-              ),
+    var presenter = ref.watch(contactListProvider.notifier);
+    var contactList = presenter.contactListMap;
+
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 8.h,
+              horizontal: 16.w,
             ),
-          ),
-          data: (contactList) => GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.h,
-                    horizontal: 16.w,
-                  ),
+                Expanded(
+                  flex: 2,
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
-                        flex: 2,
-                        child: Row(
+                        child: Stack(
                           children: [
-                            Expanded(
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    right: 0,
-                                    child: Container(
-                                      height: 40.h,
-                                      width: 45.w,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffecedef)
-                                            .withOpacity(0.6),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Text(
-                                        '   전국',
-                                        style: CTS.bold(
-                                          color: Palette.greyText_60,
-                                          fontSize: 11,
-                                        ),
-                                      ).c,
-                                    ),
+                            Positioned(
+                              right: 0,
+                              child: Container(
+                                height: 40.h,
+                                width: 45.w,
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color(0xffecedef).withOpacity(0.6),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  '   전국',
+                                  style: CTS.bold(
+                                    color: Palette.greyText_60,
+                                    fontSize: 11,
                                   ),
-                                  Container(
-                                    height: 40.h,
-                                    width: 48.w,
-                                    decoration: BoxDecoration(
-                                      color: Palette.mainColor,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      '내지역',
-                                      style: CTS.bold(
-                                        color: Colors.white,
-                                        fontSize: 11,
-                                      ),
-                                    ).c,
-                                  ),
-                                ],
+                                ).c,
                               ),
+                            ),
+                            Container(
+                              height: 40.h,
+                              width: 48.w,
+                              decoration: BoxDecoration(
+                                color: Palette.mainColor,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                '내지역',
+                                style: CTS.bold(
+                                  color: Colors.white,
+                                  fontSize: 11,
+                                ),
+                              ).c,
                             ),
                           ],
                         ),
                       ),
-                      Gaps.h10,
-                      Expanded(
-                        flex: 5,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.zero,
-
-                            prefixIcon: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.search_rounded,
-                              ),
-                            ),
-                            fillColor: Colors.white,
-                            // filled: true,
-                            hintText: '이름, 휴대폰번호 또는 소속기관명',
-                            hintStyle: CTS.bold(
-                              color: Colors.grey,
-                              fontSize: 11,
-                            ),
-
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                style: BorderStyle.solid,
-                                color: Colors.grey.shade300,
-                              ),
-                              borderRadius: BorderRadius.circular(7.r),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                style: BorderStyle.solid,
-                                color: Colors.grey.shade300,
-                              ),
-                              borderRadius: BorderRadius.circular(7.r),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Gaps.h4,
-                      Icon(
-                        Icons.keyboard_arrow_down_outlined,
-                        color: Palette.greyText_60,
-                        size: 22.h,
-                      ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 8.h,
-                  ),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        locationItem(text: "보건소", isSelected: true),
-                        locationItem(text: "병상배정반"),
-                        locationItem(text: "의료진"),
-                        locationItem(text: "구급대"),
-                        locationItem(text: "전산"),
-                        Icon(
-                          Icons.keyboard_arrow_up_outlined,
-                          color: Palette.greyText_60,
-                          size: 22.h,
+                Gaps.h10,
+                Expanded(
+                  flex: 5,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.zero,
+
+                      prefixIcon: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.search_rounded,
                         ),
-                      ],
+                      ),
+                      fillColor: Colors.white,
+                      // filled: true,
+                      hintText: '이름, 휴대폰번호 또는 소속기관명',
+                      hintStyle: CTS.bold(
+                        color: Colors.grey,
+                        fontSize: 11,
+                      ),
+
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          style: BorderStyle.solid,
+                          color: Colors.grey.shade300,
+                        ),
+                        borderRadius: BorderRadius.circular(7.r),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          style: BorderStyle.solid,
+                          color: Colors.grey.shade300,
+                        ),
+                        borderRadius: BorderRadius.circular(7.r),
+                      ),
                     ),
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        userInstTypeCd == 'ORGN0005'
-                            ? rowWrapper(
-                                header: "등록요청",
-                                alarmCount: (contactList.contactListMap['contacts']?.contacts ?? [])
-                                    .where((element) =>
-                                        element.userStatCd == "URST0001")
-                                    .toList()
-                                    .length,
-                                isOpen: ref.watch(contactRegReqIsOpenProvider.notifier).state,
-                                function: () {
-                                  ref.watch(contactRegReqIsOpenProvider.notifier).state =
-                                      !ref.watch(contactRegReqIsOpenProvider);
-                                },
-                                contactList: (contactList.contactListMap['contacts']?.contacts ?? [])
-                                    .where((element) =>
-                                        element.userStatCd == "URST0001")
-                                    .toList(),
-                                context: context,
-                              )
-                            : Container(),
-                        rowWrapper(
-                                header: "즐겨찾기",
-                                alarmCount: (contactList.contactListMap['favorites']?.contacts ?? []).length,
-                                isOpen: ref.watch(contactMyFavProvider.notifier).state,
-                                function: () {
-                                  ref.watch(contactMyFavProvider.notifier).state = !ref.watch(contactMyFavProvider);
-                                },
-                                contactList: contactList.contactListMap['favorites']?.contacts ?? [],
-                                context: context,
-                              ),
-                        rowWrapper(
-                          header: "내 조직",
-                          alarmCount: (contactList.contactListMap['contacts']?.contacts ?? [])
-                              .where((element) =>
-                                  element.instId ==
-                                  ref.watch(userDetailProvider.notifier).instId)
-                              .toList()
-                              .length,
-                          isOpen: ref
-                              .watch(contactMyOrgIsOpenProvider.notifier)
-                              .state,
-                          function: () {
-                            ref
-                                .watch(contactMyOrgIsOpenProvider.notifier)
-                                .state = !ref.watch(contactMyOrgIsOpenProvider);
-                          },
-                          contactList: (contactList.contactListMap['contacts']?.contacts ?? [])
-                              .where((element) =>
-                                  element.instId ==
-                                  ref.watch(userDetailProvider.notifier).instId)
-                              .toList(),
-                          context: context,
-                        ),
-
-                        // rowWrapper("등록요청", 1, ref.read(contactRegReqIsOpenProvider), context), // Pass ref here
-                      ],
-                    ),
-                  ),
-                )
+                Gaps.h4,
+                Icon(
+                  Icons.keyboard_arrow_down_outlined,
+                  color: Palette.greyText_60,
+                  size: 22.h,
+                ),
               ],
             ),
           ),
-        );
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.w,
+              vertical: 8.h,
+            ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  locationItem(text: "보건소", isSelected: true),
+                  locationItem(text: "병상배정반"),
+                  locationItem(text: "의료진"),
+                  locationItem(text: "구급대"),
+                  locationItem(text: "전산"),
+                  Icon(
+                    Icons.keyboard_arrow_up_outlined,
+                    color: Palette.greyText_60,
+                    size: 22.h,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  userInstTypeCd == 'ORGN0005'
+                      ? rowWrapper(
+                          header: "등록요청",
+                          alarmCount: (contactList
+                                      .contactListMap['contacts']?.contacts ??
+                                  [])
+                              .where(
+                                  (element) => element.userStatCd == "URST0001")
+                              .toList()
+                              .length,
+                          isOpen: ref
+                              .watch(contactRegReqIsOpenProvider.notifier)
+                              .state,
+                          function: () {
+                            ref
+                                    .watch(contactRegReqIsOpenProvider.notifier)
+                                    .state =
+                                !ref.watch(contactRegReqIsOpenProvider);
+                          },
+                          contactList: (contactList
+                                      .contactListMap['contacts']?.contacts ??
+                                  [])
+                              .where(
+                                  (element) => element.userStatCd == "URST0001")
+                              .toList(),
+                          context: context,
+                        )
+                      : Container(),
+                  rowWrapper(
+                    header: "즐겨찾기",
+                    alarmCount:
+                        (contactList.contactListMap['favorites']?.contacts ??
+                                [])
+                            .length,
+                    isOpen: ref.watch(contactMyFavProvider.notifier).state,
+                    function: () {
+                      ref.watch(contactMyFavProvider.notifier).state =
+                          !ref.watch(contactMyFavProvider);
+                    },
+                    contactList:
+                        contactList.contactListMap['favorites']?.contacts ?? [],
+                    context: context,
+                  ),
+                  rowWrapper(
+                    header: "내 조직",
+                    alarmCount:
+                        (contactList.contactListMap['contacts']?.contacts ?? [])
+                            .where((element) =>
+                                element.instId ==
+                                ref.watch(userDetailProvider.notifier).instId)
+                            .toList()
+                            .length,
+                    isOpen:
+                        ref.watch(contactMyOrgIsOpenProvider.notifier).state,
+                    function: () {
+                      ref.watch(contactMyOrgIsOpenProvider.notifier).state =
+                          !ref.watch(contactMyOrgIsOpenProvider);
+                    },
+                    contactList:
+                        (contactList.contactListMap['contacts']?.contacts ?? [])
+                            .where((element) =>
+                                element.instId ==
+                                ref.watch(userDetailProvider.notifier).instId)
+                            .toList(),
+                    context: context,
+                  ),
+
+                  // rowWrapper("등록요청", 1, ref.read(contactRegReqIsOpenProvider), context), // Pass ref here
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   rowWrapper(
@@ -320,7 +326,9 @@ class ContactListScreen extends ConsumerWidget {
                 },
               );
             },
-          ),
+          )
+        else
+          const SizedBox.shrink(),
       ],
     );
   }
