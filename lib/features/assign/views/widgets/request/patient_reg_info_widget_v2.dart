@@ -540,7 +540,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                   controller:
                       TextEditingController(text: vm.patientInfoModel.natiNm)
                         ..selection = TextSelection.fromPosition(TextPosition(
-                            offset: vm.patientInfoModel.natiNm!.length)),
+                            offset: vm.patientInfoModel.natiNm?.length ?? 0)),
                   decoration: getInputDecoration(
                       report.natiCd == 'NATI0001' ? '' : '직접입력'),
                   onSaved: (newValue) =>
