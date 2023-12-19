@@ -6,12 +6,15 @@ import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/assign/views/widgets/request/patient_reg_info_widget_v2.dart';
+import 'package:sbas/features/lookup/views/widgets/paitent_info_modal.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
+
 
 class PatientRegScreen extends ConsumerStatefulWidget {
   const PatientRegScreen({
@@ -94,8 +97,19 @@ class PatientRegScreenState extends ConsumerState<PatientRegScreen> {
                     onPressed: () {
                       if (patientAttc != null) {
                         if (_tryValidation()) {
-                          ref.read(patientRegProvider.notifier).registry(widget.patient?.ptId, context);
-                          Navigator.pop(context);
+                          var patientRegInfoModel = ref.read(patientRegProvider).value;
+
+                          ref.read(patientRegProvider.notifier).exist().then(
+                            (value) {
+                              if (value['isExist']) {
+                                var oldPatient = PatientCheckResponse.fromJson(value['items']);
+                                PatientInfoModal().patientDuplicateCheckModal(context, oldPatient, patientRegInfoModel!, ref);
+                              } else {
+                                ref.read(patientRegProvider.notifier).registry(widget.patient?.ptId, context);
+                                Navigator.pop(context);
+                              }
+                            }
+                          );
                         }
                       } else {
                         if (patientImage != null) {

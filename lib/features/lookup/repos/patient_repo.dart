@@ -85,7 +85,7 @@ class PatientRepository {
         model.toJson(),
       );
 
-  Future<dynamic> postExist(PatientDuplicateCheckModel model) async =>
+  Future<Map<String, dynamic>> postExist(PatientDuplicateCheckModel model) async =>
       await _privatePatientProvider.postExist(
         model.toJson(),
       );

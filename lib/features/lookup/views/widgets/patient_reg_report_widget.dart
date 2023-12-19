@@ -112,7 +112,7 @@ class PatientRegReport extends ConsumerWidget {
                           );
                           if (res) {
                             ref.invalidate(patientImageProvider);
-                            ref.invalidate(patientImageProvider);
+                            ref.invalidate(patientAttcProvider);
                             ref.invalidate(patientIsUploadProvider);
                             // ignore: use_build_context_synchronously
                             Common.showModal(
