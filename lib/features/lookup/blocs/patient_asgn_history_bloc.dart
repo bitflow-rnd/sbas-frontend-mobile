@@ -12,14 +12,19 @@ class PatientAsgnHistoryBloc extends AsyncNotifier<PatientHistoryList> {
     return _historyList;
   }
 
-  Future<void> refresh(String? ptId) async {
+  Future<bool> refresh(String? ptId) async {
     state = const AsyncLoading();
-
     state = await AsyncValue.guard(() async {
-      return await getAsync(ptId);
+      return getAsync(ptId);
     });
-    if (state.hasError) {}
-    if (state.hasValue) {}
+
+    if (state.hasError || state.value?.count == 0) {
+      return false;
+    }
+    if (state.hasValue) {
+      return true;
+    }
+    return true;
   }
 
   Future<PatientHistoryList> getAsync(String? ptId) async {
