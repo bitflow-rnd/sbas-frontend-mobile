@@ -23,6 +23,7 @@ import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
 import 'package:sbas/features/assign/views/widgets/request/patient_reg_info_widget_v2.dart';
+import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
@@ -286,8 +287,14 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   if (patientAttc == null && patientImage != null) {
                     //image 가 선택되어있지만 업로드 이전
                     //역학조사서 이미지는 선택되어있지만, 업로드 이전
-                    var uploadRes = await ref.read(patientRegProvider.notifier).uploadImage(patientImage);
-                    if (uploadRes) ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
+                    await ref.read(patientRegProvider.notifier).uploadImage(patientImage)
+                      .then((value) {
+                        if (value == true) {
+                          PatientRegInfoModal().epidUploadConfirmModal(context);
+                          ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
+                        }
+                      }
+                    );
                   } else if (patientAttc != null && patientImage != null) {
                     // image 가 선택되어있고 업로드 된 경우
                     //역학조사서 이미지가 업로드 되어있는 경우 + 환자등록

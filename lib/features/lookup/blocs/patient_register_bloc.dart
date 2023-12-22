@@ -136,12 +136,13 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         ref.read(infectiousDiseaseProvider.notifier).initByOCR(report);
       } catch (exception) {
         if (kDebugMode) {
-          print(exception);
+          print("uploadImage exception $exception");
+          return PatientRegInfoModel();
         }
       }
       return patientInfoModel;
     });
-    if (state.hasError) {
+    if (state.hasError || state.value?.ptNm == null) {
       return false;
     }
     if (state.hasValue) {
