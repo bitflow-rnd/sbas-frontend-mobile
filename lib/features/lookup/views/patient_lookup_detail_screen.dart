@@ -251,32 +251,38 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                       child: BottomPositionedSubmitButton(
                         text: '병상 요청',
                         function: () {
-                          if (ref.watch(patientAsgnHistoryProvider.notifier).checkBedAssignCompletion()) {
-                            Common.showModal(
-                              context,
-                              Common.commonModal(
-                                context: context,
-                                mainText: "병상배정이 진행중입니다.",
-                                imageWidget: Image.asset(
-                                  "assets/auth_group/modal_check.png",
-                                  width: 44.h,
-                                ),
-                                imageHeight: 44.h,
-                              ),
-                            );
-                            return;
-                          }
-                          ref.read(patientRegProvider.notifier).init();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HospitalBedRequestScreenV2(
-                                  // builder: (context) => HospitalBedRequestScreen(
-                                  isPatientRegister: false,
-                                  patient: patient,
-                                ),
-                              )
-                          );
+                          ref.watch(patientAsgnHistoryProvider.notifier).refresh(patient.ptId).then((value) {
+                            if (value == true) {
+                              if (ref.watch(patientAsgnHistoryProvider.notifier).checkBedAssignCompletion()) {
+                                Common.showModal(
+                                  context,
+                                  Common.commonModal(
+                                    context: context,
+                                    mainText: "병상배정이 진행중입니다.",
+                                    imageWidget: Image.asset(
+                                      "assets/auth_group/modal_check.png",
+                                      width: 44.h,
+                                    ),
+                                    imageHeight: 44.h,
+                                  ),
+                                );
+                                return;
+                              }
+                            } else {
+                              ref.read(patientRegProvider.notifier).init();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      HospitalBedRequestScreenV2(
+                                    // builder: (context) => HospitalBedRequestScreen(
+                                    isPatientRegister: false,
+                                    patient: patient,
+                                  ),
+                                )
+                              );
+                            }
+                          });
                         },
                       ),
                     )
