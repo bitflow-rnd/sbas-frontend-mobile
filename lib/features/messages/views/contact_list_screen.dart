@@ -22,8 +22,6 @@ class ContactListScreen extends ConsumerWidget {
     var presenter = ref.watch(contactListProvider.notifier);
     var contactList = presenter.contactListMap;
 
-    print('length : ${contactList.contactListMap['contacts']?.contacts?.length}');
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -163,37 +161,22 @@ class ContactListScreen extends ConsumerWidget {
                   userInstTypeCd == 'ORGN0005'
                       ? rowWrapper(
                           header: "등록요청",
-                          alarmCount: (contactList
-                                      .contactListMap['contacts']?.contacts ??
-                                  [])
-                              .where(
-                                  (element) => element.userStatCd == "URST0001")
-                              .toList()
-                              .length,
-                          isOpen: ref
-                              .watch(contactRegReqIsOpenProvider.notifier)
-                              .state,
+                          alarmCount: (contactList.contactListMap['contacts']?.contacts ?? []).where(
+                                  (element) => element.userStatCd == "URST0001").toList().length,
+                          isOpen: ref.watch(contactRegReqIsOpenProvider.notifier).state,
                           function: () {
-                            ref
-                                    .watch(contactRegReqIsOpenProvider.notifier)
-                                    .state =
+                            ref.watch(contactRegReqIsOpenProvider.notifier).state =
                                 !ref.watch(contactRegReqIsOpenProvider);
                           },
-                          contactList: (contactList
-                                      .contactListMap['contacts']?.contacts ??
-                                  [])
-                              .where(
-                                  (element) => element.userStatCd == "URST0001")
-                              .toList(),
+                          contactList: (contactList.contactListMap['contacts']?.contacts ?? []).where(
+                                  (element) => element.userStatCd == "URST0001").toList(),
                           context: context,
                         )
                       : Container(),
                   rowWrapper(
                     header: "즐겨찾기",
                     alarmCount:
-                        (contactList.contactListMap['favorites']?.contacts ??
-                                [])
-                            .length,
+                        (contactList.contactListMap['favorites']?.contacts ?? []).length,
                     isOpen: ref.watch(contactMyFavProvider.notifier).state,
                     function: () {
                       ref.watch(contactMyFavProvider.notifier).state =
@@ -206,12 +189,8 @@ class ContactListScreen extends ConsumerWidget {
                   rowWrapper(
                     header: "내 조직",
                     alarmCount:
-                        (contactList.contactListMap['contacts']?.contacts ?? [])
-                            .where((element) =>
-                                element.instId ==
-                                ref.watch(userDetailProvider.notifier).instId)
-                            .toList()
-                            .length,
+                        (contactList.contactListMap['contacts']?.contacts ?? []).where(
+                                (element) => element.instId == ref.watch(userDetailProvider.notifier).instId).toList().length,
                     isOpen:
                         ref.watch(contactMyOrgIsOpenProvider.notifier).state,
                     function: () {
@@ -220,10 +199,7 @@ class ContactListScreen extends ConsumerWidget {
                     },
                     contactList:
                         (contactList.contactListMap['contacts']?.contacts ?? [])
-                            .where((element) =>
-                                element.instId ==
-                                ref.watch(userDetailProvider.notifier).instId)
-                            .toList(),
+                            .where((element) => element.instId == ref.watch(userDetailProvider.notifier).instId).toList(),
                     context: context,
                   ),
 
@@ -277,7 +253,7 @@ class ContactListScreen extends ConsumerWidget {
                           style: CTS.bold(color: Colors.white, fontSize: 10),
                         ).c,
                       ),
-                    Spacer(),
+                    const Spacer(),
                     if (hasOpen)
                       InkWell(
                         borderRadius: BorderRadius.circular(16.r),

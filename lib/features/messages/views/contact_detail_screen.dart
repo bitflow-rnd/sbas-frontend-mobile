@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +9,11 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
+import 'package:sbas/features/messages/models/favorite_request_model.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
+import 'package:sbas/features/messages/repos/contact_repo.dart';
+import 'package:sbas/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactDetailScreen extends ConsumerStatefulWidget {
@@ -24,8 +30,7 @@ class ContactDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
-
-  void toggleFavorite() {
+  void toggleFavorite(String userId) {
     setState(() {
       widget.contact.isFavorite = !widget.contact.isFavorite!;
     });
@@ -33,6 +38,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userId = ref.read(userDetailProvider.notifier).userId;
+    final mbrId = widget.contact.id ?? '';
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -51,7 +58,19 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              toggleFavorite();
+              final request = FavoriteRequestModel(id: userId, mbrId: mbrId);
+
+              try {
+                if (widget.contact.isFavorite ?? false) {
+                  ref.read(contactRepoProvider).deleteFavorite(request);
+                } else {
+                  ref.read(contactRepoProvider).addFavorite(request);
+                }
+              } catch (e) {
+                showToast('error');
+                return;
+              }
+              toggleFavorite(userId);
             },
             icon: widget.contact.isFavorite ?? false
                 ? const Icon(
