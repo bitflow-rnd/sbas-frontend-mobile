@@ -11,6 +11,8 @@ import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
 import 'package:sbas/features/messages/views/contact_detail_screen.dart';
 import 'package:sbas/features/messages/views/widgets/contact_item_widget.dart';
 
+import '../models/contact_list_map.dart';
+
 class ContactListScreen extends ConsumerWidget {
   const ContactListScreen({Key? key}) : super(key: key);
 
@@ -19,8 +21,8 @@ class ContactListScreen extends ConsumerWidget {
     final userDetail = ref.read(userDetailProvider.notifier);
     final userInstTypeCd = userDetail.instTypeCd;
 
-    var presenter = ref.watch(contactListProvider.notifier);
-    var contactList = presenter.contactListMap;
+    var presenter = ref.watch(contactListProvider);
+    var contactList = presenter.value ?? ContactListMap(contactListMap: {});
 
     return GestureDetector(
       onTap: () {
@@ -161,22 +163,37 @@ class ContactListScreen extends ConsumerWidget {
                   userInstTypeCd == 'ORGN0005'
                       ? rowWrapper(
                           header: "등록요청",
-                          alarmCount: (contactList.contactListMap['contacts']?.contacts ?? []).where(
-                                  (element) => element.userStatCd == "URST0001").toList().length,
-                          isOpen: ref.watch(contactRegReqIsOpenProvider.notifier).state,
+                          alarmCount: (contactList
+                                      .contactListMap['contacts']?.contacts ??
+                                  [])
+                              .where(
+                                  (element) => element.userStatCd == "URST0001")
+                              .toList()
+                              .length,
+                          isOpen: ref
+                              .watch(contactRegReqIsOpenProvider.notifier)
+                              .state,
                           function: () {
-                            ref.watch(contactRegReqIsOpenProvider.notifier).state =
+                            ref
+                                    .watch(contactRegReqIsOpenProvider.notifier)
+                                    .state =
                                 !ref.watch(contactRegReqIsOpenProvider);
                           },
-                          contactList: (contactList.contactListMap['contacts']?.contacts ?? []).where(
-                                  (element) => element.userStatCd == "URST0001").toList(),
+                          contactList: (contactList
+                                      .contactListMap['contacts']?.contacts ??
+                                  [])
+                              .where(
+                                  (element) => element.userStatCd == "URST0001")
+                              .toList(),
                           context: context,
                         )
                       : Container(),
                   rowWrapper(
                     header: "즐겨찾기",
                     alarmCount:
-                        (contactList.contactListMap['favorites']?.contacts ?? []).length,
+                        (contactList.contactListMap['favorites']?.contacts ??
+                                [])
+                            .length,
                     isOpen: ref.watch(contactMyFavProvider.notifier).state,
                     function: () {
                       ref.watch(contactMyFavProvider.notifier).state =
@@ -189,8 +206,12 @@ class ContactListScreen extends ConsumerWidget {
                   rowWrapper(
                     header: "내 조직",
                     alarmCount:
-                        (contactList.contactListMap['contacts']?.contacts ?? []).where(
-                                (element) => element.instId == ref.watch(userDetailProvider.notifier).instId).toList().length,
+                        (contactList.contactListMap['contacts']?.contacts ?? [])
+                            .where((element) =>
+                                element.instId ==
+                                ref.watch(userDetailProvider.notifier).instId)
+                            .toList()
+                            .length,
                     isOpen:
                         ref.watch(contactMyOrgIsOpenProvider.notifier).state,
                     function: () {
@@ -199,7 +220,10 @@ class ContactListScreen extends ConsumerWidget {
                     },
                     contactList:
                         (contactList.contactListMap['contacts']?.contacts ?? [])
-                            .where((element) => element.instId == ref.watch(userDetailProvider.notifier).instId).toList(),
+                            .where((element) =>
+                                element.instId ==
+                                ref.watch(userDetailProvider.notifier).instId)
+                            .toList(),
                     context: context,
                   ),
 

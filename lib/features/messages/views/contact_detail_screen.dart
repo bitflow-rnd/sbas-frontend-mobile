@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +10,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/messages/models/favorite_request_model.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
+import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 import 'package:sbas/util.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,9 +19,11 @@ class ContactDetailScreen extends ConsumerStatefulWidget {
   final UserContact contact;
   final bool isRequest;
 
-  const ContactDetailScreen(
-      {Key? key, required this.contact, this.isRequest = true})
-      : super(key: key);
+  const ContactDetailScreen({
+    Key? key,
+    required this.contact,
+    this.isRequest = true,
+  }) : super(key: key);
 
   @override
   ConsumerState<ContactDetailScreen> createState() =>
@@ -30,9 +31,11 @@ class ContactDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
+  var isLoading = false;
+
   void toggleFavorite(String userId) {
     setState(() {
-      widget.contact.isFavorite = !widget.contact.isFavorite!;
+      isLoading = false;
     });
   }
 
@@ -40,144 +43,279 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
   Widget build(BuildContext context) {
     final userId = ref.read(userDetailProvider.notifier).userId;
     final mbrId = widget.contact.id ?? '';
-    return Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarBrightness: Brightness.light,
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
-        ),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.transparent,
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              final request = FavoriteRequestModel(id: userId, mbrId: mbrId);
+    var presenter = ref.watch(contactListProvider.notifier);
 
-              try {
-                if (widget.contact.isFavorite ?? false) {
-                  ref.read(contactRepoProvider).deleteFavorite(request);
-                } else {
-                  ref.read(contactRepoProvider).addFavorite(request);
-                }
-              } catch (e) {
-                showToast('error');
-                return;
-              }
-              toggleFavorite(userId);
-            },
-            icon: widget.contact.isFavorite ?? false
-                ? const Icon(
-                    Icons.star_outlined,
-                    color: Color(0xFFD0A72F),
-                  )
-                : const Icon(
-                    Icons.star_border_sharp,
-                    color: Color(0xFF696969),
-                  ),
-          ),
-        ],
-      ),
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0.h,
-            child: Image.asset(
-              "assets/message/hospital_image.png",
-              height: 240.h,
-              width: 1.sw,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarBrightness: Brightness.light,
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: Brightness.dark,
             ),
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.transparent,
+            centerTitle: true,
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  setState(() {
+                    isLoading = true; // 로딩 시작
+                  });
+                  final request = FavoriteRequestModel(id: userId, mbrId: mbrId);
+
+                  try {
+                    if (widget.contact.isFavorite) {
+                      await ref.read(contactRepoProvider).deleteFavorite(request);
+                      widget.contact.isFavorite = false;
+                    } else {
+                      await ref.read(contactRepoProvider).addFavorite(request);
+                      widget.contact.isFavorite = true;
+                    }
+                    presenter.loadContacts('');
+                  } catch (e) {
+                    showToast(e.toString());
+                    return;
+                  } finally {
+                    toggleFavorite(userId);
+                  }
+                },
+                icon: widget.contact.isFavorite
+                    ? const Icon(
+                        Icons.star_outlined,
+                        color: Color(0xFFD0A72F),
+                      )
+                    : const Icon(
+                        Icons.star_border_sharp,
+                        color: Color(0xFF696969),
+                      ),
+              ),
+            ],
           ),
-          Column(
+          extendBodyBehindAppBar: true,
+          body: Stack(
             children: [
-              SizedBox(height: 220.h),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(24.r),
-                          topRight: Radius.circular(24.r)),
-                      color: Colors.white),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 32.w, vertical: 16.h),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              "assets/message/doctor_icon.png",
-                              height: 44.h,
-                            ),
-                            SizedBox(width: 12.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+              Positioned(
+                top: 0.h,
+                child: Image.asset(
+                  "assets/message/hospital_image.png",
+                  height: 240.h,
+                  width: 1.sw,
+                ),
+              ),
+              Column(
+                children: [
+                  SizedBox(height: 220.h),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(24.r),
+                              topRight: Radius.circular(24.r)),
+                          color: Colors.white),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 32.w, vertical: 16.h),
+                            child: Row(
                               children: [
-                                Text(
-                                  widget.contact.userNm ?? "",
-                                  style: CTS.bold(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                  ),
+                                Image.asset(
+                                  "assets/message/doctor_icon.png",
+                                  height: 44.h,
                                 ),
-                                Gaps.v6,
-                                Text(
-                                  "${widget.contact.instNm ?? ""} / ${widget.contact.ocpCd ?? ""}",
-                                  style: CTS(
-                                    color: Palette.greyText_80,
-                                    fontSize: 13,
-                                  ),
+                                SizedBox(width: 12.w),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      widget.contact.userNm ?? "",
+                                      style: CTS.bold(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Gaps.v6,
+                                    Text(
+                                      "${widget.contact.instNm ?? ""} / ${widget.contact.ocpCd ?? ""}",
+                                      style: CTS(
+                                        color: Palette.greyText_80,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24.w),
-                        child: Divider(
-                            thickness: 1,
-                            height: 1,
-                            color: Palette.greyText_20),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 32.w, vertical: 24),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 24.w),
+                            child: Divider(
+                                thickness: 1,
+                                height: 1,
+                                color: Palette.greyText_20),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 32.w, vertical: 24),
+                            child: Column(
                               children: [
-                                Text(
-                                  '휴대폰번호',
-                                  style: CTS.medium(
-                                    color: Palette.greyText_80,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Text(
-                                  widget.contact.telno ?? "",
-                                  style: CTS(
-                                    color: Palette.black,
-                                    fontSize: 13,
-                                  ),
-                                ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        launchSms(number: widget.contact.telno);
-                                      },
-                                      child: Container(
-                                          padding: EdgeInsets.all(5.r),
-                                          // margin: EdgeInsets.only(right: 8.w),
+                                    Text(
+                                      '휴대폰번호',
+                                      style: CTS.medium(
+                                        color: Palette.greyText_80,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    Text(
+                                      widget.contact.telno ?? "",
+                                      style: CTS(
+                                        color: Palette.black,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            launchSms(number: widget.contact.telno);
+                                          },
+                                          child: Container(
+                                              padding: EdgeInsets.all(5.r),
+                                              // margin: EdgeInsets.only(right: 8.w),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                  color: Palette.greyText_20,
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                              ),
+                                              child: Icon(Icons.message_rounded,
+                                                  color: Palette.black,
+                                                  size: 16.r)),
+                                        ),
+                                        Gaps.h10,
+                                        GestureDetector(
+                                          onTap: () {
+                                            launch("tel://${widget.contact.telno}");
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.all(5.r),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                color: Palette.greyText_20,
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: Icon(Icons.phone,
+                                                color: Palette.greyText_80,
+                                                size: 16.r),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Gaps.v20,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '직장전화번호',
+                                      style: CTS.medium(
+                                        color: Palette.greyText_80,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    Text(
+                                      widget.contact.telno ?? "",
+                                      style: CTS(
+                                        color: Palette.black,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Gaps.h48,
+                                        GestureDetector(
+                                          onTap: () {
+                                            launch("tel://${widget.contact.telno}");
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.all(5.r),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                color: Palette.greyText_20,
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: Icon(Icons.phone,
+                                                color: Palette.greyText_80,
+                                                size: 16.r),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Gaps.v20,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '담당환자 유형',
+                                      style: CTS.medium(
+                                        color: Palette.greyText_80,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 12.w, vertical: 5.h),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                  color: Palette.greyText_20,
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(13.5.r),
+                                              ),
+                                              child: Text(
+                                                '임산부',
+                                                style: CTS(
+                                                  color: Palette.greyText,
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Gaps.h10,
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 12.w, vertical: 5.h),
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             border: Border.all(
@@ -185,95 +323,52 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                               width: 1,
                                             ),
                                             borderRadius:
-                                                BorderRadius.circular(4),
+                                                BorderRadius.circular(13.5.r),
                                           ),
-                                          child: Icon(Icons.message_rounded,
-                                              color: Palette.black,
-                                              size: 16.r)),
-                                    ),
-                                    Gaps.h10,
-                                    GestureDetector(
-                                      onTap: () {
-                                        launch("tel://${widget.contact.telno}");
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(5.r),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Palette.greyText_20,
-                                            width: 1,
+                                          child: Text(
+                                            '신생아',
+                                            style: CTS(
+                                              color: Palette.greyText,
+                                              fontSize: 13,
+                                            ),
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(4),
                                         ),
-                                        child: Icon(Icons.phone,
-                                            color: Palette.greyText_80,
-                                            size: 16.r),
+                                        Gaps.h10,
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 12.w, vertical: 5.h),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                              color: Palette.greyText_20,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(13.5.r),
+                                          ),
+                                          child: Text(
+                                            '응급',
+                                            style: CTS(
+                                              color: Palette.greyText,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Gaps.v20,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '세부권한',
+                                      style: CTS.medium(
+                                        color: Palette.greyText_80,
+                                        fontSize: 13,
                                       ),
                                     ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Gaps.v20,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '직장전화번호',
-                                  style: CTS.medium(
-                                    color: Palette.greyText_80,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Text(
-                                  widget.contact.telno ?? "",
-                                  style: CTS(
-                                    color: Palette.black,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Gaps.h48,
-                                    GestureDetector(
-                                      onTap: () {
-                                        launch("tel://${widget.contact.telno}");
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(5.r),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Palette.greyText_20,
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                        ),
-                                        child: Icon(Icons.phone,
-                                            color: Palette.greyText_80,
-                                            size: 16.r),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Gaps.v20,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '담당환자 유형',
-                                  style: CTS.medium(
-                                    color: Palette.greyText_80,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Row(
-                                  children: [
                                     Row(
                                       children: [
                                         Container(
@@ -289,7 +384,7 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                                 BorderRadius.circular(13.5.r),
                                           ),
                                           child: Text(
-                                            '임산부',
+                                            '일반',
                                             style: CTS(
                                               color: Palette.greyText,
                                               fontSize: 13,
@@ -297,151 +392,76 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                           ),
                                         ),
                                       ],
-                                    ),
-                                    Gaps.h10,
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 12.w, vertical: 5.h),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Palette.greyText_20,
-                                          width: 1,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(13.5.r),
-                                      ),
-                                      child: Text(
-                                        '신생아',
-                                        style: CTS(
-                                          color: Palette.greyText,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ),
-                                    Gaps.h10,
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 12.w, vertical: 5.h),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Palette.greyText_20,
-                                          width: 1,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(13.5.r),
-                                      ),
-                                      child: Text(
-                                        '응급',
-                                        style: CTS(
-                                          color: Palette.greyText,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ),
+                                    )
                                   ],
-                                )
-                              ],
-                            ),
-                            Gaps.v20,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '세부권한',
-                                  style: CTS.medium(
-                                    color: Palette.greyText_80,
-                                    fontSize: 13,
-                                  ),
                                 ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 12.w, vertical: 5.h),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Palette.greyText_20,
-                                          width: 1,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(13.5.r),
-                                      ),
-                                      child: Text(
-                                        '일반',
-                                        style: CTS(
-                                          color: Palette.greyText,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  // ㅇㅇxpanded(
+                  if (widget.isRequest)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {},
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 12.h),
+                              decoration: BoxDecoration(
+                                color: Palette.white,
+                                border: Border.all(
+                                  color: Palette.greyText_20,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                "반려",
+                                style: CTS(
+                                  color: Palette.greyText_80,
+                                  fontSize: 16,
+                                ),
+                              ).c,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {},
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 12.h),
+                              decoration: BoxDecoration(
+                                color: Palette.mainColor,
+                                border: Border.all(
+                                  color: Palette.mainColor,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                "승인",
+                                style: CTS(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ).c,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                ],
               ),
-              // ㅇㅇxpanded(
-              if (widget.isRequest)
-                Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 12.h),
-                          decoration: BoxDecoration(
-                            color: Palette.white,
-                            border: Border.all(
-                              color: Palette.greyText_20,
-                              width: 1,
-                            ),
-                          ),
-                          child: Text(
-                            "반려",
-                            style: CTS(
-                              color: Palette.greyText_80,
-                              fontSize: 16,
-                            ),
-                          ).c,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 12.h),
-                          decoration: BoxDecoration(
-                            color: Palette.mainColor,
-                            border: Border.all(
-                              color: Palette.mainColor,
-                              width: 1,
-                            ),
-                          ),
-                          child: Text(
-                            "승인",
-                            style: CTS(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ).c,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
             ],
           ),
-        ],
-      ),
+        ),
+        if (isLoading)
+          const Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
     );
   }
 

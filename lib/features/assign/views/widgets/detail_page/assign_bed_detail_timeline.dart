@@ -21,6 +21,7 @@ import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
+import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 import 'package:sbas/features/messages/views/contact_detail_screen.dart';
 import 'package:sbas/util.dart';
@@ -31,6 +32,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     required this.patient,
     required this.assignItem,
   });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
@@ -675,6 +677,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           ),
         ),
       );
+
   Widget suspendCard({
     required String title,
     required String src,
@@ -746,6 +749,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           ),
         ),
       );
+
   Widget completeCard({
     required String title,
     required String dateTime,
@@ -848,6 +852,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           ),
         ),
       );
+
   Widget imageIconFrag({
     required String imgSrc,
   }) =>
@@ -868,6 +873,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
           ],
         ),
       );
+
   Widget dateFragment(String date) => Container(
         padding: EdgeInsets.only(top: 20.h),
         margin: EdgeInsets.only(bottom: 16.h),

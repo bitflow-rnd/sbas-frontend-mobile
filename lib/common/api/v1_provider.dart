@@ -83,7 +83,13 @@ class V1Provider {
         if (kDebugMode) {
           print(res.data);
         }
-        return res.data['result'] ?? res.data['message'];
+
+        if(res.data['result'] != null) {
+          return res.data['result'];
+        } else {
+          throw ArgumentError();
+        }
+
       }
     } on DioException catch (exception) {
       if (kDebugMode) {
