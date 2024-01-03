@@ -21,11 +21,28 @@ class ContactListScreen extends ConsumerWidget {
     final userDetail = ref.read(userDetailProvider.notifier);
     final userInstTypeCd = userDetail.instTypeCd;
     final userDstr2Cd = userDetail.dutyDstr2Cd;
+    final userDstr1Cd = userDstr2Cd.toString().substring(0, 2);
+    bool isMyLocation = ref.watch(isMyLocationProvider);
 
     var presenter = ref.watch(contactListProvider);
     var contactList = presenter.value ?? ContactListMap(contactListMap: {});
 
     var contactPresenter = ref.watch(contactConditionPresenter);
+    contactPresenter.setCondition(myInstTypeCd: userInstTypeCd);
+
+    void changeLocation() async {
+      ref.read(isMyLocationProvider.notifier).state = !isMyLocation;
+
+      if(ref.read(isMyLocationProvider.notifier).state) {
+        contactPresenter.dstr1Cd = userDstr1Cd;
+        contactPresenter.dstr2Cd = userDstr2Cd;
+      }else {
+        contactPresenter.dstr1Cd = null;
+        contactPresenter.dstr2Cd = null;
+      }
+
+      await ref.read(contactListProvider.notifier).loadContacts();
+    }
 
     return GestureDetector(
       onTap: () {
@@ -45,47 +62,10 @@ class ContactListScreen extends ConsumerWidget {
                 Expanded(
                   flex: 2,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              right: 0,
-                              child: Container(
-                                height: 40.h,
-                                width: 45.w,
-                                decoration: BoxDecoration(
-                                  color:
-                                      const Color(0xffecedef).withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  '   전국',
-                                  style: CTS.bold(
-                                    color: Palette.greyText_60,
-                                    fontSize: 11,
-                                  ),
-                                ).c,
-                              ),
-                            ),
-                            Container(
-                              height: 40.h,
-                              width: 48.w,
-                              decoration: BoxDecoration(
-                                color: Palette.mainColor,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                '내지역',
-                                style: CTS.bold(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                ),
-                              ).c,
-                            ),
-                          ],
-                        ),
-                      ),
+                      _buildLocationButton(ref, '내지역', isMyLocation, true, changeLocation),
+                      _buildLocationButton(ref, '전국', !isMyLocation, false, changeLocation),
                     ],
                   ),
                 ),
@@ -128,11 +108,6 @@ class ContactListScreen extends ConsumerWidget {
                   ),
                 ),
                 Gaps.h4,
-                Icon(
-                  Icons.keyboard_arrow_down_outlined,
-                  color: Palette.greyText_60,
-                  size: 22.h,
-                ),
               ],
             ),
           ),
@@ -236,6 +211,32 @@ class ContactListScreen extends ConsumerWidget {
             ),
           )
         ],
+      ),
+    );
+
+  }
+
+  Widget _buildLocationButton(WidgetRef ref, String text, bool isSelected, bool isMyLocation, Function changeLocation) {
+    return InkWell(
+      onTap: () => {
+        changeLocation()
+      },
+      child: Container(
+        height: 40.h,
+        width: 45.w,
+        decoration: BoxDecoration(
+          color: isSelected ? Palette.mainColor : const Color(0xffecedef).withOpacity(0.6),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: CTS.bold(
+              color: isSelected ? Colors.white : Palette.greyText_60,
+              fontSize: 11,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -362,3 +363,4 @@ class ContactListScreen extends ConsumerWidget {
 final contactMyOrgIsOpenProvider = StateProvider<bool>((ref) => true);
 final contactRegReqIsOpenProvider = StateProvider<bool>((ref) => true);
 final contactMyFavProvider = StateProvider<bool>((ref) => true);
+final isMyLocationProvider = StateProvider<bool>((ref) => true);

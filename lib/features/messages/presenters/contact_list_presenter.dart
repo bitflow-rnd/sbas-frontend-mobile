@@ -29,6 +29,7 @@ class ContactListPresenter extends AsyncNotifier<ContactListMap> {
 
   Future<void> _loadContacts() async {
     try {
+      print('map : ${contactConditionModel.toMap()}');
       final contactList = UserContactList.fromJson(
           await _contactRepository.getAllUser(contactConditionModel.toMap()));
       final favoriteList = UserContactList.fromJson(
