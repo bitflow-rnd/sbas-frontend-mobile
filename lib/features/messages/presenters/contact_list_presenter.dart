@@ -2,50 +2,48 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
+import 'package:sbas/features/messages/models/contact_condition_model.dart';
 import 'package:sbas/features/messages/models/contact_list_map.dart';
 import 'package:sbas/features/messages/models/user_contact_list_model.dart';
+import 'package:sbas/features/messages/presenters/contact_condition_presenter.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 
 class ContactListPresenter extends AsyncNotifier<ContactListMap> {
   ContactListMap contactListMap = ContactListMap(contactListMap: {});
 
-  late final String? myInstTypeCd;
+  late final ContactConditionModel contactConditionModel;
+  late final ContactRepository _contactRepository;
 
   @override
   FutureOr<ContactListMap> build() async {
+    contactConditionModel = ref.watch(contactConditionPresenter);
     _contactRepository = ref.read(contactRepoProvider);
 
-    final userDetailBloc = ref.read(userDetailProvider.notifier);
-    final userDetail = userDetailBloc.state.value;
-    if (userDetail != null) {
-      myInstTypeCd = userDetail.instTypeCd;
-    } else {
-      throw StateError('User detail not available');
-    }
-
-    final contactList = UserContactList.fromJson(await _contactRepository.getAllUser("?myInstTypeCd=$myInstTypeCd"));
-    final favoriteList = UserContactList.fromJson(await _contactRepository.getFavoriteContacts());
-
-    contactListMap = ContactListMap.fromTwoLists(contacts: contactList, favorites: favoriteList);
-
-    state = AsyncValue.data(contactListMap);
-
+    await _loadContacts();
     return contactListMap;
   }
 
-  Future<void> loadContacts(String queryParams) async {
-    final contactList = UserContactList.fromJson(await _contactRepository.getAllUser("?myInstTypeCd=$myInstTypeCd$queryParams"));
-    final favoriteList = UserContactList.fromJson(await _contactRepository.getFavoriteContacts());
+  Future<void> loadContacts() async {
+    await _loadContacts();
+  }
 
-    contactListMap = ContactListMap.fromTwoLists(contacts: contactList, favorites: favoriteList);
+  Future<void> _loadContacts() async {
+    try {
+      final contactList = UserContactList.fromJson(
+          await _contactRepository.getAllUser(contactConditionModel.toMap()));
+      final favoriteList = UserContactList.fromJson(
+          await _contactRepository.getFavoriteContacts());
 
-    state = AsyncValue.data(contactListMap);
+      contactListMap = ContactListMap.fromTwoLists(
+          contacts: contactList, favorites: favoriteList);
+
+      state = AsyncValue.data(contactListMap);
+    } catch (e) {
+      print('error: $e');
+    }
   }
 
   TextEditingController searchTextController = TextEditingController();
-
-  late final ContactRepository _contactRepository;
 }
 
 final contactListProvider =

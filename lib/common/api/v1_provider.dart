@@ -17,6 +17,7 @@ class V1Provider {
       final res = await client.getUri(
         Uri.parse('$_baseUrl/$route'),
       );
+
       if (kDebugMode) {
         showToast(res.data['message']);
       }
@@ -27,6 +28,36 @@ class V1Provider {
       if (kDebugMode) {
         print({
           'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
+  Future<dynamic> getAsyncWithMap(String route, Map<String, dynamic> map) async {
+    final client = Dio();
+
+    try {
+      client.options.contentType = 'application/json';
+      client.options.headers = authToken;
+
+      final res = await client.get('$_baseUrl/$route', queryParameters: map);
+
+      print('result : ${res.data['result']}');
+
+      if(res.statusCode == 200) {
+        if(res.data['code'] == '00') {
+          return res.data['result'];
+        }else {
+          return res.data['message'];
+        }
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception.toString(),
         });
       }
     } finally {
@@ -47,9 +78,6 @@ class V1Provider {
         data: json,
       );
 
-      // if (kDebugMode) {
-      //   showToast(res.data['message']);
-      // }
       if (res.statusCode == 200) {
         return res.data['result'];
       }
@@ -84,12 +112,11 @@ class V1Provider {
           print(res.data);
         }
 
-        if(res.data['result'] != null) {
+        if (res.data['result'] != null) {
           return res.data['result'];
         } else {
           throw ArgumentError();
         }
-
       }
     } on DioException catch (exception) {
       if (kDebugMode) {

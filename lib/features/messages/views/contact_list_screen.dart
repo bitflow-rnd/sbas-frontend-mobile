@@ -7,11 +7,11 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
+import 'package:sbas/features/messages/presenters/contact_condition_presenter.dart';
 import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
 import 'package:sbas/features/messages/views/contact_detail_screen.dart';
 import 'package:sbas/features/messages/views/widgets/contact_item_widget.dart';
-
-import '../models/contact_list_map.dart';
+import 'package:sbas/features/messages/models/contact_list_map.dart';
 
 class ContactListScreen extends ConsumerWidget {
   const ContactListScreen({Key? key}) : super(key: key);
@@ -20,9 +20,12 @@ class ContactListScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userDetail = ref.read(userDetailProvider.notifier);
     final userInstTypeCd = userDetail.instTypeCd;
+    final userDstr2Cd = userDetail.dutyDstr2Cd;
 
     var presenter = ref.watch(contactListProvider);
     var contactList = presenter.value ?? ContactListMap(contactListMap: {});
+
+    var contactPresenter = ref.watch(contactConditionPresenter);
 
     return GestureDetector(
       onTap: () {
@@ -142,10 +145,10 @@ class ContactListScreen extends ConsumerWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  locationItem(text: "보건소", isSelected: true),
-                  locationItem(text: "병상배정반"),
-                  locationItem(text: "의료진"),
+                  locationItem(text: "병상배정반", isSelected: true),
                   locationItem(text: "구급대"),
+                  locationItem(text: "보건소"),
+                  locationItem(text: "의료진"),
                   locationItem(text: "전산"),
                   Icon(
                     Icons.keyboard_arrow_up_outlined,

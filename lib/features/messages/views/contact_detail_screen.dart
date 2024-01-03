@@ -10,6 +10,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/messages/models/favorite_request_model.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
+import 'package:sbas/features/messages/presenters/contact_condition_presenter.dart';
 import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 import 'package:sbas/util.dart';
@@ -78,7 +79,7 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                       await ref.read(contactRepoProvider).addFavorite(request);
                       widget.contact.isFavorite = true;
                     }
-                    presenter.loadContacts('');
+                    presenter.loadContacts();
                   } catch (e) {
                     showToast(e.toString());
                     return;
