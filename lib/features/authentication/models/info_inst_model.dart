@@ -7,8 +7,8 @@ class InfoInstModel {
   String? instId;
   String? instTypeCd;
   String? instNm;
-  String? dstrCd1;
-  String? dstrCd2;
+  String? dstr1Cd;
+  String? dstr2Cd;
   String? chrgUserId;
   String? chrgTelno;
   String? chrgNm;
@@ -27,8 +27,8 @@ class InfoInstModel {
     this.instId,
     this.instTypeCd,
     this.instNm,
-    this.dstrCd1,
-    this.dstrCd2,
+    this.dstr1Cd,
+    this.dstr2Cd,
     this.chrgUserId,
     this.chrgNm,
     this.chrgTelno,
@@ -64,11 +64,11 @@ class InfoInstModel {
     if (json["instNm"] is String) {
       instNm = json["instNm"];
     }
-    if (json["dstrCd1"] is String) {
-      dstrCd1 = json["dstrCd1"];
+    if (json["dstr1Cd"] is String) {
+      dstr1Cd = json["dstr1Cd"];
     }
-    if (json["dstrCd2"] is String) {
-      dstrCd2 = json["dstrCd2"];
+    if (json["dstr2Cd"] is String) {
+      dstr2Cd = json["dstr2Cd"];
     }
     if (json["chrgUserId"] is String) {
       chrgUserId = json["chrgUserId"];
@@ -93,8 +93,8 @@ class InfoInstModel {
     data["id"] = id;
     data["instTypeCd"] = instTypeCd;
     data["instNm"] = instNm;
-    data["dstrCd1"] = dstrCd1;
-    data["dstrCd2"] = dstrCd2;
+    data["dstr1Cd"] = dstr1Cd;
+    data["dstr2Cd"] = dstr2Cd;
     data["chrgUserId"] = chrgUserId;
     data["chrgNm"] = chrgNm;
     data["chrgTelno"] = chrgTelno;
