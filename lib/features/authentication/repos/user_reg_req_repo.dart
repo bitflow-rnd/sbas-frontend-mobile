@@ -41,13 +41,13 @@ class UserRegRequestRepository {
 
   Future<List<InfoInstModel>> getOrganCode(
     String? typeCd,
-    String? dstrCd1,
-    String? dstrCd2,
+    String? dstr1Cd,
+    String? dstr2Cd,
   ) async {
     final Map<String, String?> query = {
       'instTypecd': typeCd,
-      'dstrCd1': dstrCd1,
-      'dstrCd2': dstrCd2,
+      'dstr1Cd': dstr1Cd,
+      'dstr2Cd': dstr2Cd,
     };
     return await _baseOrganProvider.getOrganCode(query);
   }
