@@ -18,30 +18,58 @@ class ContactListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final TextEditingController searchController = TextEditingController();
     final userDetail = ref.read(userDetailProvider.notifier);
     final userInstTypeCd = userDetail.instTypeCd;
     final userDstr2Cd = userDetail.dutyDstr2Cd;
     final userDstr1Cd = userDstr2Cd.toString().substring(0, 2);
     bool isMyLocation = ref.watch(isMyLocationProvider);
-
-    var presenter = ref.watch(contactListProvider);
-    var contactList = presenter.value ?? ContactListMap(contactListMap: {});
-
+    List<bool> instTypeCdList = ref.watch(instTypeCdListProvider);
     var contactPresenter = ref.watch(contactConditionPresenter);
     contactPresenter.setCondition(myInstTypeCd: userInstTypeCd);
 
-    void changeLocation() async {
-      ref.read(isMyLocationProvider.notifier).state = !isMyLocation;
+    if (isMyLocation) {
+      ref.read(contactConditionPresenter).dstr1Cd = userDstr1Cd;
+      ref.read(contactConditionPresenter).dstr2Cd = userDstr2Cd;
+    } else {
+      ref.read(contactConditionPresenter).dstr1Cd = null;
+      ref.read(contactConditionPresenter).dstr2Cd = null;
+    }
 
-      if(ref.read(isMyLocationProvider.notifier).state) {
+    var presenter = ref.watch(contactListProvider);
+    final dataLoader = ref.read(contactListProvider.notifier);
+    var contactList = presenter.value ?? ContactListMap(contactListMap: {});
+
+    void setLocationCondition() {
+      if (ref.read(isMyLocationProvider.notifier).state) {
         contactPresenter.dstr1Cd = userDstr1Cd;
         contactPresenter.dstr2Cd = userDstr2Cd;
-      }else {
+      } else {
         contactPresenter.dstr1Cd = null;
         contactPresenter.dstr2Cd = null;
       }
+    }
 
-      await ref.read(contactListProvider.notifier).loadContacts();
+    void changeLocation() async {
+      ref.read(isMyLocationProvider.notifier).state = !isMyLocation;
+      setLocationCondition();
+      await dataLoader.loadContacts();
+    }
+
+    void changeInstTypeCd() async {
+      String code = 'ORGN000';
+      String inputData = instTypeCdList
+          .asMap()
+          .entries
+          .where((element) => element.value)
+          .map((e) => code + (e.key + 1).toString())
+          .join(',');
+
+      print(inputData);
+
+      contactPresenter.instTypeCd = inputData == '' ? null : inputData;
+      setLocationCondition();
+      await dataLoader.loadContacts();
     }
 
     return GestureDetector(
@@ -64,8 +92,10 @@ class ContactListScreen extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildLocationButton(ref, '내지역', isMyLocation, true, changeLocation),
-                      _buildLocationButton(ref, '전국', !isMyLocation, false, changeLocation),
+                      _buildLocationButton(
+                          ref, '내지역', isMyLocation, true, changeLocation),
+                      _buildLocationButton(
+                          ref, '전국', !isMyLocation, false, changeLocation),
                     ],
                   ),
                 ),
@@ -73,11 +103,14 @@ class ContactListScreen extends ConsumerWidget {
                 Expanded(
                   flex: 5,
                   child: TextFormField(
+                    controller: searchController,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.zero,
-
-                      prefixIcon: IconButton(
-                        onPressed: () {},
+                      contentPadding: const EdgeInsets.only(left: 10),
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          contactPresenter.search = searchController.text;
+                          await dataLoader.loadContacts();
+                        },
                         icon: const Icon(
                           Icons.search_rounded,
                         ),
@@ -120,11 +153,51 @@ class ContactListScreen extends ConsumerWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  locationItem(text: "병상배정반", isSelected: true),
-                  locationItem(text: "구급대"),
-                  locationItem(text: "보건소"),
-                  locationItem(text: "의료진"),
-                  locationItem(text: "전산"),
+                  GestureDetector(
+                    onTap: () => {
+                      ref.read(instTypeCdListProvider.notifier).state[0] =
+                          !instTypeCdList[0],
+                      changeInstTypeCd(),
+                    },
+                    child: locationItem(
+                        text: "병상배정반", isSelected: instTypeCdList[0]),
+                  ),
+                  GestureDetector(
+                    onTap: () => {
+                      ref.read(instTypeCdListProvider.notifier).state[1] =
+                          !instTypeCdList[1],
+                      changeInstTypeCd(),
+                    },
+                    child: locationItem(
+                        text: "구급대", isSelected: instTypeCdList[1]),
+                  ),
+                  GestureDetector(
+                    onTap: () => {
+                      ref.read(instTypeCdListProvider.notifier).state[2] =
+                          !instTypeCdList[2],
+                      changeInstTypeCd(),
+                    },
+                    child: locationItem(
+                        text: "보건소", isSelected: instTypeCdList[2]),
+                  ),
+                  GestureDetector(
+                    onTap: () => {
+                      ref.read(instTypeCdListProvider.notifier).state[3] =
+                          !instTypeCdList[3],
+                      changeInstTypeCd(),
+                    },
+                    child: locationItem(
+                        text: "의료진", isSelected: instTypeCdList[3]),
+                  ),
+                  GestureDetector(
+                    onTap: () => {
+                      ref.read(instTypeCdListProvider.notifier).state[4] =
+                          !instTypeCdList[4],
+                      changeInstTypeCd(),
+                    },
+                    child:
+                        locationItem(text: "전산", isSelected: instTypeCdList[4]),
+                  ),
                   Icon(
                     Icons.keyboard_arrow_up_outlined,
                     color: Palette.greyText_60,
@@ -213,19 +286,19 @@ class ContactListScreen extends ConsumerWidget {
         ],
       ),
     );
-
   }
 
-  Widget _buildLocationButton(WidgetRef ref, String text, bool isSelected, bool isMyLocation, Function changeLocation) {
+  Widget _buildLocationButton(WidgetRef ref, String text, bool isSelected,
+      bool isMyLocation, Function changeLocation) {
     return InkWell(
-      onTap: () => {
-        changeLocation()
-      },
+      onTap: () => {changeLocation()},
       child: Container(
         height: 40.h,
         width: 45.w,
         decoration: BoxDecoration(
-          color: isSelected ? Palette.mainColor : const Color(0xffecedef).withOpacity(0.6),
+          color: isSelected
+              ? Palette.mainColor
+              : const Color(0xffecedef).withOpacity(0.6),
           borderRadius: BorderRadius.circular(6),
         ),
         child: Center(
@@ -338,21 +411,20 @@ class ContactListScreen extends ConsumerWidget {
     );
   }
 
-  locationItem({required String text, bool? isSelected}) {
+  locationItem({required String text, required bool isSelected}) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 7.w),
       margin: EdgeInsets.only(right: 4.5.w),
       decoration: BoxDecoration(
-          color: isSelected == null ? Palette.white : Palette.mainColor,
+          color: isSelected ? Palette.mainColor : Palette.white,
           borderRadius: BorderRadius.circular(13.5.r),
           border: Border.all(
-              color:
-                  isSelected == null ? Palette.greyText_20 : Palette.mainColor,
+              color: isSelected ? Palette.mainColor : Palette.greyText_20,
               width: 1)),
       child: Text(
         text,
         style: CTS(
-          color: isSelected == null ? Palette.greyText : Colors.white,
+          color: isSelected ? Colors.white : Palette.greyText,
           fontSize: 12,
         ),
       ),
@@ -364,3 +436,5 @@ final contactMyOrgIsOpenProvider = StateProvider<bool>((ref) => true);
 final contactRegReqIsOpenProvider = StateProvider<bool>((ref) => true);
 final contactMyFavProvider = StateProvider<bool>((ref) => true);
 final isMyLocationProvider = StateProvider<bool>((ref) => true);
+final instTypeCdListProvider =
+    StateProvider<List<bool>>((ref) => [false, false, false, false, false]);
