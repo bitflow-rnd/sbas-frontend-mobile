@@ -129,11 +129,12 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                                   borderRadius: BorderRadius.circular(3),
                                 ),
                               ),
-                              Positioned(
-                                left: ref.watch(selecteTabProvider.notifier).state == 0 ? 0 : null,
-                                right: ref.watch(selecteTabProvider.notifier).state == 0 ? null : 0,
+                              AnimatedPositioned(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                                left: selectedTabIndex == 0 ? 0 : 100.w,
+                                top: 12.h,
                                 child: Container(
-                                  margin: EdgeInsets.only(top: 12.h),
                                   height: 6.h,
                                   width: 100.w,
                                   decoration: BoxDecoration(
