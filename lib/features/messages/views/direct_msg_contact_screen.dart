@@ -51,66 +51,68 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                     children: [
                       Row(
                         children: [
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  ref.read(selecteTabProvider.notifier).state = 0;
-                                },
-                                child: Text(
+                          InkWell(
+                            onTap: () {
+                              ref.read(selecteTabProvider.notifier).state = 0;
+                            },
+                            child: Row(
+                              children: [
+                                Text(
                                   '연락처',
                                   style: CTS.medium(
-                                    color: Color(0xff676a7a),
+                                    color: const Color(0xff676a7a),
                                     fontSize: 13,
                                   ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 4.w),
-                                height: 16.h,
-                                width: 16.h,
-                                decoration: BoxDecoration(
-                                    color: Palette.mainColor,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(Bitflow.defaultRadius),
-                                    )),
-                                child: Text(
-                                  "1",
-                                  style: CTS.bold(color: Colors.white, fontSize: 10),
-                                ).c,
-                              ),
-                            ],
+                                Container(
+                                  margin: EdgeInsets.only(left: 4.w),
+                                  height: 16.h,
+                                  width: 16.h,
+                                  decoration: BoxDecoration(
+                                      color: Palette.mainColor,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(Bitflow.defaultRadius),
+                                      )),
+                                  child: Text(
+                                    "1",
+                                    style: CTS.bold(
+                                        color: Colors.white, fontSize: 10),
+                                  ).c,
+                                ),
+                              ],
+                            ),
                           ),
                           Gaps.h44,
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  ref.read(selecteTabProvider.notifier).state = 1;
-                                },
-                                child: Text(
+                          InkWell(
+                            onTap: () {
+                              ref.read(selecteTabProvider.notifier).state = 1;
+                            },
+                            child: Row(
+                              children: [
+                                Text(
                                   '메시지',
                                   style: CTS.medium(
                                     color: Palette.black,
                                     fontSize: 13,
                                   ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 4.w),
-                                height: 16.h,
-                                width: 16.h,
-                                decoration: BoxDecoration(
-                                    color: Palette.mainColor,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(Bitflow.defaultRadius),
-                                    )),
-                                child: Text(
-                                  "1",
-                                  style: CTS.bold(color: Colors.white, fontSize: 10),
-                                ).c,
-                              ),
-                            ],
+                                Container(
+                                  margin: EdgeInsets.only(left: 4.w),
+                                  height: 16.h,
+                                  width: 16.h,
+                                  decoration: BoxDecoration(
+                                      color: Palette.mainColor,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(Bitflow.defaultRadius),
+                                      )),
+                                  child: Text(
+                                    "1",
+                                    style: CTS.bold(
+                                        color: Colors.white, fontSize: 10),
+                                  ).c,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -123,7 +125,7 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                                 height: 6.h,
                                 width: 200.w,
                                 decoration: BoxDecoration(
-                                  color: Color(0xFFecedef),
+                                  color: const Color(0xFFecedef),
                                   borderRadius: BorderRadius.circular(3),
                                 ),
                               ),
@@ -150,7 +152,8 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                   GestureDetector(
                     onTap: () => _showBottomSheet(context),
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Palette.mainColor,
@@ -175,7 +178,9 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
               height: 1,
             ),
             Expanded(
-              child: selectedTabIndex == 0 ? const ContactListScreen() : const TalkRoomWidget(),
+              child: selectedTabIndex == 0
+                  ? const ContactListScreen()
+                  : const TalkRoomWidget(),
             ),
           ],
         ),
@@ -190,7 +195,8 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
     String selectedType = '';
 
     final _focusNode = FocusNode();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _focusNode.requestFocus());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _focusNode.requestFocus());
     List list = ["내 조직", "외부 조직"];
 
     showModalBottomSheet(
@@ -208,14 +214,17 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
             child: GestureDetector(
               onTap: () {
                 FocusScopeNode currentFocus = FocusScope.of(context);
-                if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                if (!currentFocus.hasPrimaryFocus &&
+                    currentFocus.focusedChild != null) {
                   currentFocus.focusedChild?.unfocus();
                 }
               },
               child: Container(
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: Container(
-                  padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
+                  padding:
+                      EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -252,7 +261,8 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                                 fontSize: 13.sp,
                               ),
                               decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12.w, vertical: 12.h),
                                 hintText: '이름을 입력해 주세요',
                                 enabledBorder: _outlineInputBorder,
                                 focusedBorder: _outlineInputBorder,
@@ -275,7 +285,8 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                                 fontSize: 13.sp,
                               ),
                               decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12.w, vertical: 12.h),
                                 hintText: '휴대폰 번호를 입력해 주세요.',
                                 enabledBorder: _outlineInputBorder,
                                 focusedBorder: _outlineInputBorder,
@@ -301,8 +312,12 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                                     child: Row(
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                                          child: Text(list[i], style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10.h),
+                                          child: Text(list[i],
+                                              style: CTS.bold(
+                                                  fontSize: 11,
+                                                  color: Colors.transparent)),
                                         ),
                                         Gaps.h1,
                                       ],
@@ -322,21 +337,30 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                                       });
                                     },
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Expanded(
                                           child: Container(
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
-                                              color: selectedType == list[i] ? const Color(0xff538ef5) : Colors.transparent,
-                                              borderRadius: selectedType == list[i] ? BorderRadius.circular(6) : null,
+                                              color: selectedType == list[i]
+                                                  ? const Color(0xff538ef5)
+                                                  : Colors.transparent,
+                                              borderRadius:
+                                                  selectedType == list[i]
+                                                      ? BorderRadius.circular(6)
+                                                      : null,
                                             ),
-                                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.h),
                                             child: Text(
                                               list[i],
                                               style: CTS.bold(
                                                 fontSize: 11,
-                                                color: selectedType == list[i] ? Palette.white : Palette.greyText_60,
+                                                color: selectedType == list[i]
+                                                    ? Palette.white
+                                                    : Palette.greyText_60,
                                               ),
                                             ),
                                           ),
@@ -346,7 +370,8 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                                                 height: 12,
                                                 width: 1,
                                                 decoration: BoxDecoration(
-                                                  color: const Color(0xff676a7a).withOpacity(0.2),
+                                                  color: const Color(0xff676a7a)
+                                                      .withOpacity(0.2),
                                                 ),
                                               )
                                             : Container(),
@@ -392,7 +417,10 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
     ).then((value) => {
           //dismiss keyboard
           FocusScope.of(context).requestFocus(FocusNode()),
-          if (value == 'ok' && nameController.text.isNotEmpty && pnumController.text.isNotEmpty && selectedType.isNotEmpty)
+          if (value == 'ok' &&
+              nameController.text.isNotEmpty &&
+              pnumController.text.isNotEmpty &&
+              selectedType.isNotEmpty)
             {
               //v1provider to post api call
               // V1Provider().
@@ -425,6 +453,6 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
         ),
       );
 
-  // static String routeName = 'directMessage';
-  // static String routeUrl = '/directMessage';
+// static String routeName = 'directMessage';
+// static String routeUrl = '/directMessage';
 }

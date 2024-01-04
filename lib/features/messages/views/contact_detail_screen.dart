@@ -46,6 +46,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
     final mbrId = widget.contact.id ?? '';
     var presenter = ref.watch(contactListProvider.notifier);
 
+    final ptTypeCdList = widget.contact.ptTypeCd?.split(';');
+
     return Stack(
       children: [
         Scaffold(
@@ -288,114 +290,27 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                       ),
                                     ),
                                     Row(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 12.w, vertical: 5.h),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                  color: Palette.greyText_20,
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(13.5.r),
-                                              ),
-                                              child: Text(
-                                                '임산부',
-                                                style: CTS(
-                                                  color: Palette.greyText,
-                                                  fontSize: 13,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Gaps.h10,
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 12.w, vertical: 5.h),
+                                      children: ptTypeCdList
+                                          ?.map((ptTypeCd) => Padding(
+                                        padding: EdgeInsets.only(right: 10.w), // 오른쪽에 간격 추가
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
                                           decoration: BoxDecoration(
                                             color: Colors.white,
-                                            border: Border.all(
-                                              color: Palette.greyText_20,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(13.5.r),
+                                            border: Border.all(color: Palette.greyText_20, width: 1),
+                                            borderRadius: BorderRadius.circular(13.5.r),
                                           ),
                                           child: Text(
-                                            '신생아',
-                                            style: CTS(
-                                              color: Palette.greyText,
-                                              fontSize: 13,
-                                            ),
+                                            getPtTypeCdNm(ptTypeCd),
+                                            style: CTS(color: Palette.greyText, fontSize: 13),
                                           ),
                                         ),
-                                        Gaps.h10,
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 12.w, vertical: 5.h),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                              color: Palette.greyText_20,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(13.5.r),
-                                          ),
-                                          child: Text(
-                                            '응급',
-                                            style: CTS(
-                                              color: Palette.greyText,
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                      ))
+                                          .toList() ?? [],
                                     )
                                   ],
                                 ),
                                 Gaps.v20,
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '세부권한',
-                                      style: CTS.medium(
-                                        color: Palette.greyText_80,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 12.w, vertical: 5.h),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                              color: Palette.greyText_20,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(13.5.r),
-                                          ),
-                                          child: Text(
-                                            '일반',
-                                            style: CTS(
-                                              color: Palette.greyText,
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
                               ],
                             ),
                           ),
@@ -403,7 +318,6 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                       ),
                     ),
                   ),
-                  // ㅇㅇxpanded(
                   if (widget.isRequest)
                     Row(
                       children: [

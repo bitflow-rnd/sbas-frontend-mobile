@@ -272,6 +272,30 @@ InputDecoration getInputDecoration(String hintText) => InputDecoration(
         horizontal: 14,
       ),
     );
+
+String getPtTypeCdNm(String ptTypeCd) {
+  switch(ptTypeCd) {
+    case 'PTTP0001':
+      return '일반';
+    case 'PTTP0002' :
+      return '소아';
+    case 'PTTP0003':
+      return '투석';
+    case 'PTTP0004':
+      return '산모';
+    case 'PTTP0005':
+      return '수술';
+    case 'PTTP0006':
+      return '인공호흡기 사용';
+    case 'PTTP0007':
+      return '적극적 치료요청';
+    case 'PTTP0008':
+      return '신생아';
+  }
+
+  return '';
+}
+
 const json = {'Content-Type': 'application/json'};
 
 late SharedPreferences prefs;
