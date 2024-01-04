@@ -89,14 +89,20 @@ class ContactListScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   flex: 2,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildLocationButton(
-                          ref, '내지역', isMyLocation, true, changeLocation),
-                      _buildLocationButton(
-                          ref, '전국', !isMyLocation, false, changeLocation),
-                    ],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xffecedef).withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildLocationButton(
+                            ref, '내지역', isMyLocation, true, changeLocation),
+                        _buildLocationButton(
+                            ref, '전국', !isMyLocation, false, changeLocation),
+                      ],
+                    ),
                   ),
                 ),
                 Gaps.h10,
@@ -291,16 +297,14 @@ class ContactListScreen extends ConsumerWidget {
   Widget _buildLocationButton(WidgetRef ref, String text, bool isSelected,
       bool isMyLocation, Function changeLocation) {
     return InkWell(
-      onTap: () => {changeLocation()},
+      onTap: () => changeLocation(),
       child: Container(
         height: 40.h,
         width: 45.w,
-        decoration: BoxDecoration(
-          color: isSelected
-              ? Palette.mainColor
-              : const Color(0xffecedef).withOpacity(0.6),
+        decoration: isSelected ? BoxDecoration(
+          color: Palette.mainColor,
           borderRadius: BorderRadius.circular(6),
-        ),
+        ) : null,
         child: Center(
           child: Text(
             text,
