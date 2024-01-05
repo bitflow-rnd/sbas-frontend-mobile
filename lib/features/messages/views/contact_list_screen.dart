@@ -27,6 +27,7 @@ class ContactListScreen extends ConsumerWidget {
     List<bool> instTypeCdList = ref.watch(instTypeCdListProvider);
     var contactPresenter = ref.watch(contactConditionPresenter);
     contactPresenter.setCondition(myInstTypeCd: userInstTypeCd);
+    bool showInstTypeCdList = ref.watch(showInstTypeCdListProvider);
 
     if (isMyLocation) {
       ref.read(contactConditionPresenter).dstr1Cd = userDstr1Cd;
@@ -65,8 +66,6 @@ class ContactListScreen extends ConsumerWidget {
           .map((e) => code + (e.key + 1).toString())
           .join(',');
 
-      print(inputData);
-
       contactPresenter.instTypeCd = inputData == '' ? null : inputData;
       setLocationCondition();
       await dataLoader.loadContacts();
@@ -88,7 +87,7 @@ class ContactListScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Container(
                     decoration: BoxDecoration(
                       color: const Color(0xffecedef).withOpacity(0.6),
@@ -105,13 +104,13 @@ class ContactListScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                Gaps.h10,
+                Gaps.h5,
                 Expanded(
-                  flex: 5,
+                  flex: 8,
                   child: TextFormField(
                     controller: searchController,
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(left: 10),
+                      contentPadding: const EdgeInsets.only(left: 9),
                       suffixIcon: IconButton(
                         onPressed: () async {
                           contactPresenter.search = searchController.text;
@@ -126,9 +125,8 @@ class ContactListScreen extends ConsumerWidget {
                       hintText: '이름, 휴대폰번호 또는 소속기관명',
                       hintStyle: CTS.bold(
                         color: Colors.grey,
-                        fontSize: 11,
+                        fontSize: 10,
                       ),
-
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           style: BorderStyle.solid,
@@ -146,10 +144,22 @@ class ContactListScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                Gaps.h4,
+                Gaps.h5,
+                InkWell(
+                  borderRadius: BorderRadius.circular(16.r),
+                  onTap: () => ref.watch(showInstTypeCdListProvider.notifier).state = !ref.watch(showInstTypeCdListProvider),
+                  child: Icon(
+                    showInstTypeCdList
+                        ? Icons.keyboard_arrow_up_outlined
+                        : Icons.keyboard_arrow_down_outlined,
+                    color: Palette.greyText_60,
+                    size: 22.h,
+                  ),
+                ),
               ],
             ),
           ),
+          if(showInstTypeCdList)
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 16.w,
@@ -188,8 +198,7 @@ class ContactListScreen extends ConsumerWidget {
                   ),
                   GestureDetector(
                     onTap: () => {
-                      ref.read(instTypeCdListProvider.notifier).state[3] =
-                          !instTypeCdList[3],
+                      ref.read(instTypeCdListProvider.notifier).state[3] = !instTypeCdList[3],
                       changeInstTypeCd(),
                     },
                     child: locationItem(
@@ -204,11 +213,6 @@ class ContactListScreen extends ConsumerWidget {
                     child:
                         locationItem(text: "전산", isSelected: instTypeCdList[4]),
                   ),
-                  Icon(
-                    Icons.keyboard_arrow_up_outlined,
-                    color: Palette.greyText_60,
-                    size: 22.h,
-                  ),
                 ],
               ),
             ),
@@ -220,41 +224,25 @@ class ContactListScreen extends ConsumerWidget {
                   userInstTypeCd == 'ORGN0005'
                       ? rowWrapper(
                           header: "등록요청",
-                          alarmCount: (contactList
-                                      .contactListMap['contacts']?.contacts ??
-                                  [])
-                              .where(
-                                  (element) => element.userStatCd == "URST0001")
-                              .toList()
-                              .length,
-                          isOpen: ref
-                              .watch(contactRegReqIsOpenProvider.notifier)
-                              .state,
+                          alarmCount: (contactList.contactListMap['contacts']?.contacts ?? [])
+                              .where((element) => element.userStatCd == "URST0001")
+                              .toList().length,
+                          isOpen: ref.watch(contactRegReqIsOpenProvider.notifier).state,
                           function: () {
-                            ref
-                                    .watch(contactRegReqIsOpenProvider.notifier)
-                                    .state =
-                                !ref.watch(contactRegReqIsOpenProvider);
+                            ref.watch(contactRegReqIsOpenProvider.notifier).state = !ref.watch(contactRegReqIsOpenProvider);
                           },
-                          contactList: (contactList
-                                      .contactListMap['contacts']?.contacts ??
-                                  [])
-                              .where(
-                                  (element) => element.userStatCd == "URST0001")
-                              .toList(),
+                          contactList: (contactList.contactListMap['contacts']?.contacts ?? [])
+                              .where((element) => element.userStatCd == "URST0001").toList(),
                           context: context,
                         )
                       : Container(),
                   rowWrapper(
                     header: "즐겨찾기",
                     alarmCount:
-                        (contactList.contactListMap['favorites']?.contacts ??
-                                [])
-                            .length,
+                        (contactList.contactListMap['favorites']?.contacts ?? []).length,
                     isOpen: ref.watch(contactMyFavProvider.notifier).state,
                     function: () {
-                      ref.watch(contactMyFavProvider.notifier).state =
-                          !ref.watch(contactMyFavProvider);
+                      ref.watch(contactMyFavProvider.notifier).state = !ref.watch(contactMyFavProvider);
                     },
                     contactList:
                         contactList.contactListMap['favorites']?.contacts ?? [],
@@ -265,21 +253,15 @@ class ContactListScreen extends ConsumerWidget {
                     alarmCount:
                         (contactList.contactListMap['contacts']?.contacts ?? [])
                             .where((element) =>
-                                element.instId ==
-                                ref.watch(userDetailProvider.notifier).instId)
-                            .toList()
-                            .length,
-                    isOpen:
-                        ref.watch(contactMyOrgIsOpenProvider.notifier).state,
+                                element.instId == ref.watch(userDetailProvider.notifier).instId)
+                            .toList().length,
+                    isOpen: ref.watch(contactMyOrgIsOpenProvider.notifier).state,
                     function: () {
-                      ref.watch(contactMyOrgIsOpenProvider.notifier).state =
-                          !ref.watch(contactMyOrgIsOpenProvider);
+                      ref.watch(contactMyOrgIsOpenProvider.notifier).state = !ref.watch(contactMyOrgIsOpenProvider);
                     },
                     contactList:
                         (contactList.contactListMap['contacts']?.contacts ?? [])
-                            .where((element) =>
-                                element.instId ==
-                                ref.watch(userDetailProvider.notifier).instId)
+                            .where((element) => element.instId == ref.watch(userDetailProvider.notifier).instId)
                             .toList(),
                     context: context,
                   ),
@@ -299,8 +281,8 @@ class ContactListScreen extends ConsumerWidget {
     return InkWell(
       onTap: () => changeLocation(),
       child: Container(
-        height: 40.h,
-        width: 45.w,
+        height: 35.h,
+        width: 40.w,
         decoration: isSelected ? BoxDecoration(
           color: Palette.mainColor,
           borderRadius: BorderRadius.circular(6),
@@ -310,7 +292,7 @@ class ContactListScreen extends ConsumerWidget {
             text,
             style: CTS.bold(
               color: isSelected ? Colors.white : Palette.greyText_60,
-              fontSize: 11,
+              fontSize: 10,
             ),
           ),
         ),
@@ -365,8 +347,8 @@ class ContactListScreen extends ConsumerWidget {
                         onTap: function,
                         child: Icon(
                           isOpen
-                              ? Icons.keyboard_arrow_down_outlined
-                              : Icons.keyboard_arrow_up_outlined,
+                              ? Icons.keyboard_arrow_up_outlined
+                              : Icons.keyboard_arrow_down_outlined,
                           color: Palette.greyText_60,
                           size: 22.h,
                         ),
@@ -440,5 +422,5 @@ final contactMyOrgIsOpenProvider = StateProvider<bool>((ref) => true);
 final contactRegReqIsOpenProvider = StateProvider<bool>((ref) => true);
 final contactMyFavProvider = StateProvider<bool>((ref) => true);
 final isMyLocationProvider = StateProvider<bool>((ref) => true);
-final instTypeCdListProvider =
-    StateProvider<List<bool>>((ref) => [false, false, false, false, false]);
+final instTypeCdListProvider = StateProvider<List<bool>>((ref) => [false, false, false, false, false]);
+final showInstTypeCdListProvider = StateProvider<bool>((ref) => true);
