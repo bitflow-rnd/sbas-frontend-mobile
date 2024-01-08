@@ -66,14 +66,14 @@ class TalkRoomBloc {
 
   Future<void> uploadFile(XFile? file, String? msg) async {
     var client = dio.Dio();
-    const int maxFileSize = 1024 * 1024;
+    const int maxFileSize = 1024 * 1024 * 50;
     var uploadFile = await dio.MultipartFile.fromFile(
       file!.path,
       filename: file.name,
     );
 
     if (uploadFile.length > maxFileSize) {
-      util.showToast("파일 용량이 너무 큽니다. 1MB 미만의 파일을 사용해 주세요.");
+      util.showToast("파일 용량이 너무 큽니다. 50MB 미만의 파일을 사용해 주세요.");
       client.close();
       return;
     }

@@ -143,7 +143,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   _isButtonEnabled = true;
                 });
               }
-              ;
             },
             child: Container(
               color: Palette.greyText_20,
