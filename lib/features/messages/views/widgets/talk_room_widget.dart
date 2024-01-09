@@ -16,7 +16,6 @@ class TalkRoomWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final talkRooms = ref.watch(talkRoomsProvider);
-
     if (talkRooms.isEmpty) {
       return Center(
         child: Text(

@@ -4,15 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/common_button_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
+import 'package:sbas/features/messages/models/chat_request_model.dart';
 import 'package:sbas/features/messages/models/favorite_request_model.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
-import 'package:sbas/features/messages/presenters/contact_condition_presenter.dart';
 import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
+import 'package:sbas/features/messages/views/chatting_screen.dart';
 import 'package:sbas/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -71,11 +73,14 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                   setState(() {
                     isLoading = true; // 로딩 시작
                   });
-                  final request = FavoriteRequestModel(id: userId, mbrId: mbrId);
+                  final request =
+                      FavoriteRequestModel(id: userId, mbrId: mbrId);
 
                   try {
                     if (widget.contact.isFavorite) {
-                      await ref.read(contactRepoProvider).deleteFavorite(request);
+                      await ref
+                          .read(contactRepoProvider)
+                          .deleteFavorite(request);
                       widget.contact.isFavorite = false;
                     } else {
                       await ref.read(contactRepoProvider).addFavorite(request);
@@ -170,7 +175,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                             child: Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       '휴대폰번호',
@@ -190,7 +196,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            launchSms(number: widget.contact.telno);
+                                            launchSms(
+                                                number: widget.contact.telno);
                                           },
                                           child: Container(
                                               padding: EdgeInsets.all(5.r),
@@ -211,7 +218,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                         Gaps.h10,
                                         GestureDetector(
                                           onTap: () {
-                                            launch("tel://${widget.contact.telno}");
+                                            launch(
+                                                "tel://${widget.contact.telno}");
                                           },
                                           child: Container(
                                             padding: EdgeInsets.all(5.r),
@@ -235,7 +243,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                 ),
                                 Gaps.v20,
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       '직장전화번호',
@@ -256,7 +265,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                         Gaps.h48,
                                         GestureDetector(
                                           onTap: () {
-                                            launch("tel://${widget.contact.telno}");
+                                            launch(
+                                                "tel://${widget.contact.telno}");
                                           },
                                           child: Container(
                                             padding: EdgeInsets.all(5.r),
@@ -280,7 +290,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                 ),
                                 Gaps.v20,
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       '담당환자 유형',
@@ -291,22 +302,37 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                     ),
                                     Row(
                                       children: ptTypeCdList
-                                          ?.map((ptTypeCd) => Padding(
-                                        padding: EdgeInsets.only(right: 10.w), // 오른쪽에 간격 추가
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(color: Palette.greyText_20, width: 1),
-                                            borderRadius: BorderRadius.circular(13.5.r),
-                                          ),
-                                          child: Text(
-                                            getPtTypeCdNm(ptTypeCd),
-                                            style: CTS(color: Palette.greyText, fontSize: 13),
-                                          ),
-                                        ),
-                                      ))
-                                          .toList() ?? [],
+                                              ?.map((ptTypeCd) => Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right:
+                                                            10.w), // 오른쪽에 간격 추가
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 12.w,
+                                                              vertical: 5.h),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        border: Border.all(
+                                                            color: Palette
+                                                                .greyText_20,
+                                                            width: 1),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    13.5.r),
+                                                      ),
+                                                      child: Text(
+                                                        getPtTypeCdNm(ptTypeCd),
+                                                        style: CTS(
+                                                            color: Palette
+                                                                .greyText,
+                                                            fontSize: 13),
+                                                      ),
+                                                    ),
+                                                  ))
+                                              .toList() ??
+                                          [],
                                     )
                                   ],
                                 ),
@@ -314,6 +340,30 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                               ],
                             ),
                           ),
+                          CommonButton(
+                              function: () async {
+                                final request = ChatRequestModel(
+                                  id: userId,
+                                  userId: mbrId,
+                                );
+                                await ref
+                                    .read(contactRepoProvider)
+                                    .doChat(request)
+                                    .then((value) => {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChattingScreen(
+                                                userId: userId,
+                                                tkrmId: value['tkrmId'],
+                                                tkrmNm: mbrId,
+                                              ),
+                                            ),
+                                          )
+                                        });
+                              },
+                              text: "대화 하기")
                         ],
                       ),
                     ),
