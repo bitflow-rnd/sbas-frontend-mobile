@@ -107,8 +107,8 @@ class TalkRoomBloc {
   }
 
   // @override
-  void close() {
-    channel.sink.close();
+  Future<void> close() async {
+    await channel.sink.close();
     _chatDetailListController.close();
   }
 

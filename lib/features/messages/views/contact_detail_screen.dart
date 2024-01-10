@@ -13,6 +13,7 @@ import 'package:sbas/features/messages/models/chat_request_model.dart';
 import 'package:sbas/features/messages/models/favorite_request_model.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
 import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 import 'package:sbas/features/messages/views/chatting_screen.dart';
 import 'package:sbas/util.dart';
@@ -49,6 +50,8 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
     var presenter = ref.watch(contactListProvider.notifier);
 
     final ptTypeCdList = widget.contact.ptTypeCd?.split(';');
+
+
 
     return Stack(
       children: [
@@ -362,6 +365,7 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                             ),
                                           )
                                         });
+                                ref.read(talkRoomsProvider.notifier).updateUserId(userId);
                               },
                               text: "대화 하기")
                         ],
@@ -428,6 +432,12 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
           ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    ref.read(talkRoomsProvider.notifier).disconnect();
+    super.dispose();
   }
 
   void _showBottomSheet(BuildContext context) {
