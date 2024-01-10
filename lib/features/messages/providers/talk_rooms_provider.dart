@@ -34,7 +34,6 @@ class TalkRoomsProvider extends StateNotifier<List<TalkRoomsResponseModel>> {
   void _fetchChatRoomList() async {
     subscription = channel.stream.listen((message) {
       final parsedData = json.decode(message.toString());
-      print(parsedData);
 
       if (parsedData is List) {
         state = List.from(TalkRoomsResponseModel.fromArrJson(parsedData));

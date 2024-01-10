@@ -357,7 +357,7 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                                   ChattingScreen(
                                                 userId: userId,
                                                 tkrmId: value['tkrmId'],
-                                                tkrmNm: mbrId,
+                                                tkrmNm: value['tkrmNm'],
                                               ),
                                             ),
                                           )
