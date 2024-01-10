@@ -6,7 +6,7 @@ import 'package:sbas/common/repos/file_repo.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
-import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
+import 'package:sbas/util.dart';
 import 'package:sbas/constants/common.dart';
 
 Row myChatPhotoAttachedWidget(

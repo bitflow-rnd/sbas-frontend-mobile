@@ -296,6 +296,23 @@ String getPtTypeCdNm(String ptTypeCd) {
   return '';
 }
 
+String formatDateTime(String dateTimeString) {
+  final dateTime = DateTime.parse(dateTimeString);
+  final now = DateTime.now();
+  final difference = now.difference(dateTime);
+
+  if (difference.inDays > 0) {
+    final formatter = DateFormat('yyyy.MM.dd');
+    return formatter.format(dateTime);
+  } else if (difference.inHours > 0) {
+    return '${difference.inHours}시간 전';
+  } else if (difference.inMinutes > 0) {
+    return '${difference.inMinutes}분 전';
+  } else {
+    return '방금 전';
+  }
+}
+
 const json = {'Content-Type': 'application/json'};
 
 late SharedPreferences prefs;
