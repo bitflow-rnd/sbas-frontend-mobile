@@ -340,6 +340,31 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                   ],
                                 ),
                                 Gaps.v20,
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '최근활동',
+                                      style: CTS.medium(
+                                        color: Palette.greyText_80,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('test');
+                                      },
+                                      child: Text(
+                                        "Test",
+                                        style: CTS(
+                                          color: Palette.black,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
