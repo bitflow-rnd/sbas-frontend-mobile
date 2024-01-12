@@ -313,6 +313,12 @@ String formatDateTime(String dateTimeString) {
   }
 }
 
+String formatDateTimeForActivity(String dateTimeString) {
+  final dateTime = DateTime.parse(dateTimeString);
+  final formatter = DateFormat('yyyy년 M월 d일, a h시 m분', 'ko_KR');
+  return formatter.format(dateTime);
+}
+
 const json = {'Content-Type': 'application/json'};
 
 late SharedPreferences prefs;

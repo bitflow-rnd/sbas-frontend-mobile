@@ -13,7 +13,8 @@ class PatientListModel {
       count = json["count"];
     }
     if (json["items"] is List) {
-      items = (json["items"] as List).map((e) => Patient.fromJson(e)).toList();
+      items = (json["items"] as List)
+          .map((e) => Patient.fromJson(e)).toList();
     }
   }
   Map<String, dynamic> toJson() {
