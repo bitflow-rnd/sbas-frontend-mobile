@@ -11,6 +11,7 @@ import 'package:sbas/features/assign/views/assign_bed_detail_screen.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/patient_disease_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/patient_transfer_info_presenter.dart';
+import 'package:sbas/util.dart';
 
 class AsgnCardItem extends ConsumerWidget {
   const AsgnCardItem({
@@ -213,7 +214,7 @@ class AsgnCardItem extends ConsumerWidget {
               top: 28,
               right: 8,
               child: Text(
-                _markTimeAgo(model.updtDttm),
+                markTimeAgo(model.updtDttm),
                 style: CTS(
                   fontSize: 12,
                   color: Colors.grey.shade400,
@@ -224,30 +225,6 @@ class AsgnCardItem extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  String _markTimeAgo(String? dtStr) {
-    if (dtStr != null) {
-      final dt = DateTime.tryParse(dtStr);
-
-      if (dt != null) {
-        final difference = DateTime.now().difference(dt);
-
-        if (difference.inDays > 0) {
-          return '${difference.inDays}일전';
-        }
-        if (difference.inHours > 0) {
-          return '${difference.inHours}시간전';
-        }
-        if (difference.inMinutes > 0) {
-          return '${difference.inMinutes}분전';
-        }
-        if (difference.inSeconds > 0) {
-          return '${difference.inSeconds}초전';
-        }
-      }
-    }
-    return '';
   }
 
   final Color color;

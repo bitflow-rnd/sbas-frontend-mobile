@@ -4,6 +4,7 @@ class ActivityHistoryModel {
   String? ptId;
   String? ptNm;
   String? gndr;
+  String? rrno1;
   int? age;
   String? dstr1Cd;
   String? dstr1CdNm;
@@ -18,6 +19,7 @@ class ActivityHistoryModel {
     this.ptId,
     this.ptNm,
     this.gndr,
+    this.rrno1,
     this.age,
     this.dstr1Cd,
     this.dstr1CdNm,
@@ -42,6 +44,9 @@ class ActivityHistoryModel {
     }
     if (json['gndr'] is String) {
       gndr = json['gndr'];
+    }
+    if (json['rrno1'] is String) {
+      rrno1 = json['rrno1'];
     }
     if (json['age'] is int) {
       age = json['age'];
@@ -74,6 +79,7 @@ class ActivityHistoryModel {
     data['ptId'] = ptId;
     data['ptNm'] = ptNm;
     data['gndr'] = gndr;
+    data['rrno1'] = rrno1;
     data['age'] = age;
     data['dstr1Cd'] = dstr1Cd;
     data['dstr1CdNm'] = dstr1CdNm;

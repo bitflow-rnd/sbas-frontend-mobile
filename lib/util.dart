@@ -319,6 +319,53 @@ String formatDateTimeForActivity(String dateTimeString) {
   return formatter.format(dateTime);
 }
 
+String midMasking(String? userNm) {
+  // 사용자 이름 첫 글자
+  if (userNm == null) return "";
+  String frsName = userNm.substring(0, 1);
+
+  // 사용자 이름 중간 글자
+  String midName = userNm.substring(1, userNm.length - 1);
+
+  // 사용자 이름 중간 글자 마스킹
+  String cnvMidName = '';
+  for (int i = 0; i < midName.length; i++) {
+    cnvMidName += '*'; // 중간 글자 수만큼 '*'로 표시
+  }
+
+  // 사용자 이름 마지막 글자
+  String lstName = userNm.substring(userNm.length - 1);
+
+  // 마스킹 완성된 사용자 이름
+  String maskingName = frsName + cnvMidName + lstName;
+
+  return maskingName;
+}
+
+String markTimeAgo(String? dtStr) {
+  if (dtStr != null) {
+    final dt = DateTime.tryParse(dtStr);
+
+    if (dt != null) {
+      final difference = DateTime.now().difference(dt);
+
+      if (difference.inDays > 0) {
+        return '${difference.inDays}일전';
+      }
+      if (difference.inHours > 0) {
+        return '${difference.inHours}시간전';
+      }
+      if (difference.inMinutes > 0) {
+        return '${difference.inMinutes}분전';
+      }
+      if (difference.inSeconds > 0) {
+        return '${difference.inSeconds}초전';
+      }
+    }
+  }
+  return '';
+}
+
 const json = {'Content-Type': 'application/json'};
 
 late SharedPreferences prefs;

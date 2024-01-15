@@ -16,6 +16,7 @@ import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
 import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 import 'package:sbas/features/messages/views/chatting_screen.dart';
+import 'package:sbas/features/messages/views/recent_activity_list_screen.dart';
 import 'package:sbas/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sbas/features/messages/models/activity_history_list_model.dart';
@@ -359,21 +360,27 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                     FutureBuilder(
                                         future: getActivity(),
                                         builder: (context, snapshot) {
-                                          var data = snapshot.data?.items ??
-                                              ActivityHistoryListModel(
-                                                  items: []).items;
+                                          var data = snapshot.data?.items ?? ActivityHistoryListModel(items: []).items;
                                           if (snapshot.hasData) {
                                             if (data.isNotEmpty) {
                                               return GestureDetector(
                                                 onTap: () => {
-                                                  //Todo : 최근활동 내역 페이지 구현
+                                                  Navigator.push(context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          RecentActivityListScreen(userId: userId,activities: data),
+                                                    ),
+                                                  )
                                                 },
                                                 child: Text(
-                                                    formatDateTimeForActivity(data.first.rgstDttm ?? '')),
+                                                    formatDateTimeForActivity(data.first.rgstDttm ?? ''),
+                                                    style: CTS.medium(
+                                                        color: Palette.greyText_80,
+                                                        fontSize: 13)),
                                               );
                                             } else {
                                               return Text(
-                                                '',
+                                                '없음',
                                                 style: CTS.medium(
                                                     color: Palette.greyText_80,
                                                     fontSize: 13),
