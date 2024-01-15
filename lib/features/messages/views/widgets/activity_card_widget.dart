@@ -4,8 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/features/messages/models/activity_history_model.dart';
 import 'package:sbas/util.dart';
-
-import '../../../../constants/gaps.dart';
+import 'package:sbas/constants/gaps.dart';
 
 class ActivityCardWidget extends ConsumerWidget {
   final ActivityHistoryModel activity;
