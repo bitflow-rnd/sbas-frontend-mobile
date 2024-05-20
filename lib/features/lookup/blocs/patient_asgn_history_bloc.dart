@@ -36,11 +36,11 @@ class PatientAsgnHistoryBloc extends AsyncNotifier<PatientHistoryList> {
 
   bool checkBedAssignCompletion() {
     if (state.value?.count == 0) return false;
-    if (state.value?.items.last.bedStatCd != "BAST0007" ||
-        state.value?.items.last.bedStatCd != "BAST0008") {
-      return true;
+    if (state.value?.items.last.bedStatCd == "BAST0007" ||
+        state.value?.items.last.bedStatCd == "BAST0008") {
+      return false;
     }
-    return false;
+    return true;
   }
 
   late final PatientRepository _repository;

@@ -268,17 +268,16 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                 );
                                 return;
                               }
-                            } else {
                               ref.read(patientRegProvider.notifier).init();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      HospitalBedRequestScreenV2(
-                                    // builder: (context) => HospitalBedRequestScreen(
-                                    isPatientRegister: false,
-                                    patient: patient,
-                                  ),
+                                    HospitalBedRequestScreenV2(
+                                      // builder: (context) => HospitalBedRequestScreen(
+                                      isPatientRegister: false,
+                                      patient: patient,
+                                    ),
                                 )
                               );
                             }

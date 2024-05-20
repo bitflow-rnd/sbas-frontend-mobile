@@ -46,7 +46,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   static final patientBasicFormKey = GlobalKey<FormState>();
   static final severelyDisFormKey = GlobalKey<FormState>();
   static final infectiousDisFormKey = GlobalKey<FormState>();
-  static final orignFormKey = GlobalKey<FormState>();
+  static final originFormKey = GlobalKey<FormState>();
   final Patient? patient;
   final List<String> headerList = ["역학조사서", "환자정보", "감염병정보", "중증정보", "출발정보"];
   final bool isRight = false;
@@ -236,7 +236,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 if (order == 4)
                   Expanded(
                     child: Form(
-                      key: orignFormKey,
+                      key: originFormKey,
                       child: OriginInfomationV2(),
                     ), //출발정보
                   ),
@@ -693,11 +693,11 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
   }
 
   bool tryOrignInfoValidation(WidgetRef ref) {
-    bool isValid = orignFormKey.currentState?.validate() ?? false;
+    bool isValid = originFormKey.currentState?.validate() ?? false;
     // isValid = ref.watch(severelyDiseaseProvider.notifier).isValid();
     // isValid = ref.watch(originInfoProvider.notifier).isValid();
     if (isValid) {
-      orignFormKey.currentState?.save();
+      originFormKey.currentState?.save();
     }
     return isValid;
   }
