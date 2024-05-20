@@ -275,7 +275,7 @@ class PatientLookupDetailScreen extends ConsumerWidget {
                                   builder: (context) =>
                                     HospitalBedRequestScreenV2(
                                       // builder: (context) => HospitalBedRequestScreen(
-                                      isPatientRegister: false,
+                                      isPatientRegister: true,
                                       patient: patient,
                                     ),
                                 )

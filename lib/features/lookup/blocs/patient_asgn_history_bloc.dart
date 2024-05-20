@@ -18,7 +18,7 @@ class PatientAsgnHistoryBloc extends AsyncNotifier<PatientHistoryList> {
       return getAsync(ptId);
     });
 
-    if (state.hasError || state.value?.count == 0) {
+    if (state.hasError) {
       return false;
     }
     if (state.hasValue) {

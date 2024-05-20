@@ -8,9 +8,8 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 class HospitalBedRequest extends AsyncNotifier<EpidemiologicalReportModel> {
   @override
   FutureOr<EpidemiologicalReportModel> build() async {
-    _patientRepository = ref.read(patientRepoProvider);
-
     if (attcId.isNotEmpty) {
+      debugPrint('HospitalBedRequest attcId >>> $attcId');
       try {
         return EpidemiologicalReportModel.fromJson(
           await _patientRepository.getEpidemiologicalReport(attcId),
@@ -24,7 +23,7 @@ class HospitalBedRequest extends AsyncNotifier<EpidemiologicalReportModel> {
     return EpidemiologicalReportModel();
   }
 
-  late final PatientRepository _patientRepository;
+  final PatientRepository _patientRepository = PatientRepository();
 }
 
 final requestBedProvider = AsyncNotifierProvider<HospitalBedRequest, EpidemiologicalReportModel>(

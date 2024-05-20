@@ -22,14 +22,12 @@ import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
   InfectiousDiseaseV2({
     required this.report,
-    required this.formKey,
     super.key,
   });
 
   @override
   ConsumerState<InfectiousDiseaseV2> createState() => _InfectiousDiseaseV2State();
 
-  final GlobalKey<FormState> formKey;
   final EpidemiologicalReportModel report;
   final List<String> status = ['입원', '외래', '재택', '기타'];
 
@@ -80,6 +78,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
 
     InfectiousDiseaseBloc vm = ref.read(infectiousDiseaseProvider.notifier);
     final patientImage = ref.watch(infectiousImageProvider);
+    ref.read(infectiousDiseaseProvider.notifier).initByOCR(widget.report);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -95,7 +94,6 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                 ),
               ),
               data: (disease) => Form(
-                key: widget.formKey,
                 autovalidateMode: AutovalidateMode.always,
                 child: Column(
                   children: [

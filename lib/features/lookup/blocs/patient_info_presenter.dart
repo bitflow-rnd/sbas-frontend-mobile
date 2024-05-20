@@ -9,7 +9,7 @@ class PatientInfoPresenter extends AsyncNotifier<Patient> {
   @override
   FutureOr<Patient> build() {
     String? ptId = ref.read(patientIdProvider);
-    debugPrint("build $ptId");
+    debugPrint("PatientInfoPresenter build $ptId");
     return getAsync(ptId);
   }
 

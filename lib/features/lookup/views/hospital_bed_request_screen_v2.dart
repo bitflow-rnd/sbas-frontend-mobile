@@ -57,7 +57,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     final order = ref.watch(orderOfRequestProvider);
     final patientImage = ref.watch(patientImageProvider);
     final patientAttc = ref.watch(patientAttcProvider);
-    final a = ref.watch(patientRegProvider.notifier).patientInfoModel;
+    final patientInfoModel = ref.watch(patientRegProvider.notifier).patientInfoModel;
 
     // final patientIsUpload = ref.watch(patientIsUploadProvider);
     //빌드 이후 실행
@@ -66,6 +66,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
         //환자정보가 변경되지 않았을때 기존 정보 사용 override
         await ref.watch(patientRegProvider.notifier).patientInit(patient!); // 기존 데이터로 override
         ref.read(patientInfoIsChangedProvider.notifier).state = true;
+        ref.invalidate(requestBedProvider);
         // 이미 기본 정보 입력, valid 한 케이스 2(감염병정보)으로 이동
         if (tryBasicInfoValidation(ref)) {
           ref.read(orderOfRequestProvider.notifier).update((state) => 2);
@@ -214,7 +215,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   ),
                 if (order == 1) //환자정보
                   Expanded(
-                      child: Padding(
+                    child: Padding(
                     padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
                     child: Form(
                       key: patientBasicFormKey,
@@ -222,14 +223,22 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     ),
                   )),
 
-                if (order == 2) Expanded(child: InfectiousDiseaseV2(formKey: infectiousDisFormKey, report: report)), //감염병정보
+                if (order == 2)
+                  Expanded(
+                    child: Padding(
+                    padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
+                    child: Form(
+                      key: infectiousDisFormKey,
+                      child: InfectiousDiseaseV2(report: report),
+                    ),
+                  )),
                 //상단 2개는 신규일때만 들어갈수있도록?!
                 if (order == 3)
                   Expanded(
                     child: Form(
                       key: severelyDisFormKey,
                       child: SeverelyDiseaseV2(
-                        ptId: patient?.ptId ?? a.ptId ?? '',
+                        ptId: patient?.ptId ?? patientInfoModel.ptId ?? '',
                       ),
                     )
                   ), //중증정보
