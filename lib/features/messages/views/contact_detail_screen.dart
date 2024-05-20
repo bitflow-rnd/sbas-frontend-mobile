@@ -13,10 +13,13 @@ import 'package:sbas/features/messages/models/chat_request_model.dart';
 import 'package:sbas/features/messages/models/favorite_request_model.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
 import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 import 'package:sbas/features/messages/views/chatting_screen.dart';
+import 'package:sbas/features/messages/views/recent_activity_list_screen.dart';
 import 'package:sbas/util.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:sbas/features/messages/models/activity_history_list_model.dart';
 
 class ContactDetailScreen extends ConsumerStatefulWidget {
   final UserContact contact;
@@ -40,6 +43,12 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  Future<ActivityHistoryListModel> getActivity() async {
+    return await ref
+        .read(contactRepoProvider)
+        .getRecentActivity(widget.contact.id ?? '');
   }
 
   @override
@@ -337,6 +346,52 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                   ],
                                 ),
                                 Gaps.v20,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '최근활동',
+                                      style: CTS.medium(
+                                        color: Palette.greyText_80,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    FutureBuilder(
+                                        future: getActivity(),
+                                        builder: (context, snapshot) {
+                                          var data = snapshot.data?.items ?? ActivityHistoryListModel(items: []).items;
+                                          if (snapshot.hasData) {
+                                            if (data.isNotEmpty) {
+                                              return GestureDetector(
+                                                onTap: () => {
+                                                  Navigator.push(context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          RecentActivityListScreen(userId: userId,activities: data),
+                                                    ),
+                                                  )
+                                                },
+                                                child: Text(
+                                                    formatDateTimeForActivity(data.first.rgstDttm ?? ''),
+                                                    style: CTS.medium(
+                                                        color: Palette.greyText_80,
+                                                        fontSize: 13)),
+                                              );
+                                            } else {
+                                              return Text(
+                                                '없음',
+                                                style: CTS.medium(
+                                                    color: Palette.greyText_80,
+                                                    fontSize: 13),
+                                              );
+                                            }
+                                          } else {
+                                            return const CircularProgressIndicator();
+                                          }
+                                        }),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -362,6 +417,9 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                             ),
                                           )
                                         });
+                                ref
+                                    .read(talkRoomsProvider.notifier)
+                                    .updateUserId(userId);
                               },
                               text: "대화 하기")
                         ],
@@ -428,6 +486,12 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
           ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    ref.read(talkRoomsProvider.notifier).disconnect();
+    super.dispose();
   }
 
   void _showBottomSheet(BuildContext context) {

@@ -73,22 +73,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
           style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-        // actions: [
-        //   IconButton(
-        //     onPressed: () => print('hi'),
-        //     icon: const Icon(
-        //       Icons.search,
-        //       color: Color(0xFF696969),
-        //     ),
-        //   ),
-        //   IconButton(
-        //     onPressed: () => print('bye'),
-        //     icon: const Icon(
-        //       Icons.more_vert,
-        //       color: Color(0xFF696969),
-        //     ),
-        //   ),
-        // ],
       ),
       body: Column(
         children: [

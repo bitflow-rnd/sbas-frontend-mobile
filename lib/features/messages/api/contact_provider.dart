@@ -20,6 +20,9 @@ class ContactProvider {
   Future<Map<String, dynamic>> doChat(Map<String, dynamic> map) async =>
       await _api.postAsync('$_privateTalkRoute/personal', toJson(map));
 
+  Future<Map<String, dynamic>> getRecentActivity(String userId) async =>
+      await _api.getAsync('$_privateRoute/activity-history/$userId');
+
   final _privateTalkRoute = 'private/talk';
   final _privateRoute = 'private/user';
   final _api = V1Provider();
