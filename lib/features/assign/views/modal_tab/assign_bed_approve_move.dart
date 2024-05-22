@@ -24,16 +24,17 @@ class AssignBedApproveMoveScreen extends ConsumerStatefulWidget {
     super.key,
     required this.patient,
     required this.bdasSeq,
+    required this.formKey,
   });
   final Patient patient;
   final int? bdasSeq;
+  final GlobalKey<FormState> formKey;
 
   @override
   ConsumerState<AssignBedApproveMoveScreen> createState() => _AssignBedApproveMoveScreenState();
 }
 
 class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMoveScreen> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   List<String> list = ['관할 구급대', '연락처', '탑승대원 및 의료진', '배차정보', '메시지'];
   List<String> hintList = ['', '연락처 입력', '', '차량번호 입력', '메시지 입력'];
   // 이부분 의료기관명 readonly 로 들어갈부분.
@@ -83,7 +84,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
         ),
       ),
       body: Form(
-          key: formKey,
+          key: widget.formKey,
           autovalidateMode: AutovalidateMode.always,
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
@@ -112,7 +113,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                               children: [
                                 Gaps.v20,
                                 _getTitle(list[0], true),
-                                Gaps.v16,
+                                Gaps.v8,
                                 Row(
                                   children: [
                                     Expanded(
@@ -163,39 +164,28 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                   ],
                                 ),
                                 _getTextInputField(i: 0, hint: "직접 입력"),
-                                Gaps.v28,
+                                Gaps.v20,
                                 // FormField(validator: (value) {
                                 //   return value == null || value == "" ? '연락처를 입력해주세요.' : null;
                                 // }, builder: (field) {
                                 //   return Column(
-                                Column(
+                                _getTitle(list[1], true),
+                                Gaps.v8,
+                                Row(
                                   children: [
-                                    Row(children: [
-                                      _getTitle(list[1], true),
-                                      Container(
-                                          child: Expanded(
-                                              child: Container(
-                                        padding: EdgeInsets.only(left: 12.w),
-                                        child: Column(
-                                          children: [
-                                            _getTextInputField(
-                                              hint: hintList[1],
-                                              i: 1,
-                                              type: TextInputType.number,
-                                            ),
-                                            // _getTextInputField(hint: hintList[1], i: 1, type: TextInputType.number),
-                                          ],
-                                        ),
-                                      ))),
-                                      Gaps.h16
-                                    ]),
-                                    Gaps.v8,
-                                    // if (field.hasError) FieldErrorText(field: field)
-                                  ],
-                                  // );
-                                  // }),
-                                ),
-                                Gaps.v28,
+                                    Expanded(
+                                      child: Column(
+                                      children: [
+                                        _getTextInputField(
+                                          hint: hintList[1],
+                                          i: 1,
+                                          type: TextInputType.number,
+                                      ),
+                                      // _getTextInputField(hint: hintList[1], i: 1, type: TextInputType.number),
+                                    ],
+                                  )),
+                                ]),
+                                Gaps.v20,
                                 _getTitle(list[2], false),
                                 Gaps.v8,
                                 _thirdRow(1000),
@@ -203,7 +193,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                 _thirdRow(2000),
                                 Gaps.v8,
                                 _thirdRow(3000),
-                                Gaps.v28,
+                                Gaps.v20,
                                 Row(
                                   children: [
                                     _getTitle(list[3], false),
@@ -267,10 +257,10 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
   }
 
   bool validation() {
-    bool isValid = formKey.currentState?.validate() ?? false;
+    bool isValid = widget.formKey.currentState?.validate() ?? false;
 
     if (isValid) {
-      formKey.currentState?.save();
+      widget.formKey.currentState?.save();
     }
     return isValid;
   }
@@ -412,7 +402,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
   }
 
   Row _thirdRow(int i) {
-    List<String> dropdownList = ['대원선택', '최근3개월', '최근1년'];
+    List<String> dropdownList = ['대원선택'];
     String selectedDropdown = '대원선택';
     return Row(
       children: [
@@ -436,10 +426,17 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
     return TextFormField(
       style: CTS(fontSize: 12.sp, color: Palette.black),
       decoration: Common.getInputDecoration(hint),
-      controller: TextEditingController(text: vm.getText(index: i)),
+      controller: TextEditingController(
+          text: vm.getText(index: i)
+      )..selection = TextSelection.fromPosition(
+          TextPosition(offset: vm.getText(index: i)!.length),
+      ),
       onSaved: (newValue) {
         vm.setTextEditingController(index: i, value: newValue);
         // field?.didChange(newValue);
+      },
+      onChanged: (value) {
+        vm.setTextEditingController(index: i, value: value);
       },
       validator: (value) {
         return null;
@@ -452,7 +449,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
               )
             ]
           : null,
-      autovalidateMode: AutovalidateMode.always,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       keyboardType: type,
       maxLines: maxLines,
     );
@@ -500,19 +497,5 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
         },
       ),
     );
-  }
-
-  Widget firstRow() {
-    List<String> dropdownList = ['대구광역시', '최근3개월', '최근1년'];
-
-    String selectedDropdown = '대구광역시';
-
-    return Row(children: [
-      Expanded(child: dropdownButton(dropdownList, selectedDropdown)),
-      Gaps.h12,
-      Expanded(child: dropdownButton(dropdownList, selectedDropdown)),
-      Gaps.h12,
-      Expanded(child: _getTextInputField(i: 0, hint: "직접 입력"))
-    ]);
   }
 }

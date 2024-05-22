@@ -262,7 +262,8 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                       ],
                                     ),
                                     Text(
-                                      "${widget.hospList.items[i].gnbdIcu}", //가용병상
+                                      "${widget.hospList.items[i].gnbdIcu! + widget.hospList.items[i].npidIcu! +
+                                          widget.hospList.items[i].gnbdSvrt!}", //가용병상
                                       style: CTS.medium(
                                         color: Palette.black,
                                         fontSize: 9.sp,
