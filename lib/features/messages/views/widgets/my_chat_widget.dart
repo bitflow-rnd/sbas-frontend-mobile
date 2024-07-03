@@ -78,7 +78,7 @@ Row myChatPhotoAttachedWidget(
                         children: snapshot.data!
                             .map((file) => GestureDetector(
                                   child: Image.network(
-                                    "http://dev.smartbas.org/${file.uriPath}/${file.fileNm}",
+                                    "https://test.smartbas.org/${file.uriPath}/${file.fileNm}",
                                     height: 150.h,
                                     width: 100.w,
                                   ),

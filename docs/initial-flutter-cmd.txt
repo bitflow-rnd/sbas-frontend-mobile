@@ -1,0 +1,7 @@
+flutter config --enable-android
+flutter doctor --android-licenses
+flutter config --android-sdk "D:\dev\Android\Sdk"
+#flutter config --android-studio-dir "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Android Studio"
+flutter config --android-studio-dir "C:\Users\김성준\AppData\Local\Programs\Android Studio\bin"
+flutter --no-color pub get
+flutter doctor --android-licenses

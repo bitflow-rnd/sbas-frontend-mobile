@@ -393,7 +393,8 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                             Navigator.pop(context, 'ok');
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Palette.mainColor,
+                            // ref. https://stackoverflow.com/questions/78179938/dart-flutter-no-named-parameter-with-the-name-primary
+                            // primary: Palette.mainColor, // 에러나서 주석처리
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(6),
                             ),
