@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/terms_detail_model.dart';
-import '../models/terms_list_model.dart';
-import '../providers/terms_provider.dart';
+import 'package:sbas/features/main/models/terms_detail_model.dart';
+import 'package:sbas/features/main/models/terms_list_model.dart';
+import 'package:sbas/features/main/providers/terms_provider.dart';
 
 class TermsRepository {
   Future<List<TermsListModel>> getTermsList(String termsType) async =>

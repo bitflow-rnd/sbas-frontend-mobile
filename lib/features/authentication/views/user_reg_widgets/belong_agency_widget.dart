@@ -11,8 +11,7 @@ import 'package:sbas/features/authentication/views/user_reg_widgets/agency_proof
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_region_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/util.dart';
-
-import '../../blocs/user_reg_bloc.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 
 class BelongAgency extends ConsumerStatefulWidget {
   const BelongAgency({

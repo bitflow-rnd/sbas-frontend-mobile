@@ -11,7 +11,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/blocs/bio_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 
-import '../../../../../common/widgets/field_error_widget.dart';
+import 'package:sbas/common/widgets/field_error_widget.dart';
 
 class SeverelyDiseaseV2 extends ConsumerStatefulWidget {
   SeverelyDiseaseV2({

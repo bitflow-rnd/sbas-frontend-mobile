@@ -12,8 +12,6 @@ import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/dashboard/views/widgets/dashboard_widget.dart';
 import 'package:sbas/util.dart';
 
-import '../../alarm/provider/alarm_screen_presenter.dart';
-
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 

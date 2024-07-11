@@ -21,15 +21,13 @@ import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
-
 import 'package:sbas/features/assign/views/widgets/request/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
-
-import '../../../constants/common.dart';
-import '../../../constants/gaps.dart';
-import '../models/patient_duplicate_check_model.dart';
+import 'package:sbas/constants/common.dart';
+import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
 
 final assignNewBedProvider = AsyncNotifierProvider<AssignNewBedPresenter, PatientRegInfoModel>(
   () => AssignNewBedPresenter(),

@@ -12,8 +12,7 @@ import 'package:sbas/features/authentication/views/user_reg_widgets/job_role_wid
 import 'package:sbas/features/authentication/views/user_reg_widgets/self_auth_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/user_reg_top_nav_widget.dart';
 import 'package:sbas/util.dart';
-
-import '../../../constants/common.dart';
+import 'package:sbas/constants/common.dart';
 
 class UserRegisterRequestScreenV2 extends ConsumerStatefulWidget {
   const UserRegisterRequestScreenV2({

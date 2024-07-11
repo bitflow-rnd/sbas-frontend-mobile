@@ -7,8 +7,7 @@ import 'package:sbas/common/repos/file_repo.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/notice/blocs/notice_presenter.dart';
-
-import '../../../constants/common.dart';
+import 'package:sbas/constants/common.dart';
 
 class PublicNoticeDetailPage extends ConsumerWidget {
   const PublicNoticeDetailPage({

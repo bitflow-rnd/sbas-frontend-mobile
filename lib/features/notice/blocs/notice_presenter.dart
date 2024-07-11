@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/notice/models/read_notice_request_model.dart';
 import 'package:sbas/features/notice/repos/notice_repo.dart';
-
-import '../models/notice_detail_model.dart';
-import '../models/notice_list_model.dart';
-import '../models/notice_list_request_model.dart';
+import 'package:sbas/features/notice/models/notice_detail_model.dart';
+import 'package:sbas/features/notice/models/notice_list_model.dart';
+import 'package:sbas/features/notice/models/notice_list_request_model.dart';
 
 class NoticePresenter extends AsyncNotifier {
   late final NoticeRepository _repository;

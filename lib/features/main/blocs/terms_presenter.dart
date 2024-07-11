@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/main/repos/terms_repo.dart';
 
-import '../models/terms_detail_model.dart';
-import '../models/terms_list_model.dart';
+import 'package:sbas/features/main/models/terms_detail_model.dart';
+import 'package:sbas/features/main/models/terms_list_model.dart';
 
 class TermsPresenter extends AsyncNotifier{
   late final TermsRepository _repository;

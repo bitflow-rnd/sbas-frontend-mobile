@@ -4,8 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
-
-import '../../../assign/views/assign_bed_screen.dart';
+import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 
 class Dashboard extends ConsumerWidget {
   const Dashboard({

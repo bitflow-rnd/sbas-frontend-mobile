@@ -11,8 +11,7 @@ import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/providers/patient_provider.dart';
 import 'package:sbas/util.dart';
-
-import '../models/patient_history_model.dart';
+import 'package:sbas/features/lookup/models/patient_history_model.dart';
 
 class PatientRepository {
   Future<PatientListModel> lookupPatientInfo() async =>

@@ -1,7 +1,7 @@
 import 'package:sbas/common/api/v1_provider.dart';
 
-import '../../../util.dart';
-import '../model/available_hospital_model.dart';
+import 'package:sbas/util.dart';
+import 'package:sbas/features/assign/model/available_hospital_model.dart';
 
 class AssignProvider {
   Future<List<dynamic>> lookupPatientInfo() async => await _api.getAsync('$_privateRoute/list');

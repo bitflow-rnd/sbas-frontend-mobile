@@ -2,8 +2,8 @@ import 'package:dio/dio.dart' as dio;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sbas/common/api/v1_provider.dart';
-import '../../util.dart';
-import '../models/base_attc_model.dart';
+import 'package:sbas/util.dart';
+import 'package:sbas/common/models/base_attc_model.dart';
 
 class BaseAttcProvider {
   Future<List<BaseAttcModel>> getFileList(String attcGrpId) async {

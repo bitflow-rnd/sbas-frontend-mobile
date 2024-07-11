@@ -3,8 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-
-import '../common/bitflow_theme.dart';
+import 'package:sbas/common/bitflow_theme.dart';
 
 class Common {
   static InputBorder get _inputBorder => OutlineInputBorder(

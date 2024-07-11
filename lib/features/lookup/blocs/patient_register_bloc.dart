@@ -13,8 +13,7 @@ import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
 import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
-
-import '../../assign/bloc/assign_bed_bloc.dart';
+import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
 
 class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
   @override

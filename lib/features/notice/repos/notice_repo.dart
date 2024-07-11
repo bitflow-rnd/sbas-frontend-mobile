@@ -4,10 +4,9 @@ import 'package:sbas/features/notice/models/active_notice_request_model.dart';
 import 'package:sbas/features/notice/models/notice_list_request_model.dart';
 import 'package:sbas/features/notice/models/read_notice_request_model.dart';
 import 'package:sbas/features/notice/models/reg_notice_request_model.dart';
-
-import '../models/info_notice_model.dart';
-import '../models/notice_detail_model.dart';
-import '../models/notice_list_model.dart';
+import 'package:sbas/features/notice/models/info_notice_model.dart';
+import 'package:sbas/features/notice/models/notice_detail_model.dart';
+import 'package:sbas/features/notice/models/notice_list_model.dart';
 
 class NoticeRepository {
   Future<NoticeListModel> getNoticeList(NoticeListRequestModel model) async =>

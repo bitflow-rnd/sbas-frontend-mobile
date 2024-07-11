@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../common/bitflow_theme.dart';
-import '../../../constants/palette.dart';
+import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/palette.dart';
 
 Widget header(String title) {
   return Container(

@@ -1,7 +1,7 @@
 import 'package:sbas/common/api/v1_provider.dart';
 
-import '../models/terms_detail_model.dart';
-import '../models/terms_list_model.dart';
+import 'package:sbas/features/main/models/terms_detail_model.dart';
+import 'package:sbas/features/main/models/terms_list_model.dart';
 
 class TermsProvider {
   Future<List<TermsListModel>> getTermsList(String termsType) async =>

@@ -6,7 +6,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/palette.dart';
 
-import '../provider/alarm_screen_presenter.dart';
+import 'package:sbas/features/alarm/provider/alarm_screen_presenter.dart';
 
 class AlarmPage extends ConsumerWidget {
   const AlarmPage({

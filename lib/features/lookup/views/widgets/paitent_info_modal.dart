@@ -3,13 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
-
-import '../../../../common/bitflow_theme.dart';
-import '../../../../constants/gaps.dart';
-import '../../../../constants/palette.dart';
-import '../../blocs/patient_register_bloc.dart';
-import '../../models/patient_duplicate_check_model.dart';
-import '../../models/patient_reg_info_model.dart';
+import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
+import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 
 class PatientInfoModal {
   patientDuplicateCheckModal(context, PatientCheckResponse oldPatient, PatientRegInfoModel newPatient, WidgetRef ref) {

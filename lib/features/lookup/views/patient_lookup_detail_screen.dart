@@ -18,11 +18,10 @@ import 'package:sbas/features/lookup/views/patient_modify_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/bed_assign_history_card.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
-
-import '../../../common/widgets/progress_indicator_widget.dart';
-import '../../../constants/common.dart';
-import '../../assign/bloc/assign_bed_bloc.dart';
-import '../models/patient_history_model.dart';
+import 'package:sbas/common/widgets/progress_indicator_widget.dart';
+import 'package:sbas/constants/common.dart';
+import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
+import 'package:sbas/features/lookup/models/patient_history_model.dart';
 
 class PatientLookupDetailScreen extends ConsumerWidget {
   PatientLookupDetailScreen({

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/alarm/model/alarm_item_model.dart';
 
-import '../alarm_item_database_service.dart';
+import 'package:sbas/features/alarm/alarm_item_database_service.dart';
 
 class AlarmScreenPresenter extends AsyncNotifier<List<AlarmItemModel>> {
   @override
