@@ -1,24 +1,30 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/models/authentiate_req_model.dart';
 import 'package:sbas/util.dart';
 
-class AuthPhone extends StatefulWidget {
+import '../blocs/user_reg_bloc.dart';
+import '../repos/user_reg_req_repo.dart';
+
+class AuthPhone extends ConsumerStatefulWidget {
   const AuthPhone({super.key});
 
   @override
-  State<AuthPhone> createState() => _AuthPhoneState();
+  ConsumerState<AuthPhone> createState() => _AuthPhoneState();
 }
 
-class _AuthPhoneState extends State<AuthPhone> {
+class _AuthPhoneState extends ConsumerState<AuthPhone> {
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) =>
+      Scaffold(
         backgroundColor: Palette.white,
         appBar: Bitflow.getAppBar(
           '휴대폰 본인인증',
@@ -41,7 +47,68 @@ class _AuthPhoneState extends State<AuthPhone> {
                         vertical: 8.h,
                       ),
                       child: Text(
-                        '전화번호',
+                        '이름',
+                        style: CTS(
+                          color: Palette.textColor1,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.name,
+                      onChanged: (value) => name = value,
+                      decoration: InputDecoration(
+                        counterText: "",
+                        hintText: "이름",
+                        hintStyle: CTS(
+                          color: Palette.greyText_60,
+                          fontSize: 13,
+                        ),
+                        fillColor: Colors.grey[250],
+                        filled: true,
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            style: BorderStyle.none,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(6),
+                          ),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            style: BorderStyle.none,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(6),
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            style: BorderStyle.none,
+                            color: Palette.textColor1,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(Bitflow.defaultRadius),
+                          ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            style: BorderStyle.none,
+                            color: Palette.textColor1,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(Bitflow.defaultRadius),
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.all(16),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.h,
+                      ),
+                      child: Text(
+                        '전화 번호',
                         style: CTS(
                           color: Palette.textColor1,
                           fontSize: 13,
@@ -117,11 +184,7 @@ class _AuthPhoneState extends State<AuthPhone> {
                           child: SizedBox(
                             width: 100.w,
                             child: ElevatedButton(
-                              onPressed: () {
-                                if (pNum.length == 11) {
-                                  startTimer();
-                                }
-                              },
+                              onPressed: authenticate,
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(
                                   16,
@@ -235,11 +298,7 @@ class _AuthPhoneState extends State<AuthPhone> {
                 child: SafeArea(
                   child: BottomPositionedSubmitButton(
                     text: '확인',
-                    function: authNumber.length == 6
-                        ? () {
-                            Navigator.pop(context, 'lemon'); //lemon-> res text
-                          }
-                        : () {},
+                    function: checkAuth,
                   ),
                 ),
               ),
@@ -247,6 +306,7 @@ class _AuthPhoneState extends State<AuthPhone> {
           ),
         ),
       );
+
   @override
   void initState() {
     pNum = '';
@@ -262,7 +322,7 @@ class _AuthPhoneState extends State<AuthPhone> {
 
   void startTimer() {
     authNumber = '';
-    remainingTime = kDebugMode ? 15 : validTime;
+    remainingTime = kDebugMode ? 30 : validTime;
     timer = Timer.periodic(
       const Duration(
         seconds: 1,
@@ -271,17 +331,52 @@ class _AuthPhoneState extends State<AuthPhone> {
     );
   }
 
-  void onTick(Timer timer) => setState(() {
+  void authenticate() async {
+    var request = AuthenticateReqModel(userNm: name, telno: pNum);
+
+    try {
+      var value = await ref.read(userRegReqProvider).sendAuthMessage(pNum);
+
+      if (value == 200) {
+        ref.read(regUserProvider).telno = pNum;
+        showToast("인증번호가 발송되었습니다.");
+      } else {
+        showToast("휴대폰번호를 확인해주세요.");
+      }
+
+      if (pNum.length == 11) {
+        startTimer();
+      }
+    } catch (e) {
+      showToast("인증 중 오류가 발생했습니다.");
+      print(e);
+    }
+  }
+
+  void onTick(Timer timer) =>
+      setState(() {
         if (remainingTime > 0) {
           remainingTime--;
         } else {
           timer.cancel();
         }
       });
+
+  void checkAuth() async {
+    if(authNumber.length == 6) {
+      final res = await ref.read(signUpProvider.notifier).confirm(authNumber);
+      if(res['message'] == "SUCCESS"){
+        final findId = await ref.read(signUpProvider.notifier).findId(AuthenticateReqModel(userNm: name, telno: pNum));
+        Navigator.pop(context, findId);
+      }
+    }else {
+      showToast('인증번호를 다시 입력해 주세요.');
+    }
+  }
+
   bool isSent = false;
   late Timer timer;
-  late String authNumber;
-  late String pNum;
+  late String authNumber, pNum, name;
   late int remainingTime;
 
   static const validTime = 180;

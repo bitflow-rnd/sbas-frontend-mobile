@@ -99,7 +99,7 @@ class Dashboard extends ConsumerWidget {
                     ),
                     child: AutoSizeText(
                       count.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w400,
                       ),

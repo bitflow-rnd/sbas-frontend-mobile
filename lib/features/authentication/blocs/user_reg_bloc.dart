@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/features/authentication/models/authentiate_req_model.dart';
 import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/authentication/views/user_reg_req_screen_v2.dart';
@@ -12,10 +13,19 @@ class UserRegBloc extends AsyncNotifier {
     _signUpRepository = ref.read(userRegReqProvider);
   }
 
-  Future<Map<String, dynamic>> confirm(String authNumber) async => _signUpRepository.confirm(
+  Future<Map<String, dynamic>> confirm(String authNumber) async =>
+      _signUpRepository.confirm(
         ref.read(regUserProvider).telno ?? '',
         authNumber,
       );
+
+  Future<String> findId(AuthenticateReqModel request) async {
+    return _signUpRepository.findId(
+      request.userNm,
+      request.telno
+    );
+  }
+
   Future<void> signUp(BuildContext context) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
@@ -30,7 +40,8 @@ class UserRegBloc extends AsyncNotifier {
     }
   }
 
-  Future<bool> existId(String? userId) async => _signUpRepository.existId(userId);
+  Future<bool> existId(String? userId) async =>
+      _signUpRepository.existId(userId);
 
   late final UserRegRequestRepository _signUpRepository;
 }

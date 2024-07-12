@@ -32,12 +32,22 @@ class UserRegRequestRepository {
     });
   }
 
+  Future<String> findId(String userNm, String telno) async {
+    return await _userRegProvider.findId({
+      'userNm': userNm,
+      'telno': telno,
+    });
+  }
+
   Future<bool> existId(String? userId) async {
     return await _userRegProvider.existId(userId);
   }
 
-  Future<List<BaseCodeModel>> getBaseCode(String route) async => await _baseCodeProvider.getBaseCode(route);
-  Future<String> getBaseCodeNm(String route) async => await _baseCodeProvider.getBaseCodeNm(route);
+  Future<List<BaseCodeModel>> getBaseCode(String route) async =>
+      await _baseCodeProvider.getBaseCode(route);
+
+  Future<String> getBaseCodeNm(String route) async =>
+      await _baseCodeProvider.getBaseCodeNm(route);
 
   Future<List<InfoInstModel>> getOrganCode(
     String? typeCd,
@@ -52,7 +62,8 @@ class UserRegRequestRepository {
     return await _baseOrganProvider.getOrganCode(query);
   }
 
-  Future<List<dynamic>> uploadImage(XFile file) async => await _baseCodeProvider.uploadImage(
+  Future<List<dynamic>> uploadImage(XFile file) async =>
+      await _baseCodeProvider.uploadImage(
         await MultipartFile.fromFile(
           file.path,
           filename: file.name,

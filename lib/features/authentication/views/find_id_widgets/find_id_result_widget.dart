@@ -72,7 +72,7 @@ class FindIdResult extends StatelessWidget {
               ),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           SafeArea(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
