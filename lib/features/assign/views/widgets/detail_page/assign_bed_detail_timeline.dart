@@ -179,7 +179,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     var jobCd = ref.read(userDetailProvider.notifier).jobCd;
     switch (type) {
       case '승인대기':
-        return jobCd == "PMGR0002"
+        return (jobCd == "PMGR0002" || jobCd == "PMGR0004")
             ? _bottomer(
                 lBtnText: "배정 불가",
                 rBtnText: "승인",
@@ -314,7 +314,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               );
             });
       case '이송대기':
-        return jobCd == "PMGR0002"
+        return (jobCd == "PMGR0002" || jobCd == "PMGR0004")
             ? Common.bottomer(
                 isOneBtn: true,
                 rBtnText: "이송 처리",
@@ -334,7 +334,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                 })
             : Container();
       case '이송중':
-        return jobCd == "PMGR0003"
+        return (jobCd == "PMGR0003" || jobCd == "PMGR0004")
             ? Common.bottomer(
                 isOneBtn: true,
                 rBtnText: "입퇴원 처리",
