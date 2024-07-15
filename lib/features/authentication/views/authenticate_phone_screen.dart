@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
@@ -10,9 +9,8 @@ import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/models/authentiate_req_model.dart';
 import 'package:sbas/util.dart';
-
-import '../blocs/user_reg_bloc.dart';
-import '../repos/user_reg_req_repo.dart';
+import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
+import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 
 class AuthPhone extends ConsumerStatefulWidget {
   const AuthPhone({super.key});

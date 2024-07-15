@@ -34,9 +34,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   vertical: 24.h,
                   horizontal: 24.w,
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
                       '비밀번호를 재설정해주세요.',
                       style: TextStyle(
