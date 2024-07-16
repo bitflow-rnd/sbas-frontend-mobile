@@ -1,15 +1,18 @@
-class AuthenticateReqModel {
+class InitPwModel {
   String userNm;
+  String id;
   String telno;
 
-  AuthenticateReqModel({
+  InitPwModel({
     required this.userNm,
+    required this.id,
     required this.telno,
   });
 
-  factory AuthenticateReqModel.fromJson(Map<String, dynamic> json) {
-    return AuthenticateReqModel(
+  factory InitPwModel.fromJson(Map<String, dynamic> json) {
+    return InitPwModel(
       userNm: json['userNm'],
+      id: json['id'],
       telno: json['telno'],
     );
   }
@@ -17,6 +20,7 @@ class AuthenticateReqModel {
   Map<String, dynamic> toJson() {
     return {
       'userNm': userNm,
+      'id': id,
       'telno': telno,
     };
   }

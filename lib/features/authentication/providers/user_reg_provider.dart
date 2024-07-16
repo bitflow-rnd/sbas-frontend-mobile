@@ -99,6 +99,29 @@ class UserRegProvider {
     return '';
   }
 
+  Future<String> initPw(Map<String, dynamic> map) async {
+    final client = RetryClient(Client());
+
+    try {
+      final res = await client.post(
+        Uri.parse('$_baseUrl/init-pw'),
+        headers: json,
+        body: toJson(map),
+      );
+      print(fromJson(res.body)['message']);
+      return fromJson(res.body)['result'];
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    return '';
+  }
+
   Future<bool> existId(String? userId) async {
     final client = Dio();
 

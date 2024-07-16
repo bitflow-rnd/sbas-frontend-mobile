@@ -39,6 +39,14 @@ class UserRegRequestRepository {
     });
   }
 
+  Future<String> initPw(String userNm, String id, String telno) async {
+    return await _userRegProvider.initPw({
+      'userNm': userNm,
+      'id': id,
+      'telno': telno,
+    });
+  }
+
   Future<bool> existId(String? userId) async {
     return await _userRegProvider.existId(userId);
   }
