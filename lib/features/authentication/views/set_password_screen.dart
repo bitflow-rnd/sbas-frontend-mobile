@@ -1,10 +1,16 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/input_text_widget.dart';
 import 'package:sbas/constants/common.dart';
+import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/views/set_pw_widgets/pw_input_widget.dart';
+
+import 'authenticate_phone_screen.dart';
 
 class SetPasswordScreen extends StatefulWidget {
   const SetPasswordScreen({super.key});
@@ -14,6 +20,9 @@ class SetPasswordScreen extends StatefulWidget {
 }
 
 class _SetPasswordScreenState extends State<SetPasswordScreen> {
+  String id = '';
+  bool isEqualId = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,37 +57,80 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                       ),
                     ),
                     InputTextWidget(
-                        keyboardType: TextInputType.name,
-                        onChanged: (value) => name = value,
-                        hintText: '아이디',
+                      keyboardType: TextInputType.name,
+                      onChanged: (value) => setState(() {
+                        id = value;
+                      }),
+                      hintText: '아이디',
+                      readOnly: isEqualId,
                     ),
-                    // const Text(
-                    //   '비밀번호를 초기화 해 주세요.',
-                    //   style: TextStyle(
-                    //     fontSize: 15,
-                    //     fontWeight: FontWeight.w600,
-                    //   ),
-                    // ),
-                    // Gaps.v24,
-                    // InputPassword(
-                    //   label: '새비밀 번호',
-                    //   hintText: '8~15자리의 영소문자,숫자,특수문자 조합',
-                    // ),
-                    // Gaps.v16,
-                    // InputPassword(
-                    //   label: '비밀번호 확인',
-                    //   hintText: '비밀번호 확인',
-                    // ),
+                    Gaps.v24,
+                    AutoSizeText(
+                      '휴대전화 번호 본인인증 후\n비밀번호를 재설정 하실 수 있습니다.',
+                      maxLines: 2,
+                      style: CTS(
+                          color: Palette.greyText_80,
+                          fontSize: 14,
+                          height: 5.5 / 3.5),
+                    ),
+                    Gaps.v24,
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: isEqualId ? null : authenticate,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                          ),
+                        ),
+                        child: Text(
+                          isEqualId ? '인증완료' : '인증하기',
+                          style: CTS(
+                            color: Palette.white,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  color: Colors.transparent,
-                  width: double.infinity,
+              if (isEqualId)
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 24.h,
+                    horizontal: 24.w,
+                  ),
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '새 비밀번호를 입력해 주세요.',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Gaps.v24,
+                      InputPassword(
+                        label: '새 비밀번호',
+                        hintText: '8~15자리의 영소문자,숫자,특수문자 조합',
+                      ),
+                      Gaps.v16,
+                      InputPassword(
+                        label: '비밀번호 확인',
+                        hintText: '비밀번호 확인',
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    color: Colors.transparent,
+                    width: double.infinity,
+                  ),
+                ),
               BottomPositionedSubmitButton(
                 function: () {
                   Common.showModal(
@@ -102,5 +154,21 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
       ),
     );
   }
-  late String name;
+
+  Future<void> authenticate() async {
+    final result = await Navigator.push<String?>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AuthPhone(),
+      ),
+    );
+    if (kDebugMode) {
+      print(result);
+    }
+    if (result != null && result.isNotEmpty) {
+      if (mounted) {
+        setState(() => isEqualId = id == result);
+      }
+    }
+  }
 }

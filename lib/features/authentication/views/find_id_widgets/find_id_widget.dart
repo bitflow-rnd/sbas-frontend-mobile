@@ -51,7 +51,7 @@ class FindId extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '비밀번호 초기화를 원하시나요?',
+                '비밀번호 재설정을 원하시나요?',
                 style: CTS(
                   fontSize: 13,
                   color: Palette.textColor1,
@@ -67,7 +67,7 @@ class FindId extends StatelessWidget {
                   }
                 },
                 child: Text(
-                  '비밀번호 초기화',
+                  '비밀번호 재설정',
                   style: CTS.bold(
                     fontSize: 13,
                     color: Palette.primary,

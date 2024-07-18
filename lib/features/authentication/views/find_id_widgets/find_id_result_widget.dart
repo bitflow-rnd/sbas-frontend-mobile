@@ -129,7 +129,7 @@ class FindIdResult extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      '비밀번호 초기화',
+                      '비밀번호 재설정',
                       style: CTS(
                         color: Palette.white,
                         fontSize: 16,

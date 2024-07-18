@@ -6,16 +6,19 @@ class InputTextWidget extends StatelessWidget {
   final TextInputType keyboardType;
   final Function(String) onChanged;
   final String hintText;
+  final bool readOnly;
 
   const InputTextWidget({super.key,
     required this.keyboardType,
     required this.onChanged,
     required this.hintText,
+    required this.readOnly,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      readOnly: readOnly,
       keyboardType: keyboardType,
       onChanged: onChanged,
       decoration: InputDecoration(
