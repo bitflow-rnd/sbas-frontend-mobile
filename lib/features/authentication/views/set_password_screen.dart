@@ -133,18 +133,8 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                 ),
               BottomPositionedSubmitButton(
                 function: () {
-                  Common.showModal(
-                    context,
-                    Common.commonModal(
-                      context: context,
-                      mainText: "비밀번호가 변경되었습니다.\n변경된 비밀번호로 로그인 해 주세요.",
-                      imageWidget: Image.asset(
-                        "assets/auth_group/modal_check.png",
-                        width: 44.h,
-                      ),
-                      imageHeight: 44.h,
-                    ),
-                  );
+                  //Todo
+                  //비밀번호 재설정 api 연동
                 },
                 text: '비밀번호 변경',
               ),
@@ -170,5 +160,20 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
         setState(() => isEqualId = id == result);
       }
     }
+  }
+
+  void modifyPassword() {
+    Common.showModal(
+      context,
+      Common.commonModal(
+        context: context,
+        mainText: "비밀번호가 변경되었습니다.\n변경된 비밀번호로 로그인 해 주세요.",
+        imageWidget: Image.asset(
+          "assets/auth_group/modal_check.png",
+          width: 44.h,
+        ),
+        imageHeight: 44.h,
+      ),
+    );
   }
 }
