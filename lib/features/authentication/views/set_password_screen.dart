@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
+import 'package:sbas/common/widgets/input_text_widget.dart';
 import 'package:sbas/constants/common.dart';
-import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/views/set_pw_widgets/pw_input_widget.dart';
 
 class SetPasswordScreen extends StatefulWidget {
   const SetPasswordScreen({super.key});
@@ -20,7 +19,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     return Scaffold(
       backgroundColor: Palette.white,
       appBar: Bitflow.getAppBar(
-        '비밀번호 재설정',
+        '비밀번호 초기화',
         false,
         0,
       ),
@@ -31,29 +30,45 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: 24.h,
                   horizontal: 24.w,
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '비밀번호를 재설정해주세요.',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.h,
+                      ),
+                      child: Text(
+                        '아이디',
+                        style: CTS(
+                          color: Palette.textColor1,
+                          fontSize: 13,
+                        ),
                       ),
                     ),
-                    Gaps.v24,
-                    InputPassword(
-                      label: '새 비밀번호',
-                      hintText: '8~15자리의 영소문자,숫자,특수문자 조합',
+                    InputTextWidget(
+                        keyboardType: TextInputType.name,
+                        onChanged: (value) => name = value,
+                        hintText: '아이디',
                     ),
-                    Gaps.v16,
-                    InputPassword(
-                      label: '비밀번호 확인',
-                      hintText: '비밀번호 확인',
-                    ),
+                    // const Text(
+                    //   '비밀번호를 초기화 해 주세요.',
+                    //   style: TextStyle(
+                    //     fontSize: 15,
+                    //     fontWeight: FontWeight.w600,
+                    //   ),
+                    // ),
+                    // Gaps.v24,
+                    // InputPassword(
+                    //   label: '새비밀 번호',
+                    //   hintText: '8~15자리의 영소문자,숫자,특수문자 조합',
+                    // ),
+                    // Gaps.v16,
+                    // InputPassword(
+                    //   label: '비밀번호 확인',
+                    //   hintText: '비밀번호 확인',
+                    // ),
                   ],
                 ),
               ),
@@ -87,4 +102,5 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
       ),
     );
   }
+  late String name;
 }
