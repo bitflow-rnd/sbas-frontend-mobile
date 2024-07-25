@@ -108,8 +108,8 @@ class UserRegProvider {
         headers: json,
         body: toJson(map),
       );
-      print(fromJson(res.body)['message']);
-      return fromJson(res.body)['result'];
+      print(fromJson(res.body)['code']);
+      return fromJson(res.body)['code'];
     } catch (exception) {
       if (kDebugMode) {
         print({

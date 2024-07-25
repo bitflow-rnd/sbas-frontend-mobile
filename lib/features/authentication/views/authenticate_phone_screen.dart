@@ -97,7 +97,7 @@ class _AuthPhoneState extends ConsumerState<AuthPhone> {
         final findId = await ref.read(signUpProvider.notifier).findId(
             AuthenticateReqModel(userNm: name, telno: pNum));
         if (mounted) {
-          Navigator.pop(context, findId); // 여기서 String 값 반환
+          Navigator.pop(context, findId);
         }
       }
     } else {

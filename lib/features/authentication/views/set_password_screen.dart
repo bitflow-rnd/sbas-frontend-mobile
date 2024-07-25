@@ -164,9 +164,9 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
 
                   var result = await modifyPw();
 
-                  if(result == 'SUCCESS') {
-                    print('success');
-                  }
+                  if (result == '00') {
+                    modifyPassword();
+                  } else {}
                 },
                 text: '비밀번호 변경',
               ),
@@ -199,12 +199,16 @@ class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
       context,
       Common.commonModal(
         context: context,
-        mainText: "비밀번호가 변경되었습니다.\n변경된 비밀번호로 로그인 해 주세요.",
+        mainText: "비밀번호가 변경되었습니다.\n변경하신 비밀번호로\n로그인 해 주세요.",
         imageWidget: Image.asset(
           "assets/auth_group/modal_check.png",
           width: 44.h,
         ),
         imageHeight: 44.h,
+        button2Function: () {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
       ),
     );
   }
