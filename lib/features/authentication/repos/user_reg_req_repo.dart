@@ -39,11 +39,10 @@ class UserRegRequestRepository {
     });
   }
 
-  Future<String> initPw(String userNm, String id, String telno) async {
-    return await _userRegProvider.initPw({
-      'userNm': userNm,
+  Future<String> modifyPw(String id, String pw) async {
+    return await _userRegProvider.modifyPw({
       'id': id,
-      'telno': telno,
+      'modifyPw': pw,
     });
   }
 

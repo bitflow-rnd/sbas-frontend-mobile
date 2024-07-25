@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
@@ -8,20 +12,30 @@ import 'package:sbas/common/widgets/input_text_widget.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/authentication/views/set_pw_widgets/pw_input_widget.dart';
 
 import 'authenticate_phone_screen.dart';
 
-class SetPasswordScreen extends StatefulWidget {
+class SetPasswordScreen extends ConsumerStatefulWidget {
   const SetPasswordScreen({super.key});
 
   @override
-  State<SetPasswordScreen> createState() => _SetPasswordScreenState();
+  ConsumerState<SetPasswordScreen> createState() => _SetPasswordScreenState();
 }
 
-class _SetPasswordScreenState extends State<SetPasswordScreen> {
+class _SetPasswordScreenState extends ConsumerState<SetPasswordScreen> {
   String id = '';
   bool isEqualId = false;
+  String pw = '';
+  String checkPw = '';
+  bool isEqualPw = false;
+
+  Future<String> modifyPw() async {
+    var result = await ref.read(userRegReqProvider).modifyPw(id, pw);
+
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,10 +115,10 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     vertical: 24.h,
                     horizontal: 24.w,
                   ),
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         '새 비밀번호를 입력해 주세요.',
                         style: TextStyle(
                           fontSize: 15,
@@ -115,26 +129,44 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                       InputPassword(
                         label: '새 비밀번호',
                         hintText: '8~15자리의 영소문자,숫자,특수문자 조합',
+                        onChanged: (value) => setState(() {
+                          pw = value;
+                          checkIsEqualPw();
+                        }),
                       ),
                       Gaps.v16,
                       InputPassword(
                         label: '비밀번호 확인',
                         hintText: '비밀번호 확인',
+                        onChanged: (value) => setState(() {
+                          checkPw = value;
+                          checkIsEqualPw();
+                        }),
                       ),
+                      if (isEqualPw)
+                        Text('비밀번호가 일치합니다.', style: CTS.bold(color: Colors.red))
+                      else
+                        Text('비밀번호가 다릅니다.', style: CTS.bold(color: Colors.red)),
                     ],
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    color: Colors.transparent,
-                    width: double.infinity,
-                  ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  color: Colors.transparent,
+                  width: double.infinity,
                 ),
+              ),
               BottomPositionedSubmitButton(
-                function: () {
-                  //Todo
-                  //비밀번호 재설정 api 연동
+                function: () async {
+                  final bytes = utf8.encode(pw);
+                  pw = sha512.convert(bytes).toString();
+
+                  var result = await modifyPw();
+
+                  if(result == 'SUCCESS') {
+                    print('success');
+                  }
                 },
                 text: '비밀번호 변경',
               ),
@@ -175,5 +207,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
         imageHeight: 44.h,
       ),
     );
+  }
+
+  void checkIsEqualPw() {
+    isEqualPw = pw == checkPw;
   }
 }

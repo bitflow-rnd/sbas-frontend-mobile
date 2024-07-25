@@ -10,9 +10,11 @@ class InputPassword extends StatefulWidget {
     super.key,
     required this.label,
     required this.hintText,
+    required this.onChanged,
   });
   final String label;
   final String hintText;
+  final Function(String) onChanged;
 
   @override
   State<InputPassword> createState() => _InputPasswordState();
@@ -48,9 +50,7 @@ class _InputPasswordState extends State<InputPassword> {
             }
             return null;
           },
-          onChanged: (value) => setState(() {
-            // fieldPassword.clear();
-          }),
+          onChanged: widget.onChanged,
           // onSaved: (newValue) => ls.formData['pw'] = newValue ?? '',
           decoration: InputDecoration(
             fillColor: Palette.white,

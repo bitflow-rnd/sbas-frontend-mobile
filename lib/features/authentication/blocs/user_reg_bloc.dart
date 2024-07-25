@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/models/authentiate_req_model.dart';
-import 'package:sbas/features/authentication/models/init_pw_model.dart';
+import 'package:sbas/features/authentication/models/modify_pw_model.dart';
 import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/authentication/views/user_reg_req_screen_v2.dart';
@@ -21,19 +21,15 @@ class UserRegBloc extends AsyncNotifier {
       );
 
   Future<String> findId(AuthenticateReqModel request) async {
-    return _signUpRepository.findId(
-      request.userNm,
-      request.telno
-    );
+    return _signUpRepository.findId(request.userNm, request.telno);
   }
 
-Future<String> initPw(InitPwModel request) async {
-    return _signUpRepository.initPw(
-      request.userNm,
+  Future<String> modifyPw(ModifyPwModel request) async {
+    return _signUpRepository.modifyPw(
       request.id,
-      request.telno,
+      request.modifyPw,
     );
-}
+  }
 
   Future<void> signUp(BuildContext context) async {
     state = const AsyncValue.loading();

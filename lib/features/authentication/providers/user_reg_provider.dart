@@ -99,12 +99,12 @@ class UserRegProvider {
     return '';
   }
 
-  Future<String> initPw(Map<String, dynamic> map) async {
+  Future<String> modifyPw(Map<String, dynamic> map) async {
     final client = RetryClient(Client());
 
     try {
       final res = await client.post(
-        Uri.parse('$_baseUrl/init-pw'),
+        Uri.parse('$_baseUrl/find-pw'),
         headers: json,
         body: toJson(map),
       );
