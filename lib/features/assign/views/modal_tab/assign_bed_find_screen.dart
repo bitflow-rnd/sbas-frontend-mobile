@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
@@ -38,25 +39,9 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
     final selectedHospList = ref.watch(selectedItemsProvider);
     return Scaffold(
         backgroundColor: Palette.white,
-        appBar: AppBar(
-          title: Text(
-            "병상 배정",
-            style: CTS.medium(
-              fontSize: 15,
-              color: Colors.black,
-            ),
-          ),
+        appBar: const SBASAppBar(
+          title: '병상 배정',
           elevation: 0.5,
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          leading: const BackButton(
-            color: Colors.black,
-          ),
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-          ),
         ),
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),

@@ -78,110 +78,42 @@ class Patient {
   });
 
   Patient.fromJson(Map<String, dynamic> json) {
-    if (json["bedStatCd"] is String) {
-      bedStatCd = json["bedStatCd"];
-    }
-    if (json["bedStatNm"] is String) {
-      bedStatNm = json["bedStatNm"];
-    }
-    if (json["rgstUserId"] is String) {
-      rgstUserId = json["rgstUserId"];
-    }
-    if (json["rgstDttm"] is String) {
-      rgstDttm = json["rgstDttm"];
-    }
-    if (json["updtUserId"] is String) {
-      updtUserId = json["updtUserId"];
-    }
-    if (json["updtDttm"] is String) {
-      updtDttm = json["updtDttm"];
-    }
-    if (json["bascAddr"] is String) {
-      bascAddr = json["bascAddr"];
-    }
-    if (json["detlAddr"] is String) {
-      detlAddr = json["detlAddr"];
-    }
-    if (json["zip"] is String) {
-      zip = json["zip"];
-    }
-    if (json["natiNm"] is String) {
-      natiNm = json["natiNm"];
-    }
-    if (json["ptId"] is String) {
-      ptId = json["ptId"];
-    }
-    if (json["ptNm"] is String) {
-      ptNm = json["ptNm"];
-    }
-    if (json["gndr"] is String) {
-      gndr = json["gndr"];
-    }
-    if (json["rrno1"] is String) {
-      rrno1 = json["rrno1"];
-    }
-    if (json["rrno2"] is String) {
-      rrno2 = json["rrno2"];
-    }
-    if (json["dstr1Cd"] is String) {
-      dstr1Cd = json["dstr1Cd"];
-    }
-    if (json["dstr2Cd"] is String) {
-      dstr2Cd = json["dstr2Cd"];
-    }
-    if (json["addr"] is String) {
-      addr = json["addr"];
-    }
-    if (json["telno"] is String) {
-      telno = json["telno"];
-    }
-    if (json["natiCd"] is String) {
-      natiCd = json["natiCd"];
-    }
-    if (json["picaVer"] is String) {
-      picaVer = json["picaVer"];
-    }
-    if (json["dethYn"] is String) {
-      dethYn = json["dethYn"];
-    }
-    if (json["nokNm"] is String) {
-      nokNm = json["nokNm"];
-    }
-    if (json["mpno"] is String) {
-      mpno = json["mpno"];
-    }
-    if (json["job"] is String) {
-      job = json["job"];
-    }
-    if (json["attcId"] is String) {
-      attcId = json["attcId"];
-    }
-    //추가
-
-    if (json['bdasSeq'] is String) {
-      bdasSeq = json['bdasSeq'];
-    }
-    if (json['dstr1CdNm'] is String) {
-      dstr1CdNm = json['dstr1CdNm'];
-    }
-    if (json['dstr2CdNm'] is String) {
-      dstr2CdNm = json['dstr2CdNm'];
-    }
-    if (json['chrgInstId'] is String) {
-      chrgInstId = json['chrgInstId'];
-    }
-    if (json['hospNm'] is String) {
-      hospNm = json['hospNm'];
-    }
-    if (json['age'] is int) {
-      age = json['age'];
-    }
-    if (json['bedStatCdNm'] is String) {
-      bedStatCdNm = json['bedStatCdNm'];
-    }
-    tagList = (json['tagList'] as List?)?.map((dynamic e) => e as String).toList();
-    undrDsesCd = (json['undrDsesCd'] as List?)?.map((dynamic e) => e as String).toList();
-    undrDsesCdNm = (json['undrDsesCdNm'] as List?)?.map((dynamic e) => e as String).toList();
+    bedStatCd = json["bedStatCd"] as String?;
+    bedStatNm = json["bedStatNm"] as String?;
+    rgstUserId = json["rgstUserId"] as String?;
+    rgstDttm = json["rgstDttm"] as String?;
+    updtUserId = json["updtUserId"] as String?;
+    updtDttm = json["updtDttm"] as String?;
+    bascAddr = json["bascAddr"] as String?;
+    detlAddr = json["detlAddr"] as String?;
+    zip = json["zip"] as String?;
+    natiNm = json["natiNm"] as String?;
+    ptId = json["ptId"] as String?;
+    ptNm = json["ptNm"] as String?;
+    gndr = json["gndr"] as String?;
+    rrno1 = json["rrno1"] as String?;
+    rrno2 = json["rrno2"] as String?;
+    dstr1Cd = json["dstr1Cd"] as String?;
+    dstr2Cd = json["dstr2Cd"] as String?;
+    addr = json["addr"] as String?;
+    telno = json["telno"] as String?;
+    natiCd = json["natiCd"] as String?;
+    picaVer = json["picaVer"] as String?;
+    dethYn = json["dethYn"] as String?;
+    nokNm = json["nokNm"] as String?;
+    mpno = json["mpno"] as String?;
+    job = json["job"] as String?;
+    attcId = json["attcId"] as String?;
+    bdasSeq = json['bdasSeq'] as int?;
+    dstr1CdNm = json['dstr1CdNm'] as String?;
+    dstr2CdNm = json['dstr2CdNm'] as String?;
+    chrgInstId = json['chrgInstId'];
+    hospNm = json['hospNm'] as String?;
+    age = json['age'] as int?;
+    bedStatCdNm = json['bedStatCdNm'] as String?;
+    tagList = (json['tagList'] as List?)?.map((e) => e as String).toList() ?? [];
+    undrDsesCd = (json['undrDsesCd'] as List?)?.map((e) => e as String).toList() ?? [];
+    undrDsesCdNm = (json['undrDsesCdNm'] as List?)?.map((e) => e as String).toList() ?? [];
   }
 
   Map<String, dynamic> toJson() {
