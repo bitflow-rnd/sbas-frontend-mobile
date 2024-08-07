@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_code_model.dart';
+import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
@@ -54,14 +55,8 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.white,
-      appBar: AppBar(
-        title: Text(
-          "이송 처리",
-          style: CTS.medium(
-            fontSize: 15,
-            color: Colors.black,
-          ),
-        ),
+      appBar: SBASAppBar(
+        title: '이송 처리',
         actions: [
           IconButton(
             icon: Icon(
@@ -75,13 +70,6 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
           ),
         ],
         elevation: 0.5,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarBrightness: Brightness.light,
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
-        ),
       ),
       body: Form(
           key: widget.formKey,

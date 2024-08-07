@@ -23,7 +23,6 @@ class LoginBloc extends AsyncNotifier<void> {
     BuildContext context,
     Map<String, dynamic> map,
   ) async {
-    print(map);
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(
       () async => await _repository.signIn(

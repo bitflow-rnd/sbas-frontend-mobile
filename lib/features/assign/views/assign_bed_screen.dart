@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/extensions.dart';
@@ -26,36 +26,20 @@ class AssignBedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
         backgroundColor: Palette.white,
-        appBar: AppBar(
-          title: Text(
-            "병상 배정 현황",
-            style: CTS.medium(
-              fontSize: 15,
-              color: Colors.black,
-            ),
-          ),
-          elevation: 0.5,
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          leading: const BackButton(
-            color: Colors.black,
-          ),
+        appBar: SBASAppBar(
+          title: '병상 배정 현황',
           actions: [
             IconButton(
-                icon: const Icon(
-                  Icons.refresh,
-                  color: Colors.black,
-                ),
-                onPressed: () async {
-                  await ref.watch(assignBedProvider.notifier).reloadPatients();
-                },
-            )
+              icon: const Icon(
+                Icons.refresh,
+                color: Colors.black,
+              ),
+              onPressed: () async {
+                await ref.watch(assignBedProvider.notifier).reloadPatients();
+              },
+            ),
           ],
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-          ),
+          elevation: 0.5,
         ),
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
