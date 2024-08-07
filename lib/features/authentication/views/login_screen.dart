@@ -71,7 +71,7 @@ class LogInScreenState extends ConsumerState<LogInScreen> {
                       ),
                       onPressed: () => setPassword(context),
                       child: Text(
-                        '비밀번호 초기화',
+                        '비밀번호 찾기',
                         style: CTS(
                           fontSize: 12,
                           color: Palette.greyText_60,

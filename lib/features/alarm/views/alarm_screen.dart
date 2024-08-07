@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/palette.dart';
 
@@ -21,14 +22,8 @@ class AlarmPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Palette.dividerGrey,
-      appBar: AppBar(
-        title: Text(
-          "알림함",
-          style: CTS.medium(
-            fontSize: 15,
-            color: Colors.black,
-          ),
-        ),
+      appBar: SBASAppBar(
+        title: '알림함',
         actions: [
           Container(
             margin: EdgeInsets.only(right: 16.w, top: 3.h, bottom: 3.h),
@@ -72,66 +67,62 @@ class AlarmPage extends ConsumerWidget {
             ),
           ),
         ],
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        leading: const BackButton(
-          color: Colors.black,
-        ),
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarBrightness: Brightness.light,
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
-        ),
       ),
       body: GestureDetector(
         onTap: () => ref.invalidate(alarmScreenProvider),
         child: ref.watch(alarmScreenProvider).when(
-          loading: () => const SBASProgressIndicator(),
-          error: (error, stackTrace) => Center(
-            child: Text(
-              error.toString(),
-              style: const TextStyle(
-                color: Palette.mainColor,
+              loading: () => const SBASProgressIndicator(),
+              error: (error, stackTrace) => Center(
+                child: Text(
+                  error.toString(),
+                  style: const TextStyle(
+                    color: Palette.mainColor,
+                  ),
+                ),
               ),
-            ),
-          ),
-          data: (list) => list.isEmpty
-              ? _emptyPage()
-              : SingleChildScrollView(
-            child: IntrinsicHeight(
-              child: Stack(children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 14.w),
-                  child: Column(children: [
-                    Expanded(
-                      child: CustomPaint(
-                          painter: DashedLineVerticalPainter(),
-                          size: const Size(1, double.infinity)),
-                    ),
-                  ]),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    dateFragment("${list[0].year}년 ${list[0].month}월"),
-                    for (var alarmItem in list)
-                      alarmItemCard(
-                        title: alarmItem.title ?? '',
-                        body: alarmItem.body ?? '',
-                        dateTime: alarmItem.dateTime!,
+              data: (list) => list.isEmpty
+                  ? _emptyPage()
+                  : SingleChildScrollView(
+                      child: IntrinsicHeight(
+                        child: Stack(children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 14.w),
+                            child: Column(children: [
+                              Expanded(
+                                child: CustomPaint(
+                                    painter: DashedLineVerticalPainter(),
+                                    size: const Size(1, double.infinity)),
+                              ),
+                            ]),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              dateFragment(
+                                  "${list[0].year}년 ${list[0].month}월"),
+                              for (var alarmItem in list)
+                                alarmItemCard(
+                                  title: alarmItem.title ?? '',
+                                  body: alarmItem.body ?? '',
+                                  dateTime: alarmItem.dateTime!,
+                                ),
+                            ],
+                          ),
+                        ]),
                       ),
-                  ],
-                ),
-              ]),
+                    ),
             ),
-          ),
-        ),
       ),
     );
   }
 
-  Widget otherFrag({required String dateTime, required String name, required String gender, required int age, required String detail, required bool isApp}) {
+  Widget otherFrag(
+      {required String dateTime,
+      required String name,
+      required String gender,
+      required int age,
+      required String detail,
+      required bool isApp}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6.h),
       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -139,17 +130,24 @@ class AlarmPage extends ConsumerWidget {
         child: Row(
           children: [
             if (isApp)
-              imageIconFrag(imgSrc: "assets/common_icon/check_complete_icon.png", text: "배정승인")
+              imageIconFrag(
+                  imgSrc: "assets/common_icon/check_complete_icon.png",
+                  text: "배정승인")
             else
               // imageIconFrag(imgSrc: "assets/common_icon/check_complete_icon.png", text: "배정승인"),
-              imageIconFrag(imgSrc: "assets/common_icon/to_hospital_icon.png", text: "    입원    "),
+              imageIconFrag(
+                  imgSrc: "assets/common_icon/to_hospital_icon.png",
+                  text: "    입원    "),
             Expanded(
               flex: 7,
               child: Container(
-                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                padding: EdgeInsets.only(
+                    left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), bottomRight: Radius.circular(12.r)),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(12.r),
+                      bottomRight: Radius.circular(12.r)),
                   boxShadow: const [
                     BoxShadow(
                       color: Color(0x1a645c5c),
@@ -229,21 +227,30 @@ class AlarmPage extends ConsumerWidget {
     );
   }
 
-  Widget reqBed({required String dateTime, required String name, required String gender, required int age, required String detail}) {
+  Widget reqBed(
+      {required String dateTime,
+      required String name,
+      required String gender,
+      required int age,
+      required String detail}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6.h),
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: IntrinsicHeight(
         child: Row(
           children: [
-            imageIconFrag(imgSrc: "assets/common_icon/req_icon_mask.png", text: "병상요청"),
+            imageIconFrag(
+                imgSrc: "assets/common_icon/req_icon_mask.png", text: "병상요청"),
             Expanded(
               flex: 7,
               child: Container(
-                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                padding: EdgeInsets.only(
+                    left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), bottomRight: Radius.circular(12.r)),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(12.r),
+                      bottomRight: Radius.circular(12.r)),
                   boxShadow: const [
                     BoxShadow(
                       color: Color(0x1a645c5c),
@@ -352,7 +359,8 @@ class AlarmPage extends ConsumerWidget {
             Expanded(
               flex: 7,
               child: Container(
-                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                padding: EdgeInsets.only(
+                    left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(12.r)),
@@ -417,16 +425,23 @@ class AlarmPage extends ConsumerWidget {
             Expanded(
               flex: 2,
               child: Column(
-                children: [imageIconFrag(imgSrc: "assets/common_icon/req_icon_mask.png", text: "이송완료")],
+                children: [
+                  imageIconFrag(
+                      imgSrc: "assets/common_icon/req_icon_mask.png",
+                      text: "이송완료"),
+                ],
               ),
             ),
             Expanded(
               flex: 7,
               child: Container(
-                padding: EdgeInsets.only(left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
+                padding: EdgeInsets.only(
+                    left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(12.r), bottomRight: Radius.circular(12.r)),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(12.r),
+                      bottomRight: Radius.circular(12.r)),
                   boxShadow: const [
                     BoxShadow(
                       color: Color(0x1a645c5c),
@@ -602,7 +617,9 @@ class AlarmPage extends ConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
               decoration: BoxDecoration(
                   color: Palette.mainColor.withOpacity(0.06),
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12.r), bottomLeft: Radius.circular(12.r))),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12.r),
+                      bottomLeft: Radius.circular(12.r))),
               child: Column(
                 children: [
                   Image.asset(

@@ -9,7 +9,6 @@ import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/views/find_id_screen.dart';
 import 'package:sbas/features/authentication/views/set_password_screen.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 extension FutureExtension<T> on Future<T> {

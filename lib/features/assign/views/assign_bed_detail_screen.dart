@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/widgets/app_bar_widget.dart';
 
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
@@ -48,14 +49,8 @@ class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
 
     return Scaffold(
       backgroundColor: Palette.white,
-      appBar: AppBar(
-        title: Text(
-          "병상 배정 상세",
-          style: CTS.medium(
-            fontSize: 15,
-            color: Colors.black,
-          ),
-        ),
+      appBar: SBASAppBar(
+        title: '병상 배정 상세',
         actions: [
           Container(
             padding: EdgeInsets.symmetric(
@@ -74,16 +69,6 @@ class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
           ),
         ],
         elevation: 0.5,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        leading: const BackButton(
-          color: Colors.black,
-        ),
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarBrightness: Brightness.light,
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
-        ),
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
