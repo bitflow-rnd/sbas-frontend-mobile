@@ -6,6 +6,7 @@ class AlarmService {
 
   Future<AlarmListModel> getAlarms() async {
     final response = await _api.getAsync('$_baseUrl/alarm-list');
+    readAlarms();
 
     return AlarmListModel.fromJson(response);
   }
