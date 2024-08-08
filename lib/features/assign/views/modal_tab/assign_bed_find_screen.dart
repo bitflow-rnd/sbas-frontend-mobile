@@ -100,44 +100,46 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                       children: [
                         Text('환자유형', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                         Gaps.h8,
-                        Expanded(child: rowMultiSelectButton(['임산부', '음압격리', '투석'], ['임산부'])),
+                        Expanded(child: rowMultiSelectButton(['분만', '투석', '소아', '요양병원', '정신질환자', '음압수술'], ['임산부'])),
                       ],
                     ),
                     ref.watch(searchDetailIsOpenProvider.notifier).state
                         ? Column(
                             children: [
-                              Gaps.v16,
+                              Gaps.v8,
+                              Divider(color: Palette.greyText_20, height: 1),
+                              Gaps.v8,
                               Row(
                                 children: [
-                                  Text('                 ', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
-                                  Gaps.h8,
-                                  Expanded(child: rowMultiSelectButton(['인공호흡', '신생아', '어린이', '수술'], ['어린이'])),
+                                  Text('중증도', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
+                                  Gaps.h20,
+                                  Expanded(child: rowMultiSelectButton(['중환자실', '중환자실내음압격리', '중증', '준중증', '중등증'], ['어린이'])),
                                 ],
                               ),
-                              Gaps.v16,
-                              Row(
-                                children: [
-                                  Text('기저질환', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
-                                  Gaps.h8,
-                                  Expanded(child: rowMultiSelectButton(['고혈압', '정신질환', '관절염'], ['고혈압', '관절염'])),
-                                ],
-                              ),
-                              Gaps.v16,
-                              Row(
-                                children: [
-                                  Text('중증도    ', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
-                                  Gaps.h8,
-                                  Expanded(child: rowMultiSelectButton(['중증', '준중증', '준등중', '미분류'], ['준등중'])),
-                                ],
-                              ),
-                              Gaps.v16,
+                              Gaps.v8,
+                              Divider(color: Palette.greyText_20, height: 1),
+                              Gaps.v8,
                               Row(
                                 children: [
                                   Text('병상유형', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(child: rowMultiSelectButton(['음압격리', '일반격리', '기타'], ['음압격리', '일반격리'])),
+                                  Expanded(child: rowMultiSelectButton(['코호트격리', '음압격리', '일반격리', '소아음압격리', '소아일반격리'], ['고혈압', '관절염'])),
                                 ],
                               ),
+                              Gaps.v8,
+                              Divider(color: Palette.greyText_20, height: 1),
+                              Gaps.v8,
+                              Row(
+                                children: [
+                                  Text('장비정보', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
+                                  Gaps.h8,
+                                  Expanded(child: rowMultiSelectButton([
+                                    '인공호흡기', '인공호흡기(조산아)', '인큐베이터', 'ECMO', '고압산소',
+                                    'CT', 'MRI', '혈관촬영기', '중심체온조절유도기',
+                                  ], ['준등중'])),
+                                ],
+                              ),
+                              Gaps.v4,
                             ],
                           )
                         : Container(),
@@ -151,13 +153,14 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                           onPressed: () {
                             ref.read(searchDetailIsOpenProvider.notifier).state = !isSearchDetailOpen;
                           },
-                          icon: Icon(!isSearchDetailOpen ? Icons.arrow_drop_down : Icons.arrow_drop_up),
+                          icon: Icon(!isSearchDetailOpen ? Icons.arrow_drop_down : Icons.arrow_drop_up, size: 36.0,),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
+              Gaps.v8,
               Divider(color: Palette.greyText_20, height: 1),
               Gaps.v16,
               Container(
@@ -178,11 +181,11 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                             color: Colors.black,
                           ),
                         ),
-                        const Spacer(),
-                        dropdownButton(
-                          ['최신순', '등록순'],
-                          '최신순',
-                        ),
+                        Gaps.v24,
+                        // dropdownButton(
+                        //   ['최신순', '등록순'],
+                        //   '최신순',
+                        // ),
                       ],
                     ),
                   ],
@@ -290,7 +293,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                                     'AI추천',
                                                     style: CTS.medium(
                                                       color: Palette.red,
-                                                      fontSize: 12.sp,
+                                                      fontSize: 10.sp,
                                                     ),
                                                   ),
                                                 ),
@@ -523,8 +526,8 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
       children: [
         Expanded(
           child: Wrap(
-            spacing: 10.w,
-            runSpacing: 12.h,
+            spacing: 8.w,
+            runSpacing: 8.h,
             direction: Axis.horizontal,
             children: [
               for (var i in list)
@@ -540,7 +543,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                   ),
                   child: Text(i,
                       style: CTS.bold(
-                        fontSize: 13,
+                        fontSize: 11,
                         color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
                       )),
                 )
@@ -581,7 +584,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
         ),
         hintText: hintText,
 
-        ///hintStyle: CTS.regular(
+        //hintStyle: CTS.regular(
         //   fontSize: 13.sp,
         //   color: Palette.greyText_60,
         // ),
