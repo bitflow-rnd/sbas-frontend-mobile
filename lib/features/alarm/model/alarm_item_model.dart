@@ -1,88 +1,77 @@
 class AlarmItemModel {
-  String? title;
-  String? body;
-  int? year;
-  int? month;
-  String? dateTime;
-  String? userId;
-  String? receivedTime;
+  final int alarmId;
+  final String title;
+  final String detail;
+  final String senderId;
+  final String senderName;
+  final String receiverId;
+  final String receiverName;
+  final bool isRead;
+  final String rgstDttm;
 
   AlarmItemModel({
-    this.title,
-    this.body,
-    this.year,
-    this.month,
-    this.dateTime,
-    this.userId,
-    this.receivedTime,
+    required this.alarmId,
+    required this.title,
+    required this.detail,
+    required this.senderId,
+    required this.senderName,
+    required this.receiverId,
+    required this.receiverName,
+    required this.isRead,
+    required this.rgstDttm,
   });
 
-  AlarmItemModel.fromJson(Map<String, dynamic> json) {
-    if (json['title'] is String) {
-      title = json['title'];
-    }
-    if (json['body'] is String) {
-      body = json['body'];
-    }
-    if (json['year'] is int) {
-      year = json['year'];
-    }
-    if (json['month'] is int) {
-      month = json['month'];
-    }
-    if (json['date_time'] is String) {
-      dateTime = json['date_time'];
-    }
-    if (json['user_id'] is String) {
-      userId = json['user_id'];
-    }
-    if (json['received_time'] is String) {
-      receivedTime = json['received_time'];
-    }
+  factory AlarmItemModel.fromJson(Map<String, dynamic> json) {
+    return AlarmItemModel(
+      alarmId: json['alarmId'],
+      title: json['title'],
+      detail: json['detail'],
+      senderId: json['senderId'],
+      senderName: json['senderName'],
+      receiverId: json['receiverId'],
+      receiverName: json['receiverName'],
+      isRead: json['isRead'],
+      rgstDttm: json['rgstDttm'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-
-    data['title'] = title;
-    data['body'] = body;
-    data['year'] = year;
-    data['month'] = month;
-    data['date_time'] = dateTime;
-    data['user_id'] = userId;
-    data['received_time'] = receivedTime;
-
-    return data;
+    return {
+      'alarmId': alarmId,
+      'title': title,
+      'detail': detail,
+      'senderId': senderId,
+      'senderName': senderName,
+      'receiverId': receiverId,
+      'receiverName': receiverName,
+      'isRead': isRead,
+      'rgstDttm': rgstDttm,
+    };
   }
 }
 
 class AlarmListModel {
-  late int count;
-  late List<AlarmItemModel> items;
+  int count;
+  List<AlarmItemModel> items;
 
   AlarmListModel({
     required this.count,
     required this.items,
   });
 
-  AlarmListModel.fromJson(Map<String, dynamic> json) {
-    if (json["count"] is int) {
-      count = json["count"];
-    }
-    if (json["items"] is List) {
-      items = (json["items"] as List)
-          .map((e) => AlarmItemModel.fromJson(e))
-          .toList();
-    }
+  factory AlarmListModel.fromJson(Map<String, dynamic> json) {
+    return AlarmListModel(
+      count: json['count'] ?? 0,
+      items: (json['items'] as List<dynamic>?)
+          ?.map((e) => AlarmItemModel.fromJson(e as Map<String, dynamic>))
+          .toList() ?? [],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-
-    data["count"] = count;
-    data["items"] = items.map((e) => e.toJson()).toList();
-
-    return data;
+    return {
+      'count': count,
+      'items': items.map((e) => e.toJson()).toList(),
+    };
   }
-
 }

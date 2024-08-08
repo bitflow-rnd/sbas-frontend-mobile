@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/palette.dart';
-
-import 'package:sbas/features/alarm/provider/alarm_screen_presenter.dart';
+import 'package:sbas/features/alarm/provider/alarm_provider.dart';
 
 class AlarmPage extends ConsumerWidget {
   const AlarmPage({
@@ -18,7 +16,7 @@ class AlarmPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<String> dropdownList = ['최근1개월', '최근3개월', '최근1년'];
     String selectedDropdown = '최근1개월';
-    ref.invalidate(alarmScreenProvider);
+    final alarms = ref.watch(alarmsProvider);
 
     return Scaffold(
       backgroundColor: Palette.dividerGrey,
@@ -69,8 +67,8 @@ class AlarmPage extends ConsumerWidget {
         ],
       ),
       body: GestureDetector(
-        onTap: () => ref.invalidate(alarmScreenProvider),
-        child: ref.watch(alarmScreenProvider).when(
+        // onTap: () => ref.invalidate(),
+        child: alarms.when(
               loading: () => const SBASProgressIndicator(),
               error: (error, stackTrace) => Center(
                 child: Text(
@@ -80,9 +78,7 @@ class AlarmPage extends ConsumerWidget {
                   ),
                 ),
               ),
-              data: (list) => list.isEmpty
-                  ? _emptyPage()
-                  : SingleChildScrollView(
+              data: (list) => SingleChildScrollView(
                       child: IntrinsicHeight(
                         child: Stack(children: [
                           Padding(
@@ -99,12 +95,12 @@ class AlarmPage extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               dateFragment(
-                                  "${list[0].year}년 ${list[0].month}월"),
-                              for (var alarmItem in list)
+                                  "${list.items[0].rgstDttm}월"),
+                              for (var alarmItem in list.items)
                                 alarmItemCard(
-                                  title: alarmItem.title ?? '',
-                                  body: alarmItem.body ?? '',
-                                  dateTime: alarmItem.dateTime!,
+                                  title: alarmItem.title,
+                                  body: alarmItem.detail,
+                                  dateTime: alarmItem.rgstDttm,
                                 ),
                             ],
                           ),

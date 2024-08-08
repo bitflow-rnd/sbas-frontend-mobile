@@ -11,8 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/observer_widget.dart';
-import 'package:sbas/features/alarm/alarm_item_database_service.dart';
-import 'package:sbas/features/alarm/model/alarm_item_model.dart';
 import 'package:sbas/firebase_options.dart';
 import 'package:sbas/router.dart';
 import 'package:sbas/util.dart';
@@ -40,16 +38,16 @@ _showLocalMessage(RemoteMessage message) async {
     var dateTime = DateFormat('MM.d (EE) aa h시 mm분', 'ko').format(now);
     var userId = prefs.getString("id");
 
-    var alarmItemModel = AlarmItemModel(
-      title: notification.title, body: notification.body,
-      year: now.year, month: now.month,
-      dateTime: dateTime, userId: userId,
-      receivedTime: now.toString(),
-    );
+    // var alarmItemModel = AlarmItemModel(
+    //   title: notification.title, detail: notification.body,
+    //   year: now.year, month: now.month,
+    //   dateTime: dateTime, userId: userId,
+    //   receivedTime: now.toString(),
+    // );
 
-    AlarmItemDatabaseService()
-        .databaseConfig()
-        .then((value) => AlarmItemDatabaseService().insert(alarmItemModel));
+    // AlarmItemDatabaseService()
+    //     .databaseConfig()
+    //     .then((value) => AlarmItemDatabaseService().insert(alarmItemModel));
 
     _flutterLocalNotificationsPlugin.show(
       notification.hashCode,
