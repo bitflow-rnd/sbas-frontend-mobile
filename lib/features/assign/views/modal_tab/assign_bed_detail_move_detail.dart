@@ -15,7 +15,6 @@ class AssignBedMoveDetialInfo extends ConsumerWidget {
     required this.transferInfo,
   });
   final String? type;
-  final String message = "메시지";
   final OriginInfoModel transferInfo;
   final String? ptId;
   @override
@@ -99,20 +98,6 @@ class AssignBedMoveDetialInfo extends ConsumerWidget {
                 ],
               ),
             ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    message,
-                    style: CTS(color: Palette.mainColor, fontSize: 12),
-                    maxLines: 22,
-                  ),
-                )
-              ],
-            ),
-          ),
           Gaps.v32,
         ],
       )),
