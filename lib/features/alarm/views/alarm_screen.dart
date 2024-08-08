@@ -18,6 +18,8 @@ class AlarmPage extends ConsumerWidget {
     String selectedDropdown = '최근1개월';
     final alarms = ref.watch(alarmsProvider);
 
+    ref.read(alarmProvider).readAlarms();
+
     return Scaffold(
       backgroundColor: Palette.dividerGrey,
       appBar: SBASAppBar(
