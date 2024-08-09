@@ -7,7 +7,8 @@ class AlarmItemModel {
   final String receiverId;
   final String receiverName;
   final bool isRead;
-  final String rgstDttm;
+  final String date;
+  final String time;
 
   AlarmItemModel({
     required this.alarmId,
@@ -18,10 +19,18 @@ class AlarmItemModel {
     required this.receiverId,
     required this.receiverName,
     required this.isRead,
-    required this.rgstDttm,
+    required this.date,
+    required this.time,
   });
 
   factory AlarmItemModel.fromJson(Map<String, dynamic> json) {
+    List<String> parts = json['rgstDttm'].split(' ');
+
+    String date = "${parts[0]} ${parts[1]} ${parts[2]}";
+
+    List<String> timeParts = parts[3].split(':');
+    String time = '${timeParts[0]}시 ${timeParts[1]}분 ${timeParts[2]}초';
+
     return AlarmItemModel(
       alarmId: json['alarmId'],
       title: json['title'],
@@ -31,23 +40,24 @@ class AlarmItemModel {
       receiverId: json['receiverId'],
       receiverName: json['receiverName'],
       isRead: json['isRead'],
-      rgstDttm: json['rgstDttm'],
+      date: date,
+      time: time,
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'alarmId': alarmId,
-      'title': title,
-      'detail': detail,
-      'senderId': senderId,
-      'senderName': senderName,
-      'receiverId': receiverId,
-      'receiverName': receiverName,
-      'isRead': isRead,
-      'rgstDttm': rgstDttm,
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'alarmId': alarmId,
+  //     'title': title,
+  //     'detail': detail,
+  //     'senderId': senderId,
+  //     'senderName': senderName,
+  //     'receiverId': receiverId,
+  //     'receiverName': receiverName,
+  //     'isRead': isRead,
+  //     'rgstDttm': rgstDttm,
+  //   };
+  // }
 }
 
 class AlarmListModel {
@@ -68,10 +78,10 @@ class AlarmListModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'count': count,
-      'items': items.map((e) => e.toJson()).toList(),
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'count': count,
+  //     'items': items.map((e) => e.toJson()).toList(),
+  //   };
+  // }
 }

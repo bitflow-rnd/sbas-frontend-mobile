@@ -5,18 +5,31 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/alarm/model/alarm_item_model.dart';
 import 'package:sbas/features/alarm/provider/alarm_provider.dart';
 import 'package:sbas/features/alarm/views/widgets/alarm_item_card_widget.dart';
 
-class AlarmPage extends ConsumerWidget {
-  const AlarmPage({
-    super.key,
-  });
+class AlarmPage extends ConsumerStatefulWidget {
+  const AlarmPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    List<String> dropdownList = ['최근1개월', '최근3개월', '최근1년'];
-    String selectedDropdown = '최근1개월';
+  _AlarmPageState createState() => _AlarmPageState();
+}
+
+class _AlarmPageState extends ConsumerState<AlarmPage> {
+  List<String> dropdownList = ['최근1개월', '최근3개월', '최근1년'];
+  String selectedDropdown = '최근1개월';
+  bool _isReadAlarmsCalled = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // 페이지가 다시 보여질 때마다 데이터를 새로 고침
+    ref.invalidate(alarmsProvider);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final alarms = ref.watch(alarmsProvider);
 
     return Scaffold(
@@ -59,91 +72,94 @@ class AlarmPage extends ConsumerWidget {
                 );
               }).toList(),
               onChanged: (dynamic value) {
-                // setState(() {
-                //   selectedDropdown = value;
-                // });
+                setState(() {
+                  selectedDropdown = value;
+                });
+                // 드롭다운 값이 변경될 때마다 데이터 새로고침
+                ref.invalidate(alarmsProvider);
               },
             ),
           ),
         ],
       ),
       body: GestureDetector(
-        // onTap: () => ref.invalidate(),
         child: alarms.when(
-              loading: () => const SBASProgressIndicator(),
-              error: (error, stackTrace) => Center(
-                child: Text(
-                  error.toString(),
-                  style: const TextStyle(
-                    color: Palette.mainColor,
-                  ),
-                ),
+          loading: () => const SBASProgressIndicator(),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              error.toString(),
+              style: const TextStyle(
+                color: Palette.mainColor,
               ),
-              data: (list) => SingleChildScrollView(
-                      child: IntrinsicHeight(
-                        child: Stack(children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 14.w),
-                            child: Column(children: [
-                              Expanded(
-                                child: CustomPaint(
-                                    painter: DashedLineVerticalPainter(),
-                                    size: const Size(1, double.infinity)),
-                              ),
-                            ]),
+            ),
+          ),
+          data: (list) {
+            // 알림 데이터를 불러온 후 읽음 처리가 한 번만 호출되도록 합니다.
+            if (!_isReadAlarmsCalled) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ref.read(alarmProvider).readAlarms();
+                _isReadAlarmsCalled = true;
+              });
+            }
+
+            final groupedAlarms = groupAlarmsByData(list.items);
+
+            return SingleChildScrollView(
+              child: IntrinsicHeight(
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 14.w),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: CustomPaint(
+                              painter: DashedLineVerticalPainter(),
+                              size: const Size(1, double.infinity),
+                            ),
                           ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var date in groupedAlarms.keys)
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              dateFragment(
-                                  "${list.items[0].rgstDttm}월"),
-                              for (var alarmItem in list.items)
-                                AlarmItemCard(
-                                  title: alarmItem.title,
-                                  body: alarmItem.detail,
-                                  dateTime: alarmItem.rgstDttm,
+                              dateFragment(date), // 날짜 헤더
+                              for (var alarmItem in groupedAlarms[date]!)
+                                alarmItemCard(
+                                  item: alarmItem,
                                 ),
                             ],
                           ),
-                        ]),
-                      ),
+                      ],
                     ),
-            ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget _emptyPage() {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/home/warn_icon.png',
-                width: 100.w,
-                // height: 200.h,
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Text(
-                '수신된 알림이 없습니다.',
-                style: CTS.medium(
-                  fontSize: 15,
-                  color: Palette.greyText,
-                ),
-              ),
-              SizedBox(
-                height: 100.h,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+  Map<String, List<AlarmItemModel>> groupAlarmsByData(
+      List<AlarmItemModel> alarms) {
+    Map<String, List<AlarmItemModel>> groupedAlarms = {};
+
+    for (var alarm in alarms) {
+      if (groupedAlarms.containsKey(alarm.date)) {
+        groupedAlarms[alarm.date]!.add(alarm);
+      } else {
+        groupedAlarms[alarm.date] = [alarm];
+      }
+    }
+
+    return groupedAlarms;
   }
 
   Widget dateFragment(String date) {
@@ -179,7 +195,6 @@ class AlarmPage extends ConsumerWidget {
       ),
     );
   }
-
 }
 
 class DashedLineVerticalPainter extends CustomPainter {

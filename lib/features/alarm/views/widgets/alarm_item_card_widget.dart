@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/alarm/model/alarm_item_model.dart';
 
-Widget AlarmItemCard({
-  required String title,
-  required String body,
-  required String dateTime,
+Widget alarmItemCard({
+  required AlarmItemModel item,
 }) {
   return Container(
     margin: EdgeInsets.symmetric(vertical: 6.h),
@@ -20,7 +19,7 @@ Widget AlarmItemCard({
               padding: EdgeInsets.only(
                   left: 12.w, top: 16.h, bottom: 16.h, right: 12.w),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: item.isRead ? Colors.white : const Color(0xFF4caff1).withOpacity(0.16),
                 borderRadius: BorderRadius.all(Radius.circular(12.r)),
                 boxShadow: const [
                   BoxShadow(
@@ -37,7 +36,7 @@ Widget AlarmItemCard({
                   Row(
                     children: [
                       Text(
-                        dateTime,
+                        '${item.time} ${item.isRead}',
                         style: CTS.medium(
                           color: Palette.greyText,
                           fontSize: 12,
@@ -48,7 +47,7 @@ Widget AlarmItemCard({
                   ),
                   SizedBox(height: 8.h),
                   Text(
-                    '$title $body',
+                    '${item.title} ${item.detail}',
                     style: CTS(
                       color: Colors.black,
                       fontSize: 13,
