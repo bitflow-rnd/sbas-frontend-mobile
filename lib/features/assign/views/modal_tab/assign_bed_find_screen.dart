@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
@@ -14,8 +13,11 @@ import 'package:sbas/features/lookup/models/patient_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
+import '../../presenters/available_hospital_presenter.dart';
+
 final searchDetailIsOpenProvider = StateProvider<bool>((ref) => false);
 final selectedItemsProvider = StateProvider<List<String>>((ref) => []);
+final searchHospListProvider = StateProvider<AvailableHospitalModel>((ref) => AvailableHospitalModel(count: 0, items: []));
 
 class AssignBedFindScreen extends ConsumerStatefulWidget {
   const AssignBedFindScreen({
@@ -37,6 +39,8 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
   Widget build(BuildContext context) {
     final isSearchDetailOpen = ref.watch(searchDetailIsOpenProvider);
     final selectedHospList = ref.watch(selectedItemsProvider);
+    var searchHospList = ref.watch(searchHospListProvider);
+
     return Scaffold(
         backgroundColor: Palette.white,
         appBar: const SBASAppBar(
@@ -100,7 +104,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                       children: [
                         Text('환자유형', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                         Gaps.h8,
-                        Expanded(child: rowMultiSelectButton(['분만', '투석', '소아', '요양병원', '정신질환자', '음압수술'], ['임산부'])),
+                        Expanded(child: rowMultiSelectButton(ptTypeList, ptTypeCdList)),
                       ],
                     ),
                     ref.watch(searchDetailIsOpenProvider.notifier).state
@@ -113,7 +117,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                 children: [
                                   Text('중증도', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                                   Gaps.h20,
-                                  Expanded(child: rowMultiSelectButton(['중환자실', '중환자실내음압격리', '중증', '준중증', '중등증'], ['어린이'])),
+                                  Expanded(child: rowMultiSelectButton(severityTypeList, svrtTypeCdList)),
                                 ],
                               ),
                               Gaps.v8,
@@ -123,7 +127,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                 children: [
                                   Text('병상유형', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(child: rowMultiSelectButton(['코호트격리', '음압격리', '일반격리', '소아음압격리', '소아일반격리'], ['고혈압', '관절염'])),
+                                  Expanded(child: rowMultiSelectButton(bedTypeList, reqBedTypeCdList)),
                                 ],
                               ),
                               Gaps.v8,
@@ -133,10 +137,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                 children: [
                                   Text('장비정보', style: CTS.medium(color: Palette.greyText, fontSize: 13)),
                                   Gaps.h8,
-                                  Expanded(child: rowMultiSelectButton([
-                                    '인공호흡기', '인공호흡기(조산아)', '인큐베이터', 'ECMO', '고압산소',
-                                    'CT', 'MRI', '혈관촬영기', '중심체온조절유도기',
-                                  ], ['준등중'])),
+                                  Expanded(child: rowMultiSelectButton(equipmentList, equipment)),
                                 ],
                               ),
                               Gaps.v4,
@@ -147,7 +148,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          splashRadius: 10.r,
+                          splashRadius: 14.r,
                           padding: EdgeInsets.zero, // 패딩 설정
                           constraints: const BoxConstraints(),
                           onPressed: () {
@@ -173,7 +174,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                           TextSpan(
                             children: [
                               TextSpan(text: '총', style: CTS.bold(color: Colors.black)),
-                              TextSpan(text: ' ${widget.hospList.count}', style: CTS.bold(color: Palette.mainColor)),
+                              TextSpan(text: ' ${searchHospList.count}', style: CTS.bold(color: Palette.mainColor)),
                               TextSpan(text: '개', style: CTS.bold(color: Colors.black)),
                             ],
                           ),
@@ -195,7 +196,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      for (var i = 0; i < widget.hospList.count!; i++)
+                      for (var i = 0; i < searchHospList.count!; i++)
                         Container(
                           // margin: EdgeInsets.only(top: 8.h, left: 12.w, right: 12.w),
                           margin: EdgeInsets.only(top: 8.h),
@@ -214,7 +215,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                           ),
                           child: GestureDetector(
                             onTap: () {
-                              String currentHospId = widget.hospList.items[i].hospId!;
+                              String currentHospId = searchHospList.items[i].hospId!;
                               bool hasItem = selectedHospList.contains(currentHospId);
                               if (hasItem) {
                                 setState(() {
@@ -250,8 +251,8 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                       ],
                                     ),
                                     Text(
-                                      "${widget.hospList.items[i].gnbdIcu! + widget.hospList.items[i].npidIcu! +
-                                          widget.hospList.items[i].gnbdSvrt!}", //가용병상
+                                      "${searchHospList.items[i].gnbdIcu! + searchHospList.items[i].npidIcu! +
+                                          searchHospList.items[i].gnbdSvrt!}", //가용병상
                                       style: CTS.medium(
                                         color: Palette.black,
                                         fontSize: 9.sp,
@@ -272,7 +273,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                             child: SingleChildScrollView(
                                               scrollDirection: Axis.horizontal,
                                               child: Text(
-                                                '${widget.hospList.items[i].hospNm}',
+                                                '${searchHospList.items[i].hospNm}',
                                                 style: CTS.medium(
                                                   color: Colors.black,
                                                   fontSize: 15.sp,
@@ -309,7 +310,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                           child: Row(
                                             children: [
                                               Text(
-                                                '${widget.hospList.items[i].addr}',
+                                                '${searchHospList.items[i].addr}',
                                                 style: CTS(
                                                   color: Palette.greyText_80,
                                                   fontSize: 12,
@@ -324,7 +325,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                         scrollDirection: Axis.horizontal,
                                         child: Row(
                                             children: List.generate(
-                                          widget.hospList.items[i].tagList?.length ?? 0,
+                                              searchHospList.items[i].tagList?.length ?? 0,
                                           (index) => Container(
                                             margin: EdgeInsets.only(right: 4.w),
                                             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
@@ -333,7 +334,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                               borderRadius: BorderRadius.circular(4),
                                             ),
                                             child: Text(
-                                              '#${widget.hospList.items[i].tagList![index]}',
+                                              '#${searchHospList.items[i].tagList![index]}',
                                               style: CTS(
                                                 color: Palette.greyText_80,
                                                 fontSize: 12,
@@ -385,7 +386,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                     Row(
                                       children: [
                                         Icon(Icons.location_on_sharp, color: Palette.mainColor, size: 20.h),
-                                        Text('${widget.hospList.items[i].distance}', style: CTS(color: Palette.mainColor, fontSize: 12)),
+                                        Text('${searchHospList.items[i].distance}', style: CTS(color: Palette.mainColor, fontSize: 12)),
                                       ],
                                     ),
                                     Gaps.v8,
@@ -393,14 +394,14 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                         height: 24.h,
                                         width: 24.h,
                                         decoration: BoxDecoration(
-                                            color: ref.watch(selectedItemsProvider.notifier).state.contains(widget.hospList.items[i].hospId!)
+                                            color: ref.watch(selectedItemsProvider.notifier).state.contains(searchHospList.items[i].hospId!)
                                                 ? Palette.mainColor
                                                 : Palette.white,
                                             borderRadius: BorderRadius.circular(4.r),
-                                            border: !ref.watch(selectedItemsProvider.notifier).state.contains(widget.hospList.items[i].hospId!)
+                                            border: !ref.watch(selectedItemsProvider.notifier).state.contains(searchHospList.items[i].hospId!)
                                                 ? Border.all(color: Palette.greyText_20, width: 1)
                                                 : null),
-                                        child: ref.watch(selectedItemsProvider.notifier).state.contains(widget.hospList.items[i].hospId!)
+                                        child: ref.watch(selectedItemsProvider.notifier).state.contains(searchHospList.items[i].hospId!)
                                             ? Icon(
                                                 Icons.check,
                                                 color: Palette.white,
@@ -521,34 +522,62 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
     );
   }
 
-  Widget rowMultiSelectButton(list, selectList) {
+  Widget rowMultiSelectButton(List<Map<String, String>> list, List<String> selectList) {
     return Row(
       children: [
         Expanded(
-          child: Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            direction: Axis.horizontal,
-            children: [
-              for (var i in list)
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 12.w),
-                  decoration: BoxDecoration(
-                    color: !selectList.contains(i) ? Colors.white : Palette.mainColor,
-                    border: Border.all(
-                      color: Palette.greyText_20,
-                      width: 1,
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Wrap(
+                spacing: 8.w,
+                runSpacing: 8.h,
+                direction: Axis.horizontal,
+                children: [
+                  for (var item in list)
+                    GestureDetector(
+                    onTap: () {
+                      if (selectList.contains(item['value'])) {
+                        setState(() {
+                          selectList.remove(item['value']);
+                          if (ptTypeCdList.isEmpty && reqBedTypeCdList.isEmpty && svrtTypeCdList.isEmpty && equipment.isEmpty) {
+                            ref.watch(searchHospListProvider.notifier).state = widget.hospList;
+                          }
+                        });
+                      } else {
+                        setState(() {
+                          selectList.add(item['value']!);
+                          ref.watch(availableHospitalProvider.notifier).getHospList(widget.patient.ptId!, widget.bdasSeq!,
+                            ptTypeCdList, reqBedTypeCdList, svrtTypeCdList, equipment,
+                          ).then((value) => ref.watch(searchHospListProvider.notifier).state = value);
+                        });
+                      }
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5.h, horizontal: 12.w),
+                      decoration: BoxDecoration(
+                        color: !selectList.contains(item['value'])
+                            ? Colors.white
+                            : Palette.mainColor,
+                        border: Border.all(
+                          color: Palette.greyText_20,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(13.5.r),
+                      ),
+                      child: Text(item['name']!,
+                          style: CTS.bold(
+                            fontSize: 11,
+                            color: selectList.contains(item['value'])
+                                ? Palette.white
+                                : Palette.greyText_60,
+                          )),
                     ),
-                    borderRadius: BorderRadius.circular(13.5.r),
-                  ),
-                  child: Text(i,
-                      style: CTS.bold(
-                        fontSize: 11,
-                        color: selectList.contains(i) ? Palette.white : Palette.greyText_60,
-                      )),
-                )
-            ],
-          ),
+                  )
+                ],
+              );
+            },
+          )
         ),
       ],
     );
@@ -597,4 +626,46 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
           horizontal: 12.w,
         ),
       );
+
+  List<Map<String, String>> bedTypeList = [
+    { 'name': '코호트격리', 'value': 'cohtBed' },
+    { 'name': '음압격리', 'value': 'emrgncyNgtvIsltnBed' },
+    { 'name': '일반격리', 'value': 'emrgncyNrmlIsltnBed' },
+    { 'name': '소아음압격리', 'value': 'ngtvIsltnChild' },
+    { 'name': '소아일반격리', 'value': 'nrmlIsltnChild' },
+  ];
+
+  List<Map<String, String>> severityTypeList = [
+    { 'name': '중환자실', 'value': 'gnbdIcu' },
+    { 'name': '중환자실내음압격리', 'value': 'npidIcu' },
+    { 'name': '중증', 'value': 'gnbdSvrt' },
+    { 'name': '준중증', 'value': 'gnbdSmsv' },
+    { 'name': '중등증', 'value': 'gnbdModr' },
+  ];
+
+  List<Map<String, String>> ptTypeList = [
+    { 'name': '분만', 'value': 'childBirthMed' },
+    { 'name': '투석', 'value': 'dialysisMed' },
+    { 'name': '소아', 'value': 'childMed' },
+    { 'name': '요양병원', 'value': 'nursingHospitalMed' },
+    { 'name': '정신질환자', 'value': 'mentalPatientMed' },
+    { 'name': '음압수술', 'value': 'negativePressureRoomYn' },
+  ];
+
+  List<Map<String, String>> equipmentList = [
+    { 'name': '인공호흡기', 'value': 'ventilator' },
+    { 'name': '인공호흡기(조산아)', 'value': 'ventilatorPreemie' },
+    { 'name': '인큐베이터', 'value': 'incubator' },
+    { 'name': 'ECMO', 'value': 'ecmo' },
+    { 'name': '고압산소', 'value': 'highPressureOxygen' },
+    { 'name': 'CT', 'value': 'ct' },
+    { 'name': 'MRI', 'value': 'mri' },
+    { 'name': '혈관촬영기', 'value': 'bloodVesselImaging' },
+    { 'name': '중심체온조절유도기', 'value': 'bodyTemperatureControl' },
+  ];
+
+  List<String> ptTypeCdList = [];
+  List<String> reqBedTypeCdList = [];
+  List<String> svrtTypeCdList = [];
+  List<String> equipment = [];
 }

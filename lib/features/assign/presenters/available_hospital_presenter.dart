@@ -17,6 +17,28 @@ class AvailableHospitalPresenter extends AsyncNotifier {
     return AvailableHospitalModel(count: 0, items: []);
   }
 
+  Future<AvailableHospitalModel> getHospList(
+    String ptId, int bdasSeq,
+    List<String> ptTypeCdList,
+    List<String> reqBedTypeCdList,
+    List<String> svrtTypeCdList,
+    List<String> equipmentList,
+  ) async {
+    String? ptTypeCd = ptTypeCdList.isNotEmpty ? ptTypeCdList.join(",") : null;
+    String? reqBedTypeCd = reqBedTypeCdList.isNotEmpty ? reqBedTypeCdList.join(",") : null;
+    String? svrtTypeCd = svrtTypeCdList.isNotEmpty ? svrtTypeCdList.join(",") : null;
+    String? equipment = equipmentList.isNotEmpty ? equipmentList.join(",") : null;
+
+    Map<String, dynamic> data = {
+      'ptTypeCd': ptTypeCd,
+      'reqBedTypeCd': reqBedTypeCd,
+      'svrtTypeCd': svrtTypeCd,
+      'equipment': equipment,
+    };
+
+    return await _assignRepository.searchAvalHospList(ptId, bdasSeq, data);
+  }
+
   late final AssignRepository _assignRepository;
 }
 
