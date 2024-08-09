@@ -39,7 +39,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
   Widget build(BuildContext context) {
     final isSearchDetailOpen = ref.watch(searchDetailIsOpenProvider);
     final selectedHospList = ref.watch(selectedItemsProvider);
-    var searchHospList = ref.watch(searchHospListProvider);
+    final searchHospList = ref.watch(searchHospListProvider);
 
     return Scaffold(
         backgroundColor: Palette.white,

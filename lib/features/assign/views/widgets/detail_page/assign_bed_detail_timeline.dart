@@ -258,20 +258,22 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
 
                         Navigator.pop(context);
                       }
-                    }
-                    //원외배정
-                    else {
+                    } else {
+                      //원외배정
                       await ref
                           .watch(availableHospitalProvider.notifier)
                           .getAsync(patient.ptId, assignItem.bdasSeq)
-                          .then((value) => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AssignBedFindScreen(
-                                    patient: patient,
-                                    bdasSeq: assignItem.bdasSeq,
-                                    hospList: value),
-                              ))); //병상요청시 가능한 병원 목록 조회
+                          .then((value) => {
+                                ref.watch(searchHospListProvider.notifier).state = value,
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AssignBedFindScreen(
+                                          patient: patient,
+                                          bdasSeq: assignItem.bdasSeq,
+                                          hospList: value),
+                                    ))
+                              }); //병상요청시 가능한 병원 목록 조회
                     }
                   }
                 })
