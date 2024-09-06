@@ -182,7 +182,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                             color: Colors.black,
                           ),
                         ),
-                        Gaps.v24,
+                        Gaps.v16,
                         // dropdownButton(
                         //   ['최신순', '등록순'],
                         //   '최신순',
@@ -200,7 +200,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                         Container(
                           // margin: EdgeInsets.only(top: 8.h, left: 12.w, right: 12.w),
                           margin: EdgeInsets.only(top: 8.h),
-                          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
@@ -233,34 +233,6 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Image.asset("assets/message/hospital_icon.png", width: 36.w, height: 36.h),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "가용병실",
-                                          style: CTS.medium(
-                                            color: Palette.black,
-                                            fontSize: 9.sp,
-                                          ),
-                                        ).c,
-                                      ],
-                                    ),
-                                    Text(
-                                      "${searchHospList.items[i].gnbdIcu! + searchHospList.items[i].npidIcu! +
-                                          searchHospList.items[i].gnbdSvrt!}", //가용병상
-                                      style: CTS.medium(
-                                        color: Palette.black,
-                                        fontSize: 9.sp,
-                                      ),
-                                    ).c,
-                                  ],
-                                ),
-                                Gaps.h8,
                                 Expanded(
                                   // flex: 6,
                                   child: Column(
@@ -281,57 +253,135 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                               ),
                                             ),
                                           ),
-                                          if (i < 3)
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                                                  decoration: BoxDecoration(
-                                                    color: Palette.red.withOpacity(0.12),
-                                                    borderRadius: BorderRadius.circular(11),
-                                                  ),
-                                                  child: Text(
-                                                    'AI추천',
-                                                    style: CTS.medium(
-                                                      color: Palette.red,
-                                                      fontSize: 10.sp,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
                                         ],
                                       ),
-                                      // Gaps.v8,
                                       SizedBox(
-                                        height: 30.h,
+                                        height: 40.h,
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,
-                                          child: Row(
+                                          child: Column(
                                             children: [
-                                              Text(
-                                                '${searchHospList.items[i].addr}',
-                                                style: CTS(
-                                                  color: Palette.greyText_80,
-                                                  fontSize: 12,
-                                                ),
+                                              Gaps.v8,
+                                              Row(
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                        severityTypeList[0]['name']!,
+                                                        style: CTS.medium(
+                                                          color: Palette.greyText_80,
+                                                          fontSize: 12,
+                                                        ),
+                                                        softWrap: true,
+                                                      ),
+                                                      Text(
+                                                        '${searchHospList.items[i].gnbdIcu}',
+                                                        style: CTS.medium(
+                                                          color: Palette.googleColor,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Gaps.h8,
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                        severityTypeList[1]['name']!,
+                                                        style: CTS.medium(
+                                                          color: Palette.greyText_80,
+                                                          fontSize: 12,
+                                                        ),
+                                                        softWrap: true,
+                                                      ),
+                                                      Text(
+                                                        '${searchHospList.items[i].npidIcu}',
+                                                        style: CTS.medium(
+                                                          color: Palette.googleColor,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Gaps.h8,
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                        severityTypeList[2]['name']!,
+                                                        style: CTS.medium(
+                                                          color: Palette.greyText_80,
+                                                          fontSize: 12,
+                                                        ),
+                                                        softWrap: true,
+                                                      ),
+                                                      Text(
+                                                        '${searchHospList.items[i].gnbdSvrt}',
+                                                        style: CTS.medium(
+                                                          color: Palette.googleColor,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Gaps.h8,
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                        severityTypeList[3]['name']!,
+                                                        style: CTS.medium(
+                                                          color: Palette.greyText_80,
+                                                          fontSize: 12,
+                                                        ),
+                                                        softWrap: true,
+                                                      ),
+                                                      Text(
+                                                        '${searchHospList.items[i].gnbdSmsv}',
+                                                        style: CTS.medium(
+                                                          color: Palette.googleColor,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Gaps.h8,
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                        severityTypeList[4]['name']!,
+                                                        style: CTS.medium(
+                                                          color: Palette.greyText_80,
+                                                          fontSize: 12,
+                                                        ),
+                                                        softWrap: true,
+                                                      ),
+                                                      Text(
+                                                        '${searchHospList.items[i].gnbdModr}',
+                                                        style: CTS.medium(
+                                                          color: Palette.googleColor,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
                                         ),
                                       ),
-                                      Gaps.v4,
                                       SingleChildScrollView(
                                         scrollDirection: Axis.horizontal,
                                         child: Row(
                                             children: List.generate(
-                                              searchHospList.items[i].tagList?.length ?? 0,
+                                          searchHospList.items[i].tagList?.length ?? 0,
                                           (index) => Container(
                                             margin: EdgeInsets.only(right: 4.w),
-                                            padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 2.h, horizontal: 6.w),
                                             decoration: BoxDecoration(
                                               color: Palette.greyText_20,
-                                              borderRadius: BorderRadius.circular(4),
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
                                             ),
                                             child: Text(
                                               '#${searchHospList.items[i].tagList![index]}',
@@ -341,40 +391,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                               ),
                                             ),
                                           ),
-                                        )
-
-                                            // Container(
-                                            //   margin: EdgeInsets.only(right: 4.w),
-                                            //   padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
-                                            //   decoration: BoxDecoration(
-                                            //     color: Palette.greyText_20,
-                                            //     borderRadius: BorderRadius.circular(4),
-                                            //   ),
-                                            //   child: Text(
-                                            //     '#임산부',
-                                            //     style: CTS(
-                                            //       color: Palette.greyText_80,
-                                            //       fontSize: 12,
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                            // Container(
-                                            //   margin: EdgeInsets.only(right: 4.w),
-                                            //   padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
-                                            //   decoration: BoxDecoration(
-                                            //     color: Palette.greyText_20,
-                                            //     borderRadius: BorderRadius.circular(4),
-                                            //   ),
-                                            //   child: Text(
-                                            //     '#음압격리',
-                                            //     style: CTS(
-                                            //       color: Palette.greyText_80,
-                                            //       fontSize: 12,
-                                            //     ),
-                                            //   ),
-                                            // ),
-
-                                            ),
+                                        )),
                                       )
                                     ],
                                   ),

@@ -35,6 +35,8 @@ class AvailableHospital {
   int? gnbdIcu;
   int? npidIcu;
   int? gnbdSvrt;
+  int? gnbdSmsv;
+  int? gnbdModr;
   List<String>? tagList;
 
   AvailableHospital({
@@ -45,6 +47,8 @@ class AvailableHospital {
     this.gnbdIcu,
     this.npidIcu,
     this.gnbdSvrt,
+    this.gnbdSmsv,
+    this.gnbdModr,
     this.tagList,
   });
   AvailableHospital.fromJson(Map<String, dynamic> json) {
@@ -72,6 +76,12 @@ class AvailableHospital {
     if (json["gnbdSvrt"] is int) {
       gnbdSvrt = json["gnbdSvrt"];
     }
+    if (json["gnbdSmsv"] is int) {
+      gnbdSmsv = json["gnbdSmsv"];
+    }
+    if (json["gnbdModr"] is int) {
+      gnbdModr = json["gnbdModr"];
+    }
     if (json["tagList"] is List) {
       tagList = json["tagList"] == null ? null : List<String>.from(json["tagList"]);
     }
@@ -87,6 +97,8 @@ class AvailableHospital {
     data["gnbdIcu"] = gnbdIcu;
     data["npidIcu"] = npidIcu;
     data["gnbdSvrt"] = gnbdSvrt;
+    data["gnbdSmsv"] = gnbdSmsv;
+    data["gnbdModr"] = gnbdModr;
 
     if (tagList != null) {
       data["tagList"] = tagList;
