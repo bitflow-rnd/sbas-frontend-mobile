@@ -14,6 +14,7 @@ import 'package:sbas/constants/palette.dart';
 
 class PatientRegInfoV2 extends ConsumerStatefulWidget {
   PatientRegInfoV2({super.key});
+
   final list = [
     '환자이름',
     '주민등록번호',
@@ -33,6 +34,7 @@ class PatientRegInfoV2 extends ConsumerStatefulWidget {
     '대한민국',
     '기타',
   ];
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       PatientRegInfoV2State();
@@ -64,12 +66,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                   for (int i = 0; i < widget.list.length; i++)
                     Column(
                       children: [
-                        i != 3
-                            ? getSubTitlt(
-                                widget.list[i],
-                                i > 5,
-                              )
-                            : Container(),
+                        i != 3 ? getSubTitlt(widget.list[i], i > 5,) : Container(),
                         Gaps.v4,
                         if (i == 2) _addrInput(vm),
                         if (i == 3) _isAlive(vm),
@@ -77,21 +74,17 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                         if (i == 4 && report.natiCd != 'NATI0001') Gaps.v8,
                         if (i != 1 && i != 3 && i != 4)
                           TextFormField(
-                            scrollPadding: EdgeInsets.only(bottom: 150),
+                            scrollPadding: const EdgeInsets.only(bottom: 150),
                             decoration: getInputDecoration(
-                              i == 8
-                                  ? '직업을 알 수 있는 경우 기재'
-                                  : i == 2
-                                      ? '나머지 ${widget.list[i]} 입력'
-                                      : '${widget.list[i]} 입력',
+                              i == 8 ? '직업을 알 수 있는 경우 기재'
+                                  : i == 2 ? '나머지 ${widget.list[i]} 입력'
+                                  : '${widget.list[i]} 입력',
                             ),
                             controller: TextEditingController(
                               text: vm.getTextEditingController(i, report),
                             )..selection = TextSelection.fromPosition(
                                 TextPosition(
-                                    offset: vm
-                                        .getTextEditingController(i, report)
-                                        .length)),
+                                    offset: vm.getTextEditingController(i, report).length)),
                             onSaved: (newValue) =>
                                 vm.setTextEditingController(i, newValue),
                             onChanged: (value) =>
@@ -232,6 +225,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           ),
         ],
       );
+
   Widget _inputGender(PatientRegisterPresenter vm) => Column(
         children: [
           getSubTitlt('성별', true),
@@ -257,6 +251,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           ),
         ],
       );
+
   Widget _inputAge(PatientRegisterPresenter vm) => Column(
         children: [
           getSubTitlt('나이', true),
@@ -292,6 +287,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           ),
         ],
       );
+
   Widget _addrInput(PatientRegisterPresenter vm) => Column(
         children: [
           Row(
@@ -340,6 +336,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           Gaps.v10
         ],
       );
+
   Widget _isDeathRow(PatientRegisterPresenter vm) => Stack(
         children: [
           Container(
@@ -410,6 +407,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           ),
         ],
       );
+
   Widget _isAlive(PatientRegisterPresenter vm) => Column(
         children: [
           Row(
@@ -461,17 +459,11 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                       child: Container(
                         decoration: BoxDecoration(
                             color: widget.nationSel[
-                                        vm.patientInfoModel.natiCd == "NATI0001"
-                                            ? 0
-                                            : 1] ==
-                                    i
+                                        vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i
                                 ? const Color(0xff538ef5)
                                 : Colors.transparent,
                             borderRadius: widget.nationSel[
-                                        vm.patientInfoModel.natiCd == "NATI0001"
-                                            ? 0
-                                            : 1] ==
-                                    i
+                                        vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i
                                 ? BorderRadius.circular(6)
                                 : null),
                         padding: EdgeInsets.symmetric(
@@ -480,11 +472,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                             style: CTS.bold(
                               fontSize: 11,
                               color: widget.nationSel[
-                                          vm.patientInfoModel.natiCd ==
-                                                  "NATI0001"
-                                              ? 0
-                                              : 1] ==
-                                      i
+                                vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i
                                   ? Palette.white
                                   : Palette.greyText_60,
                             )),
@@ -505,6 +493,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           ),
         ],
       );
+
   Widget _nation(PatientRegInfoModel report, PatientRegisterPresenter vm) =>
       Column(
         children: [
