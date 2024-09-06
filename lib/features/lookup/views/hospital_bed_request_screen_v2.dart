@@ -401,10 +401,10 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     var uploadRes = await ref
                         .read(patientRegProvider.notifier)
                         .uploadImage(patientImage);
-                    if (uploadRes)
-                      ref
-                          .read(orderOfRequestProvider.notifier)
+                    if (uploadRes) {
+                      ref.read(orderOfRequestProvider.notifier)
                           .update((state) => state + 1);
+                    }
                   } else if (patientAttc != null && patientImage != null) {
                     //역학조사서 이미지가 업로드 되어있는 경우 + 환자등록
                     ref
