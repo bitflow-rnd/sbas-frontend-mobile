@@ -360,7 +360,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
                   unicode: true,
                 ).allMatches(value).length !=
                 value.length) {
-          return '이름을 정확히 입력하세요.';
+          return '환자 이름을 입력해 주세요.';
         }
         break;
 
@@ -381,9 +381,9 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         }
         break;
 
-      case 5:
-        if (value == null || value.length != 11) {
-          return '전화번호를 정확히 입력하세요.';
+      case 102:
+        if (value == null || value.length < 2) {
+          return '기본주소를 입력해 주세요.';
         }
         break;
     }

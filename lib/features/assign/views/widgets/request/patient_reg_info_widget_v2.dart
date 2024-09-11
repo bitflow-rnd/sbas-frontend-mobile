@@ -66,7 +66,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                   for (int i = 0; i < widget.list.length; i++)
                     Column(
                       children: [
-                        i != 3 ? getSubTitlt(widget.list[i], i > 5,) : Container(),
+                        i != 3 ? getSubTitlt(widget.list[i], i > 4) : Container(),
                         Gaps.v4,
                         if (i == 2) _addrInput(vm),
                         if (i == 3) _isAlive(vm),
@@ -296,7 +296,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
                 child: TextFormField(
                   decoration: getInputDecoration("주소검색을 이용하여 입력"),
                   controller: TextEditingController(text: vm.address),
-                  validator: (value) => null,
+                  validator: (value) => vm.isFieldValid(102, value),
                   readOnly: true,
                   maxLines: 1,
                   style: CTS(

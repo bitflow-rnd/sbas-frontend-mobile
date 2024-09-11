@@ -182,7 +182,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
         return (jobCd == "PMGR0002" || jobCd == "PMGR0004")
             ? _bottomer(
                 lBtnText: "배정 불가",
-                rBtnText: "승인",
+                rBtnText: "병상 요청 승인",
                 lBtnFunc: () async {
                   String? res = await _showBottomSheet(
                       context: context,
@@ -280,9 +280,10 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
             : Container();
       case '배정대기':
       case "원내배정":
-        return _bottomer(
+        return (jobCd == "PMGR0003" || jobCd == "PMGR0004")
+          ? _bottomer(
             lBtnText: "배정 불가",
-            rBtnText: "배정 승인",
+            rBtnText: "병상 배정 승인",
             lBtnFunc: () {
               Navigator.push(
                 context,
@@ -314,7 +315,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   ),
                 ),
               );
-            });
+            }) : Container();
       case '이송대기':
         return (jobCd == "PMGR0002" || jobCd == "PMGR0004")
             ? Common.bottomer(

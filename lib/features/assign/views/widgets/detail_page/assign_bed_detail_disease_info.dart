@@ -455,7 +455,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
         } else if (diseaseInfo.dnrAgreYn.getText == 'DNRA0002') {
           text = '미동의';
         } else {
-          text = '알수없음';
+          text = '해당없음';
         }
         break;
 
