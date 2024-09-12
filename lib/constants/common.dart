@@ -74,6 +74,7 @@ class Common {
                 horizontal: 12.w,
                 vertical: 14.h,
               ),
+        counterText: '',
       );
 
   static Widget bottomer({String lBtnText = '배정 불가', String rBtnText = "승인", required Function lBtnFunc, required Function rBtnFunc, bool isOneBtn = false}) {

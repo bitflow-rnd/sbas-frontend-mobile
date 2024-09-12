@@ -152,7 +152,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                   ],
                                 ),
                                 _getTextInputField(i: 0, hint: "직접 입력"),
-                                Gaps.v20,
+                                Gaps.v16,
                                 // FormField(validator: (value) {
                                 //   return value == null || value == "" ? '연락처를 입력해주세요.' : null;
                                 // }, builder: (field) {
@@ -164,12 +164,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                     Expanded(
                                       child: Column(
                                       children: [
-                                        _getTextInputField(
-                                          hint: hintList[1],
-                                          i: 1,
-                                          type: TextInputType.number,
-                                      ),
-                                      // _getTextInputField(hint: hintList[1], i: 1, type: TextInputType.number),
+                                        _getTextInputField(hint: hintList[1], i: 1, type: TextInputType.number, maxLength: 11),
                                     ],
                                   )),
                                 ]),
@@ -190,13 +185,13 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                     // carNumTag("143호1927"),
                                   ],
                                 ),
-                                Gaps.v12,
+                                Gaps.v8,
                                 _getTextInputField(hint: hintList[3], i: 3),
-                                Gaps.v28,
+                                Gaps.v20,
                                 _getTitle(list[4], false),
-                                Gaps.v16,
+                                Gaps.v8,
                                 _getTextInputField(hint: hintList[4], i: 4, maxLines: 6),
-                                Gaps.v28,
+                                Gaps.v20,
                               ],
                             ),
                           ),
@@ -409,6 +404,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
     TextInputType type = TextInputType.text,
     int? maxLines,
     FormFieldState<Object?>? field,
+    int? maxLength,
   }) {
     final vm = ref.watch(asgnBdMvAprPresenter.notifier);
     return TextFormField(
@@ -440,6 +436,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
       autovalidateMode: AutovalidateMode.onUserInteraction,
       keyboardType: type,
       maxLines: maxLines,
+      maxLength: maxLength,
     );
   }
 
