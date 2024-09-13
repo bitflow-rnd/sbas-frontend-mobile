@@ -4,8 +4,11 @@ import 'package:sbas/common/api/v1_provider.dart';
 class PatientService {
 
   Future<Patient> getPatient(String? ptId) async {
-    final response = await _api.getAsync('$_baseUrl/basicinfo/$ptId');
+    if (ptId == null) {
+      throw Exception("Patient ID cannot be null");
+    }
 
+    final response = await _api.getAsync('$_baseUrl/basicinfo/$ptId');
     return Patient.fromJson(response);
   }
 
