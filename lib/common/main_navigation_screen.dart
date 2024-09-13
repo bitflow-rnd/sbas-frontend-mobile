@@ -113,9 +113,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const PatientLookupScreen(
-                      automaticallyImplyLeading: false,
-                    ),
+                    builder: (context) => const PatientListScreen(),
                   ),
                 ),
                 selectedIndex: _selectedIndex,

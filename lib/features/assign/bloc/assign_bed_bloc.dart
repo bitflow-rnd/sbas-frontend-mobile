@@ -12,7 +12,7 @@ import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
-import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
+import 'package:sbas/features/patient/views/patient_list_screen.dart';
 
 class AssignNewBedPresenter extends AsyncNotifier<PatientRegInfoModel> {
   @override
@@ -46,7 +46,7 @@ class AssignNewBedPresenter extends AsyncNotifier<PatientRegInfoModel> {
       ref.read(patientImageProvider.notifier).state = null;
       ref.read(patientAttcProvider.notifier).state = null;
 
-      context.goNamed(PatientLookupScreen.routeName); //
+      context.goNamed(PatientListScreen.routeName); //
 
       await ref.read(patientLookupProvider.notifier).refresh();
     }

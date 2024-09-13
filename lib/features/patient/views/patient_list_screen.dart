@@ -7,41 +7,49 @@ import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/patient/views/widgets/patient_list_widget.dart';
 
 class PatientListScreen extends ConsumerWidget {
-  const PatientListScreen({Key? key}): super(key: key);
+  const PatientListScreen({Key? key,}): super(key: key);
 
   static String routeName = 'lookup';
   static String routeUrl = '/lookup';
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
-        backgroundColor: Palette.white,
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Text(
-            "환자 목록",
-            style: CTS.medium(
-              fontSize: 15,
-              color: Colors.black,
-            ),
-          ),
-          elevation: 0.5,
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          leading: const BackButton(
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool isMyGroup = ref.watch(isMyGroupProvider);
+
+    void changGroup() {
+      ref.read(isMyGroupProvider.notifier).state = !isMyGroup;
+    }
+    return Scaffold(
+      backgroundColor: Palette.white,
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text(
+          "환자 목록",
+          style: CTS.medium(
+            fontSize: 15,
             color: Colors.black,
           ),
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-          ),
         ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await ref.watch(patientLookupProvider.notifier).refresh();
-          },
-          child: patientListWidget(context, ref),
+        elevation: 0.5,
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        leading: const BackButton(
+          color: Colors.black,
         ),
-      );
-
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await ref.watch(patientLookupProvider.notifier).refresh();
+        },
+        child: patientListWidget(context, ref, isMyGroup, changGroup),
+      ),
+    );
+  }
 }
+
+final isMyGroupProvider = StateProvider<bool>((ref) => true);

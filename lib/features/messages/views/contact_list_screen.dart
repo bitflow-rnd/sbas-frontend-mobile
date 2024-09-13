@@ -87,7 +87,7 @@ class ContactListScreen extends ConsumerWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                radioButton(ref, '내지역', '전국', isMyLocation, changeLocation),
+                radioButton(ref, '내지역', '전국', isMyLocation, 3, changeLocation),
                 Gaps.h5,
                 Expanded(
                   flex: 8,
