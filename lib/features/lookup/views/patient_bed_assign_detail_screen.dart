@@ -6,7 +6,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 
 class PatientBedAssignDetailPage extends ConsumerWidget {
   const PatientBedAssignDetailPage({

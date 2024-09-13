@@ -10,7 +10,7 @@ import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';

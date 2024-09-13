@@ -1,4 +1,4 @@
-import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 
 class PatientListModel {
   int? count;

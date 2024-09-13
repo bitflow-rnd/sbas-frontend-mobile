@@ -9,7 +9,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/available_hospital_model.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 

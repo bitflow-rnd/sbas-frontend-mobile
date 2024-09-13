@@ -22,6 +22,8 @@ import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
   InfectiousDiseaseV2({
     required this.report,
+    this.dstr1Cd,
+    this.dstr2Cd,
     super.key,
   });
 
@@ -31,6 +33,9 @@ class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
   final EpidemiologicalReportModel report;
   final List<String> status = ['입원', '외래', '재택', '기타'];
   String? selectedStatus;
+
+  final String? dstr1Cd;
+  final String? dstr2Cd;
 
   final List<String> list = [
     '입원여부', // 순서변경됨 i == 4 -> i==0
@@ -183,7 +188,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                         validator: (value) {
                                           return null;
                                         },
-                                        initialValue: widget.report.dstr1Cd,
+                                        initialValue: widget.dstr1Cd,
                                       ),
                                     ),
                                   ),
@@ -606,7 +611,6 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                   isDense: true,
                   isExpanded: true,
                   onChanged: (value) {
-                    print(value);
                     ref.read(infectiousDiseaseProvider.notifier).updateRegion(
                           center.firstWhere((e) => e.instNm == value).instNm ?? '',
                         );

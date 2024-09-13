@@ -9,6 +9,8 @@ import 'package:sbas/features/dashboard/views/dashboard_screen.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 import 'package:sbas/features/messages/views/direct_msg_contact_screen.dart';
 
+import '../features/patient/views/patient_list_screen.dart';
+
 class MainNavigationScreen extends StatefulWidget {
   static const String routeName = 'mainNavigation';
 
@@ -60,9 +62,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 2,
-            child: const PatientLookupScreen(
-              automaticallyImplyLeading: true,
-            ),
+            child: PatientListScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 3,

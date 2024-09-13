@@ -18,7 +18,7 @@ import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
@@ -221,7 +221,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
                     child: Form(
                       key: infectiousDisFormKey,
-                      child: InfectiousDiseaseV2(report: report),
+                      child: InfectiousDiseaseV2(report: report, dstr1Cd: patientInfoModel.dstr1Cd),
                     ),
                   )),
                 //상단 2개는 신규일때만 들어갈수있도록?!
@@ -473,7 +473,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                         .orignSeverelyDiseaseRegistry(
                             patient?.ptId ?? a.ptId ?? '');
                     if (orignRes) {
-                      await Future.delayed(Duration(milliseconds: 1500));
+                      await Future.delayed(const Duration(milliseconds: 1500));
                       await ref.read(patientRepoProvider).lookupPatientInfo();
                       // ignore: use_build_context_synchronously
                       Navigator.popUntil(context, (route) => route.isFirst);

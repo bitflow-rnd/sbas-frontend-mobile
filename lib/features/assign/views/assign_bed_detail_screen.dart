@@ -13,7 +13,7 @@ import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_timeline.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 

@@ -7,11 +7,11 @@ import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/patient_lookup_detail_screen.dart';
-import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_list_card_item.dart';
 import 'package:sbas/util.dart';
@@ -153,10 +153,11 @@ class PatientLookupScreenState extends ConsumerState<PatientLookupScreen> {
                   itemCount: patient.items.length,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () async {
-                      ref.watch(patientIdProvider.notifier).state = patient.items[index].ptId;
                       ref.invalidate(patientInfoProvider);
+                      ref.watch(patientIdProvider.notifier).state = patient.items[index].ptId;
+
                       if (context.mounted) {
-                        Navigator.push(
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => PatientLookupDetailScreen(),

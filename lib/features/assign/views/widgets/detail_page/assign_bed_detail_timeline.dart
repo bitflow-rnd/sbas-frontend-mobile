@@ -17,7 +17,7 @@ import 'package:sbas/features/assign/views/modal_tab/assign_bed_find_screen.dart
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_go_home.dart';
 import 'package:sbas/features/authentication/blocs/login_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
-import 'package:sbas/features/lookup/models/patient_model.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
