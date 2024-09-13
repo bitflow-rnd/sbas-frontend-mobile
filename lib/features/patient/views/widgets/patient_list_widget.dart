@@ -4,10 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_sub_position_btn_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
+import 'package:sbas/common/widgets/radio_button.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/patient/views/widgets/top_column.dart';
-import 'package:sbas/features/patient/views/widgets/top_radio_button.dart';
 import 'package:sbas/util.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
@@ -16,7 +16,7 @@ import 'package:sbas/features/lookup/views/patient_lookup_detail_screen.dart';
 import 'package:sbas/features/lookup/views/patient_register_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_list_card_item.dart';
 
-Widget patientListWidget(BuildContext context, WidgetRef ref) => GestureDetector(
+Widget patientListWidget(BuildContext context, WidgetRef ref, bool isMyGroup, Function changeGroup) => GestureDetector(
   onTap: () => FocusScope.of(context).unfocus(),
   child: Stack(
     children: [
@@ -46,10 +46,10 @@ Widget patientListWidget(BuildContext context, WidgetRef ref) => GestureDetector
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        topRadioButton(),
+                        radioButton(ref, '내조직', '전체', isMyGroup, 11, changeGroup),
                         Gaps.h10,
                         Expanded(
-                          flex: 5,
+                          flex: 32,
                           child: TextFormField(
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.zero,
