@@ -62,7 +62,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           Offstage(
             offstage: _selectedIndex != 2,
-            child: PatientListScreen(),
+            child: const PatientListScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 3,
