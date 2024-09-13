@@ -118,7 +118,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                             data: (region) => FormField(
                                               builder: (field) => _selectRegion(
                                                 region.where(
-                                                  (e) => e.cdGrpId == 'SIDO',
+                                                  (e) => e.cdGrpId == 'SIDO' && e.cdId == '27',
                                                 ),
                                                 field,
                                               ),
@@ -152,11 +152,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                   ],
                                 ),
                                 _getTextInputField(i: 0, hint: "직접 입력"),
-                                Gaps.v16,
-                                // FormField(validator: (value) {
-                                //   return value == null || value == "" ? '연락처를 입력해주세요.' : null;
-                                // }, builder: (field) {
-                                //   return Column(
+                                Gaps.v20,
                                 _getTitle(list[1], true),
                                 Gaps.v8,
                                 Row(

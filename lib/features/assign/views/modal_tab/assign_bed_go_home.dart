@@ -26,8 +26,8 @@ class AssignBedGoHome extends ConsumerStatefulWidget {
   final Patient patient;
   final AssignItemModel assignItem;
   final TimeLine timeLine;
-  final List<String> list = const ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
-  final List<String> hintList = const ['칠곡경북대병원', '병실번호 입력', '진료과 입력', '담당의 이름', '의료진 연락처 입력', '입원/퇴원/회송 사유 입력'];
+  final List<String> list = const ['의료기관명', 'PID', '병실', '진료과', '담당의', '연락처', '메시지'];
+  final List<String> hintList = const ['칠곡경북대병원', 'PID 입력', '병실번호 입력', '진료과 입력', '담당의 이름', '의료진 연락처 입력', '입원/퇴원/회송 사유 입력'];
   @override
   ConsumerState<AssignBedGoHome> createState() => _AssignBedGoHome();
 }
@@ -99,7 +99,7 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                             children: [
                               Gaps.v20,
                               _getTitle("입·퇴원 상태", true),
-                              Gaps.v16,
+                              Gaps.v8,
                               FormField(
                                 builder: (field) => Column(
                                   children: [
@@ -124,12 +124,12 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                               for (var i = 0; i < widget.list.length; i++)
                                 Column(
                                   children: [
-                                    _getTitle(widget.list[i], i == 0 ? null : false),
-                                    Gaps.v16,
+                                    _getTitle(widget.list[i], i == 0 || i == 1 ? null : false),
+                                    Gaps.v8,
                                     i == 0
                                         ? _getTextInputField(i: i, initalValue: widget.timeLine.chrgInstNm ?? "", isFixed: true, ref: ref)
                                         : _getTextInputField(i: i, hint: widget.hintList[i], ref: ref),
-                                    Gaps.v28,
+                                    Gaps.v20,
                                   ],
                                 )
                             ],
@@ -223,7 +223,7 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
               fillColor: Palette.disabledTextField,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 16.w,
-                vertical: 20.h,
+                vertical: 16.h,
               ),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
@@ -238,13 +238,13 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
       onSaved: (newValue) => bdDoc.setTextByIndex(i, newValue),
       onChanged: (value) => bdDoc.setTextByIndex(i, value),
       validator: (value) {
-        return null;
+        return bdDoc.validate(i, value);
       },
       initialValue: initalValue,
       readOnly: isFixed,
 
       inputFormatters: inputFormatters,
-      autovalidateMode: AutovalidateMode.always,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       keyboardType: type,
       maxLines: maxLines,
       // maxLength: maxLength,
@@ -412,8 +412,8 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                 vertical: 14.h,
               )
             : const EdgeInsets.symmetric(
-                vertical: 18,
-                horizontal: 22,
+                vertical: 13,
+                horizontal: 14,
               ),
       );
 }

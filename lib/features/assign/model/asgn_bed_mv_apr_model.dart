@@ -44,22 +44,22 @@ class AsgnBdMvAprReq {
   void clear() {
     ptId = '';
     bdasSeq = 0;
-    instId = '';
-    ambsNm = '';
-    chfTelno = '';
-    crew1Id = '';
-    crew1Pstn = '';
-    crew1Nm = '';
-    crew1Telno = '';
-    crew2Id = '';
-    crew2Pstn = '';
-    crew2Nm = '';
-    crew2Telno = '';
-    crew3Id = '';
-    crew3Pstn = '';
-    crew3Nm = '';
-    crew3Telno = '';
-    vecno = '';
+    instId = null;
+    ambsNm = null;
+    chfTelno = null;
+    crew1Id = null;
+    crew1Pstn = null;
+    crew1Nm = null;
+    crew1Telno = null;
+    crew2Id = null;
+    crew2Pstn = null;
+    crew2Nm = null;
+    crew2Telno = null;
+    crew3Id = null;
+    crew3Pstn = null;
+    crew3Nm = null;
+    crew3Telno = null;
+    vecno = null;
     msg = '';
   }
 

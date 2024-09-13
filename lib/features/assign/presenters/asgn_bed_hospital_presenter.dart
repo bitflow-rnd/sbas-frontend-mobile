@@ -26,23 +26,37 @@ class AsgnBdHospPresenter extends AsyncNotifier {
       // case 0: //병실
       //   asgnBdReqModel.roomNm = value;
       //   break;
-      case 1: //병실
+      case 1:
+        asgnBdHospReq.pid = value;
+        break;
+      case 2: //병실
         asgnBdHospReq.roomNm = value;
         break;
-      case 2: //진료과
+      case 3: //진료과
         asgnBdHospReq.deptNm = value;
         break;
-      case 3:
+      case 4:
         //담당의
         asgnBdHospReq.spclNm = value;
         break;
-      case 4:
+      case 5:
         asgnBdHospReq.chrgTelno = value;
         break;
-      case 5:
+      case 6:
         asgnBdHospReq.msg = value;
       // break;
     }
+  }
+
+  String? validate(int index, String? value) {
+    switch (index) {
+      case 1:
+        if (value == null || value == "") {
+          return "PID를 입력해주세요.";
+        }
+        break;
+    }
+    return null;
   }
 
   bool isValid() {

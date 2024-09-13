@@ -2,6 +2,7 @@ class AsgnBdHospReq {
   String? ptId;
   int? bdasSeq;
   String? hospId;
+  String? pid;
   String? deptNm;
   String? wardNm;
   String? roomNm;
@@ -15,6 +16,7 @@ class AsgnBdHospReq {
     ptId = null;
     bdasSeq = null;
     hospId = null;
+    pid = null;
     deptNm = null;
     wardNm = null;
     roomNm = null;
@@ -29,6 +31,7 @@ class AsgnBdHospReq {
     this.ptId,
     this.bdasSeq,
     this.hospId,
+    this.pid,
     this.deptNm,
     this.wardNm,
     this.roomNm,
@@ -43,6 +46,7 @@ class AsgnBdHospReq {
       : ptId = json['ptId'] as String?,
         bdasSeq = json['bdasSeq'] as int?,
         hospId = json['hospId'] as String?,
+        pid = json['pid'] as String?,
         deptNm = json['deptNm'] as String?,
         wardNm = json['wardNm'] as String?,
         roomNm = json['roomNm'] as String?,
@@ -56,6 +60,7 @@ class AsgnBdHospReq {
         'ptId': ptId,
         'bdasSeq': bdasSeq,
         'hospId': hospId,
+        'pid': pid,
         'deptNm': deptNm,
         'wardNm': wardNm,
         'roomNm': roomNm,
