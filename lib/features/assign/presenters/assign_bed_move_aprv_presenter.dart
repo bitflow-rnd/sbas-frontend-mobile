@@ -23,10 +23,11 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
   }
 
   Future<bool> submit() async {
-    var submitRes = await _assignRepository.reqMvApr(_asgnBdMvAprReq.toJson());
-    if (submitRes == "이송 정보 등록 성공") {
-      return true;
-    }
+    // var submitRes = await _assignRepository.reqMvApr(_asgnBdMvAprReq.toJson());
+    print(_asgnBdMvAprReq.toJson());
+    // if (submitRes == "이송 정보 등록 성공") {
+    //   return true;
+    // }
 
     return false;
   }
@@ -72,6 +73,16 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
         _asgnBdMvAprReq.crew3Nm = value ?? "";
         return _asgnBdMvAprReq.crew3Nm ?? "";
 
+      case 1002:
+        _asgnBdMvAprReq.crew1Telno = value;
+        return _asgnBdMvAprReq.crew1Telno ?? "";
+      case 2002:
+        _asgnBdMvAprReq.crew2Telno = value;
+        return _asgnBdMvAprReq.crew2Telno ?? "";
+      case 3002:
+        _asgnBdMvAprReq.crew3Telno = value;
+        return _asgnBdMvAprReq.crew3Telno ?? "";
+
       case 3:
         _asgnBdMvAprReq.vecno = value ?? "";
         return _asgnBdMvAprReq.vecno ?? "";
@@ -93,21 +104,25 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
 
       case 1000:
         return _asgnBdMvAprReq.crew1Pstn ?? "";
-
       case 2000:
         return _asgnBdMvAprReq.crew2Pstn ?? "";
-
       case 3000:
         return _asgnBdMvAprReq.crew3Pstn ?? "";
 
       case 1001:
         return _asgnBdMvAprReq.crew1Nm ?? "";
-
       case 2001:
         return _asgnBdMvAprReq.crew2Nm ?? "";
-
       case 3001:
         return _asgnBdMvAprReq.crew3Nm ?? "";
+
+      case 1002:
+        return _asgnBdMvAprReq.crew1Telno ?? "";
+      case 2002:
+        return _asgnBdMvAprReq.crew2Telno ?? "";
+      case 3002:
+        return _asgnBdMvAprReq.crew3Telno ?? "";
+
       case 3:
         return _asgnBdMvAprReq.vecno ?? "";
       case 4:
@@ -139,8 +154,35 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
     }
   }
 
+  String? validate(int index, String? value) {
+    switch (index) {
+      case 1:
+        if (value == null || value == "") {
+          return "연락처를 입력해주세요.";
+        }
+        break;
+    }
+    return null;
+  }
+
   final AsgnBdMvAprReq _asgnBdMvAprReq = AsgnBdMvAprReq();
   late AssignRepository _assignRepository;
+
+  void setChfTelno(String crewKey) {
+    if (crewKey == "crew1") {
+      _asgnBdMvAprReq.chfTelno = _asgnBdMvAprReq.crew1Telno;
+    } else if (crewKey == "crew2") {
+      _asgnBdMvAprReq.chfTelno = _asgnBdMvAprReq.crew2Telno;
+    } else if (crewKey == "crew3") {
+      _asgnBdMvAprReq.chfTelno = _asgnBdMvAprReq.crew3Telno;
+    }
+  }
+
+  void checkCrewTelno() {
+    if (_asgnBdMvAprReq.crew2Telno == null || _asgnBdMvAprReq.crew2Telno == "") {
+      _asgnBdMvAprReq.crew2Telno = _asgnBdMvAprReq.crew1Telno;
+    }
+  }
 }
 
 final asgnBdMvAprPresenter = AsyncNotifierProvider<AssignBedMoveAprPresenter, void>(

@@ -5,19 +5,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/common/widgets/app_bar_widget.dart';
+import 'package:sbas/common/widgets/custom_cupertino_radio.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/assign/bloc/assign_bed_move_aprv_presenter.dart';
 import 'package:sbas/features/assign/bloc/safety_center_bloc.dart';
 import 'package:sbas/features/assign/bloc/safety_region_bloc.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_move_aprv_presenter.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
-import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/util.dart';
 
 class AssignBedApproveMoveScreen extends ConsumerStatefulWidget {
@@ -36,9 +37,16 @@ class AssignBedApproveMoveScreen extends ConsumerStatefulWidget {
 }
 
 class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMoveScreen> {
-  List<String> list = ['관할 구급대', '연락처', '탑승대원 및 의료진', '배차정보', '메시지'];
+  List<String> list = ['관할 구급대', '대표 연락처', '탑승대원 및 의료진', '배차정보', '메시지'];
   List<String> hintList = ['', '연락처 입력', '', '차량번호 입력', '메시지 입력'];
   // 이부분 의료기관명 readonly 로 들어갈부분.
+
+  static final Map<String, String> crewMap = {
+    'crew1': '대원#1',
+    'crew2': '대원#2',
+    'crew3': '대원#3',
+  };
+  String _selectedCrew = crewMap.keys.first;
 
   @override
   void initState() {
@@ -153,18 +161,6 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                 ),
                                 _getTextInputField(i: 0, hint: "직접 입력"),
                                 Gaps.v20,
-                                _getTitle(list[1], true),
-                                Gaps.v8,
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                      children: [
-                                        _getTextInputField(hint: hintList[1], i: 1, type: TextInputType.number, maxLength: 11),
-                                    ],
-                                  )),
-                                ]),
-                                Gaps.v20,
                                 _getTitle(list[2], false),
                                 Gaps.v8,
                                 _thirdRow(1000),
@@ -172,6 +168,38 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                 _thirdRow(2000),
                                 Gaps.v8,
                                 _thirdRow(3000),
+                                Gaps.v20,
+                                _getTitle(list[1], true),
+                                Gaps.v8,
+                                FormField(
+                                  builder: (field) => Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: CustomCupertinoRadio(
+                                      choices: crewMap,
+                                      onChange: onGenderSelected,
+                                      initialKeyValue: _selectedCrew,
+                                      selectedColor: Palette.mainColor,
+                                      notSelectedColor: Palette.greyText_60,
+                                      formField: field,
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    var crew1Telno = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 1002);
+                                    var crew2Telno = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 2002);
+                                    var crew3Telno = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 3002);
+                                    if (value == null) {
+                                      return '대원의 연락처를 입력해주세요.';
+                                    } else if (value == 'crew1' && (crew1Telno == null || crew1Telno == '')) {
+                                      return '대원#1의 연락처를 입력해주세요.';
+                                    } else if (value == 'crew2' && (crew2Telno == null || crew2Telno == '')) {
+                                      return '대원#2의 연락처를 입력해주세요.';
+                                    } else if (value == 'crew3' && (crew3Telno == null || crew3Telno == '')) {
+                                      return '대원#3의 연락처를 입력해주세요.';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                // _getTextInputField(hint: hintList[1], i: 1, type: TextInputType.number, maxLength: 11),
                                 Gaps.v20,
                                 Row(
                                   children: [
@@ -199,7 +227,9 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                         lBtnFunc: () {},
                         rBtnFunc: () async {
                           if (validation()) {
-                            var res = await ref.watch(asgnBdMvAprPresenter.notifier).submit();
+                            var vm = ref.watch(asgnBdMvAprPresenter.notifier);
+                            vm.setChfTelno(_selectedCrew);
+                            var res = await vm.submit();
                             if (res) {
                               await ref.watch(patientTimeLineProvider.notifier).refresh(widget.patient.ptId, widget.bdasSeq);
                               await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
@@ -233,6 +263,14 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                 ),
           )),
     );
+  }
+
+  void onGenderSelected(String crewKey) {
+    final vm = ref.watch(asgnBdMvAprPresenter.notifier);
+    setState(() {
+      _selectedCrew = crewKey;
+    });
+    vm.setChfTelno(crewKey);
   }
 
   bool validation() {
@@ -380,16 +418,22 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
     );
   }
 
-  Row _thirdRow(int i) {
+  Column _thirdRow(int i) {
     List<String> dropdownList = ['대원선택'];
     String selectedDropdown = '대원선택';
-    return Row(
+    return Column(
       children: [
-        Expanded(child: dropdownButton(dropdownList, selectedDropdown)),
-        Gaps.h12,
-        Expanded(child: _getTextInputField(i: i, hint: '직급')),
-        Gaps.h12,
-        Expanded(child: _getTextInputField(i: i + 1, hint: '이름'))
+        Row(
+          children: [
+            Expanded(child: dropdownButton(dropdownList, selectedDropdown)),
+            Gaps.h12,
+            Expanded(child: _getTextInputField(i: i, hint: '직급')),
+            Gaps.h12,
+            Expanded(child: _getTextInputField(i: i + 1, hint: '이름'))
+          ],
+        ),
+        Gaps.v8,
+        _getTextInputField(i: i + 2, hint: '연락처', type: TextInputType.number, maxLength: 11),
       ],
     );
   }
@@ -457,7 +501,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
 
   Widget dropdownButton(List<String> dlist, String sel) {
     return SizedBox(
-      height: 48.h,
+      height: 45.h,
       child: DropdownButtonFormField(
         borderRadius: BorderRadius.circular(4.r),
         decoration: Common.getInputDecoration(""),
@@ -478,5 +522,9 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
         },
       ),
     );
+  }
+
+  void addCrewMap() {
+
   }
 }
