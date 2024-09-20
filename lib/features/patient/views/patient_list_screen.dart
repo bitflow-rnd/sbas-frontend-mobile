@@ -7,7 +7,11 @@ import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
 import 'package:sbas/features/patient/views/widgets/patient_list_widget.dart';
 
 class PatientListScreen extends ConsumerWidget {
-  const PatientListScreen({Key? key,}): super(key: key);
+  const PatientListScreen({Key? key,
+    required this.automaticallyImplyLeading
+  }): super(key: key);
+
+  final bool automaticallyImplyLeading;
 
   static String routeName = 'lookup';
   static String routeUrl = '/lookup';
