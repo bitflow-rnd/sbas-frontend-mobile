@@ -86,15 +86,9 @@ class PatientDetailScreen extends ConsumerWidget {
                       child: GestureDetector(
                         onTap: () {
                           progress == 0
-                              ? ref
-                                  .read(patientProgressProvider.notifier)
-                                  .state++
-                              : ref
-                                  .read(patientProgressProvider.notifier)
-                                  .state--;
-                          ref
-                              .watch(patientAsgnHistoryProvider.notifier)
-                              .refresh(patient.ptId);
+                              ? ref.read(patientProgressProvider.notifier).state++
+                              : ref.read(patientProgressProvider.notifier).state--;
+                          ref.watch(patientAsgnHistoryProvider.notifier).refresh(patient.ptId);
                         },
                         child: PatientRegTopNav(
                           x: progress == 0 ? 1 : -1,

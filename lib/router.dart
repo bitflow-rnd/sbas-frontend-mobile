@@ -8,8 +8,8 @@ import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
-import 'package:sbas/features/lookup/views/patient_lookup_screen.dart';
 import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
+import 'package:sbas/features/patient/views/patient_list_screen.dart';
 import 'package:sbas/util.dart';
 
 final routerProvider = Provider(
@@ -51,11 +51,9 @@ final routerProvider = Provider(
             ),
           ),
           GoRoute(
-            name: PatientLookupScreen.routeName,
-            path: PatientLookupScreen.routeUrl,
-            builder: (context, state) => const PatientLookupScreen(
-              automaticallyImplyLeading: false,
-            ),
+            name: PatientListScreen.routeName,
+            path: PatientListScreen.routeUrl,
+            builder: (context, state) => const PatientListScreen(),
           ),
           GoRoute(
             name: MainNavigationScreen.routeName,
