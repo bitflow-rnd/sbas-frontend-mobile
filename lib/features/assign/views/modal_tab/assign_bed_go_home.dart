@@ -124,7 +124,7 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                               for (var i = 0; i < widget.list.length; i++)
                                 Column(
                                   children: [
-                                    _getTitle(widget.list[i], i == 0 || i == 1 ? null : false),
+                                    _getTitle(widget.list[i], i == 0 || i == 1 ? true : false),
                                     Gaps.v8,
                                     i == 0
                                         ? _getTextInputField(i: i, initalValue: widget.timeLine.chrgInstNm ?? "", isFixed: true, ref: ref)
@@ -245,13 +245,13 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
 
       inputFormatters: inputFormatters,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      keyboardType: type,
+      keyboardType: i == 1 ? TextInputType.number : type,
       maxLines: maxLines,
       // maxLength: maxLength,
     );
   }
 
-  Widget _getTitle(String title, bool? isRequired) => Row(
+  Widget _getTitle(String title, bool isRequired) => Row(
         children: [
           Text(
             title,
@@ -261,14 +261,10 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
             ),
           ),
           Text(
-            isRequired == null
-                ? ""
-                : isRequired
-                    ? "(필수)"
-                    : "(선택)",
+            isRequired ? '(필수)' : '(선택)',
             style: CTS.medium(
               fontSize: 13,
-              color: !(isRequired ?? false) ? Colors.grey.shade600 : Palette.mainColor,
+              color: !isRequired ? Colors.grey.shade600 : Palette.mainColor,
             ),
           ),
         ],

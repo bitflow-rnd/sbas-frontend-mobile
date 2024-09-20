@@ -18,14 +18,8 @@ class AsgnBdHospPresenter extends AsyncNotifier {
     asgnBdHospReq.hospId = hospId;
   }
 
-// ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
-// ['의료기관명', '병실', '진료과', '담당의', '연락처', '메시지'];
-
   void setTextByIndex(int index, String? value) {
     switch (index) {
-      // case 0: //병실
-      //   asgnBdReqModel.roomNm = value;
-      //   break;
       case 1:
         asgnBdHospReq.pid = value;
         break;
@@ -44,7 +38,7 @@ class AsgnBdHospPresenter extends AsyncNotifier {
         break;
       case 6:
         asgnBdHospReq.msg = value;
-      // break;
+        break;
     }
   }
 
