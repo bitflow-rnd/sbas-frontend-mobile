@@ -297,17 +297,13 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                         .then((value) {
                       if (value == true) {
                         PatientRegInfoModal().epidUploadConfirmModal(context);
-                        ref
-                            .read(orderOfRequestProvider.notifier)
-                            .update((state) => state + 1);
+                        ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
                       }
                     });
                   } else if (patientAttc != null && patientImage != null) {
                     // image 가 선택되어있고 업로드 된 경우
                     //역학조사서 이미지가 업로드 되어있는 경우 + 환자등록
-                    ref
-                        .read(orderOfRequestProvider.notifier)
-                        .update((state) => order + 1);
+                    ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                     // ref.read(patientRegProvider.notifier).overrideInfo(patient!);
                   } else {
                     //역학조사서 없는경우
