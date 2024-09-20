@@ -5,7 +5,8 @@ import 'package:sbas/constants/gaps.dart';
 class CustomCupertinoRadio extends StatefulWidget {
   /// CupertinoRadioChoice displays a radio choice widget with cupertino format
   const CustomCupertinoRadio(
-      {super.key, required this.choices,
+      {super.key,
+      required this.choices,
       required this.onChange,
       required this.initialKeyValue,
       this.selectedColor = CupertinoColors.systemBlue,
@@ -42,16 +43,6 @@ class CustomCupertinoRadio extends StatefulWidget {
 class CustomCupertinoRadioState extends State<CustomCupertinoRadio> {
   dynamic _selectedKey;
 
-  @override
-  void initState() {
-    super.initState();
-    if (widget.choices.keys.contains(widget.initialKeyValue)) {
-      _selectedKey = widget.initialKeyValue;
-    } else {
-      _selectedKey = widget.choices.keys.first;
-    }
-  }
-
   Widget buildSelectionButton(String key, String value,
       {bool selected = false}) {
     return Container(
@@ -81,6 +72,7 @@ class CustomCupertinoRadioState extends State<CustomCupertinoRadio> {
           selected: _selectedKey == key));
     }
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Wrap(
           spacing: 5.0,

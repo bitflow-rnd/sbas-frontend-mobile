@@ -177,24 +177,29 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                     child: CustomCupertinoRadio(
                                       choices: crewMap,
                                       onChange: onGenderSelected,
-                                      initialKeyValue: _selectedCrew,
+                                      initialKeyValue: '',
                                       selectedColor: Palette.mainColor,
                                       notSelectedColor: Palette.greyText_60,
                                       formField: field,
                                     ),
                                   ),
                                   validator: (value) {
-                                    var crew1Telno = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 1002);
-                                    var crew2Telno = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 2002);
-                                    var crew3Telno = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 3002);
-                                    if (value == null) {
-                                      return '대원의 연락처를 입력해주세요.';
-                                    } else if (value == 'crew1' && (crew1Telno == null || crew1Telno == '')) {
-                                      return '대원#1의 연락처를 입력해주세요.';
-                                    } else if (value == 'crew2' && (crew2Telno == null || crew2Telno == '')) {
-                                      return '대원#2의 연락처를 입력해주세요.';
-                                    } else if (value == 'crew3' && (crew3Telno == null || crew3Telno == '')) {
-                                      return '대원#3의 연락처를 입력해주세요.';
+                                    if (value == null || value == '') {
+                                      return '대원을 선택해주세요.';
+                                    }
+                                    String? crew1Nm = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 1001);
+                                    String? crew1Telno = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 1002);
+                                    String? crew2Nm = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 2001);
+                                    String? crew2Telno = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 2002);
+                                    String? crew3Nm = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 3001);
+                                    String? crew3Telno = ref.watch(asgnBdMvAprPresenter.notifier).getText(index: 3002);
+
+                                    if (value == 'crew1' && ((crew1Telno == null || crew1Telno == '') || (crew1Nm == null || crew1Nm == ''))) {
+                                      return '대원#1의 정보를 입력해주세요.';
+                                    } else if (value == 'crew2' && ((crew2Telno == null || crew2Telno == '') || (crew2Nm == null || crew2Nm == ''))) {
+                                      return '대원#2의 정보를 입력해주세요.';
+                                    } else if (value == 'crew3' && ((crew3Telno == null || crew3Telno == '') || (crew3Nm == null || crew3Nm == ''))) {
+                                      return '대원#3의 정보를 입력해주세요.';
                                     }
                                     return null;
                                   },
@@ -522,9 +527,5 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
         },
       ),
     );
-  }
-
-  void addCrewMap() {
-
   }
 }

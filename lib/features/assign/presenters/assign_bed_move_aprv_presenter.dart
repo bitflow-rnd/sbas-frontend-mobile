@@ -23,11 +23,10 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
   }
 
   Future<bool> submit() async {
-    // var submitRes = await _assignRepository.reqMvApr(_asgnBdMvAprReq.toJson());
-    print(_asgnBdMvAprReq.toJson());
-    // if (submitRes == "이송 정보 등록 성공") {
-    //   return true;
-    // }
+    var submitRes = await _assignRepository.reqMvApr(_asgnBdMvAprReq.toJson());
+    if (submitRes == "이송 정보 등록 성공") {
+      return true;
+    }
 
     return false;
   }
@@ -154,20 +153,6 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
     }
   }
 
-  String? validate(int index, String? value) {
-    switch (index) {
-      case 1:
-        if (value == null || value == "") {
-          return "연락처를 입력해주세요.";
-        }
-        break;
-    }
-    return null;
-  }
-
-  final AsgnBdMvAprReq _asgnBdMvAprReq = AsgnBdMvAprReq();
-  late AssignRepository _assignRepository;
-
   void setChfTelno(String crewKey) {
     if (crewKey == "crew1") {
       _asgnBdMvAprReq.chfTelno = _asgnBdMvAprReq.crew1Telno;
@@ -178,11 +163,8 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
     }
   }
 
-  void checkCrewTelno() {
-    if (_asgnBdMvAprReq.crew2Telno == null || _asgnBdMvAprReq.crew2Telno == "") {
-      _asgnBdMvAprReq.crew2Telno = _asgnBdMvAprReq.crew1Telno;
-    }
-  }
+  final AsgnBdMvAprReq _asgnBdMvAprReq = AsgnBdMvAprReq();
+  late AssignRepository _assignRepository;
 }
 
 final asgnBdMvAprPresenter = AsyncNotifierProvider<AssignBedMoveAprPresenter, void>(
