@@ -53,7 +53,9 @@ final routerProvider = Provider(
           GoRoute(
             name: PatientListScreen.routeName,
             path: PatientListScreen.routeUrl,
-            builder: (context, state) => const PatientListScreen(),
+            builder: (context, state) => const PatientListScreen(
+              automaticallyImplyLeading: false,
+            ),
           ),
           GoRoute(
             name: MainNavigationScreen.routeName,
