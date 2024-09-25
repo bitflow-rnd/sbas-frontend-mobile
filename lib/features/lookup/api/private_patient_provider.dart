@@ -1,16 +1,15 @@
 import 'package:sbas/common/api/v1_provider.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
-import 'package:sbas/features/lookup/models/patient_list_model.dart';
+import 'package:sbas/features/patient/models/patient_list_model.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/util.dart';
-
 import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_history_model.dart';
 
 class PrivatePatientProvider {
   PatientTimelineModel? timeLine;
-  Future<PatientListModel> lookupPatientInfo() async => PatientListModel.fromJson(await _api.getAsync('$_privateRoute/search-mobile'));
+  Future<PatientListModel> lookupPatientInfo() async => PatientListModel.fromJson(await _api.getAsync('$_privateRoute/search'));
 
   Future<Patient> getPatientInfo(String ptId) async => Patient.fromJson(await _api.getAsync('$_privateRoute/basicinfo/$ptId'));
   Future<PatientHistoryList> getPatientHistory(String ptId) async => PatientHistoryList.fromJson(await _api.getAsync('$_privateRoute/bdasHisinfos/$ptId'));

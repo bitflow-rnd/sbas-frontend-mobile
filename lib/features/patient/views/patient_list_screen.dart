@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
+import 'package:sbas/features/patient/providers/paitent_provider.dart';
 import 'package:sbas/features/patient/views/widgets/patient_list_widget.dart';
 
 class PatientListScreen extends ConsumerWidget {
@@ -48,7 +48,8 @@ class PatientListScreen extends ConsumerWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await ref.watch(patientLookupProvider.notifier).refresh();
+          await ref.watch(patientListProvider.notifier).init();
+          // await ref.watch(patientLookupProvider.notifier).refresh();
         },
         child: patientListWidget(context, ref, isMyGroup, changGroup),
       ),
