@@ -56,8 +56,7 @@ Widget patientListWidget(
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              radioButton(
-                                  ref, '내조직', '전체', isMyGroup, 11, changeGroup),
+                              radioButton(ref, '내조직', '전체', isMyGroup, 11, changeGroup),
                               Gaps.h10,
                               const Expanded(
                                 flex: 32,

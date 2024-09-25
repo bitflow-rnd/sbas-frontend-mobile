@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/patient/providers/paitent_provider.dart';
 import 'package:sbas/features/patient/services/patient_info_service.dart';
-import '../models/patient_list_model.dart';
+import 'package:sbas/features/patient/models/patient_list_model.dart';
 
 class PatientListService extends AsyncNotifier<PatientListModel> {
   var page = 1;
@@ -11,7 +11,6 @@ class PatientListService extends AsyncNotifier<PatientListModel> {
   FutureOr<PatientListModel> build() async {
     _patientService = ref.read(patientService);
 
-    print('init');
     return await init();
   }
 
@@ -29,7 +28,7 @@ class PatientListService extends AsyncNotifier<PatientListModel> {
     if (state.isLoading) return state.value ?? PatientListModel(items: [], count: 0);
 
     page++;
-    if (page == null || page <= 1) {
+    if (page <= 1) {
       return await init();
     }
 
@@ -47,6 +46,7 @@ class PatientListService extends AsyncNotifier<PatientListModel> {
       }
 
       if(newPatientList.items.isEmpty) {
+        //다음 데이터가 없을 경우 기존데이터 반환
         return state.value!;
       }
       return newPatientList; // 기존 데이터가 없을 때는 새로운 리스트로 교체
