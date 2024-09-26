@@ -1,12 +1,12 @@
 import 'package:sbas/common/api/v1_provider.dart';
-import 'package:sbas/util.dart';
 import 'package:sbas/features/notice/models/notice_detail_model.dart';
 import 'package:sbas/features/notice/models/notice_list_model.dart';
+import 'package:sbas/util.dart';
 
 class NoticeProvider {
   Future<NoticeListModel> getNoticeList(Map<String, dynamic> map) async =>
       NoticeListModel.fromJson(
-          await _api.getAsyncWithJson('$_publicRoute/notice', toJson(map)));
+          await _api.getAsyncWithMap('$_publicRoute/notice', map));
 
   Future<NoticeDetailModel> getNoticeDetail(String noticeId) async =>
       NoticeDetailModel.fromJson(

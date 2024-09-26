@@ -39,6 +39,8 @@ class V1Provider {
   Future<dynamic> getAsyncWithMap(String route, Map<String, dynamic> map) async {
     final client = Dio();
 
+    map.removeWhere((key, value) => value == null);
+
     try {
       client.options.contentType = 'application/json';
       client.options.headers = authToken;
