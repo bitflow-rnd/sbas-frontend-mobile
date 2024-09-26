@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_sms/flutter_sms.dart';
 import 'package:sbas/common/api/v1_provider.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
@@ -42,10 +39,13 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
         child: Column(
           children: [
             Container(
-              height: 82.h,
+              height: 75.h,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const BackButton(
+                    color: Colors.black,
+                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -149,12 +149,12 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                       )
                     ],
                   ),
-                  Gaps.h32,
+                  Gaps.h16,
                   GestureDetector(
                     onTap: () => _showBottomSheet(context),
                     child: Container(
                       padding:
-                          EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+                          EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Palette.mainColor,
