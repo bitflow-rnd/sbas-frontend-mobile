@@ -78,6 +78,18 @@ class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
 }
 
 class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future(() {
+      if (widget.dstr1Cd != null) {
+        ref.read(agencyDetailProvider.notifier).updatePublicHealthCenter(widget.dstr1Cd!);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final ImagePicker picker = ImagePicker();
@@ -184,6 +196,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                             (e) => e.cdGrpId == 'SIDO',
                                           ),
                                           field,
+                                          initialRegion: widget.dstr1Cd,
                                         ),
                                         validator: (value) {
                                           return null;
@@ -525,7 +538,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
         contentPadding: const EdgeInsets.all(0),
       );
 
-  Widget _selectRegion(Iterable<BaseCodeModel> region, FormFieldState<Object?> field) => SizedBox(
+  Widget _selectRegion(Iterable<BaseCodeModel> region, FormFieldState<Object?> field, {String? initialRegion}) => SizedBox(
         child: Column(
           children: [
             InputDecorator(
@@ -565,7 +578,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                     ref.read(infectiousDiseaseProvider.notifier).updateRegion("");
                     field.didChange(value);
                   },
-                  value: field.value != '' ? field.value : null,
+                  value: field.value != '' ? field.value : initialRegion,
                 ),
               ),
             ),
