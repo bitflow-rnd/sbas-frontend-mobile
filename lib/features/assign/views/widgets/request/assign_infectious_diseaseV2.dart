@@ -78,18 +78,6 @@ class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
 }
 
 class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
-
-  @override
-  void initState() {
-    super.initState();
-
-    Future(() {
-      if (widget.dstr1Cd != null) {
-        ref.read(agencyDetailProvider.notifier).updatePublicHealthCenter(widget.dstr1Cd!);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final ImagePicker picker = ImagePicker();
@@ -123,13 +111,12 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                         _getTitle(widget.list[i], true, vm),
                         Gaps.v4,
                         if (i == 0) //입원여부
-                          Row(
-                            children: [
+                          Row(children: [
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Wrap(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Wrap(
                                     spacing: 12.w,
                                     runSpacing: 12.h,
                                     direction: Axis.horizontal,
@@ -148,7 +135,9 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                             });
                                           },
                                           child: Container(
-                                            padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5.h,
+                                                horizontal: 16.w),
                                             decoration: BoxDecoration(
                                               color: isSelected ? Palette.mainColor : Colors.white,
                                               border: Border.all(
@@ -158,7 +147,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                               borderRadius: BorderRadius.circular(13.5.r),
                                             ),
                                             child: Text(
-                                              widget.status.toList()[index] ?? '',
+                                              widget.status.toList()[index] ??
+                                                  '',
                                               style: CTS(
                                                 fontSize: 13.sp,
                                                 color: isSelected ? Palette.white : Palette.greyText_60,
@@ -166,13 +156,11 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                             ),
                                           ),
                                         );
-                                      }
-                                    )
-                                  ),
-                                  Gaps.v20,
-                                ],
-                              )
-                            )
+                                      },
+                                    )),
+                                Gaps.v20,
+                              ],
+                            ))
                           ])
                         else if (i == 1) // 담당보건소
                           Column(
@@ -181,54 +169,60 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                 children: [
                                   Expanded(
                                     child: ref.watch(agencyRegionProvider).when(
-                                      loading: () => const SBASProgressIndicator(),
-                                      error: (error, stackTrace) => Center(
-                                        child: Text(
-                                          error.toString(),
-                                          style: const TextStyle(
-                                            color: Palette.mainColor,
+                                          loading: () => const SBASProgressIndicator(),
+                                          error: (error, stackTrace) => Center(
+                                            child: Text(
+                                              error.toString(),
+                                              style: const TextStyle(
+                                                color: Palette.mainColor,
+                                              ),
+                                            ),
+                                          ),
+                                          data: (region) => FormField(
+                                            builder: (field) => _selectRegion(
+                                              region.where(
+                                                (e) => e.cdGrpId == 'SIDO',
+                                              ),
+                                              field,
+                                            ),
+                                            validator: (value) {
+                                              return null;
+                                            },
+                                            initialValue: widget.dstr1Cd,
                                           ),
                                         ),
-                                      ),
-                                      data: (region) => FormField(
-                                        builder: (field) => _selectRegion(
-                                          region.where(
-                                            (e) => e.cdGrpId == 'SIDO',
-                                          ),
-                                          field,
-                                          initialRegion: widget.dstr1Cd,
-                                        ),
-                                        validator: (value) {
-                                          return null;
-                                        },
-                                        initialValue: widget.dstr1Cd,
-                                      ),
-                                    ),
                                   ),
                                   Gaps.h8,
                                   Expanded(
                                     child: ref.watch(agencyDetailProvider).when(
-                                      loading: () => const SBASProgressIndicator(),
-                                      error: (error, stackTrace) => Center(
-                                        child: Text(
-                                          error.toString(),
-                                          style: const TextStyle(
-                                            color: Palette.mainColor,
+                                          loading: () => const SBASProgressIndicator(),
+                                          error: (error, stackTrace) => Center(
+                                            child: Text(
+                                              error.toString(),
+                                              style: const TextStyle(
+                                                color: Palette.mainColor,
+                                              ),
+                                            ),
+                                          ),
+                                          data: (publicHealthCenter) =>
+                                              FormField(
+                                            builder: (field) =>
+                                                _selectPublicHealthCenter(
+                                                    publicHealthCenter, field),
+                                            validator: (value) {
+                                              return null;
+                                            },
                                           ),
                                         ),
-                                      ),
-                                      data: (publicHealthCenter) => FormField(
-                                        builder: (field) => _selectPublicHealthCenter(publicHealthCenter, field),
-                                        validator: (value) {
-                                          return null;
-                                        },
-                                      ),
-                                    ),
                                   ),
                                 ],
                               ),
                               Row(
-                                children: [Expanded(child: _getTextInputField(hint: "보건소명 직접입력", vm: vm, i: i))],
+                                children: [
+                                  Expanded(
+                                      child: _getTextInputField(
+                                          hint: "보건소명 직접입력", vm: vm, i: i))
+                                ],
                               ),
                             ],
                           )
@@ -239,8 +233,10 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      decoration: getInputDecoration("주소검색을 이용하여 입력"),
-                                      controller: TextEditingController(text: vm.address),
+                                      decoration:
+                                          getInputDecoration("주소검색을 이용하여 입력"),
+                                      controller: TextEditingController(
+                                          text: vm.address),
                                       validator: (value) => null,
                                       readOnly: true,
                                       maxLines: 1,
@@ -255,7 +251,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                       MaterialPageRoute(
                                         builder: (_) => KpostalView(
                                           kakaoKey: dotenv.env['KAKAO'] ?? '',
-                                          callback: (postal) => vm.setAddress(postal),
+                                          callback: (postal) =>
+                                              vm.setAddress(postal),
                                         ),
                                       ),
                                     ),
@@ -265,7 +262,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                         color: Palette.mainColor,
                                         borderRadius: BorderRadius.circular(4),
                                       ),
-                                      padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 28.w, vertical: 16.h),
                                       child: Text(
                                         "주소검색",
                                         style: CTS(
@@ -278,7 +276,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                 ],
                               ),
                               Gaps.v10,
-                              _getTextInputField(hint: "상세주소 입력", vm: vm, i: i), // 이부분 i 값 변경.
+                              _getTextInputField(hint: "상세주소 입력", vm: vm, i: i),
+                              // 이부분 i 값 변경.
                             ],
                           )
                         else if (i == 16)
@@ -297,7 +296,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                 },
                                 child: Stack(
                                   children: [
-                                    if (patientImage != null && patientImage.path.isNotEmpty)
+                                    if (patientImage != null &&
+                                        patientImage.path.isNotEmpty)
                                       Image.file(
                                         File(patientImage.path),
                                         width: 0.8.sw,
@@ -306,8 +306,10 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                                       Container(
                                         padding: EdgeInsets.all(20.r),
                                         decoration: BoxDecoration(
-                                          border: Border.all(color: Palette.greyText_20),
-                                          borderRadius: BorderRadius.circular(4.r),
+                                          border: Border.all(
+                                              color: Palette.greyText_20),
+                                          borderRadius:
+                                              BorderRadius.circular(4.r),
                                         ),
                                         child: Image.asset(
                                           'assets/auth_group/camera_location.png',
@@ -324,7 +326,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                         else if (i == 5 || i == 6 || i == 7)
                           getDatePicker(widget.hintList[i], vm, i)
                         else
-                          _getTextInputField(hint: widget.hintList[i], vm: vm, i: i),
+                          _getTextInputField(
+                              hint: widget.hintList[i], vm: vm, i: i),
                       ],
                     ),
                 ],
@@ -360,7 +363,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
           },
           inputFormatters: [
             FilteringTextInputFormatter.allow(
-              RegExp(i == 0 ? r'[0-9|.-]' : r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|\s|ㆍ|ᆢ]'),
+              RegExp(
+                  i == 0 ? r'[0-9|.-]' : r'[A-Z|a-z|0-9|()-|가-힝|ㄱ-ㅎ|\s|ㆍ|ᆢ]'),
             ),
             FilteringTextInputFormatter.singleLineFormatter,
           ],
@@ -394,7 +398,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
             ).then((selectedDate) {
               if (selectedDate != null) {
                 setState(() {
-                  vm.setTextEditingController(i, DateFormat('yyyy-MM-dd').format(selectedDate));
+                  vm.setTextEditingController(
+                      i, DateFormat('yyyy-MM-dd').format(selectedDate));
                 });
               }
             });
@@ -405,7 +410,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
     );
   }
 
-  Widget _getTitle(String title, bool isRequired, InfectiousDiseaseBloc vm) => Row(
+  Widget _getTitle(String title, bool isRequired, InfectiousDiseaseBloc vm) =>
+      Row(
         children: [
           Text(
             title,
@@ -457,7 +463,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                       },
                       child: Text(
                         '전체동일',
-                        style: CTS.medium(fontSize: 13, color: Palette.mainColor),
+                        style:
+                            CTS.medium(fontSize: 13, color: Palette.mainColor),
                       ),
                     ),
                   ],
@@ -519,6 +526,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                 horizontal: 22,
               ),
       );
+
   // Widget _selectPublicHealthCenter(Iterable<InfoInstModel> center, FormFieldState<Object?> field) => SizedBox(
 
   InputBorder get _inputBorder => OutlineInputBorder(
@@ -532,13 +540,16 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
           ),
         ),
       );
+
   InputDecoration get _inputDecoration => InputDecoration(
         enabledBorder: _inputBorder,
         focusedBorder: _inputBorder,
         contentPadding: const EdgeInsets.all(0),
       );
 
-  Widget _selectRegion(Iterable<BaseCodeModel> region, FormFieldState<Object?> field, {String? initialRegion}) => SizedBox(
+  Widget _selectRegion(
+          Iterable<BaseCodeModel> region, FormFieldState<Object?> field) =>
+      SizedBox(
         child: Column(
           children: [
             InputDecorator(
@@ -554,7 +565,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                             width: 150,
                             child: Text(
                               e.cdNm ?? '',
-                              style: TextStyle(fontSize: 13, color: Palette.black),
+                              style:
+                                  TextStyle(fontSize: 13, color: Palette.black),
                               textAlign: TextAlign.left,
                             ),
                           ),
@@ -565,20 +577,25 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                     width: 150,
                     child: Text(
                       '시/도 선택',
-                      style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                      style:
+                          TextStyle(fontSize: 13, color: Colors.grey.shade400),
                       textAlign: TextAlign.left,
                     ),
                   ),
                   isDense: true,
                   isExpanded: true,
                   onChanged: (value) {
-                    ref.read(agencyDetailProvider.notifier).updatePublicHealthCenter(
+                    ref
+                        .read(agencyDetailProvider.notifier)
+                        .updatePublicHealthCenter(
                           region.firstWhere((e) => e.cdId == value).cdId ?? '',
                         );
-                    ref.read(infectiousDiseaseProvider.notifier).updateRegion("");
+                    ref
+                        .read(infectiousDiseaseProvider.notifier)
+                        .updateRegion("");
                     field.didChange(value);
                   },
-                  value: field.value != '' ? field.value : initialRegion,
+                  value: field.value != '' ? field.value : null,
                 ),
               ),
             ),
@@ -590,7 +607,10 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
           ],
         ),
       );
-  Widget _selectPublicHealthCenter(Iterable<InfoInstModel> center, FormFieldState<Object?> field) => SizedBox(
+
+  Widget _selectPublicHealthCenter(
+          Iterable<InfoInstModel> center, FormFieldState<Object?> field) =>
+      SizedBox(
         child: Column(
           children: [
             InputDecorator(
@@ -606,7 +626,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                             width: 150,
                             child: Text(
                               e.instNm ?? '',
-                              style: TextStyle(fontSize: 13, color: Palette.black),
+                              style:
+                                  TextStyle(fontSize: 13, color: Palette.black),
                               textAlign: TextAlign.left,
                             ),
                           ),
@@ -617,7 +638,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                     width: 150,
                     child: Text(
                       '보건소 선택',
-                      style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                      style:
+                          TextStyle(fontSize: 13, color: Colors.grey.shade400),
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -625,7 +647,8 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                   isExpanded: true,
                   onChanged: (value) {
                     ref.read(infectiousDiseaseProvider.notifier).updateRegion(
-                          center.firstWhere((e) => e.instNm == value).instNm ?? '',
+                          center.firstWhere((e) => e.instNm == value).instNm ??
+                              '',
                         );
                     field.didChange(value);
                   },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_attc_model.dart';
@@ -78,7 +79,7 @@ Row myChatPhotoAttachedWidget(
                         children: snapshot.data!
                             .map((file) => GestureDetector(
                                   child: Image.network(
-                                    "https://test.smartbas.org/${file.uriPath}/${file.fileNm}",
+                                    "${dotenv.env['URL']}${file.uriPath}/${file.fileNm}",
                                     height: 150.h,
                                     width: 100.w,
                                   ),
