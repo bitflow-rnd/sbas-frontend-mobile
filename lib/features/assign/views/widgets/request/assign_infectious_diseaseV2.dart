@@ -54,7 +54,7 @@ class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
     '요양기관 전화번호',
     '진단의사 성명',
     '신고기관장 성명',
-    '기타 진료정보 이미지 및 영상',
+    '기타 진료정보 이미지',
   ];
   final List<String> hintList = [
     '',

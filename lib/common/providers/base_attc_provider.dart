@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart' as dio;
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sbas/common/api/v1_provider.dart';
@@ -53,6 +54,30 @@ class BaseAttcProvider {
       client.close();
     }
     throw ArgumentError();
+  }
+
+  Future<Uint8List> getDiagImage(String attcId) async {
+    final client = dio.Dio();
+
+    try {
+      client.options.headers = authToken;
+      final res = await client.getUri(
+        Uri.parse('$_privateBaseUrl/image/$attcId'),
+        options: Options(responseType: ResponseType.bytes),  // 응답을 바이트 형태로 받기
+      );
+      if (res.statusCode == 200) {
+        return Uint8List.fromList(res.data);  // List<int>를 Uint8List로 변환
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError('Failed to load image');
   }
 
   final String _privateRoute = 'private/common';

@@ -30,6 +30,8 @@ class PatientDiseaseInfoModel {
   String? instTelno;
   String? diagDrNm;
   String? rptChfNm;
+  String? diagAttcId;
+  String? esvyAttcId;
   String? reqBedTypeNm;
 
   PatientDiseaseInfoModel({
@@ -58,6 +60,8 @@ class PatientDiseaseInfoModel {
     this.instTelno,
     this.diagDrNm,
     this.rptChfNm,
+    this.diagAttcId,
+    this.esvyAttcId,
     this.reqBedTypeNm,
   });
 
@@ -87,6 +91,8 @@ class PatientDiseaseInfoModel {
     instTelno: json["instTelno"],
     diagDrNm: json["diagDrNm"],
     rptChfNm: json["rptChfNm"],
+    diagAttcId: json["diagAttcId"],
+    esvyAttcId: json["esvyAttcId"],
     reqBedTypeNm: json["reqBedTypeNm"],
   );
 
@@ -116,6 +122,8 @@ class PatientDiseaseInfoModel {
     "instTelno": instTelno,
     "diagDrNm": diagDrNm,
     "rptChfNm": rptChfNm,
+    "diagAttcId": diagAttcId,
+    "esvyAttcId": esvyAttcId,
     "reqBedTypeNm": reqBedTypeNm,
   };
 }

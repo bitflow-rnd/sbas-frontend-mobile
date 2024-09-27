@@ -5,6 +5,9 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
+import 'package:sbas/features/lookup/presenters/patient_disease_info_presenter.dart';
+
+import 'ByteImageWidget.dart';
 
 class AssignBedDetailDiseaseInfo extends ConsumerWidget {
   AssignBedDetailDiseaseInfo({
@@ -49,6 +52,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
   ];
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
@@ -379,8 +383,8 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Image.asset(
-                          "assets/auth_group/image_location.png",
+                        child: ByteImageWidget(
+                          imageBytesFuture: ref.watch(patientDiseaseInfoProvider.notifier).getImageBytes(),
                         ),
                       ),
                     ),

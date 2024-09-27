@@ -22,6 +22,10 @@ class FileRepository {
     ),
   );
 
+  Future<dynamic> getDiagImage(String attcId) async {
+    return await _fileProvider.getDiagImage(attcId);
+  }
+
   final _fileProvider = BaseAttcProvider();
 }
 
