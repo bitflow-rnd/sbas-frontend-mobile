@@ -69,13 +69,20 @@ class UserRegRequestRepository {
     return await _baseOrganProvider.getOrganCode(query);
   }
 
-  Future<List<dynamic>> uploadImage(XFile file) async =>
-      await _baseCodeProvider.uploadImage(
+  Future<List<dynamic>> uploadImage(List<XFile> files, String? rmk) async {
+    List<MultipartFile> multipartFiles = [];
+
+    for(var file in files) {
+      multipartFiles.add(
         await MultipartFile.fromFile(
           file.path,
           filename: file.name,
-        ),
+        )
       );
+    }
+
+    return await _baseCodeProvider.uploadImages(multipartFiles, rmk);
+  }
   final _userRegProvider = UserRegProvider();
 
   final _baseCodeProvider = BaseCodeProvider();

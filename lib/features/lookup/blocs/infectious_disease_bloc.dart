@@ -27,8 +27,8 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
 
       final imageFile = ref.read(infectiousImageProvider);
 
-      if (imageFile != null) {
-        _infectiousDiseaseModel.diagAttcId = await _regRepository.uploadImage(imageFile).then((value) => value[0]);
+      if (imageFile.isNotEmpty) {
+        _infectiousDiseaseModel.diagAttcId = await _regRepository.uploadImage(imageFile, '감염병정보').then((value) => value[0]);
       }
       await _patientRepository.registerDiseaseInfo(
         _infectiousDiseaseModel.toJson(),
@@ -47,7 +47,7 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
 
   reset() {
     // 초기화 시점에 대한 고려 필요
-    ref.watch(infectiousImageProvider.notifier).state = null;
+    ref.watch(infectiousImageProvider.notifier).state = [];
     ref.watch(infectiousAttcProvider.notifier).state = null;
     ref.watch(infectiousIsUploadProvider.notifier).state = true;
     _infectiousDiseaseModel.clear();
@@ -214,6 +214,6 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
 final infectiousDiseaseProvider = AsyncNotifierProvider<InfectiousDiseaseBloc, InfectiousDiseaseModel>(
   () => InfectiousDiseaseBloc(),
 );
-final infectiousImageProvider = StateProvider<XFile?>((ref) => null);
+final infectiousImageProvider = StateProvider<List<XFile>>((ref) => []);
 final infectiousAttcProvider = StateProvider<String?>((ref) => null);
 final infectiousIsUploadProvider = StateProvider<bool>((ref) => true);

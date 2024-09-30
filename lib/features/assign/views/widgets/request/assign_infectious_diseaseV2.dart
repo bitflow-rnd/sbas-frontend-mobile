@@ -285,22 +285,24 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  final image = await picker.pickImage(
-                                    source: ImageSource.gallery,
-                                    preferredCameraDevice: CameraDevice.rear,
-                                    requestFullMetadata: false,
-                                  );
-                                  if (image != null) {
-                                    ref.read(infectiousImageProvider.notifier).state = image;
+                                  final images = await picker.pickMultiImage();
+                                  if(images.isNotEmpty) {
+                                    ref.read(infectiousImageProvider.notifier).state = images;
                                   }
                                 },
                                 child: Stack(
                                   children: [
-                                    if (patientImage != null &&
-                                        patientImage.path.isNotEmpty)
-                                      Image.file(
-                                        File(patientImage.path),
-                                        width: 0.8.sw,
+                                    if (patientImage.isNotEmpty)
+                                      Column(
+                                        children: patientImage.map((image) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(bottom: 10.h),
+                                            child: Image.file(
+                                              File(image.path),
+                                              width: 0.8.sw,
+                                            ),
+                                          );
+                                        }).toList(),
                                       )
                                     else
                                       Container(

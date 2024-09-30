@@ -87,5 +87,36 @@ class BaseCodeProvider {
     throw ArgumentError();
   }
 
+  Future<List<dynamic>> uploadImages(List<dio.MultipartFile> file, String? rmk) async {
+    final client = dio.Dio();
+
+    try {
+      client.options.contentType = 'multipart/form-data';
+      client.options.headers = authToken;
+
+      final res = await client.postUri(
+        Uri.parse('$_baseUrl/upload'),
+        data: dio.FormData.fromMap(
+          {
+            'param1': rmk,
+            'param2': file,
+          },
+        ),
+      );
+      if (res.statusCode == 200) {
+        return res.data['result']['attcId'];
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/common';
 }

@@ -79,7 +79,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     });
 
     void imageInit() {
-      ref.read(infectiousImageProvider.notifier).state = null;
+      ref.read(infectiousImageProvider.notifier).state = [];
     }
 
     return Scaffold(
