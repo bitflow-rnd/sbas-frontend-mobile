@@ -26,7 +26,7 @@ class PatientDiseaseInfoPresenter extends AsyncNotifier {
   }
 
   Future<Uint8List> getImageBytes() async {
-    return await fileRepository.getDiagImage("AT0000002227");
+    return await fileRepository.getDiagImage("AT0000002255");
   }
 
   late final PatientRepository _patientRepository;

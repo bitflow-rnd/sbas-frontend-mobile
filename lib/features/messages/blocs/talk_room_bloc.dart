@@ -113,5 +113,5 @@ class TalkRoomBloc {
   }
 
   final String _wsUrl = '${dotenv.env['WS_URL']}/chat-rooms/room';
-  final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/common';
+  final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/private/common';
 }
