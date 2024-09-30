@@ -7,12 +7,14 @@ class SBASAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget> actions;
   final double elevation;
+  final VoidCallback? onBackPressed;
 
   const SBASAppBar({
     super.key,
     required this.title,
     this.actions = const [],
     this.elevation = 0,
+    this.onBackPressed,
   });
 
   @override
@@ -29,8 +31,14 @@ class SBASAppBar extends ConsumerWidget implements PreferredSizeWidget {
       elevation: elevation,
       centerTitle: true,
       backgroundColor: Colors.white,
-      leading: const BackButton(
+      leading: BackButton(
         color: Colors.black,
+        onPressed: () {
+          Navigator.pop(context);
+          if(onBackPressed != null) {
+            onBackPressed!();
+          }
+        },
       ),
       systemOverlayStyle: const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,

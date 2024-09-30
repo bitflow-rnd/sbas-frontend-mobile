@@ -57,18 +57,14 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
     final order = ref.watch(orderOfRequestProvider);
     final patientImage = ref.watch(patientImageProvider);
     final patientAttc = ref.watch(patientAttcProvider);
-    final patientInfoModel =
-        ref.watch(patientRegProvider.notifier).patientInfoModel;
+    final patientInfoModel = ref.watch(patientRegProvider.notifier).patientInfoModel;
 
     // final patientIsUpload = ref.watch(patientIsUploadProvider);
     //빌드 이후 실행
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (patient != null &&
-          ref.read(patientInfoIsChangedProvider.notifier).state == false) {
+      if (patient != null && ref.read(patientInfoIsChangedProvider.notifier).state == false) {
         //환자정보가 변경되지 않았을때 기존 정보 사용 override
-        await ref
-            .watch(patientRegProvider.notifier)
-            .patientInit(patient!); // 기존 데이터로 override
+        await ref.watch(patientRegProvider.notifier).patientInit(patient!); // 기존 데이터로 override
         ref.read(patientInfoIsChangedProvider.notifier).state = true;
         ref.invalidate(requestBedProvider);
         // 이미 기본 정보 입력, valid 한 케이스 2(감염병정보)으로 이동
@@ -82,10 +78,20 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
       //patient 가 null 이 아닐 때 patientRegProvider.patientINit 으로 init
     });
 
+    void imageInit() {
+      ref.read(infectiousImageProvider.notifier).state = null;
+    }
+
     return Scaffold(
       backgroundColor: Palette.white,
       appBar: SBASAppBar(
         title: '병상 요청',
+        onBackPressed: () {
+          if(order == 2) {
+            return imageInit();
+          }
+          return;
+        },
         actions: [
           Container(
             padding: EdgeInsets.symmetric(
@@ -94,6 +100,9 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
             margin: EdgeInsets.only(right: 16.w),
             child: InkWell(
               onTap: () {
+                if(order == 2) {
+                  imageInit();
+                }
                 Navigator.pop(context);
               },
               child: Padding(
