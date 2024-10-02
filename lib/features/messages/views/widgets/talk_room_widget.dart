@@ -32,58 +32,56 @@ class TalkRoomWidget extends ConsumerWidget {
         var talkRoom = talkRooms[index];
         return ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          title: Column(
+          title: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              Image.asset(
+                'assets/message/doctor_icon.png',
+                height: 36.h,
+              ),
+              Gaps.h10,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    'assets/message/doctor_icon.png',
-                    height: 36.h,
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 250.w,
+                        child: Text(
+                          talkRoom.tkrmNm!,
+                          style: CTS.bold(
+                            fontSize: 15,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                      // Gaps.h4,
+                      // Image.asset(
+                      //   "assets/message/unread_msg.png",
+                      //   width: 16.w,
+                      //   height: 16.w,
+                      // )
+                    ],
                   ),
-                  Gaps.h10,
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  if (talkRoom.msg != null && talkRoom.msg != '')
+                    Column(
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              talkRoom.tkrmNm!,
-                              style: CTS.bold(
-                                fontSize: 15,
-                              ),
-                            ),
-                            Gaps.h4,
-                            Image.asset(
-                              "assets/message/unread_msg.png",
-                              width: 16.w,
-                              height: 16.w,
-                            )
-                          ],
+                        Gaps.v4,
+                        SizedBox(
+                          width: 250.w,
+                          child: Text(
+                            talkRoom.msg ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(color: Colors.grey),
+                          ),
                         ),
-                        Gaps.v8,
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                talkRoom.msg ?? '',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          ],
-                        ),
+                        Gaps.v4,
                       ],
                     ),
-                  ),
-                ],
-              ),
-              Gaps.v8,
-              Row(
-                children: [
-                  Gaps.h52,
+                  if (talkRoom.msg == null || talkRoom.msg == '')
+                    Gaps.v8,
                   Text(
                     formatDateTime(talkRoom.rgstDttm!),
                     style: const TextStyle(fontSize: 12.0, color: Colors.grey),
