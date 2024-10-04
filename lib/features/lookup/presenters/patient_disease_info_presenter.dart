@@ -19,7 +19,6 @@ class PatientDiseaseInfoPresenter extends AsyncNotifier {
       // patientDiseaseInfoModel.diagAttcId?.split(";").forEach((attcId) {
       //   print(fileRepository.getDiagImage(attcId).toString());
       // });
-      print(patientDiseaseInfoModel.diagAttcId);
       return patientDiseaseInfoModel;
     }
     return PatientDiseaseInfoModel(undrDsesNms: [], ptTypeNms: [], svrtTypeNms: []);

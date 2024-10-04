@@ -1,11 +1,11 @@
 import 'dart:convert';
-
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/providers/base_code_provider.dart';
 import 'package:sbas/common/models/base_code_model.dart';
+import 'package:sbas/common/providers/private_image_provider.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/authentication/models/user_reg_req_model.dart';
 import 'package:sbas/features/authentication/providers/info_inst_provider.dart';
@@ -69,7 +69,7 @@ class UserRegRequestRepository {
     return await _baseOrganProvider.getOrganCode(query);
   }
 
-  Future<List<dynamic>> uploadImage(List<XFile> files, String? rmk) async {
+  Future<String> uploadImage(List<XFile> files, String? rmk) async {
     List<MultipartFile> multipartFiles = [];
 
     for(var file in files) {
@@ -81,11 +81,13 @@ class UserRegRequestRepository {
       );
     }
 
-    return await _baseCodeProvider.uploadImages(multipartFiles, rmk);
+    return await _privateImageProvider.uploadImages(multipartFiles, rmk);
   }
   final _userRegProvider = UserRegProvider();
 
   final _baseCodeProvider = BaseCodeProvider();
+
+  final _privateImageProvider = PrivateImageProvider();
 
   final _baseOrganProvider = InfoInstProvider();
 }
