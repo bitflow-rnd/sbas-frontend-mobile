@@ -26,8 +26,8 @@ class AssignBedGoHome extends ConsumerStatefulWidget {
   final Patient patient;
   final AssignItemModel assignItem;
   final TimeLine timeLine;
-  final List<String> list = const ['의료기관명', 'PID', '병실', '진료과', '담당의', '연락처', '메시지'];
-  final List<String> hintList = const ['칠곡경북대병원', 'PID 입력', '병실번호 입력', '진료과 입력', '담당의 이름', '의료진 연락처 입력', '입원/퇴원/회송 사유 입력'];
+  final List<String> list = const ['의료기관명', '병원 등록번호', '병실', '진료과', '담당의', '연락처', '메시지'];
+  final List<String> hintList = const ['칠곡경북대병원', '병원 등록번호 입력', '병실번호 입력', '진료과 입력', '담당의 이름', '의료진 연락처 입력', '입원/퇴원/회송 사유 입력'];
   @override
   ConsumerState<AssignBedGoHome> createState() => _AssignBedGoHome();
 }
