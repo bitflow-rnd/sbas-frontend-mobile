@@ -7,7 +7,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_disease_info_presenter.dart';
 
-import 'ByteImageWidget.dart';
+import 'byte_image_widget.dart';
 
 class AssignBedDetailDiseaseInfo extends ConsumerWidget {
   AssignBedDetailDiseaseInfo({
@@ -15,6 +15,7 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
     required this.ptId,
     required this.diseaseInfo,
   });
+
   final String? ptId;
   final PatientDiseaseInfoModel diseaseInfo;
   final List<String> list1 = [
@@ -50,9 +51,9 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
     "산소포화도(%)",
     "수축기혈압(mmHg)",
   ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
@@ -78,14 +79,16 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                               )
                             : Expanded(
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   // mainAxisSize: MainAxisSize.max,
                                   children: [
                                     for (int j = 0; j < 3; j++)
                                       Expanded(
                                         child: Column(
                                           // mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               list1[i].split(",")[j],
@@ -100,7 +103,9 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                                 vertical: 8.h,
                                               ),
                                               child: Text(
-                                                getList1Value(i + 100, diseaseInfo), // 발병일, 진단일, 신고일
+                                                getList1Value(
+                                                    i + 100, diseaseInfo),
+                                                // 발병일, 진단일, 신고일
                                                 style: CTS.medium(fontSize: 13),
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
@@ -164,7 +169,9 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 if (i == 0)
-                                  for (var disease = 0; disease < diseaseInfo.undrDsesNms.length; disease++)
+                                  for (var disease = 0;
+                                      disease < diseaseInfo.undrDsesNms.length;
+                                      disease++)
                                     Container(
                                       margin: EdgeInsets.only(right: 8.w),
                                       padding: EdgeInsets.symmetric(
@@ -177,7 +184,8 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                           color: Palette.greyText_20,
                                           width: 1,
                                         ),
-                                        borderRadius: BorderRadius.circular(13.5),
+                                        borderRadius:
+                                            BorderRadius.circular(13.5),
                                       ),
                                       child: Text(
                                         diseaseInfo.undrDsesNms[disease],
@@ -191,7 +199,9 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                       ),
                                     )
                                 else if (i == 1)
-                                  for (var innerIndex = 0; innerIndex < diseaseInfo.ptTypeNms.length; innerIndex++)
+                                  for (var innerIndex = 0;
+                                      innerIndex < diseaseInfo.ptTypeNms.length;
+                                      innerIndex++)
                                     Container(
                                       margin: EdgeInsets.only(right: 8.w),
                                       padding: EdgeInsets.symmetric(
@@ -204,7 +214,8 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                                           color: Palette.greyText_20,
                                           width: 1,
                                         ),
-                                        borderRadius: BorderRadius.circular(13.5),
+                                        borderRadius:
+                                            BorderRadius.circular(13.5),
                                       ),
                                       child: Text(
                                         diseaseInfo.ptTypeNms[innerIndex],
@@ -272,7 +283,8 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
                             children: [
                               for (var i = 1; i < 4; i++)
                                 Padding(
-                                  padding: EdgeInsets.only(top: i != 1 ? 12.h : 0),
+                                  padding:
+                                      EdgeInsets.only(top: i != 1 ? 12.h : 0),
                                   child: Row(
                                     children: [
                                       Text(
@@ -377,18 +389,8 @@ class AssignBedDetailDiseaseInfo extends ConsumerWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: Row(
-                children: [
-                  for (int i = 0; i < 3; i++)
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: ByteImageWidget(
-                          imageBytesFuture: ref.watch(patientDiseaseInfoProvider.notifier).getImageBytes(),
-                        ),
-                      ),
-                    ),
-                ],
+              child: ByteImageWidget(
+                imageBytesFuture: ref.watch(patientDiseaseInfoProvider.notifier).getImageBytes(diseaseInfo.diagAttcId),
               ),
             ),
             Gaps.v32,

@@ -1,8 +1,8 @@
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/models/base_attc_model.dart';
-
 import 'package:sbas/common/providers/base_attc_provider.dart';
 
 class FileRepository {
@@ -22,8 +22,8 @@ class FileRepository {
     ),
   );
 
-  Future<dynamic> getDiagImage(String attcId) async {
-    return await _fileProvider.getDiagImage(attcId);
+  Future<List<Uint8List>> getDiagImage(String attcGrpId) async {
+    return await _fileProvider.getDiagImage(attcGrpId);
   }
 
   final _fileProvider = BaseAttcProvider();

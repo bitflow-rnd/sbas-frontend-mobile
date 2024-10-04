@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -56,17 +58,21 @@ class BaseAttcProvider {
     throw ArgumentError();
   }
 
-  Future<Uint8List> getDiagImage(String attcId) async {
+  Future<List<Uint8List>> getDiagImage(String attcGrpId) async {
     final client = dio.Dio();
 
     try {
       client.options.headers = authToken;
       final res = await client.getUri(
-        Uri.parse('$_privateBaseUrl/image/$attcId'),
-        options: Options(responseType: ResponseType.bytes),  // 응답을 바이트 형태로 받기
+        Uri.parse('$_privateBaseUrl/images/$attcGrpId'),
+        options: Options(responseType: ResponseType.json),
       );
       if (res.statusCode == 200) {
-        return Uint8List.fromList(res.data);  // List<int>를 Uint8List로 변환
+        List<Uint8List> imageList = [];
+        for(var item in res.data['result']['items']) {
+          imageList.add(base64Decode(item));
+        }
+        return imageList;
       }
     } catch (exception) {
       if (kDebugMode) {

@@ -16,7 +16,9 @@ class PatientTimeLinePresenter extends AsyncNotifier<PatientTimelineModel> {
     state = const AsyncLoading();
 
     state = await AsyncValue.guard(() async {
-      return await getAsync(ptId, bdasSeq);
+      final result = await getAsync(ptId, bdasSeq);
+      print(result.items);
+      return result;
     });
     if (state.hasError) {}
     if (state.hasValue) {}
