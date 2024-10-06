@@ -15,15 +15,14 @@ import 'package:sbas/features/assign/views/modal_tab/assign_bed_approve_screen.d
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_cancel_screen.dart';
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_find_screen.dart';
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_go_home.dart';
-import 'package:sbas/features/authentication/blocs/login_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
-import 'package:sbas/features/patient/models/patient_model.dart';
+import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
-import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 import 'package:sbas/features/messages/views/contact_detail_screen.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/util.dart';
 
 class AssignBedDetailTimeLine extends ConsumerWidget {
@@ -31,6 +30,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
     super.key,
     required this.patient,
     required this.assignItem,
+    required this.transferInfo,
   });
 
   static final bedMoveFormKey = GlobalKey<FormState>();
@@ -352,6 +352,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                         timeLine: timeLine.items
                             .where((element) => (element.title == "입원"))
                             .first,
+                        transferInfo: transferInfo,
                       ),
                     ),
                   );
@@ -895,6 +896,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
 
   final Patient patient;
   final AssignItemModel assignItem;
+  final OriginInfoModel transferInfo;
 }
 
 class DashedLineVerticalPainter extends CustomPainter {

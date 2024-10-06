@@ -14,6 +14,7 @@ class OriginInfoModel {
   String? spclNm;
   String? chrgTelno;
   String? msg;
+  DestinationInfo? destinationInfo;
 
   OriginInfoModel({
     this.ptId,
@@ -31,6 +32,7 @@ class OriginInfoModel {
     this.spclNm,
     this.chrgTelno,
     this.msg,
+    this.destinationInfo,
   });
   OriginInfoModel.fromJson(Map<String, dynamic> json) {
     if (json["ptId"] is String) {
@@ -78,6 +80,9 @@ class OriginInfoModel {
     if (json["msg"] is String) {
       msg = json["msg"];
     }
+    if (json["destinationInfo"] is Map<String, dynamic>) {
+      destinationInfo = DestinationInfo.fromJson(json["destinationInfo"]);
+    }
   }
   void clear() {
     ptId = null;
@@ -95,6 +100,7 @@ class OriginInfoModel {
     spclNm = null;
     chrgTelno = null;
     msg = null;
+    destinationInfo = null;
   }
 
   Map<String, dynamic> toJson() {
@@ -115,7 +121,61 @@ class OriginInfoModel {
     data["spclNm"] = spclNm;
     data["chrgTelno"] = chrgTelno;
     data["msg"] = msg;
+    data["destinationInfo"] = destinationInfo?.toJson();
 
+    return data;
+  }
+}
+
+class DestinationInfo {
+  String? hospId;
+  String? hospNm;
+  String? chrgTelno;
+  String? hospAddr;
+  String? destinationLat;
+  String? destinationLon;
+  String? roomNm;
+  String? deptNm;
+  String? spclNm;
+  String? msg;
+
+  DestinationInfo(
+      {this.hospId,
+      this.hospNm,
+      this.chrgTelno,
+      this.hospAddr,
+      this.destinationLat,
+      this.destinationLon,
+      this.roomNm,
+      this.deptNm,
+      this.spclNm,
+      this.msg});
+
+  DestinationInfo.fromJson(Map<String, dynamic> json) {
+    hospId = json['hospId'];
+    hospNm = json['hospNm'];
+    chrgTelno = json['chrgTelno'];
+    hospAddr = json['hospAddr'];
+    destinationLat = json['destinationLat'];
+    destinationLon = json['destinationLon'];
+    roomNm = json['roomNm'];
+    deptNm = json['deptNm'];
+    spclNm = json['spclNm'];
+    msg = json['msg'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['hospId'] = hospId;
+    data['hospNm'] = hospNm;
+    data['chrgTelno'] = chrgTelno;
+    data['hospAddr'] = hospAddr;
+    data['destinationLat'] = destinationLat;
+    data['destinationLon'] = destinationLon;
+    data['roomNm'] = roomNm;
+    data['deptNm'] = deptNm;
+    data['spclNm'] = spclNm;
+    data['msg'] = msg;
     return data;
   }
 }

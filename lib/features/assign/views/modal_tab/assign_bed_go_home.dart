@@ -11,6 +11,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/presenters/asgn_bed_hospital_presenter.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
+import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
@@ -22,11 +23,13 @@ class AssignBedGoHome extends ConsumerStatefulWidget {
     required this.patient,
     required this.assignItem,
     required this.timeLine,
+    required this.transferInfo,
   });
   final Patient patient;
   final AssignItemModel assignItem;
   final TimeLine timeLine;
-  final List<String> list = const ['의료기관명', '병원 등록번호', '병실', '진료과', '담당의', '연락처', '메시지'];
+  final OriginInfoModel transferInfo;
+  final List<String> list = const ['병원명', '병원 등록번호', '병실', '진료과', '담당의', '연락처', '메시지'];
   final List<String> hintList = const ['칠곡경북대병원', '병원 등록번호 입력', '병실번호 입력', '진료과 입력', '담당의 이름', '의료진 연락처 입력', '입원/퇴원/회송 사유 입력'];
   @override
   ConsumerState<AssignBedGoHome> createState() => _AssignBedGoHome();
@@ -127,7 +130,7 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                                     _getTitle(widget.list[i], i == 0 || i == 1 ? true : false),
                                     Gaps.v8,
                                     i == 0
-                                        ? _getTextInputField(i: i, initalValue: widget.timeLine.chrgInstNm ?? "", isFixed: true, ref: ref)
+                                        ? _getTextInputField(i: i, initalValue: widget.transferInfo.destinationInfo!.hospNm ?? "", isFixed: true, ref: ref)
                                         : _getTextInputField(i: i, hint: widget.hintList[i], ref: ref),
                                     Gaps.v20,
                                   ],
@@ -164,7 +167,7 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                         if (true) {
                           //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
                           ref.watch(asgnBdHospProvider.notifier).init(widget.assignItem.ptId ?? "", "Y", widget.assignItem.bdasSeq ?? -1,
-                              widget.timeLine.asgnReqSeq ?? -1, widget.timeLine.chrgInstId ?? "");
+                              widget.timeLine.asgnReqSeq ?? -1, widget.transferInfo.destinationInfo!.hospId!);
                           if (ref.watch(asgnBdHospProvider.notifier).isValid() == true && validate() == true) {
                             await ref.watch(asgnBdHospProvider.notifier).aprGotoHosp();
                             await Future.delayed(Duration(milliseconds: 1500));

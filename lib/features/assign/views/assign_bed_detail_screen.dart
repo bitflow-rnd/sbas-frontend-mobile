@@ -144,7 +144,7 @@ class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
               ),
             ),
             if (_selectedIndex == 0)
-              AssignBedDetailTimeLine(patient: widget.patient, assignItem: widget.assignItem)
+              AssignBedDetailTimeLine(patient: widget.patient, assignItem: widget.assignItem, transferInfo: widget.transferInfo)
             else if (_selectedIndex == 1)
               AssignBedDetailPatientInfo(patient: widget.patient)
             else if (_selectedIndex == 2)
