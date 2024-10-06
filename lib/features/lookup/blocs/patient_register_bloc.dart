@@ -293,8 +293,10 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     switch (index) {
       case 0:
       case 7:
-      case 101:
         return 7;
+
+      case 101:
+        return 1;
 
       case 1:
         return 6;
