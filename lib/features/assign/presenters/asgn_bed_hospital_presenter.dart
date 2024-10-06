@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/assign/model/asgn_bed_hosp_req_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
+import 'package:sbas/features/patient/models/his_sample_data.dart';
 import 'package:sbas/util.dart';
 
 class AsgnBdHospPresenter extends AsyncNotifier {
@@ -22,16 +23,29 @@ class AsgnBdHospPresenter extends AsyncNotifier {
     switch (index) {
       case 1:
         asgnBdHospReq.pid = value;
+        hisSampleData = HisSampleDataService().getHisSampleData(asgnBdHospReq.pid);
         break;
       case 2: //병실
-        asgnBdHospReq.roomNm = value;
+        if (hisSampleData != null) {
+          asgnBdHospReq.roomNm = hisSampleData!.roomNm;
+        } else {
+          asgnBdHospReq.roomNm = value;
+        }
         break;
       case 3: //진료과
-        asgnBdHospReq.deptNm = value;
+        if (hisSampleData != null) {
+          asgnBdHospReq.deptNm = hisSampleData!.deptNm;
+        } else {
+          asgnBdHospReq.deptNm = value;
+        }
         break;
       case 4:
         //담당의
-        asgnBdHospReq.spclNm = value;
+        if (hisSampleData != null) {
+          asgnBdHospReq.spclNm = hisSampleData!.spclNm;
+        } else {
+          asgnBdHospReq.spclNm = value;
+        }
         break;
       case 5:
         asgnBdHospReq.chrgTelno = value;
@@ -46,7 +60,7 @@ class AsgnBdHospPresenter extends AsyncNotifier {
     switch (index) {
       case 1:
         if (value == null || value == "") {
-          return "PID를 입력해주세요.";
+          return "병원 등록번호를 입력해주세요.";
         }
         break;
     }
@@ -79,6 +93,17 @@ class AsgnBdHospPresenter extends AsyncNotifier {
         break;
     }
     asgnBdHospReq.admsStatCd = admsStatCd;
+    var hisSampleData = HisSampleDataService().getHisSampleData(asgnBdHospReq.pid);
+    if (hisSampleData != null) {
+      asgnBdHospReq.deptNm = hisSampleData.deptNm;
+      asgnBdHospReq.wardNm = hisSampleData.wardNm;
+      asgnBdHospReq.roomNm = hisSampleData.roomNm;
+      asgnBdHospReq.spclNm = hisSampleData.spclNm;
+      asgnBdHospReq.monStrtDt = hisSampleData.monStrtDt;
+      asgnBdHospReq.monStrtTm = hisSampleData.monStrtTm;
+      asgnBdHospReq.admsDt = hisSampleData.admsDt;
+    }
+    print(asgnBdHospReq.toJson());
     var res = await _assignRepository.postAsgnHosp(asgnBdHospReq.toJson());
     try {
       if (res != null && res['isAlreadyApproved'] == false) {
@@ -97,6 +122,7 @@ class AsgnBdHospPresenter extends AsyncNotifier {
 final gotoTargetProvider = StateProvider<String>((ref) => "");
 late AssignRepository _assignRepository;
 late AsgnBdHospReq asgnBdHospReq;
+late HisSampleData? hisSampleData;
 final asgnBdHospProvider = AsyncNotifierProvider<AsgnBdHospPresenter, void>(
   () => AsgnBdHospPresenter(),
 );

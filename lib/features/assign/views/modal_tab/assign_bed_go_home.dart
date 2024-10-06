@@ -171,6 +171,7 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                           if (ref.watch(asgnBdHospProvider.notifier).isValid() == true && validate() == true) {
                             await ref.watch(asgnBdHospProvider.notifier).aprGotoHosp();
                             await Future.delayed(Duration(milliseconds: 1500));
+
                             await ref.watch(patientTimeLineProvider.notifier).refresh(widget.assignItem.ptId, widget.assignItem.bdasSeq);
                             await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
 
@@ -245,7 +246,6 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
       },
       initialValue: initalValue,
       readOnly: isFixed,
-
       inputFormatters: inputFormatters,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       keyboardType: i == 1 ? TextInputType.number : type,

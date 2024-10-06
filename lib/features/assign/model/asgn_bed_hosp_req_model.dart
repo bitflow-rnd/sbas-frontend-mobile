@@ -11,6 +11,9 @@ class AsgnBdHospReq {
   String? dschRsnCd;
   String? msg;
   String? admsStatCd;
+  String? monStrtDt;
+  String? monStrtTm;
+  String? admsDt;
 
   void clear() {
     ptId = null;
@@ -25,6 +28,9 @@ class AsgnBdHospReq {
     dschRsnCd = null;
     msg = null;
     admsStatCd = null;
+    monStrtDt = null;
+    monStrtTm = null;
+    admsDt = null;
   }
 
   AsgnBdHospReq({
@@ -40,6 +46,9 @@ class AsgnBdHospReq {
     this.dschRsnCd,
     this.msg,
     this.admsStatCd,
+    this.monStrtDt,
+    this.monStrtTm,
+    this.admsDt,
   });
 
   AsgnBdHospReq.fromJson(Map<String, dynamic> json)
@@ -54,7 +63,11 @@ class AsgnBdHospReq {
         chrgTelno = json['chrgTelno'] as String?,
         dschRsnCd = json['dschRsnCd'] as String?,
         msg = json['msg'] as String?,
-        admsStatCd = json['admsStatCd'] as String?;
+        admsStatCd = json['admsStatCd'] as String?,
+        monStrtDt = json['monStrtDt'] as String?,
+        monStrtTm = json['monStrtTm'] as String?,
+        admsDt = json['admsDt'] as String?;
+
 
   Map<String, dynamic> toJson() => {
         'ptId': ptId,
@@ -68,6 +81,9 @@ class AsgnBdHospReq {
         'chrgTelno': chrgTelno,
         'dschRsnCd': dschRsnCd,
         'msg': msg,
-        'admsStatCd': admsStatCd
+        'admsStatCd': admsStatCd,
+        'monStrtDt': monStrtDt,
+        'monStrtTm': monStrtTm,
+        'admsDt': admsDt,
       };
 }
