@@ -401,9 +401,7 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                   id: userId,
                                   userId: mbrId,
                                 );
-                                await ref
-                                    .read(contactRepoProvider)
-                                    .doChat(request)
+                                await ref.read(contactRepoProvider).doChat(request)
                                     .then((value) => {
                                           Navigator.push(
                                             context,
@@ -417,9 +415,7 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                                             ),
                                           )
                                         });
-                                ref
-                                    .read(talkRoomsProvider.notifier)
-                                    .updateUserId(userId);
+                                ref.read(talkRoomsProvider.notifier).updateUserId(userId);
                               },
                               text: "대화 하기")
                         ],

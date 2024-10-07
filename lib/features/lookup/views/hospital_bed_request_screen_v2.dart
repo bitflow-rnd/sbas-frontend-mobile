@@ -268,8 +268,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
             ? Expanded(
                 child: InkWell(
                   onTap: () {
-                    ref.read(orderOfRequestProvider.notifier)
-                        .update((state) => order - 1);
+                    ref.read(orderOfRequestProvider.notifier).update((state) => order - 1);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 12.h),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
+import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
@@ -30,6 +31,7 @@ class PatientRegScreen extends ConsumerStatefulWidget {
 
 class PatientRegScreenState extends ConsumerState<PatientRegScreen> {
   final formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +74,11 @@ class PatientRegScreenState extends ConsumerState<PatientRegScreen> {
           Expanded(
             child: Form(
               key: formKey,
-              child: patientAttc != null ? PatientRegInfoV2() : const PatientRegReport(),
+              child: patientAttc != null
+                  ? PatientRegInfoV2()
+                  : _isLoading
+                  ? const SBASProgressIndicator()
+                  : const PatientRegReport(),
             ),
           ),
           Row(
@@ -84,46 +90,76 @@ class PatientRegScreenState extends ConsumerState<PatientRegScreen> {
                   text: patientAttc != null ? '이전' : '취소',
                   onPressed: patientAttc != null
                       ? () {
-                          ref.read(patientIsUploadProvider.notifier).state = true;
-                          ref.read(patientAttcProvider.notifier).state = null;
-                        }
+                    ref.read(patientIsUploadProvider.notifier).state = true;
+                    ref.read(patientAttcProvider.notifier).state = null;
+                  }
                       : () => Navigator.pop(context),
                 ),
               ),
               SizedBox(
                 width: width * 0.5,
                 child: BottomSubmitBtn(
-                    text: '다음',
-                    onPressed: () {
-                      if (patientAttc != null) {
-                        if (_tryValidation()) {
-                          var patientRegInfoModel = ref.read(patientRegProvider).value;
+                  text: '다음',
+                  onPressed: () {
+                    setState(() {
+                      _isLoading = true; // 로딩 상태 시작
+                    });
 
-                          ref.read(patientRegProvider.notifier).exist().then(
-                            (value) {
-                              if (value['isExist']) {
-                                var oldPatient = PatientCheckResponse.fromJson(value['items']);
-                                PatientInfoModal().patientDuplicateCheckModal(context, oldPatient, patientRegInfoModel!, ref);
-                              } else {
-                                ref.read(patientRegProvider.notifier).registry(widget.patient?.ptId, context);
-                                Navigator.pop(context);
-                              }
-                            }
-                          );
-                        }
-                      } else {
-                        if (patientImage != null) {
-                          ref.read(patientRegProvider.notifier).uploadImage(patientImage).then(
-                            (value) {
-                              if (value == true) {
-                                PatientRegInfoModal().epidUploadConfirmModal(context);
-                              }
+                    if (patientAttc != null) {
+                      if (_tryValidation()) {
+                        var patientRegInfoModel = ref.read(patientRegProvider).value;
+
+                        ref.read(patientRegProvider.notifier).exist().then((value) {
+                            setState(() {
+                              _isLoading = false; // 로딩 상태 종료
                             });
-                        } else {
-                          ref.read(patientAttcProvider.notifier).state = '';
-                        }
+
+                            if (value['isExist']) {
+                              var oldPatient = PatientCheckResponse.fromJson(value['items']);
+                              PatientInfoModal().patientDuplicateCheckModal(context, oldPatient, patientRegInfoModel!, ref);
+                            } else {
+                              ref.read(patientRegProvider.notifier).registry(widget.patient?.ptId, context);
+                              Navigator.pop(context);
+                            }
+                          },
+                          onError: (error) {
+                            setState(() {
+                              _isLoading = false; // 에러 발생 시 로딩 종료
+                            });
+                          },
+                        );
+                      } else {
+                        setState(() {
+                          _isLoading = false; // 유효성 검사 실패 시 로딩 종료
+                        });
                       }
-                    }),
+                    } else {
+                      if (patientImage != null) {
+                        ref.read(patientRegProvider.notifier).uploadImage(patientImage).then(
+                              (value) {
+                            setState(() {
+                              _isLoading = false; // 이미지 업로드 후 로딩 종료
+                            });
+
+                            if (value == true) {
+                              PatientRegInfoModal().epidUploadConfirmModal(context);
+                            }
+                          },
+                          onError: (error) {
+                            setState(() {
+                              _isLoading = false; // 에러 발생 시 로딩 종료
+                            });
+                          },
+                        );
+                      } else {
+                        setState(() {
+                          _isLoading = false; // 이미지가 없을 경우 로딩 종료
+                        });
+                        ref.read(patientAttcProvider.notifier).state = '';
+                      }
+                    }
+                  },
+                ),
               ),
             ],
           ),
