@@ -9,7 +9,7 @@ import 'package:sbas/features/lookup/models/infectious_disease_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
 class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
-  String get address => _infectiousDiseaseModel.instBascAddr ?? '';
+  String get address => _infectiousDiseaseModel.instAddr ?? '';
 
   @override
   FutureOr<InfectiousDiseaseModel> build() {
@@ -60,7 +60,7 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
   Future<void> setAddress(Kpostal postal) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      _infectiousDiseaseModel.instBascAddr = postal.roadAddress;
+      _infectiousDiseaseModel.instAddr = postal.roadAddress;
       _infectiousDiseaseModel.instZip = postal.postCode;
 
       return _infectiousDiseaseModel;
@@ -183,9 +183,6 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
   }
 
   void initByOCR(EpidemiologicalReportModel report) {
-    _infectiousDiseaseModel.admsYn ??= report.admsYn;
-    _infectiousDiseaseModel.rcptPhc ??= report.rcptPhc;
-    _infectiousDiseaseModel.cv19Symp ??= report.cv19Symp;
     _infectiousDiseaseModel.rcptPhc = report.rcptPhc;
     _infectiousDiseaseModel.diagNm = report.diagNm;
     _infectiousDiseaseModel.diagGrde = report.diagGrde;

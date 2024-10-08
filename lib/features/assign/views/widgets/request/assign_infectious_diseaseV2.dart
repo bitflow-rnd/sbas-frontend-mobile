@@ -84,7 +84,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
 
     InfectiousDiseaseBloc vm = ref.read(infectiousDiseaseProvider.notifier);
     final patientImage = ref.watch(infectiousImageProvider);
-    ref.read(infectiousDiseaseProvider.notifier).initByOCR(widget.report);
+    // ref.read(infectiousDiseaseProvider.notifier).initByOCR(widget.report);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -372,7 +372,6 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
           ],
           autovalidateMode: AutovalidateMode.always,
           keyboardType: type,
-          maxLength: maxLength,
         ),
         Gaps.v20,
       ],

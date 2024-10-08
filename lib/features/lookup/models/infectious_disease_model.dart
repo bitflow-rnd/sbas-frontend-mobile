@@ -19,7 +19,6 @@ class InfectiousDiseaseModel {
   String? diagDrNm;
   String? rptChfNm;
   String? esvyAttcId;
-  String? instBascAddr;
   String? instDetlAddr;
   String? instZip;
   String? diagAttcId;
@@ -45,7 +44,6 @@ class InfectiousDiseaseModel {
     this.diagDrNm,
     this.rptChfNm,
     this.esvyAttcId,
-    this.instBascAddr,
     this.instDetlAddr,
     this.instZip,
     this.diagAttcId,
@@ -71,7 +69,6 @@ class InfectiousDiseaseModel {
     diagDrNm = null;
     rptChfNm = null;
     esvyAttcId = null;
-    instBascAddr = null;
     instDetlAddr = null;
     instZip = null;
     diagAttcId = null;
@@ -138,9 +135,6 @@ class InfectiousDiseaseModel {
     if (json["esvyAttcId"] is String) {
       esvyAttcId = json["esvyAttcId"];
     }
-    if (json["instBascAddr"] is String) {
-      instBascAddr = json["instBascAddr"];
-    }
     if (json["instDetlAddr"] is String) {
       instDetlAddr = json["instDetlAddr"];
     }
@@ -174,7 +168,6 @@ class InfectiousDiseaseModel {
     data["diagDrNm"] = diagDrNm;
     data["rptChfNm"] = rptChfNm;
     data["esvyAttcId"] = esvyAttcId;
-    data["instBascAddr"] = instBascAddr;
     data["instDetlAddr"] = instDetlAddr;
     data["instZip"] = instZip;
     data["diagAttcId"] = diagAttcId;
@@ -202,7 +195,6 @@ class InfectiousDiseaseModel {
         instAddr = null,
         diagDrNm = null,
         esvyAttcId = null,
-        instBascAddr = null,
         instDetlAddr = null,
         instZip = null,
         diagAttcId = null,
