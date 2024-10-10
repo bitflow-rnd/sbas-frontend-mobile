@@ -57,7 +57,7 @@ class AssignNewBedPresenter extends AsyncNotifier<PatientRegInfoModel> {
     state = await AsyncValue.guard(() async {
       try {
         final report = EpidemiologicalReportModel.fromJson(
-          await _patientRepository.getOpticalCharacterRecognition(imageFile),
+          await _patientRepository.upldEpidReport(imageFile),
         );
         ref.read(patientAttcProvider.notifier).state = report.attcId;
         _patientInfoModel.bascAddr = report.baseAddr;

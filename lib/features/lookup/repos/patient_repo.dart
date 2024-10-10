@@ -64,7 +64,7 @@ class PatientRepository {
         toJson(map),
       );
 
-  Future<Map<String, dynamic>> getOpticalCharacterRecognition(
+  Future<Map<String, dynamic>> upldEpidReport(
     XFile image,
   ) async =>
       await _patientProvider.upldepidreport(

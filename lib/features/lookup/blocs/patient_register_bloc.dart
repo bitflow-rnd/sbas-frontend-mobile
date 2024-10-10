@@ -112,7 +112,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     state = await AsyncValue.guard(() async {
       try {
         final report = EpidemiologicalReportModel.fromJson(
-          await _patientRepository.getOpticalCharacterRecognition(imageFile),
+          await _patientRepository.upldEpidReport(imageFile),
         );
         ref.read(patientAttcProvider.notifier).state = report.attcId;
         patientInfoModel.bascAddr = report.baseAddr;
@@ -132,7 +132,7 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
         patientInfoModel.mpno = report.mpno;
         patientInfoModel.nokNm = report.nokNm;
         patientInfoModel.natiCd = report.natiCd;
-        ref.read(infectiousDiseaseProvider.notifier).initByOCR(report);
+        ref.watch(infectiousDiseaseProvider.notifier).initByOCR(report);
       } catch (exception) {
         if (kDebugMode) {
           print("uploadImage exception $exception");
