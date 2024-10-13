@@ -7,6 +7,7 @@ import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/messages/views/contact_list_screen.dart';
+import 'package:sbas/features/messages/views/talk_room_reg_screen.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 import 'package:sbas/util.dart';
 
@@ -150,27 +151,52 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                     ],
                   ),
                   Gaps.h16,
-                  GestureDetector(
-                    onTap: () => _showBottomSheet(context),
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Palette.mainColor,
-                          width: 1,
+                  selectedTabIndex == 0 ?
+                    GestureDetector(
+                      onTap: () => _showBottomSheet(context),
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Palette.mainColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(7),
                         ),
-                        borderRadius: BorderRadius.circular(7),
+                        child: Text(
+                          '+ 사용자 초대',
+                          style: CTS.medium(
+                            color: Palette.mainColor,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
-                      child: Text(
-                        '+ 사용자 초대',
-                        style: CTS.medium(
-                          color: Palette.mainColor,
-                          fontSize: 12,
+                    ) : GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => TalkRoomRegScreen()
+                        ));
+                      },
+                      child: Container(
+                        padding:
+                        EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Palette.mainColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        child: Text(
+                          '+ 대화방 생성',
+                          style: CTS.medium(
+                            color: Palette.mainColor,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),

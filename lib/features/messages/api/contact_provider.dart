@@ -23,7 +23,11 @@ class ContactProvider {
   Future<Map<String, dynamic>> getRecentActivity(String userId) async =>
       await _api.getAsync('$_privateRoute/activity-history/$userId');
 
+  Future<Map<String, dynamic>> getAllUser(Map<String, dynamic> map) async =>
+      await _api.getAsyncWithMap('$_adminRoute/users', map);
+
   final _privateTalkRoute = 'private/talk';
   final _privateRoute = 'private/user';
+  final _adminRoute = 'admin/user';
   final _api = V1Provider();
 }

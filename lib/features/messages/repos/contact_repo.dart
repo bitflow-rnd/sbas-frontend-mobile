@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/messages/api/contact_provider.dart';
+import 'package:sbas/features/messages/models/UserListModel.dart';
 import 'package:sbas/features/messages/models/activity_history_list_model.dart';
 import 'package:sbas/features/messages/models/chat_request_model.dart';
 import 'package:sbas/features/messages/models/favorite_request_model.dart';
 
 class ContactRepository {
-  Future<Map<String, dynamic>> getAllUser(Map<String, dynamic> map) async =>
+  Future<Map<String, dynamic>> getAllContacts(Map<String, dynamic> map) async =>
       (await _contactProvider.getAllContacts(map));
 
   Future<Map<String, dynamic>> getContactById(String targetId) async =>
@@ -28,6 +29,8 @@ class ContactRepository {
   Future<ActivityHistoryListModel> getRecentActivity(String userId) async =>
       ActivityHistoryListModel.fromJson(await _contactProvider.getRecentActivity(userId));
 
+  Future<UserListModel> getAllUser(Map<String, dynamic> map) async =>
+      UserListModel.fromJson(await _contactProvider.getAllUser(map));
 
     final _contactProvider = ContactProvider();
 
