@@ -6,12 +6,11 @@ import 'package:sbas/features/lookup/models/bed_assgin_request_model.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
+import 'package:sbas/features/lookup/models/patient_history_model.dart';
+import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/patient/models/patient_list_model.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
-import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
-import 'package:sbas/features/lookup/providers/patient_provider.dart';
 import 'package:sbas/util.dart';
-import 'package:sbas/features/lookup/models/patient_history_model.dart';
 
 class PatientRepository {
   Future<PatientListModel> lookupPatientInfo() async =>
@@ -24,50 +23,35 @@ class PatientRepository {
       await _privatePatientProvider.getPatientHistory(ptId);
 
   Future<dynamic> registerPatientInfo(Map<String, dynamic> map) async =>
-      await _patientProvider.registerPatientInfo(
+      await _privatePatientProvider.registerPatientInfo(
         toJson(map),
       );
 
   Future<dynamic> registerDiseaseInfo(Map<String, dynamic> map) async =>
-      await _patientProvider.registerDiseaseInfo(
+      await _privatePatientProvider.registerDiseaseInfo(
         toJson(map),
       );
 
-  Future<dynamic> amendPatientInfo(String id, Map<String, dynamic> map) async =>
-      await _patientProvider.amendPatientInfo(
+  Future<dynamic> updatePatientInfo(String id, Map<String, dynamic> map) async =>
+      await _privatePatientProvider.updatePatientInfo(
         id,
         toJson(map),
-      );
-
-  Future<dynamic> getAllocationHistory(String id) async =>
-      await _patientProvider.getAllocationHistory(
-        id,
       );
 
   Future<dynamic> getEpidemiologicalReport(String attcId) async =>
-      await _patientProvider.getEpidemiologicalReport(
+      await _privatePatientProvider.getEpidemiologicalReport(
         attcId,
       );
 
   Future<int> bioinfoanlys(Map<String, dynamic> map) async =>
-      await _patientProvider.bioinfoanlys(
-        toJson(map),
-      );
-
-  Future<dynamic> regBioInfo(Map<String, dynamic> map) async =>
-      await _patientProvider.regBioInfo(
-        toJson(map),
-      );
-
-  Future<dynamic> regSevrInfo(Map<String, dynamic> map) async =>
-      await _patientProvider.regSevrInfo(
+      await _privatePatientProvider.bioInfoAnlys(
         toJson(map),
       );
 
   Future<Map<String, dynamic>> upldEpidReport(
     XFile image,
   ) async =>
-      await _patientProvider.upldepidreport(
+      await _privatePatientProvider.upldEpidreport(
         await MultipartFile.fromFile(
           image.path,
           filename: image.name,
@@ -76,11 +60,6 @@ class PatientRepository {
 
   Future<dynamic> postBedAssignRequest(BedAssignRequestModel model) async =>
       await _privatePatientProvider.postBedAssignRequest(
-        model.toJson(),
-      );
-
-  Future<dynamic> postRegOriginInfo(OriginInfoModel model) async =>
-      await _privatePatientProvider.postRegOriginInfo(
         model.toJson(),
       );
 
@@ -100,7 +79,6 @@ class PatientRepository {
   Future<PatientTimelineModel> getTimeLine(String ptId, int bdasSeq) async =>
       await _privatePatientProvider.getTimeLine(ptId, bdasSeq);
 
-  final _patientProvider = PatientProvider();
   final _privatePatientProvider = PrivatePatientProvider();
 }
 

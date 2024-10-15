@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:sbas/common/api/v1_provider.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/patient/models/patient_list_model.dart';
@@ -9,14 +10,20 @@ import 'package:sbas/features/lookup/models/patient_history_model.dart';
 
 class PrivatePatientProvider {
   PatientTimelineModel? timeLine;
+
   Future<PatientListModel> lookupPatientInfo() async => PatientListModel.fromJson(await _api.getAsync('$_privateRoute/search'));
 
+  Future<dynamic> registerPatientInfo(String json) async => await _api.postAsync('$_privateRoute/regbasicinfo', json);
+  Future<dynamic> updatePatientInfo(String id, String json) async => await _api.postAsync('$_privateRoute/modinfo/$id', json);
   Future<Patient> getPatientInfo(String ptId) async => Patient.fromJson(await _api.getAsync('$_privateRoute/basicinfo/$ptId'));
+  Future<Map<String, dynamic>> upldEpidreport(MultipartFile file) async => await _api.uploadImageFile('$_privateRoute/upldepidreport', file);
+  Future<dynamic> getEpidemiologicalReport(String attcId) async => await _api.getAsync('$_privateRoute/read-epidreport/$attcId');
+
   Future<PatientHistoryList> getPatientHistory(String ptId) async => PatientHistoryList.fromJson(await _api.getAsync('$_privateRoute/bdasHisinfos/$ptId'));
 
-  Future<dynamic> postRegOriginInfo(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/regstrtpoint', toJson(map));
-
+  Future<dynamic> registerDiseaseInfo(String json) async => await _api.postAsync('$_privateRoute/regdisesinfo', json);
   Future<dynamic> postBedAssignRequest(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/bedassignreq', toJson(map));
+  Future<int> bioInfoAnlys(String json) async => await _api.postAsync('$_privateRoute/bioinfoanlys', json);
 
   Future<Map<String, dynamic>> postExist(Map<String, dynamic> map) async => await _api.postAsync('$_privateRoute/exist', toJson(map));
 
