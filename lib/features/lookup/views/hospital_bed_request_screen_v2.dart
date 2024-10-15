@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/providers/loading_notifier.dart';
 import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/extensions.dart';
@@ -299,13 +300,18 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   if (patientAttc == null && patientImage != null) {
                     //image 가 선택되어있지만 업로드 이전
                     //역학조사서 이미지는 선택되어있지만, 업로드 이전
+                    ref.watch(loadingProvider.notifier).show();
                     await ref
                         .read(patientRegProvider.notifier)
                         .uploadImage(patientImage)
                         .then((value) {
                       if (value == true) {
-                        PatientRegInfoModal().epidUploadConfirmModal(context);
+                        PatientRegInfoModal().epidUploadConfirmModal(context, "역학조사서 파일을 기반으로\n환자정보를 자동입력 하였습니다.\n내용을 확인해주세요.");
                         ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
+                        ref.watch(loadingProvider.notifier).hide();
+                      } else {
+                        PatientRegInfoModal().epidUploadConfirmModal(context, "역학조사서 인식에 실패했습니다.\n다시 한번 시도해주세요.");
+                        ref.watch(loadingProvider.notifier).hide();
                       }
                     });
                   } else if (patientAttc != null && patientImage != null) {

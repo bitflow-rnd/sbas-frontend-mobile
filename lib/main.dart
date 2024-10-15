@@ -10,11 +10,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/providers/loading_notifier.dart';
 import 'package:sbas/common/widgets/observer_widget.dart';
 import 'package:sbas/firebase_options.dart';
 import 'package:sbas/router.dart';
 import 'package:sbas/util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'common/widgets/loading_spinner.dart';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -150,12 +153,11 @@ class App extends ConsumerWidget {
     super.key,
   });
   @override
-  Widget build(BuildContext context, WidgetRef ref) => ScreenUtilInit(
-        designSize: const Size(
-          360,
-          690,
-        ),
-        builder: (context, _) => MaterialApp.router(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      builder: (context, _) {
+        return MaterialApp.router(
           routerConfig: ref.watch(routerProvider),
           debugShowCheckedModeBanner: false,
           scaffoldMessengerKey: scaffoldMessengerKey,
@@ -171,6 +173,22 @@ class App extends ConsumerWidget {
             Locale('ko', 'KR'),
             Locale('en', 'US'),
           ],
-        ),
-      );
+          builder: (context, child) {
+            return Stack(
+              children: [
+                child!,
+                if (ref.watch(loadingProvider))
+                  const Stack(
+                    children: [
+                      ModalBarrier(dismissible: false),
+                      LoadingSpinner(), // 로딩 스피너 추가
+                    ],
+                  )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 }

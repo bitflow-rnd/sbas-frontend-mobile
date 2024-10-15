@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/common.dart';
-import 'package:sbas/constants/extensions.dart';
-import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/constants/palette.dart';
 
 class PatientRegInfoModal {
-  epidUploadConfirmModal(context) {
+  epidUploadConfirmModal(context, String msg) {
     Common.showModal(
       context,
       Common.commonModal(
         context: context,
-        mainText: "역학조사서 파일을 기반으로\n환자정보를 자동입력 하였습니다.\n내용을 확인해주세요.",
+        mainText: msg,
         imageWidget: Image.asset(
           "assets/auth_group/modal_check.png",
           width: 44.h,
         ),
         imageHeight: 44.h,
-      )
+      ),
     );
   }
 
