@@ -1,10 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/messages/models/UserListModel.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
-import 'package:sbas/features/patient/providers/paitent_provider.dart';
-import 'package:sbas/features/patient/services/patient_info_service.dart';
-import 'package:sbas/features/patient/models/patient_list_model.dart';
 
 class UserListNotifier extends AsyncNotifier<UserListModel> {
   var page = 1;
@@ -72,4 +70,5 @@ final userListProvider =
 AsyncNotifierProvider<UserListNotifier, UserListModel>(
       () => UserListNotifier(),
 );
-final selectedItemsProvider = StateProvider<List<String>>((ref) => []);
+final selectedUserIdProvider = StateProvider<List<String>>((ref) => []);
+final selectedUserNmProvider = StateProvider<List<String>>((ref) => []);

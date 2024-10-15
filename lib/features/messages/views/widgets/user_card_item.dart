@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/assign/views/modal_tab/assign_bed_find_screen.dart';
 import 'package:sbas/features/messages/models/user_detail_model.dart';
+import 'package:sbas/features/messages/providers/user_list_provider.dart';
 
 class UserCardItem extends ConsumerStatefulWidget {
   const UserCardItem({
@@ -21,29 +21,39 @@ class UserCardItem extends ConsumerStatefulWidget {
 class _UserCardItemState extends ConsumerState<UserCardItem> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 8.r,
-        horizontal: 16.r,
-      ),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 20.r, horizontal: 20.r),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.r),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0x1a645c5c),
-              offset: const Offset(0, 3),
-              blurRadius: 12.r,
-              spreadRadius: 0,
-            ),
-          ],
-        ),
-        child: GestureDetector(
-          onTap: () {
-            ref.watch(selectedItemsProvider.notifier).state.add(widget.model.id!);
-          },
+    final selectedUserIds = ref.watch(selectedUserIdProvider);
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
+      child: GestureDetector(
+        onTap: () {
+          print('UserCardItem onTap');
+          final selectedUserIdNotifier = ref.read(selectedUserIdProvider.notifier);
+          final selectedUserNmNotifier = ref.read(selectedUserNmProvider.notifier);
+
+          if (selectedUserIds.contains(widget.model.id)) {
+            // id와 userNm을 리스트에서 제거
+            selectedUserIdNotifier.state = selectedUserIds.where((id) => id != widget.model.id).toList();
+            selectedUserNmNotifier.state = selectedUserNmNotifier.state.where((name) => name != widget.model.userNm).toList();
+          } else {
+            // id와 userNm을 리스트에 추가
+            selectedUserIdNotifier.state = [...selectedUserIds, widget.model.id!];
+            selectedUserNmNotifier.state = [...selectedUserNmNotifier.state, widget.model.userNm!];
+          }
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 20.r, horizontal: 20.r),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.r),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0x1a645c5c),
+                offset: const Offset(0, 3),
+                blurRadius: 12.r,
+                spreadRadius: 0,
+              ),
+            ],
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -125,14 +135,14 @@ class _UserCardItemState extends ConsumerState<UserCardItem> {
                 height: 24.h,
                 width: 24.h,
                 decoration: BoxDecoration(
-                    color: ref.watch(selectedItemsProvider.notifier).state.contains(widget.model.id)
+                    color: selectedUserIds.contains(widget.model.id)
                         ? Palette.mainColor
                         : Palette.white,
                     borderRadius: BorderRadius.circular(4.r),
-                    border: ref.watch(selectedItemsProvider.notifier).state.contains(widget.model.id)
+                    border: selectedUserIds.contains(widget.model.id)
                         ? null
                         : Border.all(color: Palette.greyText_20, width: 1)),
-                child: ref.watch(selectedItemsProvider.notifier).state.contains(widget.model.id)
+                child: selectedUserIds.contains(widget.model.id)
                     ? Icon(
                       Icons.check,
                       color: Palette.white,
