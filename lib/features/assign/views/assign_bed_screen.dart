@@ -221,7 +221,7 @@ class AssignBedScreen extends ConsumerWidget {
                                       ),
                                     );
                                   },
-                                  text: '병상요청',
+                                  text: '신규 병상요청',
                                 ),
                               ],
                             ),

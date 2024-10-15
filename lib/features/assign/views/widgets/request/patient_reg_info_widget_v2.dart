@@ -421,79 +421,6 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
         ],
       );
 
-  Widget _nationSelRow(PatientRegisterPresenter vm) => Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: const Color(0xffe4e4e4),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Row(
-              children: [
-                for (var i in widget.nationSel)
-                  Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 28.w, vertical: 10.h),
-                        child: Text(i,
-                            style: CTS.bold(
-                              fontSize: 11,
-                              color: Colors.transparent,
-                            )),
-                      ),
-                      Gaps.h1,
-                    ],
-                  )
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              for (var i in widget.nationSel)
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () =>
-                          vm.setNation(i == "대한민국" ? "NATI0001" : "NATI0002"),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: widget.nationSel[
-                                        vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i
-                                ? const Color(0xff538ef5)
-                                : Colors.transparent,
-                            borderRadius: widget.nationSel[
-                                        vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i
-                                ? BorderRadius.circular(6)
-                                : null),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 28.w, vertical: 10.h),
-                        child: Text(i,
-                            style: CTS.bold(
-                              fontSize: 11,
-                              color: widget.nationSel[
-                                vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i
-                                  ? Palette.white
-                                  : Palette.greyText_60,
-                            )),
-                      ),
-                    ),
-                    i != '기타'
-                        ? Container(
-                            height: 12.h,
-                            width: 1,
-                            decoration: BoxDecoration(
-                              color: const Color(0xff676a7a).withOpacity(0.2),
-                            ),
-                          )
-                        : Container(),
-                  ],
-                ),
-            ],
-          ),
-        ],
-      );
-
   Widget _nation(PatientRegInfoModel report, PatientRegisterPresenter vm) =>
       Column(
         children: [
@@ -550,4 +477,77 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
           Gaps.v10
         ],
       );
+
+  Widget _nationSelRow(PatientRegisterPresenter vm) => Stack(
+    children: [
+      Container(
+        decoration: BoxDecoration(
+          color: const Color(0xffe4e4e4),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          children: [
+            for (var i in widget.nationSel)
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 28.w, vertical: 10.h),
+                    child: Text(i,
+                        style: CTS.bold(
+                          fontSize: 11,
+                          color: Colors.transparent,
+                        )),
+                  ),
+                  Gaps.h1,
+                ],
+              )
+          ],
+        ),
+      ),
+      Row(
+        children: [
+          for (var i in widget.nationSel)
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () =>
+                      vm.setNation(i == "대한민국" ? "NATI0001" : "NATI0002"),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: widget.nationSel[
+                        vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i
+                            ? const Color(0xff538ef5)
+                            : Colors.transparent,
+                        borderRadius: widget.nationSel[
+                        vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i
+                            ? BorderRadius.circular(6)
+                            : null),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 28.w, vertical: 10.h),
+                    child: Text(i,
+                        style: CTS.bold(
+                          fontSize: 11,
+                          color: widget.nationSel[
+                          vm.patientInfoModel.natiCd == "NATI0001" ? 0 : 1] == i
+                              ? Palette.white
+                              : Palette.greyText_60,
+                        )),
+                  ),
+                ),
+                i != '기타'
+                    ? Container(
+                  height: 12.h,
+                  width: 1,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff676a7a).withOpacity(0.2),
+                  ),
+                )
+                    : Container(),
+              ],
+            ),
+        ],
+      ),
+    ],
+  );
 }

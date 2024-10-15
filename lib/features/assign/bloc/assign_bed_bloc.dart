@@ -30,7 +30,7 @@ class AssignNewBedPresenter extends AsyncNotifier<PatientRegInfoModel> {
       if (id == null) {
         await _patientRepository.registerPatientInfo(_patientInfoModel.toJson());
       } else {
-        await _patientRepository.amendPatientInfo(
+        await _patientRepository.updatePatientInfo(
           id,
           _patientInfoModel.toJson(),
         );

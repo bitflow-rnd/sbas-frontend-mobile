@@ -68,7 +68,7 @@ patientDuplicateCheckModal(context, PatientCheckResponse oldPatient,
                     "주소 : ${oldPatient.dstr1CdNm} ${oldPatient.dstr2CdNm}",
                   ),
                   modal2frag(oldPatient.telno == newPatient.telno,
-                      "연락처 : ${oldPatient.telno}"),
+                      "연락처 : ${oldPatient.telno ?? "-"}"),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.r),
                     child: Text(

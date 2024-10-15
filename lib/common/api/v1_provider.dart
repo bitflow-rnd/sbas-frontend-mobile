@@ -195,5 +195,36 @@ class V1Provider {
     }
   }
 
+  Future<dynamic> uploadImageFile(String route, MultipartFile file) async {
+    final client = Dio();
+
+    try {
+      client.options.contentType = 'multipart/form-data';
+      client.options.headers = authToken;
+
+      final res = await client.postUri(
+        Uri.parse('$_baseUrl/$route'),
+        data: FormData.fromMap(
+          {
+            'param1': '',
+            'param2': file,
+          },
+        ),
+      );
+      if (res.statusCode == 200) {
+        return res.data['result'];
+      }
+    } catch (exception) {
+      if (kDebugMode) {
+        print({
+          'exception': exception,
+        });
+      }
+    } finally {
+      client.close();
+    }
+    throw ArgumentError();
+  }
+
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1';
 }
