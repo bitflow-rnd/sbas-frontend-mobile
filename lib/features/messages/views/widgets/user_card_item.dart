@@ -26,7 +26,6 @@ class _UserCardItemState extends ConsumerState<UserCardItem> {
       padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
       child: GestureDetector(
         onTap: () {
-          print('UserCardItem onTap');
           final selectedUserIdNotifier = ref.read(selectedUserIdProvider.notifier);
           final selectedUserNmNotifier = ref.read(selectedUserNmProvider.notifier);
 

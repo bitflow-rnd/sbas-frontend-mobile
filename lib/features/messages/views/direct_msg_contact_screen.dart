@@ -11,7 +11,7 @@ import 'package:sbas/features/messages/views/talk_room_reg_screen.dart';
 import 'package:sbas/features/messages/views/widgets/talk_room_widget.dart';
 import 'package:sbas/util.dart';
 
-final selecteTabProvider = StateProvider.autoDispose(
+final selectedTabProvider = StateProvider.autoDispose(
   //tab 전환용
   (ref) => 0,
 );
@@ -32,7 +32,7 @@ class DMContactScreen extends ConsumerStatefulWidget {
 class _DMContactScreenState extends ConsumerState<DMContactScreen> {
   @override
   Widget build(BuildContext context) {
-    final selectedTabIndex = ref.watch(selecteTabProvider);
+    final selectedTabIndex = ref.watch(selectedTabProvider);
 
     return Scaffold(
       backgroundColor: Palette.white,
@@ -54,7 +54,7 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                         children: [
                           InkWell(
                             onTap: () {
-                              ref.read(selecteTabProvider.notifier).state = 0;
+                              ref.read(selectedTabProvider.notifier).state = 0;
                             },
                             child: Row(
                               children: [
@@ -75,7 +75,7 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                                         Radius.circular(Bitflow.defaultRadius),
                                       )),
                                   child: Text(
-                                    "1",
+                                    "0",
                                     style: CTS.bold(
                                         color: Colors.white, fontSize: 10),
                                   ).c,
@@ -86,7 +86,7 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                           Gaps.h44,
                           InkWell(
                             onTap: () {
-                              ref.read(selecteTabProvider.notifier).state = 1;
+                              ref.read(selectedTabProvider.notifier).state = 1;
                             },
                             child: Row(
                               children: [
@@ -107,7 +107,7 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                                         Radius.circular(Bitflow.defaultRadius),
                                       )),
                                   child: Text(
-                                    "1",
+                                    "0",
                                     style: CTS.bold(
                                         color: Colors.white, fontSize: 10),
                                   ).c,
@@ -175,7 +175,7 @@ class _DMContactScreenState extends ConsumerState<DMContactScreen> {
                     ) : GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => TalkRoomRegScreen()
+                            builder: (context) => const TalkRoomRegScreen()
                         ));
                       },
                       child: Container(

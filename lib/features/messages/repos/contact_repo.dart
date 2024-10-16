@@ -32,9 +32,10 @@ class ContactRepository {
   Future<UserListModel> getAllUser(Map<String, dynamic> map) async =>
       UserListModel.fromJson(await _contactProvider.getAllUser(map));
 
-    final _contactProvider = ContactProvider();
+  Future<dynamic> regGroupChatRoom(Map<String, dynamic> map) async =>
+      await _contactProvider.regGroupChatRoom(map);
 
+  final _contactProvider = ContactProvider();
 }
-
 
 final contactRepoProvider = Provider((ref) => ContactRepository());

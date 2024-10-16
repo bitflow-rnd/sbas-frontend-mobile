@@ -26,6 +26,9 @@ class ContactProvider {
   Future<Map<String, dynamic>> getAllUser(Map<String, dynamic> map) async =>
       await _api.getAsyncWithMap('$_adminRoute/users', map);
 
+  Future<dynamic> regGroupChatRoom(Map<String, dynamic> map) async =>
+      await _api.postAsync('$_privateTalkRoute/group', toJson(map));
+
   final _privateTalkRoute = 'private/talk';
   final _privateRoute = 'private/user';
   final _adminRoute = 'admin/user';

@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sbas/common/providers/loading_notifier.dart';
 import 'package:sbas/features/messages/models/UserListModel.dart';
+import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
+import 'package:sbas/util.dart';
 
 class UserListNotifier extends AsyncNotifier<UserListModel> {
   var page = 1;
@@ -61,6 +64,24 @@ class UserListNotifier extends AsyncNotifier<UserListModel> {
 
     // state.value가 없으면 빈 리스트를 가진 기본 PatientListModel 반환
     return state.value ?? UserListModel(items: [], count: 0);
+  }
+
+  void regChatRoom(String tkrmNm) {
+    var userIdList = ref.read(selectedUserIdProvider);
+    var userNmList = ref.read(selectedUserNmProvider);
+
+    Map<String, dynamic> map = {};
+    map['id'] = prefs.getString('id');
+    map['userNm'] = prefs.getString('userNm');
+    map['tkrmNm'] = tkrmNm;
+    map['userIdList'] = userIdList;
+    map['userNmList'] = userNmList;
+
+    ref.watch(loadingProvider.notifier).show();
+    _contactRepository.regGroupChatRoom(map).then((value) {
+      ref.watch(loadingProvider.notifier).hide();
+      ref.read(talkRoomsProvider.notifier).updateUserId(prefs.getString('id')!);
+    });
   }
 
   late final ContactRepository _contactRepository;
