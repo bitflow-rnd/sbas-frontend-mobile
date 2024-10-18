@@ -19,8 +19,6 @@ import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
-import 'package:sbas/features/patient/models/patient_model.dart';
-import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
@@ -28,11 +26,7 @@ import 'package:sbas/features/lookup/views/patient_duplicate_check_modal.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
-
-final assignNewBedProvider =
-    AsyncNotifierProvider<AssignNewBedPresenter, PatientRegInfoModel>(
-  () => AssignNewBedPresenter(),
-);
+import 'package:sbas/features/patient/models/patient_model.dart';
 
 class HospitalBedRequestScreenV2 extends ConsumerWidget {
   HospitalBedRequestScreenV2({
@@ -427,22 +421,14 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   }
                 } else if (order == 1) {
                   if (tryBasicInfoValidation(ref)) {
-                    var patientRegInfoModel =
-                        ref.read(patientRegProvider).value;
-
+                    var patientRegInfoModel = ref.read(patientRegProvider).value;
                     ref.read(patientRegProvider.notifier).exist().then((value) {
                       if (value['isExist']) {
-                        var oldPatient =
-                            PatientCheckResponse.fromJson(value['items']);
-                        patientDuplicateCheckModal(
-                            context, oldPatient, patientRegInfoModel!, ref);
+                        var oldPatient = PatientCheckResponse.fromJson(value['items']);
+                        patientDuplicateCheckModal(context, oldPatient, patientRegInfoModel!, ref);
                       } else {
-                        ref
-                            .read(patientRegProvider.notifier)
-                            .registry(patient?.ptId, context);
-                        ref
-                            .read(orderOfRequestProvider.notifier)
-                            .update((state) => order + 1);
+                        ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+                        ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                       }
                     });
                   }
