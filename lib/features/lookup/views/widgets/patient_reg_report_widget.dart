@@ -32,18 +32,6 @@ class PatientRegReport extends ConsumerWidget {
                 style: CTS.medium(
                   color: Colors.black,
                 ),
-                // children: [
-                //   WidgetSpan(
-                //     child: GestureDetector(
-                //       onTap: () => ref.read(patientIsUploadProvider.notifier).state = !ref.read(patientIsUploadProvider),
-                //       child: Icon(
-                //         ref.watch(patientIsUploadProvider) ? Icons.cancel_outlined : Icons.check_circle_outline_rounded,
-                //         size: 20,
-                //         color: Colors.grey,
-                //       ),
-                //     ),
-                //   ),
-                // ],
               ),
             ),
           ),

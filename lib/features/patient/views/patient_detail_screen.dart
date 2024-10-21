@@ -12,7 +12,6 @@ import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_asgn_history_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/blocs/patient_lookup_bloc.dart';
-import 'package:sbas/features/lookup/blocs/patient_lookup_detail_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/patient_modify_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.dart';

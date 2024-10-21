@@ -116,17 +116,8 @@ String getPatientInfo(Patient patient) {
   return '${patient.gndr} / ${patient.age}세 / ${address?[0]} ${address?[1]}';
 }
 
-String getAddress(Patient? patient) {
-  final address = patient?.addr?.split(' ');
-  final phone = patient?.mpno?.replaceRange(
-    3,
-    7,
-    '-****-',
-  );
-  return '${address?[0]} ${address?[1]} / $phone';
-}
-
 final patientLookupProvider =
     AsyncNotifierProvider<PatientLookupBloc, PatientListModel>(
   () => PatientLookupBloc(),
 );
+final patientProgressProvider = StateProvider.autoDispose<int>((ref) => 0);
