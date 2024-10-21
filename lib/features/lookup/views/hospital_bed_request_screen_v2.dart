@@ -27,6 +27,7 @@ import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 
 class HospitalBedRequestScreenV2 extends ConsumerWidget {
   HospitalBedRequestScreenV2({
@@ -85,6 +86,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
           if(order == 2) {
             return imageInit();
           }
+          ref.watch(assignBedProvider.notifier).reloadPatients();
           return;
         },
         actions: [
@@ -98,6 +100,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 if(order == 2) {
                   imageInit();
                 }
+                ref.watch(assignBedProvider.notifier).reloadPatients();
                 Navigator.pop(context);
               },
               child: Padding(
@@ -123,130 +126,136 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                 ),
               ),
             ),
-            data: (report) => Column(
-              children: [
-                PatientTopInfo(
-                  patient: patient,
-                ),
-                // _header(patient!),
-                Divider(
-                  color: Palette.greyText_20,
-                  height: 1,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 2.w),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16.w, vertical: 10.h),
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 6.h),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: List.generate(
-                                      5,
-                                      (index) => SizedBox(
-                                        width: 0.22.sw,
-                                        child: Text(
-                                          headerList[index],
-                                          style: CTS.medium(
-                                            color: Colors.black,
-                                            fontSize: 13,
-                                          ),
-                                        ).c,
-                                      ),
-                                    )),
-                              ),
-                            ),
-                            Stack(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(left: 16.w),
-                                  height: 6.h,
-                                  width: 0.22.sw * 5,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffecedef),
-                                    borderRadius: BorderRadius.circular(3),
-                                  ),
+            data: (report) => WillPopScope(
+              onWillPop: () async {
+                ref.watch(assignBedProvider.notifier).reloadPatients();
+                return true;
+              },
+              child: Column(
+                children: [
+                  PatientTopInfo(
+                    patient: patient,
+                  ),
+                  // _header(patient!),
+                  Divider(
+                    color: Palette.greyText_20,
+                    height: 1,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 2.w),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.w, vertical: 10.h),
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 6.h),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: List.generate(
+                                        5,
+                                        (index) => SizedBox(
+                                          width: 0.22.sw,
+                                          child: Text(
+                                            headerList[index],
+                                            style: CTS.medium(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                            ),
+                                          ).c,
+                                        ),
+                                      )),
                                 ),
-                                AnimatedContainer(
-                                  padding: EdgeInsets.only(
-                                      left: 0.22.sw * order + 16.w),
-                                  duration: const Duration(
-                                    milliseconds: 200,
-                                  ),
-                                  child: Container(
-                                    width: 0.22.sw,
+                              ),
+                              Stack(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(left: 16.w),
                                     height: 6.h,
+                                    width: 0.22.sw * 5,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                        30,
-                                      ),
-                                      color: Palette.mainColor,
+                                      color: const Color(0xffecedef),
+                                      borderRadius: BorderRadius.circular(3),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                                  AnimatedContainer(
+                                    padding: EdgeInsets.only(
+                                        left: 0.22.sw * order + 16.w),
+                                    duration: const Duration(
+                                      milliseconds: 200,
+                                    ),
+                                    child: Container(
+                                      width: 0.22.sw,
+                                      height: 6.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          30,
+                                        ),
+                                        color: Palette.mainColor,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                if (order == 0) //역학조사서
-                  Expanded(
-                    child: Padding(
-                      padding:
-                          EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                      child: const PatientRegReport(),
-                    ),
-                  ),
-                if (order == 1) //환자정보
-                  Expanded(
+                  if (order == 0) //역학조사서
+                    Expanded(
                       child: Padding(
-                    padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                    child: Form(
-                      key: patientBasicFormKey,
-                      child: PatientRegInfoV2(),
+                        padding:
+                            EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
+                        child: const PatientRegReport(),
+                      ),
                     ),
-                  )),
-
-                if (order == 2)
-                  Expanded(
-                      child: Padding(
-                    padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                    child: Form(
-                      key: infectiousDisFormKey,
-                      child: InfectiousDiseaseV2(report: report, dstr1Cd: patientInfoModel.dstr1Cd),
-                    ),
-                  )),
-                //상단 2개는 신규일때만 들어갈수있도록?!
-                if (order == 3)
-                  Expanded(
+                  if (order == 1) //환자정보
+                    Expanded(
+                        child: Padding(
+                      padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
                       child: Form(
-                    key: severelyDisFormKey,
-                    child: SeverelyDiseaseV2(
-                      ptId: patient?.ptId ?? patientInfoModel.ptId ?? '',
+                        key: patientBasicFormKey,
+                        child: PatientRegInfoV2(),
+                      ),
+                    )),
+
+                  if (order == 2)
+                    Expanded(
+                        child: Padding(
+                      padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
+                      child: Form(
+                        key: infectiousDisFormKey,
+                        child: InfectiousDiseaseV2(report: report, dstr1Cd: patientInfoModel.dstr1Cd),
+                      ),
+                    )),
+                  //상단 2개는 신규일때만 들어갈수있도록?!
+                  if (order == 3)
+                    Expanded(
+                        child: Form(
+                      key: severelyDisFormKey,
+                      child: SeverelyDiseaseV2(
+                        ptId: patient?.ptId ?? patientInfoModel.ptId ?? '',
+                      ),
+                    )), //중증정보
+                  if (order == 4)
+                    Expanded(
+                      child: Form(
+                        key: originFormKey,
+                        child: OriginInfomationV2(),
+                      ), //출발정보
                     ),
-                  )), //중증정보
-                if (order == 4)
-                  Expanded(
-                    child: Form(
-                      key: originFormKey,
-                      child: OriginInfomationV2(),
-                    ), //출발정보
-                  ),
-                _bottomer(ref, patientImage, patientAttc, context,
-                    hasPatient: patient != null),
-              ],
+                  _bottomer(ref, patientImage, patientAttc, context,
+                      hasPatient: patient != null),
+                ],
+              ),
             ),
           ),
     );
@@ -295,10 +304,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     //image 가 선택되어있지만 업로드 이전
                     //역학조사서 이미지는 선택되어있지만, 업로드 이전
                     ref.watch(loadingProvider.notifier).show();
-                    await ref
-                        .read(patientRegProvider.notifier)
-                        .uploadImage(patientImage)
-                        .then((value) {
+                    await ref.read(patientRegProvider.notifier).uploadImage(patientImage).then((value) {
                       if (value == true) {
                         PatientRegInfoModal().epidUploadConfirmModal(context, "역학조사서 파일을 기반으로\n환자정보를 자동입력 하였습니다.\n내용을 확인해주세요.");
                         ref.read(orderOfRequestProvider.notifier).update((state) => state + 1);
@@ -315,9 +321,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     // ref.read(patientRegProvider.notifier).overrideInfo(patient!);
                   } else {
                     //역학조사서 없는경우
-                    ref
-                        .read(orderOfRequestProvider.notifier)
-                        .update((state) => order + 1);
+                    ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                   }
                 } else if (order == 1) {
                   if (tryBasicInfoValidation(ref)) {
