@@ -8,7 +8,6 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
-import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
@@ -38,7 +37,7 @@ class OriginInfomationV2 extends ConsumerStatefulWidget {
     '전원요청',
     '원내배정',
   ];
-  final _classification = [
+  final _dprtDstrType = [
     '자택',
     '병원',
     '기타',
@@ -82,15 +81,16 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                       Gaps.v8,
                       Row(
                         children: [
-                          Expanded(
-                              child: _selectRegion(origin.reqDstr1Cd),
+                          SizedBox(
+                            width: 0.4.sw,
+                            child: _selectRegion(origin.reqDstr1Cd),
                           ),
-                          Expanded(
-                            child: Text(
-                              "※ 병상배정 지자체 선택",
-                              style: CTS(color: Palette.mainColor, fontSize: 13),
-                            ).c,
-                          )
+                          // Expanded(
+                          //   child: Text(
+                          //     "※ 병상배정 지자체 선택",
+                          //     style: CTS(color: Palette.mainColor, fontSize: 13),
+                          //   ).c,
+                          // )
                         ],
                       ),
                     ],
@@ -101,7 +101,7 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                       Gaps.v16,
                       _getTitle("환자 출발지 유형", true),
                       Gaps.v8,
-                      _initRowClassification(widget._classification, false, ref),
+                      _initRowClassification(widget._dprtDstrType, false, ref),
                     ],
                   ),
               FormField(
@@ -251,8 +251,9 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
                             var val = await ref.read(originInfoProvider.notifier).setAssignedToTheFloor(i);
                             ref.read(selectedIndexProvider.notifier).update((state) => state = val);
                             field.didChange(inhpAsgnYn);
-                          } else {
+                          } else { // 환자 출발지 유형
                             var val = await ref.read(originInfoProvider.notifier).setOriginIndex(i);
+                            ref.read(originInfoProvider.notifier).setDprtDstrAddr(i);
                             ref.read(selectedOriginIndexProvider.notifier).update((state) => state = val);
                             field.didChange(dprtDstrTypeCd);
                           }

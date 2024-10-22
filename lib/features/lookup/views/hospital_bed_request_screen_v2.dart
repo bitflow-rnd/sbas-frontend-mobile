@@ -361,9 +361,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                         .read(infectiousDiseaseProvider.notifier)
                         .registry(patientInfoModel.ptId ?? '');
                     if (infectRes) {
-                      ref
-                          .read(orderOfRequestProvider.notifier)
-                          .update((state) => order + 1);
+                      ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                     }
                   }
                 } else if (order == 3) {
@@ -371,23 +369,17 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     final patientInfoModel =
                         ref.watch(patientRegProvider.notifier).patientInfoModel;
 
-                    bool severeRes = await ref
-                        .read(severelyDiseaseProvider.notifier)
+                    bool severeRes = await ref.read(severelyDiseaseProvider.notifier)
                         .saveDiseaseInfo(patientInfoModel.ptId ?? '');
                     if (severeRes) {
-                      ref
-                          .read(orderOfRequestProvider.notifier)
-                          .update((state) => order + 1);
+                      ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                     }
                   }
                 } else if (order == 4) {
                   if (tryOrignInfoValidation(ref)) {
-                    final patientInfoModel =
-                        ref.watch(patientRegProvider.notifier).patientInfoModel;
-                    bool orignRes = await ref
-                        .read(originInfoProvider.notifier)
-                        .orignSeverelyDiseaseRegistry(
-                            patientInfoModel.ptId ?? '');
+                    final patientInfoModel = ref.watch(patientRegProvider.notifier).patientInfoModel;
+                    bool orignRes = await ref.read(originInfoProvider.notifier)
+                        .orignSeverelyDiseaseRegistry(patientInfoModel.ptId ?? '');
                     if (orignRes) {
                       await Future.delayed(Duration(milliseconds: 1500));
 

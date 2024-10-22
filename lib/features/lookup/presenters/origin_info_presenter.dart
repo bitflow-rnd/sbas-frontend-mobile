@@ -5,6 +5,7 @@ import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
+import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/models/severely_disease_model.dart';
 import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 import 'package:sbas/features/lookup/models/bed_assgin_request_model.dart';
@@ -210,6 +211,19 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
       return false;
     } else {
       return true;
+    }
+  }
+
+  void setDprtDstrAddr(int idx) {
+    var patientInfo = ref.watch(patientRegProvider.notifier).patientInfoModel;
+    if (idx == 0) {
+      _dprtInfo.dprtDstrZip = patientInfo.zip;
+      _dprtInfo.dprtDstrBascAddr = patientInfo.bascAddr;
+      _dprtInfo.dprtDstrDetlAddr = patientInfo.detlAddr;
+    } else {
+      _dprtInfo.dprtDstrZip = null;
+      _dprtInfo.dprtDstrBascAddr = null;
+      _dprtInfo.dprtDstrDetlAddr = null;
     }
   }
 

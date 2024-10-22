@@ -428,7 +428,7 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
       // list.add("준중증");
       // list.add("준등중");
     } else {
-      if (list.length > 3) list = list.sublist(0, 3); // 기존 디자인과 다르기에 3개만 보여줌.
+      if (list.length > 3) list = list.sublist(1, 7); // 기존 디자인과 다르기에 3개만 보여줌.
     }
 
     var severelyDiseaseModel = ref.watch(severelyDiseaseProvider.notifier).severelyDiseaseModel;
@@ -467,14 +467,9 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                     for (int i = 0; i < list.length; i++)
                       Expanded(
                         flex: 1,
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 10.h),
-                              child: Text(list[i] ?? "", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
-                            ),
-                            Gaps.h1,
-                          ],
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          child: Text(list[i] ?? "", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
                         ),
                       ),
                   ],
@@ -495,16 +490,19 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
                                     color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? const Color(0xff538ef5) : Colors.transparent,
                                     borderRadius: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? BorderRadius.circular(6) : null),
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
-                                child: Text(list[i] ?? '',
-                                    style: CTS.bold(
-                                      fontSize: 11,
-                                      color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? Palette.white : Palette.greyText_60,
-                                    )),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  list[i]?.replaceAll(" ", "\n") ?? '',
+                                  style: CTS.bold(
+                                    fontSize: 11,
+                                    color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? Palette.white : Palette.greyText_60,
+                                  ),
+                                ),
                               ),
                             ),
                             list[i] != list.last
                               ? Container(
-                                  height: 12,
+                                  height: 20,
                                   width: 1,
                                   decoration: BoxDecoration(
                                     color: const Color(0xff676a7a).withOpacity(0.2),
