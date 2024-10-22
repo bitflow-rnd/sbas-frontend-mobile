@@ -11,7 +11,9 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/views/widgets/card_item_widget.dart';
 import 'package:sbas/features/assign/views/widgets/top_search_widget.dart';
+import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';
 import 'package:sbas/util.dart';
 import 'package:sbas/features/lookup/views/hospital_bed_request_screen_v2.dart';
 
@@ -211,6 +213,8 @@ class AssignBedScreen extends ConsumerWidget {
                                 BottomSubmitBtn(
                                   onPressed: () {
                                     ref.read(patientRegProvider.notifier).init();
+                                    ref.read(infectiousDiseaseProvider.notifier).reset();
+                                    ref.read(severelyDiseaseProvider.notifier).reset();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

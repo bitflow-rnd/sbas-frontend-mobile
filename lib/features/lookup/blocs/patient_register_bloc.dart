@@ -81,8 +81,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
 
       ref.read(patientIdProvider.notifier).state = id;
       ref.read(patientLookupProvider.notifier).refresh();
-
-      patientInfoModel.clear();
     }
   }
 
@@ -104,8 +102,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
 
       ref.read(patientIdProvider.notifier).state = id;
       ref.read(patientLookupProvider.notifier).refresh();
-
-      patientInfoModel.clear();
     }
   }
 
