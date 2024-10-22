@@ -136,7 +136,6 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   PatientTopInfo(
                     patient: patient,
                   ),
-                  // _header(patient!),
                   Divider(
                     color: Palette.greyText_20,
                     height: 1,
@@ -159,16 +158,20 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: List.generate(
-                                        5,
-                                        (index) => SizedBox(
-                                          width: 0.22.sw,
-                                          child: Text(
-                                            headerList[index],
-                                            style: CTS.medium(
-                                              color: Colors.black,
-                                              fontSize: 13,
-                                            ),
-                                          ).c,
+                                        5, (index) => GestureDetector(
+                                          onTap: () {
+                                            ref.read(orderOfRequestProvider.notifier).update((state) => index);
+                                          },
+                                          child: SizedBox(
+                                            width: 0.22.sw,
+                                            child: Text(
+                                              headerList[index],
+                                              style: CTS.medium(
+                                                color: Colors.black,
+                                                fontSize: 13,
+                                              ),
+                                            ).c,
+                                          ),
                                         ),
                                       )),
                                 ),
@@ -212,44 +215,48 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   if (order == 0) //역학조사서
                     Expanded(
                       child: Padding(
-                        padding:
-                            EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
+                        padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 16.h),
                         child: const PatientRegReport(),
                       ),
                     ),
                   if (order == 1) //환자정보
                     Expanded(
-                        child: Padding(
-                      padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                      child: Form(
-                        key: patientBasicFormKey,
-                        child: PatientRegInfoV2(),
-                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 16.h),
+                        child: Form(
+                          key: patientBasicFormKey,
+                          child: PatientRegInfoV2(),
+                        ),
                     )),
-
                   if (order == 2)
                     Expanded(
-                        child: Padding(
-                      padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 24.h),
-                      child: Form(
-                        key: infectiousDisFormKey,
-                        child: InfectiousDiseaseV2(report: report, dstr1Cd: patientInfoModel.dstr1Cd),
-                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 16.h),
+                        child: Form(
+                          key: infectiousDisFormKey,
+                          child: InfectiousDiseaseV2(report: report, dstr1Cd: patientInfoModel.dstr1Cd),
+                        ),
                     )),
                   //상단 2개는 신규일때만 들어갈수있도록?!
                   if (order == 3)
                     Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 16.h),
                         child: Form(
-                      key: severelyDisFormKey,
-                      child: SeverelyDiseaseV2(
-                        ptId: patient?.ptId ?? patientInfoModel.ptId ?? '',
-                      ),
+                          key: severelyDisFormKey,
+                          child: SeverelyDiseaseV2(
+                            ptId: patient?.ptId ?? patientInfoModel.ptId ?? '',
+                          ),
+                        ),
                     )), //중증정보
                   if (order == 4)
                     Expanded(
-                      child: Form(
-                        key: originFormKey,
-                        child: OriginInfomationV2(),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 16.h),
+                        child: Form(
+                          key: originFormKey,
+                          child: OriginInfomationV2(),
+                        ),
                       ), //출발정보
                     ),
                   _bottomer(ref, patientImage, patientAttc, context,

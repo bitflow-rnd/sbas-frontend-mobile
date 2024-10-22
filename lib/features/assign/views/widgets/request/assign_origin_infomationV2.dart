@@ -69,7 +69,6 @@ class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
         ),
         data: (origin) => SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
-            vertical: 14,
             horizontal: 18,
           ),
           child: Column(

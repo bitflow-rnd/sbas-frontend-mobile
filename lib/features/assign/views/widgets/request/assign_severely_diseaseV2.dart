@@ -72,7 +72,6 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
         ),
         data: (model) => SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
-            vertical: 14,
             horizontal: 18,
           ),
           child: Column(
