@@ -283,7 +283,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
         return (jobCd == "PMGR0003" || jobCd == "PMGR0004")
             ? Common.bottomer(
                 isOneBtn: true,
-                rBtnText: "입퇴원 처리",
+                rBtnText: "입·퇴원 처리",
                 lBtnFunc: () {},
                 rBtnFunc: () {
                   Navigator.push(

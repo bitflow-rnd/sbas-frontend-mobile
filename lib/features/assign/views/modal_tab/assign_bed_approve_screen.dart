@@ -131,7 +131,6 @@ class AssignBedApproveScreen extends ConsumerWidget {
                                 }
                               });
                             }
-
                           },
                           imageHeight: 44.h,
                         ));
