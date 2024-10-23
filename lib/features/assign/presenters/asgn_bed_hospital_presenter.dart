@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/providers/loading_notifier.dart';
 import 'package:sbas/features/assign/model/asgn_bed_hosp_req_model.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
 import 'package:sbas/features/patient/models/his_sample_data.dart';
 import 'package:sbas/util.dart';
@@ -80,7 +81,7 @@ class AsgnBdHospPresenter extends AsyncNotifier {
     return true;
   }
 
-  Future<bool> aprGotoHosp(WidgetRef ref) async {
+  Future<bool> aprGotoHosp() async {
     String admsStatCd = '';
     switch (ref.watch(gotoTargetProvider.notifier).state) {
       case "입원":
@@ -108,16 +109,17 @@ class AsgnBdHospPresenter extends AsyncNotifier {
     var res = await _assignRepository.postAsgnHosp(asgnBdHospReq.toJson());
     try {
       if (res != null && res['isAlreadyApproved'] == false) {
-        ref.watch(loadingProvider.notifier).hide();
         showToast(res.message!);
         return res["isAlreadyApproved"] == false;
       }
-    } catch (e) {
       ref.watch(loadingProvider.notifier).hide();
+    } catch (e) {
       if (res == "check push token") {
         return true;
       }
+      ref.watch(loadingProvider.notifier).hide();
     }
+    ref.watch(assignBedProvider.notifier).reloadPatients();
     return false;
   }
 }

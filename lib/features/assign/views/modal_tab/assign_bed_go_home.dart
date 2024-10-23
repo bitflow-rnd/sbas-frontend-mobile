@@ -163,10 +163,7 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                               },
                               button2Function: () {
                                 ref.watch(loadingProvider.notifier).show();
-                                ref.watch(asgnBdHospProvider.notifier).aprGotoHosp(ref);
-
-                                ref.watch(patientTimeLineProvider.notifier).refresh(widget.assignItem.ptId, widget.assignItem.bdasSeq);
-                                ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                                ref.watch(asgnBdHospProvider.notifier).aprGotoHosp();
 
                                 Navigator.pop(context);
                                 Navigator.pop(context);
