@@ -96,7 +96,7 @@ class PatientModifyScreenState extends ConsumerState<PatientModifyScreen> {
                     onPressed: () {
                       if (patientAttc != null) {
                         if (_tryValidation()) {
-                          ref.read(patientRegProvider.notifier).registry(widget.patient.ptId, context);
+                          ref.read(patientRegProvider.notifier).registry(widget.patient.ptId);
                           Navigator.pop(context);
                         }
                       } else {

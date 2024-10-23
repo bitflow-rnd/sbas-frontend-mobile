@@ -6,6 +6,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/providers/loading_notifier.dart';
 import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
+import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
@@ -332,22 +333,15 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                   }
                 } else if (order == 1) {
                   if (tryBasicInfoValidation(ref)) {
-                    var patientRegInfoModel =
-                        ref.read(patientRegProvider).value;
+                    var patientRegInfoModel = ref.read(patientRegProvider).value;
 
                     ref.read(patientRegProvider.notifier).exist().then((value) {
                       if (value['isExist']) {
-                        var oldPatient =
-                            PatientCheckResponse.fromJson(value['items']);
-                        patientDuplicateCheckModal(
-                            context, oldPatient, patientRegInfoModel!, ref);
+                        var oldPatient = PatientCheckResponse.fromJson(value['items']);
+                        patientDuplicateCheckModal(context, oldPatient, patientRegInfoModel!, ref);
                       } else {
-                        ref
-                            .read(patientRegProvider.notifier)
-                            .registry(patient?.ptId, context);
-                        ref
-                            .read(orderOfRequestProvider.notifier)
-                            .update((state) => order + 1);
+                        ref.read(patientRegProvider.notifier).registry(patient?.ptId);
+                        ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                       }
                     });
                   }
@@ -380,21 +374,41 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     final patientInfoModel = ref.watch(patientRegProvider.notifier).patientInfoModel;
                     bool orignRes = await ref.read(originInfoProvider.notifier)
                         .orignSeverelyDiseaseRegistry(patientInfoModel.ptId ?? '');
-                    if (orignRes) {
-                      await Future.delayed(Duration(milliseconds: 1500));
-
-                      await ref.read(patientRepoProvider).lookupPatientInfo();
-                      // ignore: use_build_context_synchronously
-                      Navigator.popUntil(context, (route) => route.isFirst);
-                      // ignore: use_build_context_synchronously
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AssignBedScreen(
-                              automaticallyImplyLeading: false,
-                            ),
-                          ));
-                    } else {}
+                    if (orignRes && context.mounted) {
+                      Common.showModal(
+                        context,
+                        Common.commonModal(
+                          context: context,
+                          imageWidget: Image.asset(
+                            "assets/auth_group/modal_check.png",
+                            width: 44.h,
+                          ),
+                          imageHeight: 44.h,
+                          mainText: "병상 요청이 완료되었습니다.",
+                          button2Function: () {
+                            ref.watch(assignBedProvider.notifier).reloadPatients();
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      );
+                    } else {
+                      Common.showModal(
+                        context,
+                        Common.commonModal(
+                          context: context,
+                          imageWidget: Image.asset(
+                            "assets/auth_group/modal_check.png",
+                            width: 44.h,
+                          ),
+                          imageHeight: 44.h,
+                          mainText: "병상 요청에 실패했습니다.\n입력값을 다시 확인해주세요.",
+                          button2Function: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      );
+                    }
                   }
                 }
               } else {
@@ -430,7 +444,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                         var oldPatient = PatientCheckResponse.fromJson(value['items']);
                         patientDuplicateCheckModal(context, oldPatient, patientRegInfoModel!, ref);
                       } else {
-                        ref.read(patientRegProvider.notifier).registry(patient?.ptId, context);
+                        ref.read(patientRegProvider.notifier).registry(patient?.ptId);
                         ref.read(orderOfRequestProvider.notifier).update((state) => order + 1);
                       }
                     });

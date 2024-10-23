@@ -119,7 +119,7 @@ class PatientRegScreenState extends ConsumerState<PatientRegScreen> {
                               var oldPatient = PatientCheckResponse.fromJson(value['items']);
                               patientDuplicateCheckModal(context, oldPatient, patientRegInfoModel!, ref);
                             } else {
-                              ref.read(patientRegProvider.notifier).registry(widget.patient?.ptId, context);
+                              ref.read(patientRegProvider.notifier).registry(widget.patient?.ptId);
                               Navigator.pop(context);
                             }
                           },

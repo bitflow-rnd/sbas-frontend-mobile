@@ -178,7 +178,7 @@ patientDuplicateCheckModal(context, PatientCheckResponse oldPatient,
                                   onTap: () {
                                     ref
                                         .read(patientRegProvider.notifier)
-                                        .registry(newPatient.ptId, context);
+                                        .registry(newPatient.ptId);
                                     Navigator.pop(context);
                                     ref
                                         .read(orderOfRequestProvider.notifier)

@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart' as dio;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
@@ -43,37 +42,6 @@ class BaseCodeProvider {
       );
       if (res.statusCode == 200) {
         return fromJson(res.body)['result'];
-      }
-    } catch (exception) {
-      if (kDebugMode) {
-        print({
-          'exception': exception,
-        });
-      }
-    } finally {
-      client.close();
-    }
-    throw ArgumentError();
-  }
-
-  Future<List<dynamic>> uploadImage(dio.MultipartFile file) async {
-    final client = dio.Dio();
-
-    try {
-      client.options.contentType = 'multipart/form-data';
-      client.options.headers = authToken;
-
-      final res = await client.postUri(
-        Uri.parse('$_baseUrl/upload'),
-        data: dio.FormData.fromMap(
-          {
-            'param1': '',
-            'param2': file,
-          },
-        ),
-      );
-      if (res.statusCode == 200) {
-        return res.data['result']['attcId'];
       }
     } catch (exception) {
       if (kDebugMode) {

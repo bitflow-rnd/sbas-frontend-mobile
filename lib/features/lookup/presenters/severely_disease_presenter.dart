@@ -40,15 +40,7 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
   }
 
   reset() {
-// severelyDiseaseProvider
-    severelyDiseaseModel.clear();
-
-    for (final e in list) {
-      if (e.cdId != null && e.cdId!.isNotEmpty) {
-        ref.read(checkedSeverelyDiseaseProvider.notifier).state[e.cdId!] = false;
-      }
-    }
-
+    severelyDiseaseModel = SeverelyDiseaseModel.empty();
     ref.read(bioInfoProvider.notifier).bioInfoModel.clear();
   }
 
@@ -114,7 +106,7 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
   late final List<BaseCodeModel> list;
   // late final PatientRepository _patientRepository;
   late final UserRegRequestRepository _userRegRequestRepository;
-  late final SeverelyDiseaseModel severelyDiseaseModel;
+  SeverelyDiseaseModel severelyDiseaseModel = SeverelyDiseaseModel.empty();
 }
 
 final severelyDiseaseProvider = AsyncNotifierProvider<SeverelyDiseasePresenter, SeverelyDiseaseModel>(

@@ -7,7 +7,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/providers/loading_notifier.dart';
@@ -37,21 +36,6 @@ _showLocalMessage(RemoteMessage message) async {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
   if (notification != null && android != null) {
-    var now = DateTime.now();
-    var dateTime = DateFormat('MM.d (EE) aa h시 mm분', 'ko').format(now);
-    var userId = prefs.getString("id");
-
-    // var alarmItemModel = AlarmItemModel(
-    //   title: notification.title, detail: notification.body,
-    //   year: now.year, month: now.month,
-    //   dateTime: dateTime, userId: userId,
-    //   receivedTime: now.toString(),
-    // );
-
-    // AlarmItemDatabaseService()
-    //     .databaseConfig()
-    //     .then((value) => AlarmItemDatabaseService().insert(alarmItemModel));
-
     _flutterLocalNotificationsPlugin.show(
       notification.hashCode,
       notification.title,

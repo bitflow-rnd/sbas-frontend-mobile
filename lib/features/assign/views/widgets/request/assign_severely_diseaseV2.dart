@@ -455,105 +455,107 @@ class _SeverelyDiseaseV2State extends ConsumerState<SeverelyDiseaseV2> {
       builder: (field) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xffe4e4e4),
-                  borderRadius: BorderRadius.circular(6),
+          IntrinsicHeight(
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xffe4e4e4),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    children: [
+                      for (int i = 0; i < list.length; i++)
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            child: Text(list[i] ?? "", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-                child: Row(
+                Row(
                   children: [
                     for (int i = 0; i < list.length; i++)
                       Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                          child: Text(list[i] ?? "", style: CTS.bold(fontSize: 11, color: Colors.transparent)),
+                        child: InkWell(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? const Color(0xff538ef5) : Colors.transparent,
+                                      borderRadius: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? BorderRadius.circular(6) : null),
+                                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    list[i]?.replaceAll(" ", "\n") ?? '',
+                                    style: CTS.bold(
+                                      fontSize: 11,
+                                      color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? Palette.white : Palette.greyText_60,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              list[i] != list.last
+                                ? Container(
+                                    height: 20,
+                                    width: 1,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xff676a7a).withOpacity(0.2),
+                                    ),
+                                  )
+                                : Container(),
+                            ],
+                          ),
+                          onTap: () {
+                            setState(() {
+                              if (isFirst == true && _selectedIndex != i) {
+                                _selectedIndex = i;
+                              }
+                              final key = model.toList()[i].cdId;
+
+                              if (key != null && key.isNotEmpty) {
+                                if (model.first.cdGrpId == 'SVIP') {
+                                  severelyDiseaseModel.svrtIptTypeCd = key;
+                                } else if (model.first.cdGrpId == 'SVTP') {
+                                  severelyDiseaseModel.svrtTypeCd = key;
+                                } else if (model.first.cdGrpId == 'BDTP') {
+                                  severelyDiseaseModel.reqBedTypeCd = key;
+                                } else if (model.first.cdGrpId == 'DNRA') {
+                                  severelyDiseaseModel.dnrAgreYn = key;
+                                }
+
+                                field.didChange(key);
+
+                                final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
+
+                                if (isChecked != null) {
+                                  final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
+
+                                  if (state[key] == true) return;
+
+                                  state[key] = !isChecked;
+
+                                  for (var e in state.keys) {
+                                    if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
+                                      state[e] = isChecked;
+                                    }
+                                  }
+                                }
+                              }
+                            });
+                          },
                         ),
                       ),
                   ],
                 ),
-              ),
-              Row(
-                children: [
-                  for (int i = 0; i < list.length; i++)
-                    Expanded(
-                      child: InkWell(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? const Color(0xff538ef5) : Colors.transparent,
-                                    borderRadius: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? BorderRadius.circular(6) : null),
-                                padding: EdgeInsets.symmetric(vertical: 10.h),
-                                child: Text(
-                                  textAlign: TextAlign.center,
-                                  list[i]?.replaceAll(" ", "\n") ?? '',
-                                  style: CTS.bold(
-                                    fontSize: 11,
-                                    color: ref.watch(checkedSeverelyDiseaseProvider)[model.toList()[i].cdId] == true ? Palette.white : Palette.greyText_60,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            list[i] != list.last
-                              ? Container(
-                                  height: 20,
-                                  width: 1,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xff676a7a).withOpacity(0.2),
-                                  ),
-                                )
-                              : Container(),
-                          ],
-                        ),
-                        onTap: () {
-                          setState(() {
-                            if (isFirst == true && _selectedIndex != i) {
-                              _selectedIndex = i;
-                            }
-                            final key = model.toList()[i].cdId;
-
-                            if (key != null && key.isNotEmpty) {
-                              if (model.first.cdGrpId == 'SVIP') {
-                                severelyDiseaseModel.svrtIptTypeCd = key;
-                              } else if (model.first.cdGrpId == 'SVTP') {
-                                severelyDiseaseModel.svrtTypeCd = key;
-                              } else if (model.first.cdGrpId == 'BDTP') {
-                                severelyDiseaseModel.reqBedTypeCd = key;
-                              } else if (model.first.cdGrpId == 'DNRA') {
-                                severelyDiseaseModel.dnrAgreYn = key;
-                              }
-
-                              field.didChange(key);
-
-                              final isChecked = ref.watch(checkedSeverelyDiseaseProvider)[key];
-
-                              if (isChecked != null) {
-                                final state = ref.read(checkedSeverelyDiseaseProvider.notifier).state;
-
-                                if (state[key] == true) return;
-
-                                state[key] = !isChecked;
-
-                                for (var e in state.keys) {
-                                  if (e.substring(0, 4) == key.substring(0, 4) && e != key) {
-                                    state[e] = isChecked;
-                                  }
-                                }
-                              }
-                            }
-                          });
-                        },
-                      ),
-                    ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
           Gaps.v10,
           if (field.hasError)

@@ -58,12 +58,12 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
     patientInfoModel.ptId = patient.ptId ?? "";
   }
 
-  Future<void> registry(String? id, BuildContext context) async {
+  Future<void> registry(String? id) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       if (id == null) {
         patientInfoModel.ptId = (await _patientRepository
-            .registerPatientInfo(patientInfoModel.toJson()))["result"];
+            .registerPatientInfo(patientInfoModel.toJson()));
       } else {
         patientInfoModel.ptId = id;
         await _patientRepository.updatePatientInfo(

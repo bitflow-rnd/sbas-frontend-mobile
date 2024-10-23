@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/models/base_code_model.dart';
@@ -27,7 +28,7 @@ class OriginInfoPresenter extends AsyncNotifier<OriginInfoModel> {
       SeverelyDiseaseModel severelyDiseaseModel = ref.read(severelyDiseaseProvider.notifier).severelyDiseaseModel;
 
       // await _repository.postRegOriginInfo(_dprtInfo);
-
+      debugPrint('${BedAssignRequestModel(severelyDiseaseModel, _dprtInfo).toJson()}');
       var res = await _repository.postBedAssignRequest(BedAssignRequestModel(severelyDiseaseModel, _dprtInfo)); //실병상요청.
       if (res == "병상 요청 성공" || res == "check push token") {
         _dprtInfo.clear();
