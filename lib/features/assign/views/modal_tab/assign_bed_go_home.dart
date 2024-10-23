@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/common/providers/loading_notifier.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
@@ -121,9 +122,9 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                                 ),
                                 initialValue: ref.watch(gotoTargetProvider.notifier).state,
                                 autovalidateMode: AutovalidateMode.always,
-                                validator: (value) => value == null || value == "" ? '입 퇴원 상태를 선택해주세요' : null,
+                                validator: (value) => value == null || value == "" ? '입·퇴원 상태를 선택해주세요' : null,
                               ),
-                              Gaps.v16,
+                              Gaps.v8,
                               for (var i = 0; i < widget.list.length; i++)
                                 Column(
                                   children: [
@@ -141,49 +142,39 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                       ),
                     ),
                     Common.bottomer(
-                      rBtnText: "처리 완료",
+                      rBtnText: "입·퇴원 처리 완료",
                       isOneBtn: true,
                       lBtnFunc: () {},
                       rBtnFunc: () async {
-                        // var confirm = await Common.showModal(
-                        //     context,
-                        //     Common.commonModal(
-                        //       context: context,
-                        //       mainText: "배정 승인 하시겠습니까?",
-                        //       imageWidget: Image.asset(
-                        //         "assets/auth_group/modal_check.png",
-                        //         width: 44.h,
-                        //       ),
-                        //       button1Function: () {
-                        //         Navigator.pop(context, false);
-                        //       },
-                        //       button2Function: () {
-                        //         Navigator.pop(context, true);
-                        //       },
-                        //       imageHeight: 44.h,
-                        //     ));
+                        ref.watch(asgnBdHospProvider.notifier).init(widget.assignItem.ptId ?? "", "Y", widget.assignItem.bdasSeq ?? -1,
+                            widget.timeLine.asgnReqSeq ?? -1, widget.transferInfo.destinationInfo!.hospId!);
+                        if (ref.watch(asgnBdHospProvider.notifier).isValid() == true && validate() == true) {
+                          Common.showModal(
+                            context,
+                            Common.commonModal(
+                              context: context,
+                              mainText: "입·퇴원 처리 하시겠습니까?",
+                              imageWidget: Image.asset(
+                                "assets/auth_group/modal_check.png",
+                                width: 44.h,
+                              ),
+                              button1Function: () {
+                                Navigator.pop(context, false);
+                              },
+                              button2Function: () {
+                                ref.watch(loadingProvider.notifier).show();
+                                ref.watch(asgnBdHospProvider.notifier).aprGotoHosp(ref);
 
-                        // if (confirm == true) {
-                        if (true) {
-                          //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
-                          ref.watch(asgnBdHospProvider.notifier).init(widget.assignItem.ptId ?? "", "Y", widget.assignItem.bdasSeq ?? -1,
-                              widget.timeLine.asgnReqSeq ?? -1, widget.transferInfo.destinationInfo!.hospId!);
-                          if (ref.watch(asgnBdHospProvider.notifier).isValid() == true && validate() == true) {
-                            await ref.watch(asgnBdHospProvider.notifier).aprGotoHosp();
-                            await Future.delayed(Duration(milliseconds: 1500));
+                                ref.watch(patientTimeLineProvider.notifier).refresh(widget.assignItem.ptId, widget.assignItem.bdasSeq);
+                                ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
 
-                            await ref.watch(patientTimeLineProvider.notifier).refresh(widget.assignItem.ptId, widget.assignItem.bdasSeq);
-                            await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
-
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                          }
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              imageHeight: 44.h,
+                            ));
                         }
-                        // } else {
-                        //   return;
-                        // }
                       },
                     )
                   ],
