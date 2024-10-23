@@ -41,60 +41,21 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
       child: ref.watch(patientTimeLineProvider).when(
           loading: () => const SBASProgressIndicator(),
           error: (error, stackTrace) => Center(
-                child: Text(
-                  error.toString(),
-                  style: const TextStyle(
-                    color: Palette.mainColor,
-                  ),
-                ),
+            child: Text(
+              error.toString(),
+              style: const TextStyle(
+                color: Palette.mainColor,
               ),
+            ),
+          ),
           data: (timeLine) {
-            final titleOrder = {
-              "병상요청 (전원요청)": -2,
-              "병상요청 (원내배정)": -2,
-              "승인대기": -1, //병상배정반 승인대기
-              "승인": 0, //병상배정반 승인
-              "배정대기": 1, //의료진 승인 대기
-              "원내배정": 2, //원내배정 케이스
-              "이송대기": 4, //의료진 승인 후 이송 요청 전.
-              "이송중": 5, //이송 요청 이후
-              "이송완료": 6, //이송 완료
-              "입원": 7,
-              "입원완료": 8,
-              "퇴원": 9,
-              "재택회송": 9,
-              "귀가요청": 10,
-            };
-
-            timeLine.items.sort((a, b) {
-              if (titleOrder[a.title] == null || titleOrder[b.title] == null) {
-                return 0;
-              }
-              final titleComparison =
-                  titleOrder[a.title]!.compareTo(titleOrder[b.title]!);
-              if (titleComparison != 0) {
-                return titleComparison;
-              } else {
-                if (a.updtDttm == null && b.updtDttm == null) {
-                  return 0;
-                } else if (a.updtDttm == null) {
-                  return 1;
-                } else if (b.updtDttm == null) {
-                  return -1;
-                } else {
-                  return a.updtDttm!.compareTo(b.updtDttm!);
-                }
-              }
-            });
-
             return Column(
               children: [
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        dateFragment(
-                            getDateTimeFormatDay(assignItem.updtDttm!)),
+                        dateFragment(getDateTimeFormatDay(assignItem.updtDttm!)),
                         IntrinsicHeight(
                           child: Stack(
                             children: [
@@ -112,51 +73,34 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                 ),
                               ),
                               Column(
-                                // crossAxisAlignment: CrossAxisAlignment.start,
-                                // timeline_approved
-                                // timeline_bed_assign_complete
-                                // timeline_go_hospital_complete
-                                // timeline_move_complete
-                                // timeline_refused
-                                // timeline_go_home
-                                //
-                                //timeline_suspend //  원형 점
-
                                 children: [
                                   for (var i = 0; i < timeLine.count!; i++)
                                     GestureDetector(
-                                        onTap: () async {
-                                          if (timeLine.items[i]
-                                                      .timeLineStatus ==
-                                                  "complete" ||
-                                              timeLine.items[i]
-                                                      .timeLineStatus ==
-                                                  "suspend") {
-                                            ref
-                                                .read(contactRepoProvider)
-                                                .getContactById(timeLine
-                                                    .items[i].chrgUserId!)
-                                                .load(context)
-                                                .then((value) {
-                                              UserContact contact =
-                                                  UserContact.fromJson(value);
+                                      onTap: () async {
+                                        if (timeLine.items[i].timeLineStatus == "complete"
+                                            || timeLine.items[i].timeLineStatus == "suspend") {
+                                          ref.read(contactRepoProvider)
+                                            .getContactById(timeLine.items[i].chrgUserId!)
+                                            .load(context).then((value) {
+                                              UserContact contact = UserContact.fromJson(value);
                                               Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ContactDetailScreen(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                    ContactDetailScreen(
                                                       contact: contact,
                                                       isRequest: false,
                                                     ),
-                                                  ));
-                                            });
-                                          }
-                                        },
-                                        child: timeLineBody(timeLine.items[i],
-                                            isVisible: !timeLine.items
-                                                .map((e) => e.title == "배정불가")
-                                                .toList()
-                                                .contains(true))),
+                                              ));
+                                          });
+                                        }
+                                      },
+                                      child: timeLineBody(timeLine.items[i],
+                                          isVisible: !timeLine.items
+                                              .map((e) => e.title == "배정불가")
+                                              .toList()
+                                              .contains(true))
+                                    ),
                                 ],
                               ),
                             ],
@@ -166,8 +110,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                     ),
                   ),
                 ),
-                _whichBottomer(
-                    assignItem.bedStatCdNm ?? '', context, ref, timeLine),
+                _whichBottomer(assignItem.bedStatCdNm ?? '', context, ref, timeLine),
               ],
             );
           }),
@@ -304,7 +247,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AsgnBdDoctorApproveScreen(
+                  builder: (context) => AssignBedApproveScreen(
                     patient: patient,
                     assignItem: assignItem,
                     timeLine: timeLine.items

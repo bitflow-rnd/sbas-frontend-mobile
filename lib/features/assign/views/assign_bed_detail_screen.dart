@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/app_bar_widget.dart';
-
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_detail_move_detail.dart';
@@ -13,9 +11,9 @@ import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_timeline.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_disease_info_model.dart';
-import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 
 class AssignBedDetailScreen extends ConsumerStatefulWidget {
   AssignBedDetailScreen({

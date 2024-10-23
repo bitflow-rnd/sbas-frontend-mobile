@@ -16,8 +16,8 @@ import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 
-class AsgnBdDoctorApproveScreen extends ConsumerWidget {
-  const AsgnBdDoctorApproveScreen({
+class AssignBedApproveScreen extends ConsumerWidget {
+  const AssignBedApproveScreen({
     super.key,
     required this.patient,
     required this.assignItem,
@@ -40,13 +40,13 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-        child: Scaffold(
-      backgroundColor: Palette.white,
-      appBar: const SBASAppBar(
-        title: '병상 배정',
-        elevation: 0.5,
-      ),
-      body: ref.watch(asgnBdDocProvider).when(
+      child: Scaffold(
+        backgroundColor: Palette.white,
+        appBar: const SBASAppBar(
+          title: '병상 배정 승인',
+          elevation: 0.5,
+        ),
+        body: ref.watch(asgnBdDocProvider).when(
             loading: () => const SBASProgressIndicator(),
             error: (error, stackTrace) => Center(
               child: Text(
@@ -71,22 +71,22 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                         margin: EdgeInsets.symmetric(horizontal: 24.w),
                         child: Column(
                           children: [
-                            Gaps.v20,
+                            Gaps.v16,
                             for (var i = 0; i < list.length; i++)
                               Column(
                                 children: [
                                   _getTitle(list[i], i == 0 ? null : false),
-                                  Gaps.v16,
+                                  Gaps.v8,
                                   i == 0
-                                      ? _getTextInputField(
-                                          i: i,
-                                          initalValue:
-                                              timeLine.chrgInstNm ?? "",
-                                          isFixed: true,
-                                          ref: ref)
-                                      : _getTextInputField(
-                                          i: i, hint: hintList[i], ref: ref),
-                                  Gaps.v28,
+                                    ? _getTextInputField(
+                                        i: i,
+                                        initalValue:
+                                            timeLine.chrgInstNm ?? "",
+                                        isFixed: true,
+                                        ref: ref)
+                                    : _getTextInputField(
+                                        i: i, hint: hintList[i], ref: ref),
+                                  Gaps.v16,
                                 ],
                               )
                           ],
@@ -98,63 +98,49 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                     rBtnText: "배정 승인",
                     isOneBtn: true,
                     lBtnFunc: () {},
-                    rBtnFunc: () async {
-                      var confirm = await Common.showModal(
-                          context,
-                          Common.commonModal(
-                            context: context,
-                            mainText: "배정 승인 하시겠습니까?",
-                            imageWidget: Image.asset(
-                              "assets/auth_group/modal_check.png",
-                              width: 44.h,
-                            ),
-                            button1Function: () {
-                              Navigator.pop(context, false);
-                            },
-                            button2Function: () {
-                              Navigator.pop(context, true);
-                            },
-                            imageHeight: 44.h,
-                          ));
+                    rBtnFunc: () {
+                      Common.showModal(
+                        context,
+                        Common.commonModal(
+                          context: context,
+                          mainText: "배정 승인 하시겠습니까?",
+                          imageWidget: Image.asset(
+                            "assets/auth_group/modal_check.png",
+                            width: 44.h,
+                          ),
+                          button1Function: () {
+                            Navigator.pop(context, false);
+                          },
+                          button2Function: () {
+                            ref.watch(asgnBdDocProvider.notifier).init(
+                                assignItem.ptId ?? "",
+                                "Y",
+                                assignItem.bdasSeq ?? -1,
+                                timeLine.asgnReqSeq ?? -1,
+                                timeLine.chrgInstId ?? "");
+                            if (ref.watch(asgnBdDocProvider.notifier).isValid() == true) {
+                              ref.watch(asgnBdDocProvider.notifier).patientToHosp().then((value) {
+                                if (value) {
+                                  ref.watch(patientTimeLineProvider.notifier)
+                                      .refresh(assignItem.ptId, assignItem.bdasSeq);
+                                  ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
 
-                      if (confirm == true) {
-                        //제대로된 msg res 가 리턴된 케이스 (페이지라우트)
-                        ref.watch(asgnBdDocProvider.notifier).init(
-                            assignItem.ptId ?? "",
-                            "Y",
-                            assignItem.bdasSeq ?? -1,
-                            timeLine.asgnReqSeq ?? -1,
-                            timeLine.chrgInstId ?? "");
-                        if (ref.watch(asgnBdDocProvider.notifier).isValid() ==
-                            true) {
-                          bool postRes = await ref
-                              .watch(asgnBdDocProvider.notifier)
-                              .patientToHosp();
-                          if (postRes) {
-                            await Future.delayed(
-                                const Duration(milliseconds: 1500));
-                            await ref
-                                .watch(patientTimeLineProvider.notifier)
-                                .refresh(assignItem.ptId, assignItem.bdasSeq);
-                            await ref
-                                .watch(assignBedProvider.notifier)
-                                .reloadPatients(); // 리스트 갱신
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }
+                              });
+                            }
 
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                          }
-                        }
-                      } else {
-                        return;
-                      }
+                          },
+                          imageHeight: 44.h,
+                        ));
                     },
                   )
                 ],
               ),
             ),
-          ),
+      ),
     ));
   }
 
@@ -169,10 +155,9 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
       required WidgetRef ref}) {
     final bdDoc = ref.watch(asgnBdDocProvider.notifier);
     return TextFormField(
-      // textAlign: TextAlign.center,
       textAlignVertical: TextAlignVertical.center,
       style: CTS.regular(
-        fontSize: 12.sp,
+        fontSize: 13.sp,
         color: isFixed ? Palette.greyText_60 : Palette.black,
       ),
       enabled: !isFixed,
@@ -183,7 +168,7 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
               fillColor: Palette.disabledTextField,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 16.w,
-                vertical: 20.h,
+                vertical: 14.h,
               ),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
@@ -266,7 +251,7 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
         ),
         hintText: hintText,
         hintStyle: CTS.regular(
-          fontSize: 12.sp,
+          fontSize: 13.sp,
           color: Palette.greyText_60,
         ),
         contentPadding: hintText == ""
@@ -275,8 +260,8 @@ class AsgnBdDoctorApproveScreen extends ConsumerWidget {
                 vertical: 14.h,
               )
             : const EdgeInsets.symmetric(
-                vertical: 18,
-                horizontal: 22,
+                vertical: 12,
+                horizontal: 14,
               ),
       );
 
