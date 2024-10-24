@@ -286,94 +286,98 @@ class Common {
     // Call requestFocus() on the focus node when the bottom sheet is displayed
     WidgetsBinding.instance.addPostFrameCallback((_) => focusNode.requestFocus());
     return showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-          // <-- SEE HERE
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(24.r),
-          ),
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(24.r),
         ),
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return SingleChildScrollView(
-            child: GestureDetector(
-              onTap: () {
-                FocusScopeNode currentFocus = FocusScope.of(context);
-                if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                  currentFocus.focusedChild?.unfocus();
-                }
-              },
-              child: Container(
-                height: 400.h,
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Container(
-                  padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+      ),
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                currentFocus.focusedChild?.unfocus();
+              }
+            },
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                left: 24.w,
+                right: 24.w,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            header,
-                            style: CTS.medium(
-                              fontSize: 15,
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.close,
-                              weight: 24.h,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
+                      Text(
+                        header,
+                        style: CTS.medium(
+                          fontSize: 15,
+                        ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 3,
-                            child: TextField(
-                                focusNode: focusNode,
-                                controller: textEditingController,
-                                decoration: InputDecoration(
-                                  hintText: hintText,
-                                  enabledBorder: _outlineInputBorder,
-                                  focusedBorder: _outlineInputBorder,
-                                  errorBorder: _outlineInputBorder,
-                                )),
-                          ),
-                          Gaps.h8,
-                          Expanded(
-                            flex: 1,
-                            child: ElevatedButton(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 16.h),
-                                child: Text(
-                                  btnText,
-                                  style: CTS(color: Palette.white, fontSize: 13),
-                                ),
-                              ),
-                              onPressed: () {
-                                String text = textEditingController.text;
-                                // Perform action with the entered text here
-                                return Navigator.pop(context, text);
-                              },
-                            ),
-                          ),
-                        ],
+                      IconButton(
+                        icon: Icon(
+                          Icons.close,
+                          size: 24.h,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                       ),
                     ],
                   ),
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 3,
+                        child: TextField(
+                          focusNode: focusNode,
+                          controller: textEditingController,
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.newline,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            hintText: hintText,
+                            enabledBorder: _outlineInputBorder,
+                            focusedBorder: _outlineInputBorder,
+                            errorBorder: _outlineInputBorder,
+                          ),
+                        ),
+                      ),
+                      Gaps.h8,
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            child: Text(
+                              btnText,
+                              style: CTS(color: Palette.white, fontSize: 13),
+                            ),
+                          ),
+                          onPressed: () {
+                            String text = textEditingController.text;
+                            // Perform action with the entered text here
+                            return Navigator.pop(context, text);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Gaps.v24,
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      });
   }
 
   static InputBorder get _outlineInputBorder => OutlineInputBorder(

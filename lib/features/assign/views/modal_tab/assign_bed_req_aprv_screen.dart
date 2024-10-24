@@ -12,6 +12,7 @@ import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
+import 'package:sbas/util.dart';
 
 import '../../presenters/available_hospital_presenter.dart';
 
@@ -19,8 +20,8 @@ final searchDetailIsOpenProvider = StateProvider<bool>((ref) => false);
 final selectedItemsProvider = StateProvider<List<String>>((ref) => []);
 final searchHospListProvider = StateProvider<AvailableHospitalModel>((ref) => AvailableHospitalModel(count: 0, items: []));
 
-class AssignBedFindScreen extends ConsumerStatefulWidget {
-  const AssignBedFindScreen({
+class AssignBedReqAprvScreen extends ConsumerStatefulWidget {
+  const AssignBedReqAprvScreen({
     super.key,
     required this.patient,
     required this.bdasSeq,
@@ -31,10 +32,10 @@ class AssignBedFindScreen extends ConsumerStatefulWidget {
   final AvailableHospitalModel hospList;
 
   @override
-  ConsumerState<AssignBedFindScreen> createState() => _AssignBedFindScreenState();
+  ConsumerState<AssignBedReqAprvScreen> createState() => _AssignBedReqAprvScreenState();
 }
 
-class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
+class _AssignBedReqAprvScreenState extends ConsumerState<AssignBedReqAprvScreen> {
   @override
   Widget build(BuildContext context) {
     final isSearchDetailOpen = ref.watch(searchDetailIsOpenProvider);
@@ -44,7 +45,7 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
     return Scaffold(
         backgroundColor: Palette.white,
         appBar: const SBASAppBar(
-          title: '병상 배정',
+          title: '병상 요청 승인',
           elevation: 0.5,
         ),
         body: GestureDetector(
@@ -221,12 +222,10 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                                 setState(() {
                                   ref.watch(selectedItemsProvider.notifier).state.remove(currentHospId);
                                 });
-                                print("removed");
                               } else {
                                 setState(() {
                                   ref.watch(selectedItemsProvider.notifier).state.add(currentHospId);
                                 });
-                                print("selected");
                               }
                               // print(selectedHospList);
                             },
@@ -436,55 +435,51 @@ class _AssignBedFindScreenState extends ConsumerState<AssignBedFindScreen> {
                 ),
               ),
               Common.bottomer(
-                  lBtnFunc: () {},
-                  rBtnFunc: () async {
-                    if (selectedHospList.isEmpty) {
-                      //하나는 선택되어야함.
-                      return;
-                    }
-                    var msgRes = await Common.showBottomSheet(
-                      context: context,
-                      header: '배정요청',
-                    );
-                    bool postRes = await ref.watch(assignBedProvider.notifier).approveReq({
-                      "ptId": widget.patient.ptId,
-                      "bdasSeq": widget.bdasSeq,
-                      "aprvYn": "Y",
-                      "msg": msgRes,
-                      // "chrgInstId": widget.hospList.items[selectedIdx!].chrgInstId,
-                      "reqHospIdList": selectedHospList,
-                    });
-                    if (postRes) {
-                      //승인성공
+                lBtnText: "배정 불가",
+                rBtnText: "병상 요청 승인",
+                lBtnFunc: () {},
+                rBtnFunc: () async {
+                  if (selectedHospList.isEmpty) {
+                    showToast('병원을 선택해주세요.');
+                    return;
+                  }
+                  var msgRes = await Common.showBottomSheet(
+                    context: context,
+                    header: '승인 메시지 입력',
+                  );
+                  ref.watch(assignBedProvider.notifier).approveReq({
+                    "ptId": widget.patient.ptId,
+                    "bdasSeq": widget.bdasSeq,
+                    "aprvYn": "Y",
+                    "msg": msgRes,
+                    "reqHospIdList": selectedHospList,
+                  }).then((value) {
+                    if (value) { // 승인성공
                       ref.watch(selectedItemsProvider.notifier).state = [];
-
-                      await ref.watch(patientTimeLineProvider.notifier).refresh(widget.patient.ptId, widget.bdasSeq);
-                      await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
-                      await Future.delayed(Duration(milliseconds: 1500)).then((value) {
-                        Common.showModal(
-                          context,
-                          // ignore: use_build_context_synchronously
-                          Common.commonModal(
-                            context: context,
-                            imageWidget: Image.asset(
-                              "assets/auth_group/modal_check.png",
-                              width: 44.h,
-                            ),
-                            imageHeight: 44.h,
-                            mainText: "배정 요청이 완료되었습니다.",
-                            button2Function: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
+                      ref.watch(patientTimeLineProvider.notifier).refresh(widget.patient.ptId, widget.bdasSeq);
+                      ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                      Common.showModal(
+                        context,
+                        Common.commonModal(
+                          context: context,
+                          imageWidget: Image.asset(
+                            "assets/auth_group/modal_check.png",
+                            width: 44.h,
                           ),
-                        );
-                      });
-                      // ignore: use_build_context_synchronously
+                          imageHeight: 44.h,
+                          mainText: "병상 요청이 승인되었습니다.",
+                          button2Function: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      );
                     }
-                  },
-                  lBtnText: "배정 불가",
-                  rBtnText: '배정 요청')
+                  });
+                }
+              )
             ],
           ),
         ));

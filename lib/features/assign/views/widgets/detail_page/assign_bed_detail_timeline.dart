@@ -10,10 +10,10 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/presenters/available_hospital_presenter.dart';
-import 'package:sbas/features/assign/views/modal_tab/assign_bed_approve_move.dart';
+import 'package:sbas/features/assign/views/modal_tab/assign_bed_trans_screen.dart';
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_approve_screen.dart';
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_cancel_screen.dart';
-import 'package:sbas/features/assign/views/modal_tab/assign_bed_find_screen.dart';
+import 'package:sbas/features/assign/views/modal_tab/assign_bed_req_aprv_screen.dart';
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_go_home.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
@@ -211,7 +211,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => AssignBedFindScreen(
+                                      builder: (context) => AssignBedReqAprvScreen(
                                           patient: patient,
                                           bdasSeq: assignItem.bdasSeq,
                                           hospList: value),
@@ -269,7 +269,7 @@ class AssignBedDetailTimeLine extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AssignBedApproveMoveScreen(
+                      builder: (context) => AssignBedTransScreen(
                         patient: patient,
                         bdasSeq: assignItem.bdasSeq,
                         formKey: bedMoveFormKey,

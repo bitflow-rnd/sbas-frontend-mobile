@@ -13,8 +13,8 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 
-class OriginInfomationV2 extends ConsumerStatefulWidget {
-  OriginInfomationV2({
+class OriginInformationV2 extends ConsumerStatefulWidget {
+  OriginInformationV2({
     super.key,
   });
   final _homeTitles = [
@@ -43,10 +43,10 @@ class OriginInfomationV2 extends ConsumerStatefulWidget {
     '기타',
   ];
   @override
-  ConsumerState<OriginInfomationV2> createState() => _OriginInfomationStateV2();
+  ConsumerState<OriginInformationV2> createState() => _OriginInformationStateV2();
 }
 
-class _OriginInfomationStateV2 extends ConsumerState<OriginInfomationV2> {
+class _OriginInformationStateV2 extends ConsumerState<OriginInformationV2> {
   int selectedIndex = -1;
 
   @override

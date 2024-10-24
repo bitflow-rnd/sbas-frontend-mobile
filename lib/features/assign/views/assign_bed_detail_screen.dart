@@ -5,7 +5,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
-import 'package:sbas/features/assign/views/modal_tab/assign_bed_detail_move_detail.dart';
+import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_move_detail.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_disease_info.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_patient_info.dart';
 import 'package:sbas/features/assign/views/widgets/detail_page/assign_bed_detail_timeline.dart';

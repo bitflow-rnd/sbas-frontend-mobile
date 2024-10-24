@@ -13,7 +13,7 @@ import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_infectious_diseaseV2.dart';
-import 'package:sbas/features/assign/views/widgets/request/assign_origin_infomationV2.dart';
+import 'package:sbas/features/assign/views/widgets/request/assign_origin_informationV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_severely_diseaseV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
@@ -256,7 +256,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                         padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 16.h),
                         child: Form(
                           key: originFormKey,
-                          child: OriginInfomationV2(),
+                          child: OriginInformationV2(),
                         ),
                       ), //출발정보
                     ),

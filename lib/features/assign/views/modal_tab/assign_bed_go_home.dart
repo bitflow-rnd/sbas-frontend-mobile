@@ -11,12 +11,10 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/presenters/asgn_bed_hospital_presenter.dart';
-import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
-import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
-import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
+import 'package:sbas/features/patient/models/patient_model.dart';
 
 class AssignBedGoHome extends ConsumerStatefulWidget {
   const AssignBedGoHome({
@@ -142,7 +140,7 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                       ),
                     ),
                     Common.bottomer(
-                      rBtnText: "입·퇴원 처리 완료",
+                      rBtnText: "입·퇴원 처리",
                       isOneBtn: true,
                       lBtnFunc: () {},
                       rBtnFunc: () async {
@@ -163,11 +161,28 @@ class _AssignBedGoHome extends ConsumerState<AssignBedGoHome> {
                               },
                               button2Function: () {
                                 ref.watch(loadingProvider.notifier).show();
-                                ref.watch(asgnBdHospProvider.notifier).aprGotoHosp();
-
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
+                                ref.watch(asgnBdHospProvider.notifier).aprGotoHosp().then((value) {
+                                  if (value) {
+                                    Common.showModal(
+                                      context,
+                                      Common.commonModal(
+                                        context: context,
+                                        imageWidget: Image.asset(
+                                          "assets/auth_group/modal_check.png",
+                                          width: 44.h,
+                                        ),
+                                        imageHeight: 44.h,
+                                        mainText: "입·퇴원 처리가 완료되었습니다.",
+                                        button2Function: () {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    );
+                                  }
+                                });
                               },
                               imageHeight: 44.h,
                             ));

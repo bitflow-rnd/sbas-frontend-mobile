@@ -21,8 +21,8 @@ import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart'
 import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/util.dart';
 
-class AssignBedApproveMoveScreen extends ConsumerStatefulWidget {
-  const AssignBedApproveMoveScreen({
+class AssignBedTransScreen extends ConsumerStatefulWidget {
+  const AssignBedTransScreen({
     super.key,
     required this.patient,
     required this.bdasSeq,
@@ -33,10 +33,10 @@ class AssignBedApproveMoveScreen extends ConsumerStatefulWidget {
   final GlobalKey<FormState> formKey;
 
   @override
-  ConsumerState<AssignBedApproveMoveScreen> createState() => _AssignBedApproveMoveScreenState();
+  ConsumerState<AssignBedTransScreen> createState() => _AssignBedTransScreenState();
 }
 
-class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMoveScreen> {
+class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
   List<String> list = ['관할 구급대', '대표 연락처', '탑승대원 및 의료진', '배차정보', '메시지'];
   List<String> hintList = ['', '연락처 입력', '', '차량번호 입력', '메시지 입력'];
   // 이부분 의료기관명 readonly 로 들어갈부분.
@@ -219,7 +219,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                                 Gaps.v20,
                                 _getTitle(list[4], false),
                                 Gaps.v8,
-                                _getTextInputField(hint: hintList[4], i: 4, maxLines: 6),
+                                _getTextInputField(hint: hintList[4], i: 4, maxLines: 6, type: TextInputType.multiline),
                                 Gaps.v20,
                               ],
                             ),
@@ -227,7 +227,7 @@ class _AssignBedApproveMoveScreenState extends ConsumerState<AssignBedApproveMov
                         ),
                       ),
                       Common.bottomer(
-                        rBtnText: "처리 완료",
+                        rBtnText: "이송 처리",
                         isOneBtn: true,
                         lBtnFunc: () {},
                         rBtnFunc: () async {

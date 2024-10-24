@@ -79,13 +79,19 @@ class AssignBedApproveScreen extends ConsumerWidget {
                                   Gaps.v8,
                                   i == 0
                                     ? _getTextInputField(
-                                        i: i,
-                                        initalValue:
-                                            timeLine.chrgInstNm ?? "",
-                                        isFixed: true,
-                                        ref: ref)
+                                      i: i,
+                                      initalValue:
+                                          timeLine.chrgInstNm ?? "",
+                                      isFixed: true,
+                                      ref: ref)
                                     : _getTextInputField(
-                                        i: i, hint: hintList[i], ref: ref),
+                                      i: i, hint: hintList[i], ref: ref,
+                                      type: i == 4
+                                          ? TextInputType.phone
+                                          : i == 5
+                                            ? TextInputType.multiline
+                                            : TextInputType.text,
+                                    ),
                                   Gaps.v16,
                                 ],
                               )
@@ -103,7 +109,7 @@ class AssignBedApproveScreen extends ConsumerWidget {
                         context,
                         Common.commonModal(
                           context: context,
-                          mainText: "배정 승인 하시겠습니까?",
+                          mainText: "배정 승인하시겠습니까?",
                           imageWidget: Image.asset(
                             "assets/auth_group/modal_check.png",
                             width: 44.h,
@@ -124,10 +130,23 @@ class AssignBedApproveScreen extends ConsumerWidget {
                                   ref.watch(patientTimeLineProvider.notifier)
                                       .refresh(assignItem.ptId, assignItem.bdasSeq);
                                   ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
-
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
+                                  Common.showModal(
+                                    context,
+                                    Common.commonModal(
+                                      context: context,
+                                      imageWidget: Image.asset(
+                                        "assets/auth_group/modal_check.png",
+                                        width: 44.h,
+                                      ),
+                                      imageHeight: 44.h,
+                                      mainText: "병상 배정이 승인되었습니다.",
+                                      button2Function: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  );
                                 }
                               });
                             }
