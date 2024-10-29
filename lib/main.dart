@@ -164,7 +164,10 @@ class App extends ConsumerWidget {
                 if (ref.watch(loadingProvider))
                   const Stack(
                     children: [
-                      ModalBarrier(dismissible: false),
+                      ModalBarrier(
+                        dismissible: false,
+                        color: Colors.black54,
+                      ),
                       LoadingSpinner(), // 로딩 스피너 추가
                     ],
                   )

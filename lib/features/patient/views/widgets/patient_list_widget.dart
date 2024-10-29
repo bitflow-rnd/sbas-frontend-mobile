@@ -10,7 +10,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/patient/views/widgets/top_column.dart';
 import 'package:sbas/util.dart';
 import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
-import 'package:sbas/features/lookup/views/patient_register_screen.dart';
+import 'package:sbas/features/lookup/views/patient_reg_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_list_card_item.dart';
 import 'package:sbas/features/patient/views/patient_detail_screen.dart';
 import 'package:sbas/features/patient/providers/paitent_provider.dart';

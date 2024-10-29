@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
+import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/model/alarm_item_model.dart';
 
@@ -36,7 +37,7 @@ Widget alarmItemCard({
                   Row(
                     children: [
                       Text(
-                        '${item.time} ${item.isRead}',
+                        item.time,
                         style: CTS.medium(
                           color: Palette.greyText,
                           fontSize: 12,
@@ -45,9 +46,9 @@ Widget alarmItemCard({
                       const Spacer(),
                     ],
                   ),
-                  SizedBox(height: 8.h),
+                  Gaps.v4,
                   Text(
-                    '${item.title} ${item.detail}',
+                    '${item.title}\n${item.detail}',
                     style: CTS(
                       color: Colors.black,
                       fontSize: 13,
