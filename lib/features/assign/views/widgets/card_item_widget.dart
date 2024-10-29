@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
-import 'package:sbas/common/widgets/progress_indicator_widget.dart';
+import 'package:sbas/common/providers/loading_notifier.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
@@ -22,21 +22,9 @@ class AsgnCardItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isHandlingTap = false;
-
     return InkWell(
       onTap: () async {
-        if (isHandlingTap) return;
-        isHandlingTap = true;
-
-        final route = DialogRoute(
-            context: context,
-            builder: (_) => const Center(
-                  child: SBASProgressIndicator(),
-                ),
-            barrierDismissible: false);
-        Navigator.of(context).push(route);
-
+        ref.watch(loadingProvider.notifier).show();
         final patient =
             await ref.read(patientInfoProvider.notifier).getAsync(model.ptId);
         final diseaseInfo = await ref
@@ -46,21 +34,18 @@ class AsgnCardItem extends ConsumerWidget {
             .read(patientTransferInfoProvider.notifier)
             .getTransInfo(model.ptId, model.bdasSeq ?? -1);
 
-        Navigator.of(context).removeRoute(route);
-
         if (context.mounted) {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => AssignBedDetailScreen(
-                  patient: patient,
-                  assignItem: model,
-                  diseaseInfo: diseaseInfo,
-                  transferInfo: orignInfo),
-            ),
-          ).then((_) {
-            isHandlingTap = false;
-          });
+                patient: patient,
+                assignItem: model,
+                diseaseInfo: diseaseInfo,
+                transferInfo: orignInfo),
+            )
+          );
+          ref.watch(loadingProvider.notifier).hide();
         }
       },
       child: Container(

@@ -36,137 +36,137 @@ class AssignBedApproveScreen extends ConsumerWidget {
     '의료진 연락처 입력',
     '메시지 입력'
   ];
-  // 이부분 의료기관명 readonly 로 들어갈부분.
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      child: Scaffold(
-        backgroundColor: Palette.white,
-        appBar: const SBASAppBar(
-          title: '병상 배정 승인',
-          elevation: 0.5,
-        ),
-        body: ref.watch(asgnBdDocProvider).when(
-            loading: () => const SBASProgressIndicator(),
-            error: (error, stackTrace) => Center(
-              child: Text(
-                error.toString(),
-                style: const TextStyle(
-                  color: Palette.mainColor,
-                ),
+    return Scaffold(
+      backgroundColor: Palette.white,
+      appBar: const SBASAppBar(
+        title: '병상 배정 승인',
+        elevation: 0.5,
+      ),
+      body: ref.watch(asgnBdDocProvider).when(
+          loading: () => const SBASProgressIndicator(),
+          error: (error, stackTrace) => Center(
+            child: Text(
+              error.toString(),
+              style: const TextStyle(
+                color: Palette.mainColor,
               ),
             ),
-            data: (_) => GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Column(
-                children: [
-                  PatientTopInfo(patient: patient),
-                  Divider(
-                    color: Palette.greyText_20,
-                    height: 1,
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 24.w),
-                        child: Column(
-                          children: [
-                            Gaps.v16,
-                            for (var i = 0; i < list.length; i++)
-                              Column(
-                                children: [
-                                  _getTitle(list[i], i == 0 ? null : false),
-                                  Gaps.v8,
-                                  i == 0
-                                    ? _getTextInputField(
-                                      i: i,
-                                      initalValue:
-                                          timeLine.chrgInstNm ?? "",
-                                      isFixed: true,
-                                      ref: ref)
-                                    : _getTextInputField(
-                                      i: i, hint: hintList[i], ref: ref,
-                                      type: i == 4
-                                          ? TextInputType.phone
-                                          : i == 5
-                                            ? TextInputType.multiline
-                                            : TextInputType.text,
-                                    ),
-                                  Gaps.v16,
-                                ],
-                              )
-                          ],
-                        ),
+          ),
+          data: (_) => GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
+              children: [
+                PatientTopInfo(patient: patient),
+                Divider(
+                  color: Palette.greyText_20,
+                  height: 1,
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 24.w),
+                      child: Column(
+                        children: [
+                          Gaps.v16,
+                          for (var i = 0; i < list.length; i++)
+                            Column(
+                              children: [
+                                _getTitle(list[i], i == 0 ? null : false),
+                                Gaps.v8,
+                                i == 0
+                                  ? _getTextInputField(
+                                    i: i,
+                                    initialValue:
+                                        timeLine.chrgInstNm ?? "",
+                                    isFixed: true,
+                                    ref: ref)
+                                  : _getTextInputField(
+                                    i: i, hint: hintList[i], ref: ref,
+                                    type: i == 4
+                                        ? TextInputType.phone
+                                        : i == 5
+                                          ? TextInputType.multiline
+                                          : TextInputType.text,
+                                  ),
+                                Gaps.v16,
+                              ],
+                            )
+                        ],
                       ),
                     ),
                   ),
-                  Common.bottomer(
-                    rBtnText: "배정 승인",
-                    isOneBtn: true,
-                    lBtnFunc: () {},
-                    rBtnFunc: () {
-                      Common.showModal(
-                        context,
-                        Common.commonModal(
-                          context: context,
-                          mainText: "배정 승인하시겠습니까?",
-                          imageWidget: Image.asset(
-                            "assets/auth_group/modal_check.png",
-                            width: 44.h,
-                          ),
-                          button1Function: () {
-                            Navigator.pop(context, false);
-                          },
-                          button2Function: () {
-                            ref.watch(asgnBdDocProvider.notifier).init(
-                                assignItem.ptId ?? "",
-                                "Y",
-                                assignItem.bdasSeq ?? -1,
-                                timeLine.asgnReqSeq ?? -1,
-                                timeLine.chrgInstId ?? "");
-                            if (ref.watch(asgnBdDocProvider.notifier).isValid() == true) {
-                              ref.watch(asgnBdDocProvider.notifier).patientToHosp().then((value) {
-                                if (value) {
-                                  ref.watch(patientTimeLineProvider.notifier)
-                                      .refresh(assignItem.ptId, assignItem.bdasSeq);
-                                  ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
-                                  Common.showModal(
-                                    context,
-                                    Common.commonModal(
-                                      context: context,
-                                      imageWidget: Image.asset(
-                                        "assets/auth_group/modal_check.png",
-                                        width: 44.h,
-                                      ),
-                                      imageHeight: 44.h,
-                                      mainText: "병상 배정이 승인되었습니다.",
-                                      button2Function: () {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      },
+                ),
+                Common.bottomer(
+                  rBtnText: "배정 승인",
+                  isOneBtn: true,
+                  lBtnFunc: () {},
+                  rBtnFunc: () {
+                    Common.showModal(
+                      context,
+                      Common.commonModal(
+                        context: context,
+                        mainText: "배정 승인하시겠습니까?",
+                        imageWidget: Image.asset(
+                          "assets/auth_group/modal_check.png",
+                          width: 44.h,
+                        ),
+                        button1Function: () {
+                          Navigator.pop(context, false);
+                        },
+                        button2Function: () {
+                          ref.watch(asgnBdDocProvider.notifier).init(
+                              assignItem.ptId ?? "",
+                              "Y",
+                              assignItem.bdasSeq ?? -1,
+                              timeLine.asgnReqSeq ?? -1,
+                              timeLine.chrgInstId ?? "");
+                          if (ref.watch(asgnBdDocProvider.notifier).isValid() == true) {
+                            ref.watch(asgnBdDocProvider.notifier).patientToHosp().then((value) {
+                              if (value) {
+                                ref.watch(patientTimeLineProvider.notifier)
+                                    .refresh(assignItem.ptId, assignItem.bdasSeq);
+                                ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
+                                Common.showModal(
+                                  context,
+                                  Common.commonModal(
+                                    context: context,
+                                    imageWidget: Image.asset(
+                                      "assets/auth_group/modal_check.png",
+                                      width: 44.h,
                                     ),
-                                  );
-                                }
-                              });
-                            }
-                          },
-                          imageHeight: 44.h,
-                        ));
-                    },
-                  )
-                ],
-              ),
+                                    imageHeight: 44.h,
+                                    mainText: "병상 배정이 승인되었습니다.",
+                                    button2Function: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                );
+                              }
+                            });
+                          }
+                        },
+                        imageHeight: 44.h,
+                      ));
+                  },
+                )
+              ],
             ),
-      ),
-    ));
+          ),
+      )
+    );
   }
 
   Widget _getTextInputField(
       {required int i,
       bool isFixed = false,
       String? hint,
-      String? initalValue,
+      String? initialValue,
       TextInputType type = TextInputType.text,
       int? maxLines,
       List<TextInputFormatter>? inputFormatters,
@@ -203,7 +203,7 @@ class AssignBedApproveScreen extends ConsumerWidget {
       validator: (value) {
         return null;
       },
-      initialValue: initalValue,
+      initialValue: initialValue,
       readOnly: isFixed,
 
       inputFormatters: inputFormatters,

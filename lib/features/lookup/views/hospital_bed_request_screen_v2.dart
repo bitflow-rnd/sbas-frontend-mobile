@@ -370,11 +370,13 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 4) {
+                  ref.watch(loadingProvider.notifier).show();
                   if (tryOrignInfoValidation(ref)) {
                     final patientInfoModel = ref.watch(patientRegProvider.notifier).patientInfoModel;
                     bool orignRes = await ref.read(originInfoProvider.notifier)
                         .orignSeverelyDiseaseRegistry(patientInfoModel.ptId ?? '');
                     if (orignRes && context.mounted) {
+                      ref.watch(loadingProvider.notifier).hide();
                       Common.showModal(
                         context,
                         Common.commonModal(
