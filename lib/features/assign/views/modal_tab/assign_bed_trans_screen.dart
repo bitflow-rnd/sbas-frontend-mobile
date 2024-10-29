@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_code_model.dart';
+import 'package:sbas/common/providers/sido_provider.dart';
+import 'package:sbas/common/providers/sigungu_provider.dart';
 import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/common/widgets/custom_cupertino_radio.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
@@ -12,7 +14,6 @@ import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/bloc/safety_center_bloc.dart';
-import 'package:sbas/features/assign/bloc/safety_region_bloc.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_move_aprv_presenter.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
@@ -47,6 +48,7 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
     'crew3': '대원#3',
   };
   String _selectedCrew = crewMap.keys.first;
+  String cdGrpId = 'SIDO27';
 
   @override
   void initState() {
@@ -113,54 +115,68 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: ref.watch(saftyRegionPresenter).when(
-                                            loading: () => const SBASProgressIndicator(),
-                                            error: (error, stackTrace) => Center(
-                                              child: Text(
-                                                error.toString(),
-                                                style: const TextStyle(
-                                                  color: Palette.mainColor,
-                                                ),
-                                              ),
-                                            ),
-                                            data: (region) => FormField(
-                                              builder: (field) => _selectRegion(
-                                                region.where(
-                                                  (e) => e.cdGrpId == 'SIDO' && e.cdId == '27',
-                                                ),
-                                                field,
-                                              ),
-                                              validator: (value) {
-                                                return value == null ? '시/도를 선택해주세요' : null;
-                                              },
-                                              // initialValue: widget.dstr1Cd,
+                                      child: ref.watch(sidoProvider).when(
+                                        loading: () => const SBASProgressIndicator(),
+                                        error: (error, stackTrace) => Center(
+                                          child: Text(
+                                            error.toString(),
+                                            style: const TextStyle(
+                                              color: Palette.mainColor,
                                             ),
                                           ),
+                                        ),
+                                        data: (region) => FormField(
+                                          builder: (field) => _selectRegion(
+                                            region.where(
+                                              (e) => e.cdGrpId == 'SIDO' && e.cdId == '27',
+                                            ),
+                                            field,
+                                          ),
+                                          validator: (value) {
+                                            return value == null ? '시/도를 선택해주세요' : null;
+                                          },
+                                        ),
+                                      ),
                                     ),
                                     Gaps.h8,
                                     Expanded(
-                                      child: ref.watch(saftyCenterPresenter).when(
-                                            loading: () => const SBASProgressIndicator(),
-                                            error: (error, stackTrace) => Center(
-                                              child: Text(
-                                                error.toString(),
-                                                style: const TextStyle(
-                                                  color: Palette.mainColor,
-                                                ),
-                                              ),
-                                            ),
-                                            data: (publicHealthCenter) => FormField(
-                                              builder: (field) => _selectSaftyCenter(publicHealthCenter, field),
-                                              validator: (value) {
-                                                return value == null ? '구급대를 선택해주세요.' : null;
-                                              },
+                                      child: ref.watch(sigunguProvider(cdGrpId)).when(
+                                        loading: () => const SBASProgressIndicator(),
+                                        error: (error, stackTrace) => Center(
+                                          child: Text(
+                                            error.toString(),
+                                            style: const TextStyle(
+                                              color: Palette.mainColor,
                                             ),
                                           ),
+                                        ),
+                                        data: (county) => FormField(
+                                          builder: (field) => _selectCounty(county, field),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
-                                _getTextInputField(i: 0, hint: "직접 입력"),
-                                Gaps.v20,
+                                Container(
+                                  child: ref.watch(saftyCenterPresenter).when(
+                                    loading: () => const SBASProgressIndicator(),
+                                    error: (error, stackTrace) => Center(
+                                      child: Text(
+                                        error.toString(),
+                                        style: const TextStyle(
+                                          color: Palette.mainColor,
+                                        ),
+                                      ),
+                                    ),
+                                    data: (publicHealthCenter) => FormField(
+                                      builder: (field) => _selectSaftyCenter(publicHealthCenter, field),
+                                      validator: (value) {
+                                        return value == null ? '구급대를 선택해주세요.' : null;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Gaps.v8,
                                 _getTitle(list[2], false),
                                 Gaps.v8,
                                 _thirdRow(1000),
@@ -287,122 +303,166 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
     return isValid;
   }
 
-  Widget _selectRegion(Iterable<BaseCodeModel> region, FormFieldState<Object?> field) => SizedBox(
-        child: Column(
-          children: [
-            Container(
-              height: 48.h,
-              child: InputDecorator(
-                decoration: getInputDecoration(""),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    alignment: Alignment.center,
-                    items: region
-                        .map(
-                          (e) => DropdownMenuItem(
-                            alignment: Alignment.center,
-                            value: e.cdId,
-                            child: SizedBox(
-                              width: 150,
-                              child: Text(
-                                e.cdNm ?? '',
-                                style: TextStyle(fontSize: 13, color: Palette.black),
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    hint: SizedBox(
+  Widget _selectRegion(Iterable<BaseCodeModel> region, FormFieldState<Object?> field) => Column(
+    children: [
+      SizedBox(
+        height: 48.h,
+        child: InputDecorator(
+          decoration: getInputDecoration(""),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+              alignment: Alignment.center,
+              items: region
+                  .map(
+                    (e) => DropdownMenuItem(
+                      alignment: Alignment.center,
+                      value: e.cdId,
+                      child: SizedBox(
+                        width: 150,
+                        child: Text(
+                          e.cdNm ?? '',
+                          style: const TextStyle(fontSize: 13, color: Palette.black),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+              hint: SizedBox(
+                width: 150,
+                child: Text(
+                  '시/도 선택',
+                  style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              isDense: true,
+              isExpanded: true,
+              onChanged: (value) {
+                var baseCodeModel = region.firstWhere((e) => e.cdId == value);
+                cdGrpId = '${baseCodeModel.cdGrpId}${baseCodeModel.cdId}';
+                ref.read(saftyCenterPresenter.notifier).getFireStatnList(
+                  baseCodeModel.cdId ?? '',
+                  null,
+                );
+                field.didChange(value);
+              },
+              value: field.value != '' ? field.value : null,
+            ),
+          ),
+        ),
+      ),
+      if (field.hasError)
+        FieldErrorText(
+          field: field,
+        )
+    ],
+  );
+
+  Widget _selectCounty(Iterable<BaseCodeModel> county, FormFieldState<Object?> field) => Column(
+    children: [
+      SizedBox(
+        height: 48.h,
+        child: InputDecorator(
+          decoration: getInputDecoration(""),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+              alignment: Alignment.center,
+              items: county
+                  .map(
+                    (e) => DropdownMenuItem(
+                  alignment: Alignment.center,
+                  value: e.cdId,
+                  child: SizedBox(
+                    width: 150,
+                    child: Text(
+                      e.cdNm ?? '',
+                      style: const TextStyle(fontSize: 13, color: Palette.black),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ),
+              )
+                  .toList(),
+              hint: SizedBox(
+                width: 150,
+                child: Text(
+                  '시/군/구 선택',
+                  style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              isDense: true,
+              isExpanded: true,
+              onChanged: (value) {
+                var baseCodeModel = county.firstWhere((e) => e.cdId == value);
+                ref.read(saftyCenterPresenter.notifier).getFireStatnList(
+                  baseCodeModel.cdGrpId?.substring(4) ?? '27',
+                  baseCodeModel.cdId,
+                );
+                field.didChange(value);
+              },
+              value: field.value != '' ? field.value : null,
+            ),
+          ),
+        ),
+      ),
+      if (field.hasError)
+        FieldErrorText(
+          field: field,
+        )
+    ],
+  );
+
+  Widget _selectSaftyCenter(Iterable<InfoInstModel> center, FormFieldState<Object?> field) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      SizedBox(
+        height: 48.h,
+        child: InputDecorator(
+          decoration: getInputDecoration(""),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+              items: center
+                .map(
+                  (e) => DropdownMenuItem(
+                    value: e.instNm,
+                    child: SizedBox(
                       width: 150,
                       child: Text(
-                        '시/도 선택',
-                        style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                        e.instNm ?? '',
+                        style: const TextStyle(fontSize: 13, color: Palette.black),
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    isDense: true,
-                    isExpanded: true,
-                    onChanged: (value) {
-                      ref.read(saftyCenterPresenter.notifier).updatePublicHealthCenter(
-                            region.firstWhere((e) => e.cdId == value).cdId ?? '',
-                          );
-                      // ref.read(saftyRegionPresenter.notifier).updateSaftyCenter(
-                      //       region.firstWhere((e) => e.cdId == value).cdId ?? '',
-                      //     );
-                      field.didChange(value);
-                    },
-                    value: field.value != '' ? field.value : null,
                   ),
+                ).toList(),
+              hint: SizedBox(
+                width: 150,
+                child: Text(
+                  '구급대 선택',
+                  style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
+                  textAlign: TextAlign.left,
                 ),
               ),
+              isDense: true,
+              isExpanded: true,
+              onChanged: (value) {
+                ref.read(asgnBdMvAprPresenter.notifier).changeSaftyCenter(center.firstWhere((element) => element.instNm == value));
+                field.didChange(value);
+              },
+              value: field.value != '' ? field.value : null,
             ),
-            Gaps.v8,
-            if (field.hasError)
-              FieldErrorText(
-                field: field,
-              )
-          ],
+          ),
         ),
-      );
-
-  Widget _selectSaftyCenter(Iterable<InfoInstModel> center, FormFieldState<Object?> field) => SizedBox(
-        child: Column(
-          children: [
-            Container(
-              height: 48.h,
-              child: InputDecorator(
-                decoration: getInputDecoration(""),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    items: center
-                        .map(
-                          (e) => DropdownMenuItem(
-                            alignment: Alignment.center,
-                            value: e.instNm,
-                            child: SizedBox(
-                              width: 150,
-                              child: Text(
-                                e.instNm ?? '',
-                                style: TextStyle(fontSize: 13, color: Palette.black),
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    hint: SizedBox(
-                      width: 150,
-                      child: Text(
-                        '구급대 선택',
-                        style: TextStyle(fontSize: 13, color: Colors.grey.shade400),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    isDense: true,
-                    isExpanded: true,
-                    onChanged: (value) {
-                      print(value);
-
-                      // ref.read(saftyCenterPresenter.notifier).updateRegion(
-                      //       center.firstWhere((e) => e.instNm == value).instNm ?? '',
-                      //     );
-                      ref.read(asgnBdMvAprPresenter.notifier).changeSaftyCenter(center.firstWhere((element) => element.instNm == value));
-                      field.didChange(value);
-                    },
-                    value: field.value != '' ? field.value : null,
-                  ),
-                ),
-              ),
-            ),
-            Gaps.v8,
-            if (field.hasError)
-              FieldErrorText(
-                field: field,
-              )
-          ],
-        ),
-      );
+      ),
+      Gaps.v8,
+      if (field.hasError)
+        FieldErrorText(
+          field: field,
+        )
+    ],
+  );
 
   Widget carNumTag(String num) {
     return Container(

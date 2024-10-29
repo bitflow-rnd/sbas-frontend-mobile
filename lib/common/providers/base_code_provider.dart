@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
+import 'package:sbas/common/api/v1_provider.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/util.dart';
 
@@ -55,5 +56,24 @@ class BaseCodeProvider {
     throw ArgumentError();
   }
 
+  Future<List<BaseCodeModel>> getSido() async {
+    final response = await _api.getAsync('public/common/sidos');
+    if (response is List<dynamic>) {
+      return response.map((item) => BaseCodeModel.fromJson(item as Map<String, dynamic>)).toList();
+    } else {
+      throw Exception("Invalid response format");
+    }
+  }
+
+  Future<List<BaseCodeModel>> getGugun(String cdGrpId) async {
+    final response = await _api.getAsync('public/common/guguns/$cdGrpId');
+    if (response is List<dynamic>) {
+      return response.map((item) => BaseCodeModel.fromJson(item as Map<String, dynamic>)).toList();
+    } else {
+      throw Exception("Invalid response format");
+    }
+  }
+
+  final _api = V1Provider();
   final String _baseUrl = '${dotenv.env['BASE_URL']}/v1/public/common';
 }

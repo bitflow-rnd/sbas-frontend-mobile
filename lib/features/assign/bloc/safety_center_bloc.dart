@@ -2,9 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:sbas/features/assign/bloc/safety_region_bloc.dart';
-import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 
@@ -18,33 +15,12 @@ class SaftyCenterBloc extends AsyncNotifier<List<InfoInstModel>> {
     return list;
   }
 
-  Future<void> exchangeTheCenter() async {
+  Future<void> getFireStatnList(String dstr1Cd, String? dstr2Cd) async {
     list.clear();
 
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final region = ref.read(selectedRegionProvider);
-      final county = ref.read(selectedCountyProvider);
-
-      final user = ref.read(regUserProvider);
-
-      list.addAll(await _infoInstRepository.getOrganCode(user.instTypeCd, region.cdId, county.cdId));
-
-      return list;
-    });
-    if (state.hasError) {
-      if (kDebugMode) {
-        print(state.error);
-      }
-    }
-  }
-
-  Future<void> updatePublicHealthCenter(String id) async {
-    list.clear();
-
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      list.addAll(await _infoInstRepository.getOrganCode("ORGN0002", id, null));
+      list.addAll(await _infoInstRepository.getOrganCode("ORGN0002", dstr1Cd, dstr2Cd));
 
       return list;
     });
