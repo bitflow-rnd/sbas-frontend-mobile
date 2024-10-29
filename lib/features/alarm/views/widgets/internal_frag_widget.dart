@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 
-Widget InternalFrag(String title, String body) {
+Widget internalFrag(String title, String body) {
   return Row(
     children: [
       Container(

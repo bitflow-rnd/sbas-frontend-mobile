@@ -4,7 +4,7 @@ import 'package:sbas/features/alarm/views/widgets/image_icon_frag_widget.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 
-Widget ReqBed(
+Widget reqBed(
     {required String dateTime,
       required String name,
       required String gender,
@@ -16,7 +16,7 @@ Widget ReqBed(
     child: IntrinsicHeight(
       child: Row(
         children: [
-          ImageIconFrag(
+          imageIconFrag(
               imgSrc: "assets/common_icon/req_icon_mask.png", text: "병상요청"),
           Expanded(
             flex: 7,

@@ -37,7 +37,7 @@ class DashboardScreen extends ConsumerWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AlarmPage(),
+                  builder: (context) => const AlarmScreen(),
                 ),
               );
             },

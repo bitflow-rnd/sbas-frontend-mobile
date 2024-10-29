@@ -5,7 +5,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'internal_frag_widget.dart';
 
-Widget MoveCompleteCard(
+Widget moveCompleteCard(
     {required String dateTime,
       required String name,
       required String gender,
@@ -23,7 +23,7 @@ Widget MoveCompleteCard(
             flex: 2,
             child: Column(
               children: [
-                ImageIconFrag(
+                imageIconFrag(
                     imgSrc: "assets/common_icon/req_icon_mask.png",
                     text: "이송완료"),
               ],
@@ -92,11 +92,11 @@ Widget MoveCompleteCard(
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  InternalFrag("출발", departure),
+                  internalFrag("출발", departure),
                   SizedBox(height: 6.h),
-                  InternalFrag("도착", arrival),
+                  internalFrag("도착", arrival),
                   SizedBox(height: 6.h),
-                  InternalFrag("이송", moveBy)
+                  internalFrag("이송", moveBy)
                 ],
               ),
             ),

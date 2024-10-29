@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 
-Widget ImageIconFrag({required String imgSrc, required String text}) {
+Widget imageIconFrag({required String imgSrc, required String text}) {
   return Expanded(
     flex: 2,
     child: Column(

@@ -9,14 +9,14 @@ import 'package:sbas/features/alarm/model/alarm_item_model.dart';
 import 'package:sbas/features/alarm/provider/alarm_provider.dart';
 import 'package:sbas/features/alarm/views/widgets/alarm_item_card_widget.dart';
 
-class AlarmPage extends ConsumerStatefulWidget {
-  const AlarmPage({super.key});
+class AlarmScreen extends ConsumerStatefulWidget {
+  const AlarmScreen({super.key});
 
   @override
-  _AlarmPageState createState() => _AlarmPageState();
+  ConsumerState<AlarmScreen> createState() => _AlarmPageState();
 }
 
-class _AlarmPageState extends ConsumerState<AlarmPage> {
+class _AlarmPageState extends ConsumerState<AlarmScreen> {
   List<String> dropdownList = ['최근1개월', '최근3개월', '최근1년'];
   String selectedDropdown = '최근1개월';
   bool _isReadAlarmsCalled = false;

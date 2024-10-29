@@ -4,7 +4,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/views/widgets/image_icon_frag_widget.dart';
 
-Widget OtherFrag({
+Widget otherFrag({
   required String dateTime,
   required String name,
   required String gender,
@@ -19,12 +19,12 @@ Widget OtherFrag({
       child: Row(
         children: [
           if (isApp)
-            ImageIconFrag(
+            imageIconFrag(
                 imgSrc: "assets/common_icon/check_complete_icon.png",
                 text: "배정승인")
           else
             // imageIconFrag(imgSrc: "assets/common_icon/check_complete_icon.png", text: "배정승인"),
-            ImageIconFrag(
+            imageIconFrag(
                 imgSrc: "assets/common_icon/to_hospital_icon.png",
                 text: "    입원    "),
           Expanded(
