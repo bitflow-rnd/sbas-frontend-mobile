@@ -108,7 +108,7 @@ class DashboardScreen extends ConsumerWidget {
                               children: [
                                 Dashboard(
                                   title: '요청',
-                                  edge: EdgeInsets.only(
+                                  edge: const EdgeInsets.only(
                                     right: 6,
                                     bottom: 6,
                                   ),

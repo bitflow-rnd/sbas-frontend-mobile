@@ -13,6 +13,7 @@ import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/Institution/providers/info_crew_provider.dart';
 import 'package:sbas/features/assign/bloc/safety_center_bloc.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_move_aprv_presenter.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
@@ -48,7 +49,9 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
     'crew3': '대원#3',
   };
   String _selectedCrew = crewMap.keys.first;
+  String sidoCd = '27';
   String cdGrpId = 'SIDO27';
+  String instId = '';
 
   @override
   void initState() {
@@ -83,7 +86,7 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
       ),
       body: Form(
           key: widget.formKey,
-          autovalidateMode: AutovalidateMode.always,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: ref.watch(asgnBdMvAprPresenter).when(
@@ -341,6 +344,7 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
               onChanged: (value) {
                 var baseCodeModel = region.firstWhere((e) => e.cdId == value);
                 cdGrpId = '${baseCodeModel.cdGrpId}${baseCodeModel.cdId}';
+                sidoCd = baseCodeModel.cdId ?? '27';
                 ref.read(saftyCenterPresenter.notifier).getFireStatnList(
                   baseCodeModel.cdId ?? '',
                   null,
@@ -368,22 +372,33 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
           child: DropdownButtonHideUnderline(
             child: DropdownButton(
               alignment: Alignment.center,
-              items: county
-                  .map(
-                    (e) => DropdownMenuItem(
-                  alignment: Alignment.center,
-                  value: e.cdId,
+              items: [
+                const DropdownMenuItem(
+                  value: 'all',
                   child: SizedBox(
                     width: 150,
                     child: Text(
-                      e.cdNm ?? '',
-                      style: const TextStyle(fontSize: 13, color: Palette.black),
+                      '시/군/구 전체',
+                      style: TextStyle(fontSize: 13, color: Palette.black),
                       textAlign: TextAlign.left,
                     ),
                   ),
                 ),
-              )
-                  .toList(),
+                ...county.map(
+                      (e) => DropdownMenuItem(
+                    alignment: Alignment.center,
+                    value: e.cdId,
+                    child: SizedBox(
+                      width: 150,
+                      child: Text(
+                        e.cdNm ?? '',
+                        style: const TextStyle(fontSize: 13, color: Palette.black),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ),
+                ).toList(),
+              ],
               hint: SizedBox(
                 width: 150,
                 child: Text(
@@ -395,11 +410,18 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
               isDense: true,
               isExpanded: true,
               onChanged: (value) {
-                var baseCodeModel = county.firstWhere((e) => e.cdId == value);
-                ref.read(saftyCenterPresenter.notifier).getFireStatnList(
-                  baseCodeModel.cdGrpId?.substring(4) ?? '27',
-                  baseCodeModel.cdId,
-                );
+                if (value == 'all') {
+                  ref.read(saftyCenterPresenter.notifier).getFireStatnList(
+                    sidoCd,
+                    null,
+                  );
+                } else {
+                  var baseCodeModel = county.firstWhere((e) => e.cdId == value);
+                  ref.read(saftyCenterPresenter.notifier).getFireStatnList(
+                    baseCodeModel.cdGrpId?.substring(4) ?? '27',
+                    baseCodeModel.cdId,
+                  );
+                }
                 field.didChange(value);
               },
               value: field.value != '' ? field.value : null,
@@ -448,7 +470,9 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
               isDense: true,
               isExpanded: true,
               onChanged: (value) {
-                ref.read(asgnBdMvAprPresenter.notifier).changeSaftyCenter(center.firstWhere((element) => element.instNm == value));
+                var infoInstModel = center.firstWhere((element) => element.instNm == value);
+                instId = infoInstModel.instId!;
+                ref.read(asgnBdMvAprPresenter.notifier).changeSaftyCenter(infoInstModel);
                 field.didChange(value);
               },
               value: field.value != '' ? field.value : null,
@@ -483,17 +507,15 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
     );
   }
 
-  Column _thirdRow(int i) {
-    List<String> dropdownList = ['대원선택'];
-    String selectedDropdown = '대원선택';
+  Widget _thirdRow(int i) {
     return Column(
       children: [
         Row(
           children: [
-            Expanded(child: dropdownButton(dropdownList, selectedDropdown)),
-            Gaps.h12,
+            Expanded(child: dropdownButton()),
+            Gaps.h8,
             Expanded(child: _getTextInputField(i: i, hint: '직급')),
-            Gaps.h12,
+            Gaps.h8,
             Expanded(child: _getTextInputField(i: i + 1, hint: '이름'))
           ],
         ),
@@ -564,28 +586,54 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
         ],
       );
 
-  Widget dropdownButton(List<String> dlist, String sel) {
-    return SizedBox(
-      height: 45.h,
-      child: DropdownButtonFormField(
-        borderRadius: BorderRadius.circular(4.r),
-        decoration: Common.getInputDecoration(""),
-        value: sel,
-        items: dlist.map((String item) {
-          return DropdownMenuItem<String>(
-            value: item,
-            child: Text(
-              item,
-              style: CTS(fontSize: 10, color: Palette.black),
-            ),
-          );
-        }).toList(),
-        onChanged: (dynamic value) {
-          // setState(() {
-          //   selectedDropdown = value;
-          // });
-        },
+  Widget dropdownButton() {
+    return ref.watch(infoCrewProvider(instId)).when(
+      loading: () => const SBASProgressIndicator(),
+      error: (error, stackTrace) => Center(
+        child: Text(
+          error.toString(),
+          style: const TextStyle(
+            color: Palette.mainColor,
+          ),
+        ),
       ),
+      data: (list) => SizedBox(
+        height: 45.h,
+        child: DropdownButtonFormField(
+          borderRadius: BorderRadius.circular(4.r),
+          decoration: Common.getInputDecoration(""),
+          hint: Text(
+            '대원 선택',
+            style: CTS(fontSize: 10, color: Palette.greyText_60),
+          ),
+          items: [
+            DropdownMenuItem(
+              value: 'custom',
+              child: Text(
+                '직접 입력',
+                style: CTS(fontSize: 10, color: Palette.black),
+              ),
+            ),
+            ...list.map((item) => DropdownMenuItem(
+              value: item.crewId,
+              child: Text(
+                item.crewNm,
+                style: CTS(fontSize: 10, color: Palette.black),
+              ),
+            ))
+          ],
+          onChanged: (dynamic value) {
+            if (value == 'custom') {
+              // "직접 입력"을 선택했을 때의 처리
+              print("직접 입력 선택");
+              // 여기서 사용자에게 입력을 받을 수 있는 추가 UI를 표시하는 로직을 추가하세요.
+            } else {
+              print(value);
+
+            }
+          },
+        ),
+      )
     );
   }
 }
