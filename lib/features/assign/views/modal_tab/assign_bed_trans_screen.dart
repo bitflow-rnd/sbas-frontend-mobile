@@ -52,6 +52,7 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
   String sidoCd = '27';
   String cdGrpId = 'SIDO27';
   String instId = '';
+  final List<int> selectedCrewIds = [];
 
   @override
   void initState() {
@@ -512,7 +513,7 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
       children: [
         Row(
           children: [
-            Expanded(child: dropdownButton()),
+            Expanded(child: dropdownButton(i)),
             Gaps.h8,
             Expanded(child: _getTextInputField(i: i, hint: '직급')),
             Gaps.h8,
@@ -586,7 +587,8 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
         ],
       );
 
-  Widget dropdownButton() {
+  Widget dropdownButton(int idx) {
+    final vm = ref.watch(asgnBdMvAprPresenter.notifier);
     return ref.watch(infoCrewProvider(instId)).when(
       loading: () => const SBASProgressIndicator(),
       error: (error, stackTrace) => Center(
@@ -597,43 +599,54 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
           ),
         ),
       ),
-      data: (list) => SizedBox(
-        height: 45.h,
-        child: DropdownButtonFormField(
-          borderRadius: BorderRadius.circular(4.r),
-          decoration: Common.getInputDecoration(""),
-          hint: Text(
-            '대원 선택',
-            style: CTS(fontSize: 10, color: Palette.greyText_60),
-          ),
-          items: [
-            DropdownMenuItem(
-              value: 'custom',
-              child: Text(
-                '직접 입력',
-                style: CTS(fontSize: 10, color: Palette.black),
-              ),
+      data: (list) {
+        final availableItems = list.where((item) => !selectedCrewIds.contains(item.crewId)).toList();
+        return SizedBox(
+          height: 45.h,
+          child: DropdownButtonFormField(
+            borderRadius: BorderRadius.circular(4.r),
+            decoration: Common.getInputDecoration(""),
+            hint: Text(
+              '대원 선택',
+              style: CTS(fontSize: 10, color: Palette.greyText_60),
             ),
-            ...list.map((item) => DropdownMenuItem(
-              value: item.crewId,
-              child: Text(
-                item.crewNm,
-                style: CTS(fontSize: 10, color: Palette.black),
+            items: [
+              DropdownMenuItem(
+                value: 'custom',
+                child: Text(
+                  '직접 입력',
+                  style: CTS(fontSize: 10, color: Palette.black),
+                ),
               ),
-            ))
-          ],
-          onChanged: (dynamic value) {
-            if (value == 'custom') {
-              // "직접 입력"을 선택했을 때의 처리
-              print("직접 입력 선택");
-              // 여기서 사용자에게 입력을 받을 수 있는 추가 UI를 표시하는 로직을 추가하세요.
-            } else {
-              print(value);
-
-            }
-          },
-        ),
-      )
-    );
+              ...availableItems.map((item) => DropdownMenuItem(
+                  value: item.crewId,
+                  child: Text(
+                    item.crewNm,
+                    style: CTS(fontSize: 10, color: Palette.black),
+                  ),
+                ))
+            ],
+            onChanged: (value) {
+              if (value == 'custom') {
+                print("직접 입력 선택");
+              } else if (value == '' || value == null) {
+                vm.setTextEditingController(index: idx, value: null);
+                vm.setTextEditingController(index: idx + 1, value: null);
+                vm.setTextEditingController(index: idx + 2, value: null);
+              } else {
+                var infoCrew = list.firstWhere((item) => item.crewId == value);
+                if (selectedCrewIds.contains(infoCrew.crewId)) {
+                  selectedCrewIds.remove(infoCrew.crewId);
+                } else {
+                  selectedCrewIds.add(infoCrew.crewId);
+                  vm.setTextEditingController(index: idx, value: infoCrew.pstn);
+                  vm.setTextEditingController(index: idx + 1, value: infoCrew.crewNm);
+                  vm.setTextEditingController(index: idx + 2, value: infoCrew.telno);
+                }
+              }
+            },
+          ),
+        );
+    });
   }
 }

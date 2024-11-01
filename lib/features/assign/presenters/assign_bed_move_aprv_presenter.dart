@@ -45,17 +45,14 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
 
       case 1:
         _asgnBdMvAprReq.chfTelno = value ?? "";
-        _asgnBdMvAprReq.crew1Telno = value ?? ""; // TODO::디자인상 입력 필드 미존재로 수정 필요
         return _asgnBdMvAprReq.chfTelno ?? "";
 
       case 1000:
         _asgnBdMvAprReq.crew1Pstn = value ?? "";
         return _asgnBdMvAprReq.crew1Pstn ?? "";
-
       case 2000:
         _asgnBdMvAprReq.crew2Pstn = value ?? "";
         return _asgnBdMvAprReq.crew2Pstn ?? "";
-
       case 3000:
         _asgnBdMvAprReq.crew3Pstn = value ?? "";
         return _asgnBdMvAprReq.crew3Pstn ?? "";
@@ -63,11 +60,9 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
       case 1001:
         _asgnBdMvAprReq.crew1Nm = value ?? "";
         return _asgnBdMvAprReq.crew1Nm ?? "";
-
       case 2001:
         _asgnBdMvAprReq.crew2Nm = value ?? "";
         return _asgnBdMvAprReq.crew2Nm ?? "";
-
       case 3001:
         _asgnBdMvAprReq.crew3Nm = value ?? "";
         return _asgnBdMvAprReq.crew3Nm ?? "";
