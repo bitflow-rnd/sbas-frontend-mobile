@@ -4,14 +4,14 @@ import 'package:sbas/features/assign/model/asgn_bed_mv_apr_model.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
 
-class AssignBedMoveAprPresenter extends AsyncNotifier {
+class AssignBedMoveAprPresenter extends AutoDisposeAsyncNotifier {
   @override
   FutureOr build() {
     _assignRepository = ref.read(assignRepoProvider);
     _asgnBdMvAprReq.clear();
   }
 
-  init({String? ptId = '', int? bdasSeq = -1}) {
+  init(String ptId, int bdasSeq) {
     _asgnBdMvAprReq.clear();
     if (ptId == '' || bdasSeq == -1) {
       return false;
@@ -76,6 +76,16 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
       case 3002:
         _asgnBdMvAprReq.crew3Telno = value;
         return _asgnBdMvAprReq.crew3Telno ?? "";
+
+      case 1003:
+        _asgnBdMvAprReq.crew1Id = value;
+        return _asgnBdMvAprReq.crew1Id ?? "";
+      case 2003:
+        _asgnBdMvAprReq.crew2Id = value;
+        return _asgnBdMvAprReq.crew2Id ?? "";
+      case 3003:
+        _asgnBdMvAprReq.crew3Id = value;
+        return _asgnBdMvAprReq.crew3Id ?? "";
 
       case 3:
         _asgnBdMvAprReq.vecno = value ?? "";
@@ -162,6 +172,6 @@ class AssignBedMoveAprPresenter extends AsyncNotifier {
   late AssignRepository _assignRepository;
 }
 
-final asgnBdMvAprPresenter = AsyncNotifierProvider<AssignBedMoveAprPresenter, void>(
+final asgnBdMvAprPresenter = AsyncNotifierProvider.autoDispose<AssignBedMoveAprPresenter, void>(
   () => AssignBedMoveAprPresenter(),
 );

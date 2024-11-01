@@ -13,6 +13,7 @@ import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
+import 'package:sbas/features/Institution/models/info_crew_model.dart';
 import 'package:sbas/features/Institution/providers/info_crew_provider.dart';
 import 'package:sbas/features/assign/bloc/safety_center_bloc.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_move_aprv_presenter.dart';
@@ -52,16 +53,14 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
   String sidoCd = '27';
   String cdGrpId = 'SIDO27';
   String instId = '';
-  final List<int> selectedCrewIds = [];
+  List<InfoCrew> infoCrewList = [];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(asgnBdMvAprPresenter.notifier).init(
-            bdasSeq: widget.bdasSeq,
-            ptId: widget.patient.ptId,
-          );
+      await ref.read(asgnBdMvAprPresenter.notifier)
+          .init(widget.patient.ptId!, widget.bdasSeq!);
     });
   }
 
@@ -252,34 +251,50 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
                         lBtnFunc: () {},
                         rBtnFunc: () async {
                           if (validation()) {
-                            var vm = ref.watch(asgnBdMvAprPresenter.notifier);
-                            vm.setChfTelno(_selectedCrew);
-                            var res = await vm.submit();
-                            if (res) {
-                              await ref.watch(patientTimeLineProvider.notifier).refresh(widget.patient.ptId, widget.bdasSeq);
-                              await ref.watch(assignBedProvider.notifier).reloadPatients(); // 리스트 갱신
-                              // ignore: use_build_context_synchronously
-                              Common.showModal(
-                                context,
-                                // ignore: use_build_context_synchronously
-                                Common.commonModal(
-                                  context: context,
-                                  imageWidget: Image.asset(
-                                    "assets/auth_group/modal_check.png",
-                                    width: 44.h,
-                                  ),
-                                  imageHeight: 44.h,
-                                  mainText: "이송 처리가 완료되었습니다.",
-                                  button2Function: () {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
+                            Common.showModal(
+                              context,
+                              Common.commonModal(
+                                context: context,
+                                mainText: '이송 처리 하시겠습니까?',
+                                imageWidget: Image.asset(
+                                  "assets/auth_group/modal_check.png",
+                                  width: 44.h,
                                 ),
-                              );
-                              // ignore: use_build_context_synchronously
-                            }
-                            showToast("배차 실패 ");
+                                button1Function: () {
+                                  Navigator.pop(context, false);
+                                },
+                                button2Function: () {
+                                  var vm = ref.watch(asgnBdMvAprPresenter.notifier);
+                                  vm.setChfTelno(_selectedCrew);
+                                  vm.submit().then((value) {
+                                    if (value) {
+                                      Common.showModal(
+                                        context,
+                                        Common.commonModal(
+                                          context: context,
+                                          imageWidget: Image.asset(
+                                            "assets/auth_group/modal_check.png",
+                                            width: 44.h,
+                                          ),
+                                          imageHeight: 44.h,
+                                          mainText: "이송 처리가 완료되었습니다.",
+                                          button2Function: () {
+                                            ref.watch(patientTimeLineProvider.notifier).refresh(widget.patient.ptId, widget.bdasSeq);
+                                            ref.watch(assignBedProvider.notifier).reloadPatients();
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      );
+                                    } else {
+                                      showToast("배차 실패 ");
+                                    }
+                                  });
+                                }
+                              )
+                            );
                           }
                         },
                       )
@@ -474,6 +489,8 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
                 var infoInstModel = center.firstWhere((element) => element.instNm == value);
                 instId = infoInstModel.instId!;
                 ref.read(asgnBdMvAprPresenter.notifier).changeSaftyCenter(infoInstModel);
+                ref.read(asgnBdMvAprPresenter.notifier)
+                    .init(widget.patient.ptId!, widget.bdasSeq!);
                 field.didChange(value);
               },
               value: field.value != '' ? field.value : null,
@@ -600,7 +617,6 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
         ),
       ),
       data: (list) {
-        final availableItems = list.where((item) => !selectedCrewIds.contains(item.crewId)).toList();
         return SizedBox(
           height: 45.h,
           child: DropdownButtonFormField(
@@ -618,7 +634,7 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
                   style: CTS(fontSize: 10, color: Palette.black),
                 ),
               ),
-              ...availableItems.map((item) => DropdownMenuItem(
+              ...list.map((item) => DropdownMenuItem(
                   value: item.crewId,
                   child: Text(
                     item.crewNm,
@@ -628,21 +644,21 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
             ],
             onChanged: (value) {
               if (value == 'custom') {
-                print("직접 입력 선택");
+                vm.setTextEditingController(index: idx, value: null);
+                vm.setTextEditingController(index: idx + 1, value: null);
+                vm.setTextEditingController(index: idx + 2, value: null);
+                vm.setTextEditingController(index: idx + 3, value: null);
               } else if (value == '' || value == null) {
                 vm.setTextEditingController(index: idx, value: null);
                 vm.setTextEditingController(index: idx + 1, value: null);
                 vm.setTextEditingController(index: idx + 2, value: null);
+                vm.setTextEditingController(index: idx + 3, value: null);
               } else {
                 var infoCrew = list.firstWhere((item) => item.crewId == value);
-                if (selectedCrewIds.contains(infoCrew.crewId)) {
-                  selectedCrewIds.remove(infoCrew.crewId);
-                } else {
-                  selectedCrewIds.add(infoCrew.crewId);
-                  vm.setTextEditingController(index: idx, value: infoCrew.pstn);
-                  vm.setTextEditingController(index: idx + 1, value: infoCrew.crewNm);
-                  vm.setTextEditingController(index: idx + 2, value: infoCrew.telno);
-                }
+                vm.setTextEditingController(index: idx, value: infoCrew.pstn);
+                vm.setTextEditingController(index: idx + 1, value: infoCrew.crewNm);
+                vm.setTextEditingController(index: idx + 2, value: infoCrew.telno);
+                vm.setTextEditingController(index: idx + 3, value: infoCrew.crewId.toString());
               }
             },
           ),
