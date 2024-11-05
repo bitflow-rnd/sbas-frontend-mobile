@@ -488,9 +488,9 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
               onChanged: (value) {
                 var infoInstModel = center.firstWhere((element) => element.instNm == value);
                 instId = infoInstModel.instId!;
-                ref.read(asgnBdMvAprPresenter.notifier).changeSaftyCenter(infoInstModel);
                 ref.read(asgnBdMvAprPresenter.notifier)
                     .init(widget.patient.ptId!, widget.bdasSeq!);
+                ref.read(asgnBdMvAprPresenter.notifier).changeSaftyCenter(infoInstModel);
                 field.didChange(value);
               },
               value: field.value != '' ? field.value : null,

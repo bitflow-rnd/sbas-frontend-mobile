@@ -370,48 +370,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 4) {
-                  ref.watch(loadingProvider.notifier).show();
-                  if (tryOrignInfoValidation(ref)) {
-                    final patientInfoModel = ref.watch(patientRegProvider.notifier).patientInfoModel;
-                    bool orignRes = await ref.read(originInfoProvider.notifier)
-                        .orignSeverelyDiseaseRegistry(patientInfoModel.ptId ?? '');
-                    if (orignRes && context.mounted) {
-                      ref.watch(loadingProvider.notifier).hide();
-                      Common.showModal(
-                        context,
-                        Common.commonModal(
-                          context: context,
-                          imageWidget: Image.asset(
-                            "assets/auth_group/modal_check.png",
-                            width: 44.h,
-                          ),
-                          imageHeight: 44.h,
-                          mainText: "병상 요청이 완료되었습니다.",
-                          button2Function: () {
-                            ref.watch(assignBedProvider.notifier).reloadPatients();
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      );
-                    } else {
-                      Common.showModal(
-                        context,
-                        Common.commonModal(
-                          context: context,
-                          imageWidget: Image.asset(
-                            "assets/auth_group/modal_check.png",
-                            width: 44.h,
-                          ),
-                          imageHeight: 44.h,
-                          mainText: "병상 요청에 실패했습니다.\n입력값을 다시 확인해주세요.",
-                          button2Function: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      );
-                    }
-                  }
+                  await confirmRequest(ref, context);
                 }
               } else {
                 // 병상요청 화면
@@ -480,29 +439,7 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
                     }
                   }
                 } else if (order == 4) {
-                  if (tryOrignInfoValidation(ref)) {
-                    final a =
-                        ref.watch(patientRegProvider.notifier).patientInfoModel;
-                    bool orignRes = await ref
-                        .read(originInfoProvider.notifier)
-                        .orignSeverelyDiseaseRegistry(
-                            patient?.ptId ?? a.ptId ?? '');
-                    if (orignRes) {
-                      await Future.delayed(const Duration(milliseconds: 1500));
-                      await ref.read(patientRepoProvider).lookupPatientInfo();
-                      // ignore: use_build_context_synchronously
-                      Navigator.popUntil(context, (route) => route.isFirst);
-
-                      // ignore: use_build_context_synchronously
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AssignBedScreen(
-                              automaticallyImplyLeading: false,
-                            ),
-                          ));
-                    }
-                  }
+                  await confirmRequest(ref, context);
                 }
               }
             },
@@ -527,6 +464,51 @@ class HospitalBedRequestScreenV2 extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  Future<void> confirmRequest(WidgetRef ref, BuildContext context) async {
+    if (tryOrignInfoValidation(ref)) {
+      ref.watch(loadingProvider.notifier).show();
+      final patientInfoModel = ref.watch(patientRegProvider.notifier).patientInfoModel;
+      bool orignRes = await ref.read(originInfoProvider.notifier)
+          .orignSeverelyDiseaseRegistry(patientInfoModel.ptId ?? '');
+      if (orignRes && context.mounted) {
+        ref.watch(loadingProvider.notifier).hide();
+        Common.showModal(
+          context,
+          Common.commonModal(
+            context: context,
+            imageWidget: Image.asset(
+              "assets/auth_group/modal_check.png",
+              width: 44.h,
+            ),
+            imageHeight: 44.h,
+            mainText: "병상 요청이 완료되었습니다.",
+            button2Function: () {
+              ref.watch(assignBedProvider.notifier).reloadPatients();
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          ),
+        );
+      } else {
+        Common.showModal(
+          context,
+          Common.commonModal(
+            context: context,
+            imageWidget: Image.asset(
+              "assets/auth_group/modal_check.png",
+              width: 44.h,
+            ),
+            imageHeight: 44.h,
+            mainText: "병상 요청에 실패했습니다.\n입력값을 다시 확인해주세요.",
+            button2Function: () {
+              Navigator.pop(context);
+            },
+          ),
+        );
+      }
+    }
   }
 
   bool tryBasicInfoValidation(WidgetRef ref) {
