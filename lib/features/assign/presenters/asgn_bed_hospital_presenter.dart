@@ -107,20 +107,12 @@ class AsgnBdHospPresenter extends AsyncNotifier {
     }
     print(asgnBdHospReq.toJson());
     var res = await _assignRepository.postAsgnHosp(asgnBdHospReq.toJson());
-    try {
-      if (res != null && res['isAlreadyApproved'] == false) {
-        showToast(res.message!);
-        return res["isAlreadyApproved"] == false;
-      }
-      ref.watch(loadingProvider.notifier).hide();
-    } catch (e) {
-      if (res == "check push token") {
-        return true;
-      }
-      ref.watch(loadingProvider.notifier).hide();
+    if (res == "check push token") {
+      return false;
     }
+    ref.watch(loadingProvider.notifier).hide();
     ref.watch(assignBedProvider.notifier).reloadPatients();
-    return false;
+    return true;
   }
 }
 
