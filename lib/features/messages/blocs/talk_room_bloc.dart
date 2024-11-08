@@ -92,8 +92,8 @@ class TalkRoomBloc {
         ),
       );
       if (res.statusCode == 200) {
-        var attcId = res.data['result'];
-        sendMessage('attcId:${attcId}|$msg');
+        var attcId = res.data['result']['attcGrpId'];
+        sendMessage('attcId:$attcId|$msg');
       }
     } catch (exception) {
       if (kDebugMode) {

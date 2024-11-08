@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/repos/file_repo.dart';
 import 'package:sbas/constants/gaps.dart';
+import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/messages/models/talk_msg_model.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/models/base_attc_model.dart';
@@ -10,10 +11,10 @@ import 'package:sbas/constants/common.dart';
 import 'package:sbas/util.dart';
 
 Row othersChatWidget(
-  TalkMsgModel input,
+  TalkMsgModel talkMsgModel,
   ScrollController scrollController,
 ) {
-  var chat = input;
+  var chat = talkMsgModel;
   String? userImage = 'assets/message/doctor_icon.png';
 
   return Row(
@@ -27,7 +28,7 @@ Row othersChatWidget(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            chat.rgstUserId!,
+            '${chat.instNm} / ${chat.userNm}',
             style: CTS(
               fontWeight: FontWeight.bold,
               fontSize: 13.sp,
@@ -53,7 +54,7 @@ Row othersChatWidget(
                     color: Colors.white,
                   ),
                   child: Text(
-                    input.msg ?? '',
+                    talkMsgModel.msg ?? '',
                     textAlign: TextAlign.start,
                     style: CTS(
                       color: Colors.black,
@@ -64,7 +65,7 @@ Row othersChatWidget(
               ),
               Text(
                 textAlign: TextAlign.left,
-                formatDateTime(input.updtDttm!),
+                formatDateTime(talkMsgModel.updtDttm!),
                 style: CTS(fontSize: 11.sp, color: Colors.grey),
               ),
             ],
@@ -91,21 +92,21 @@ Row othersPhotoChatWidget(
   Future<void> downloadFile(
       String attcGrpId, String attcId, String fileNm) async {
     await fileRepository
-        .downloadPublicImageFile(attcGrpId, attcId, fileNm)
-        .then((value) => {
-      Common.showModal(
-        context,
-        Common.commonModal(
-          context: context,
-          mainText: "파일 다운로드 완료",
-          imageWidget: Image.asset(
-            "assets/auth_group/modal_check.png",
-            width: 44.h,
+      .downloadPublicImageFile(attcGrpId, attcId, fileNm)
+      .then((value) => {
+        Common.showModal(
+          context,
+          Common.commonModal(
+            context: context,
+            mainText: "파일 다운로드 완료",
+            imageWidget: Image.asset(
+              "assets/auth_group/modal_check.png",
+              width: 44.h,
+            ),
+            imageHeight: 44.h,
           ),
-          imageHeight: 44.h,
-        ),
-      )
-    });
+        )
+      });
   }
 
   return Row(
@@ -119,7 +120,7 @@ Row othersPhotoChatWidget(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            chat.rgstUserId!,
+            '${chat.instNm} / ${chat.userNm}',
             style: CTS(
               fontWeight: FontWeight.bold,
               fontSize: 13.sp,
@@ -157,15 +158,66 @@ Row othersPhotoChatWidget(
                                   .map((file) => GestureDetector(
                                         child: Image.network(
                                           "${dotenv.env['URL']}${file.uriPath}/${file.fileNm}",
-                                          height: 150.h,
+                                          height: 100.h,
                                           width: 100.w,
                                         ),
-                                        onTap: () => {
-                                          downloadFile(
-                                            file.attcGrpId,
-                                            file.attcId,
-                                            file.fileNm,
-                                          )
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 10.r),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // 양옆으로 배치
+                                                        children: [
+                                                          Text(
+                                                            file.fileNm, // 실제 이미지 제목으로 바꾸세요
+                                                            style: const TextStyle(
+                                                              fontSize: 14,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            color: Palette.greyText_30,
+                                                            child: IconButton(
+                                                              icon: const Icon(
+                                                                Icons.arrow_downward, // 아래 화살표 아이콘
+                                                                size: 25, // 아이콘 크기 조정
+                                                              ),
+                                                              onPressed: () async {
+                                                                Navigator.pop(context);
+                                                                await downloadFile(
+                                                                  file.attcGrpId,
+                                                                  file.attcId,
+                                                                  file.fileNm,
+                                                                );
+                                                              },
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      height: 0.5, // 구분선 두께
+                                                      color: Palette.black, // 구분선 색상
+                                                    ),
+                                                    InteractiveViewer(
+                                                      minScale: 0.1,
+                                                      maxScale: 4.0,
+                                                      child: Image.network(
+                                                        "${dotenv.env['URL']}${file.uriPath}/${file.fileNm}",
+                                                        fit: BoxFit.contain, // 이미지 크기를 화면에 맞게 조정
+                                                      ),
+                                                    ),
+                                                    Gaps.v4,
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
                                         },
                                       ))
                                   .toList(),
@@ -195,14 +247,6 @@ Row othersPhotoChatWidget(
                             return const CircularProgressIndicator();
                           }
                         },
-                      ),
-                      Text(
-                        input.msg ?? '',
-                        textAlign: TextAlign.start,
-                        style: CTS(
-                          color: Colors.black,
-                          fontSize: 13.sp,
-                        ),
                       ),
                     ],
                   ),

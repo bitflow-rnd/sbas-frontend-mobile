@@ -3,6 +3,8 @@ class TalkMsgModel {
   final String? histCd;
   final String? msg;
   final String? attcId;
+  final String? instNm;
+  final String? userNm;
   final String? rgstUserId;
   final String? rgstDttm;
   final String? updtUserId;
@@ -13,6 +15,8 @@ class TalkMsgModel {
     this.histCd,
     this.msg,
     this.attcId,
+    this.instNm,
+    this.userNm,
     this.rgstUserId,
     this.rgstDttm,
     this.updtUserId,
@@ -25,6 +29,8 @@ class TalkMsgModel {
       'histCd': histCd,
       'msg': msg,
       'attcId': attcId,
+      'instNm': instNm,
+      'userNm': userNm,
       'rgstUserId': rgstUserId,
       'rgstDttm': rgstDttm,
       'updtUserId': updtUserId,
@@ -38,6 +44,8 @@ class TalkMsgModel {
       histCd: json['histCd'] == null ? null : json['histCd'] as String,
       msg: json['msg'] == null ? null : json['msg'] as String,
       attcId: json['attcId'] == null ? null : json['attcId'] as String,
+      instNm: json['instNm'] == null ? null : json['instNm'] as String,
+      userNm: json['userNm'] == null ? null : json['userNm'] as String,
       rgstUserId: json['rgstUserId'] == null ? null : json['rgstUserId'] as String,
       rgstDttm: json['rgstDttm'] == null ? null : json['rgstDttm'] as String,
       updtUserId: json['updtUserId'] == null ? null : json['updtUserId'] as String,

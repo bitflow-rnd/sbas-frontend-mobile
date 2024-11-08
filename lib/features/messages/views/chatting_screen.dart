@@ -124,33 +124,37 @@ class _ChattingScreenState extends State<ChattingScreen> {
               if (pickedFile != null) {
                 setState(() {
                   file = pickedFile;
+                  _messageController.text = '[이미지]';
                   _isButtonEnabled = true;
                 });
               }
             },
             child: Container(
               color: Palette.greyText_20,
-              margin: EdgeInsets.all(2.r),
+              margin: EdgeInsets.only(left: 2.r, right: 2.r),
               child: Image.asset("assets/auth_group/image_location_small.png",
                   width: 42.h),
             ),
           ),
           Expanded(
-              child: TextField(
-            controller: _messageController,
-            onChanged: (value) {
-              setState(() {});
-              _isButtonEnabled = value.trim().isNotEmpty;
-            },
-            decoration: InputDecoration(
-                hintText: '메시지 입력',
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 12.w)),
+            child: TextField(
+              controller: _messageController,
+              onChanged: (value) {
+                setState(() {});
+                _isButtonEnabled = value.trim().isNotEmpty;
+              },
+              decoration: InputDecoration(
+                  hintText: '메시지 입력',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w)
+              ),
+              enabled: file == null,
           )),
           InkWell(
             onTap: _isButtonEnabled
                 ? () {
                     if (file != null) {
+                      _messageController.text = '';
                       _talkRoomBloc.uploadFile(file, _messageController.text);
                     } else {
                       _talkRoomBloc.sendMessage(_messageController.text);
@@ -166,7 +170,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 color:
                     _isButtonEnabled ? Palette.mainColor : Palette.greyText_30,
                 padding: EdgeInsets.all(12.r),
-                margin: EdgeInsets.all(2.r),
+                margin: EdgeInsets.only(left: 2.r, right: 2.r),
                 child: Icon(
                   Icons.send,
                   color: Palette.white,

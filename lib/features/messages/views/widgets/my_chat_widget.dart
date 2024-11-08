@@ -24,21 +24,21 @@ Row myChatPhotoAttachedWidget(
   Future<void> downloadFile(
       String attcGrpId, String attcId, String fileNm) async {
     await fileRepository
-        .downloadPublicImageFile(attcGrpId, attcId, fileNm)
-        .then((value) => {
-              Common.showModal(
-                context,
-                Common.commonModal(
-                  context: context,
-                  mainText: "파일 다운로드 완료",
-                  imageWidget: Image.asset(
-                    "assets/auth_group/modal_check.png",
-                    width: 44.h,
-                  ),
-                  imageHeight: 44.h,
-                ),
-              )
-            });
+      .downloadPublicImageFile(attcGrpId, attcId, fileNm)
+      .then((value) => {
+        Common.showModal(
+          context,
+          Common.commonModal(
+            context: context,
+            mainText: "파일 다운로드 완료",
+            imageWidget: Image.asset(
+              "assets/auth_group/modal_check.png",
+              width: 44.h,
+            ),
+            imageHeight: 44.h,
+          ),
+        )
+      });
   }
 
   return Row(
@@ -80,15 +80,66 @@ Row myChatPhotoAttachedWidget(
                             .map((file) => GestureDetector(
                                   child: Image.network(
                                     "${dotenv.env['URL']}${file.uriPath}/${file.fileNm}",
-                                    height: 150.h,
+                                    height: 100.h,
                                     width: 100.w,
                                   ),
-                                  onTap: () => {
-                                    downloadFile(
-                                      file.attcGrpId,
-                                      file.attcId,
-                                      file.fileNm,
-                                    )
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Dialog(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.only(left: 10.r),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // 양옆으로 배치
+                                                  children: [
+                                                    Text(
+                                                      file.fileNm, // 실제 이미지 제목으로 바꾸세요
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      color: Palette.greyText_30,
+                                                      child: IconButton(
+                                                        icon: const Icon(
+                                                          Icons.arrow_downward, // 아래 화살표 아이콘
+                                                          size: 25, // 아이콘 크기 조정
+                                                        ),
+                                                        onPressed: () async {
+                                                          Navigator.pop(context);
+                                                          await downloadFile(
+                                                            file.attcGrpId,
+                                                            file.attcId,
+                                                            file.fileNm,
+                                                          );
+                                                        },
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                height: 0.5, // 구분선 두께
+                                                color: Palette.black, // 구분선 색상
+                                              ),
+                                              InteractiveViewer(
+                                                minScale: 0.1,
+                                                maxScale: 4.0,
+                                                child: Image.network(
+                                                  "${dotenv.env['URL']}${file.uriPath}/${file.fileNm}",
+                                                  fit: BoxFit.contain, // 이미지 크기를 화면에 맞게 조정
+                                                ),
+                                              ),
+                                              Gaps.v4,
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
                                   },
                                 ))
                             .toList(),
@@ -118,20 +169,6 @@ Row myChatPhotoAttachedWidget(
                       return const CircularProgressIndicator();
                     }
                   },
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      input.msg ?? '',
-                      textAlign: TextAlign.start,
-                      style: CTS(
-                        color: Colors.black,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Gaps.h5,
-                  ],
                 ),
               ],
             ),
