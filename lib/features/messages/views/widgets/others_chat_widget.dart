@@ -12,7 +12,6 @@ import 'package:sbas/util.dart';
 
 Row othersChatWidget(
   TalkMsgModel talkMsgModel,
-  ScrollController scrollController,
 ) {
   var chat = talkMsgModel;
   String? userImage = 'assets/message/doctor_icon.png';
@@ -78,7 +77,6 @@ Row othersChatWidget(
 
 Row othersPhotoChatWidget(
   TalkMsgModel input,
-  ScrollController scrollController,
   BuildContext context,
 ) {
   var chat = input;

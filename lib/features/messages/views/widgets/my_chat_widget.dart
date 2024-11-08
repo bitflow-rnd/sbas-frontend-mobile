@@ -12,7 +12,6 @@ import 'package:sbas/constants/common.dart';
 
 Row myChatPhotoAttachedWidget(
   TalkMsgModel input,
-  ScrollController scrollController,
   BuildContext context,
 ) {
   final fileRepository = FileRepository();
@@ -244,7 +243,6 @@ Row myChatVideoAttachedWidget(
 
 Row myChatWidget(
   TalkMsgModel input,
-  ScrollController scrollController,
 ) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,

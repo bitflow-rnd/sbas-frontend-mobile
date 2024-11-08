@@ -10,22 +10,23 @@ ListView chatWidget(
   BuildContext context,
 ) {
   return ListView.builder(
+    reverse: true,
     controller: scrollController,
     itemCount: snapshot.data!.length,
     itemBuilder: (context, index) {
-      var chat = snapshot.data![index];
+      var chat = snapshot.data![snapshot.data!.length - 1 - index];
       bool isMyMessage = chat.updtUserId == currentUserId;
       bool isText = chat.attcId == null;
 
       return Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(top: 4, bottom: 4),
         child: isMyMessage
             ? (isText
-                ? myChatWidget(chat, scrollController)
-                : myChatPhotoAttachedWidget(chat, scrollController, context))
+                ? myChatWidget(chat)
+                : myChatPhotoAttachedWidget(chat, context))
             : (isText
-                ? othersChatWidget(chat, scrollController)
-                : othersPhotoChatWidget(chat, scrollController, context)),
+                ? othersChatWidget(chat)
+                : othersPhotoChatWidget(chat, context)),
       );
     },
   );

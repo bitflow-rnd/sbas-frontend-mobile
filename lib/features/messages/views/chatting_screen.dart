@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/messages/blocs/talk_room_bloc.dart';
@@ -55,55 +57,54 @@ class _ChattingScreenState extends State<ChattingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarBrightness: Brightness.light,
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
-        ),
-        backgroundColor: Colors.white,
-        elevation: 1,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          widget.tkrmNm,
-          style: const TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: StreamBuilder<List<TalkMsgModel>>(
-              stream: _talkRoomBloc.chatDetailListStream,
-              builder: (_, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _scrollController.animateTo(
-                    _scrollController.position.maxScrollExtent,
-                    duration: const Duration(microseconds: 300),
-                    curve: Curves.easeOut,
-                  );
-                });
-                return chatWidget(userToken.name!, snapshot, _scrollController, context);
-              },
-            ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus(); // 화면을 터치하면 포커스 해제
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
           ),
-          const Divider(height: 1.0),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-            ),
-            child: _textSender(),
+          backgroundColor: Colors.white,
+          elevation: 1,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-        ],
+          title: Text(
+            widget.tkrmNm,
+            style: const TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder<List<TalkMsgModel>>(
+                stream: _talkRoomBloc.chatDetailListStream,
+                builder: (_, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return chatWidget(userToken.name!, snapshot, _scrollController, context);
+                },
+              ),
+            ),
+            Gaps.v4,
+            const Divider(height: 1.0),
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+              ),
+              child: _textSender(),
+            ),
+          ],
+        ),
       ),
     );
   }
