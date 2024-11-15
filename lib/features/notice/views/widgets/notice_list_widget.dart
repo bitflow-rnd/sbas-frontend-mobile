@@ -38,14 +38,8 @@ class NoticeListWidget extends ConsumerWidget {
           searchPeriod: getPeriodCode(searchPeriod),
         );
 
-        ref.read(noticeProvider.notifier).getNoticeList(request);
-
-        final noticeList = ref.watch(noticeListProvider);
-
-        if (noticeList == null) {
-          return const CircularProgressIndicator();
-        }
-
+        ref.watch(noticeProvider.notifier).getNoticeList(request);
+        final noticeList = ref.watch(noticeProvider.notifier).listModel;
         final notices = noticeList.items;
 
         List<Widget> noticeCards = notices.map((notice) {

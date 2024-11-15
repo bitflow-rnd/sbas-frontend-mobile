@@ -9,22 +9,18 @@ import 'package:sbas/features/notice/models/notice_list_request_model.dart';
 
 class NoticeNotifier extends AsyncNotifier {
   late final NoticeRepository _repository;
-
+  NoticeListModel listModel = NoticeListModel(items: []);
   @override
   FutureOr build() async {
     _repository = ref.read(noticeRepoProvider);
   }
 
   Future<void> getNoticeList(NoticeListRequestModel model) async {
-    ref.read(noticeListProvider.notifier).state = await _repository.getNoticeList(model);
+    await _repository.getNoticeList(model).then((value) => listModel = value);
   }
 
   Future<NoticeDetailModel> getNoticeDetail(String noticeId) async {
-    if(noticeId != null) {
-      return await _repository.getNoticeDetail(noticeId);
-    }
-
-    return NoticeDetailModel();
+    return await _repository.getNoticeDetail(noticeId);
   }
 
   Future<void> readNotice(ReadNoticeRequestModel request) async {
@@ -37,5 +33,3 @@ final noticeProvider =
 AsyncNotifierProvider<NoticeNotifier, void>(
       () => NoticeNotifier(),
 );
-
-final noticeListProvider = StateProvider<NoticeListModel?>((ref) => null);
