@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
-import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
+import 'package:sbas/features/authentication/providers/agency_region_bloc.dart';
+import 'package:sbas/features/authentication/providers/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
-import 'package:sbas/features/lookup/presenters/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/presenters/patient_register_provider.dart';
 
-class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
+class AgencyDetailNotifier extends AsyncNotifier<List<InfoInstModel>> {
   @override
   FutureOr<List<InfoInstModel>> build() async {
     _infoInstRepository = ref.read(userRegReqProvider);
@@ -61,8 +61,8 @@ class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
 }
 
 final agencyDetailProvider =
-    AsyncNotifierProvider<AgencyDetailBloc, List<InfoInstModel>>(
-  () => AgencyDetailBloc(),
+    AsyncNotifierProvider<AgencyDetailNotifier, List<InfoInstModel>>(
+  () => AgencyDetailNotifier(),
 );
 final selectedAgencyProvider = StateProvider<InfoInstModel>(
   (ref) => InfoInstModel(),

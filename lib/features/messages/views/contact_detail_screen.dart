@@ -8,7 +8,7 @@ import 'package:sbas/common/widgets/common_button_widget.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
+import 'package:sbas/features/authentication/providers/user_detail_presenter.dart';
 import 'package:sbas/features/messages/models/chat_request_model.dart';
 import 'package:sbas/features/messages/models/favorite_request_model.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';

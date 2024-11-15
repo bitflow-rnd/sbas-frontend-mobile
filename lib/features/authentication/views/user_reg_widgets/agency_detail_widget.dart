@@ -6,8 +6,8 @@ import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
-import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
+import 'package:sbas/features/authentication/providers/agency_detail_provider.dart';
+import 'package:sbas/features/authentication/providers/user_reg_bloc.dart';
 
 class AgencyDetail extends ConsumerStatefulWidget {
   const AgencyDetail({

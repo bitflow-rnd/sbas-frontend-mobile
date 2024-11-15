@@ -13,10 +13,10 @@ import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
-import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
+import 'package:sbas/features/authentication/providers/agency_detail_provider.dart';
+import 'package:sbas/features/authentication/providers/agency_region_bloc.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
-import 'package:sbas/features/lookup/presenters/infectious_disease_bloc.dart';
+import 'package:sbas/features/lookup/presenters/infectious_disease_provider.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 
 class InfectiousDiseaseV2 extends ConsumerStatefulWidget {
@@ -82,7 +82,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
   Widget build(BuildContext context) {
     final ImagePicker picker = ImagePicker();
 
-    InfectiousDiseaseBloc vm = ref.read(infectiousDiseaseProvider.notifier);
+    InfectiousDiseaseNotifier vm = ref.read(infectiousDiseaseProvider.notifier);
     final patientImage = ref.watch(infectiousImageProvider);
     // ref.read(infectiousDiseaseProvider.notifier).initByOCR(widget.report);
 
@@ -342,7 +342,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
   Widget _getTextInputField(
       {required String hint,
       required int i,
-      required InfectiousDiseaseBloc vm,
+      required InfectiousDiseaseNotifier vm,
       TextInputType type = TextInputType.text,
       int? maxLength,
       List<TextInputFormatter>? inputFormatters}) {
@@ -378,7 +378,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
     );
   }
 
-  Widget getDatePicker(String hint, InfectiousDiseaseBloc vm, int i) {
+  Widget getDatePicker(String hint, InfectiousDiseaseNotifier vm, int i) {
     return Column(
       children: [
         TextFormField(
@@ -411,7 +411,7 @@ class _InfectiousDiseaseV2State extends ConsumerState<InfectiousDiseaseV2> {
     );
   }
 
-  Widget _getTitle(String title, bool isRequired, InfectiousDiseaseBloc vm) =>
+  Widget _getTitle(String title, bool isRequired, InfectiousDiseaseNotifier vm) =>
       Row(
         children: [
           Text(

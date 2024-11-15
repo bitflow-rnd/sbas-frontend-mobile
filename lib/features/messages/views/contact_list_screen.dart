@@ -6,7 +6,7 @@ import 'package:sbas/common/widgets/radio_button.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
+import 'package:sbas/features/authentication/providers/user_detail_presenter.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
 import 'package:sbas/features/messages/providers/contact_condition_provider.dart';
 import 'package:sbas/features/messages/providers/contact_list_provider.dart';

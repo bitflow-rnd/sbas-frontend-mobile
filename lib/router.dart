@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sbas/common/api/v1_provider.dart';
 import 'package:sbas/common/main_navigation_screen.dart';
 import 'package:sbas/features/assign/views/assign_bed_screen.dart';
-import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
+import 'package:sbas/features/authentication/providers/user_detail_presenter.dart';
 import 'package:sbas/features/authentication/repos/login_repo.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
 import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';

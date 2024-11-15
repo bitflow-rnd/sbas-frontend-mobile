@@ -15,7 +15,7 @@ import 'package:sbas/features/assign/views/modal_tab/assign_bed_approve_screen.d
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_cancel_screen.dart';
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_req_aprv_screen.dart';
 import 'package:sbas/features/assign/views/modal_tab/assign_bed_go_home.dart';
-import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
+import 'package:sbas/features/authentication/providers/user_detail_presenter.dart';
 import 'package:sbas/features/lookup/models/origin_info_model.dart';
 import 'package:sbas/features/lookup/models/patient_timeline_model.dart';
 import 'package:sbas/features/lookup/presenters/patient_timeline_presenter.dart';

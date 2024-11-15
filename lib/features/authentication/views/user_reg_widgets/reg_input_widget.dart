@@ -7,7 +7,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
+import 'package:sbas/features/authentication/providers/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 import 'package:sbas/features/authentication/views/user_reg_req_screen_v2.dart';
 import 'package:sbas/util.dart';

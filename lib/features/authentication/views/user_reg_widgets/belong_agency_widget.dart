@@ -5,13 +5,13 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/authentication/blocs/belong_agency_bloc.dart';
+import 'package:sbas/features/authentication/providers/belong_agency_bloc.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_detail_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_proof_widget.dart';
 import 'package:sbas/features/authentication/views/user_reg_widgets/agency_region_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/util.dart';
-import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
+import 'package:sbas/features/authentication/providers/user_reg_bloc.dart';
 
 class BelongAgency extends ConsumerStatefulWidget {
   const BelongAgency({

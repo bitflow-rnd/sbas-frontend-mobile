@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
-import 'package:sbas/features/lookup/presenters/infectious_disease_bloc.dart';
+import 'package:sbas/features/lookup/presenters/infectious_disease_provider.dart';
 import 'package:sbas/features/lookup/presenters/patient_info_presenter.dart';
-import 'package:sbas/features/lookup/presenters/patient_lookup_bloc.dart';
+import 'package:sbas/features/lookup/presenters/patient_lookup_provider.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
@@ -16,7 +16,7 @@ import 'package:sbas/features/lookup/repos/patient_repo.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/patient/providers/patient_provider.dart';
 
-class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
+class PatientRegisterNotifier extends AsyncNotifier<PatientRegInfoModel> {
   @override
   FutureOr<PatientRegInfoModel> build() {
     patientInfoModel = PatientRegInfoModel();
@@ -443,6 +443,6 @@ class PatientRegisterPresenter extends AsyncNotifier<PatientRegInfoModel> {
 }
 
 final patientRegProvider =
-    AsyncNotifierProvider<PatientRegisterPresenter, PatientRegInfoModel>(
-  () => PatientRegisterPresenter(),
+    AsyncNotifierProvider<PatientRegisterNotifier, PatientRegInfoModel>(
+  () => PatientRegisterNotifier(),
 );

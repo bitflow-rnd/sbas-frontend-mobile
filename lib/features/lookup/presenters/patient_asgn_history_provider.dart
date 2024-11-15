@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/lookup/models/patient_history_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
-class PatientAsgnHistoryBloc extends AsyncNotifier<PatientHistoryList> {
+class PatientAsgnHistoryNotifier extends AsyncNotifier<PatientHistoryList> {
   @override
   FutureOr<PatientHistoryList> build() {
     _repository = ref.read(patientRepoProvider);
@@ -48,6 +48,6 @@ class PatientAsgnHistoryBloc extends AsyncNotifier<PatientHistoryList> {
 
 }
 
-final patientAsgnHistoryProvider = AsyncNotifierProvider<PatientAsgnHistoryBloc, PatientHistoryList>(
-  () => PatientAsgnHistoryBloc(),
+final patientAsgnHistoryProvider = AsyncNotifierProvider<PatientAsgnHistoryNotifier, PatientHistoryList>(
+  () => PatientAsgnHistoryNotifier(),
 );

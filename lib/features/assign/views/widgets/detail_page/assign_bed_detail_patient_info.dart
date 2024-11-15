@@ -5,7 +5,7 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
-import 'package:sbas/features/lookup/presenters/patient_lookup_bloc.dart';
+import 'package:sbas/features/lookup/presenters/patient_lookup_provider.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
 
 class AssignBedDetailPatientInfo extends ConsumerWidget {

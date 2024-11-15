@@ -8,7 +8,7 @@ import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/models/infectious_disease_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
-class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
+class InfectiousDiseaseNotifier extends AsyncNotifier<InfectiousDiseaseModel> {
   String get address => _infectiousDiseaseModel.instAddr ?? '';
 
   @override
@@ -208,8 +208,8 @@ class InfectiousDiseaseBloc extends AsyncNotifier<InfectiousDiseaseModel> {
   late final UserRegRequestRepository _regRepository;
 }
 
-final infectiousDiseaseProvider = AsyncNotifierProvider<InfectiousDiseaseBloc, InfectiousDiseaseModel>(
-  () => InfectiousDiseaseBloc(),
+final infectiousDiseaseProvider = AsyncNotifierProvider<InfectiousDiseaseNotifier, InfectiousDiseaseModel>(
+  () => InfectiousDiseaseNotifier(),
 );
 final infectiousImageProvider = StateProvider<List<XFile>>((ref) => []);
 final infectiousAttcProvider = StateProvider<String?>((ref) => null);

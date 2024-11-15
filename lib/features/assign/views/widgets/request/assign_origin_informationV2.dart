@@ -10,7 +10,7 @@ import 'package:sbas/common/widgets/field_error_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
+import 'package:sbas/features/authentication/providers/agency_region_bloc.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 
 class OriginInformationV2 extends ConsumerStatefulWidget {

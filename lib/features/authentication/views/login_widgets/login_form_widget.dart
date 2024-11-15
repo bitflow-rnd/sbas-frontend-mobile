@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/authentication/blocs/login_bloc.dart';
+import 'package:sbas/features/authentication/providers/login_bloc.dart';
 import 'package:sbas/features/authentication/views/login_screen.dart';
 
 class LoginForm extends ConsumerStatefulWidget {

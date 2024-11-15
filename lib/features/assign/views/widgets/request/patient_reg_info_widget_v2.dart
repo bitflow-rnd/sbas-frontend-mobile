@@ -7,7 +7,7 @@ import 'package:kpostal/kpostal.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/gaps.dart';
-import 'package:sbas/features/lookup/presenters/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/presenters/patient_register_provider.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 import 'package:sbas/util.dart';
 import 'package:sbas/constants/palette.dart';
@@ -132,7 +132,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
   }
 
   Widget _inputResidentRegistrationNumber(
-    PatientRegisterPresenter vm,
+    PatientRegisterNotifier vm,
     PatientRegInfoModel report,
     int index,
   ) =>
@@ -226,7 +226,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
         ],
       );
 
-  Widget _inputGender(PatientRegisterPresenter vm) => Column(
+  Widget _inputGender(PatientRegisterNotifier vm) => Column(
         children: [
           getSubTitlt('성별', true),
           Gaps.v8,
@@ -252,7 +252,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
         ],
       );
 
-  Widget _inputAge(PatientRegisterPresenter vm) => Column(
+  Widget _inputAge(PatientRegisterNotifier vm) => Column(
         children: [
           getSubTitlt('나이', true),
           Gaps.v8,
@@ -288,7 +288,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
         ],
       );
 
-  Widget _addrInput(PatientRegisterPresenter vm) => Column(
+  Widget _addrInput(PatientRegisterNotifier vm) => Column(
         children: [
           Row(
             children: [
@@ -337,7 +337,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
         ],
       );
 
-  Widget _isDeathRow(PatientRegisterPresenter vm) => Stack(
+  Widget _isDeathRow(PatientRegisterNotifier vm) => Stack(
         children: [
           Container(
             decoration: BoxDecoration(
@@ -408,7 +408,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
         ],
       );
 
-  Widget _isAlive(PatientRegisterPresenter vm) => Column(
+  Widget _isAlive(PatientRegisterNotifier vm) => Column(
         children: [
           Row(
             children: [
@@ -421,7 +421,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
         ],
       );
 
-  Widget _nation(PatientRegInfoModel report, PatientRegisterPresenter vm) =>
+  Widget _nation(PatientRegInfoModel report, PatientRegisterNotifier vm) =>
       Column(
         children: [
           Row(
@@ -478,7 +478,7 @@ class PatientRegInfoV2State extends ConsumerState<PatientRegInfoV2> {
         ],
       );
 
-  Widget _nationSelRow(PatientRegisterPresenter vm) => Stack(
+  Widget _nationSelRow(PatientRegisterNotifier vm) => Stack(
     children: [
       Container(
         decoration: BoxDecoration(

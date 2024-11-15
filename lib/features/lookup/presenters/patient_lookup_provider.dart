@@ -5,7 +5,7 @@ import 'package:sbas/features/patient/models/patient_list_model.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
-class PatientLookupBloc extends AsyncNotifier<PatientListModel> {
+class PatientLookupNotifier extends AsyncNotifier<PatientListModel> {
   @override
   FutureOr<PatientListModel> build() async {
     _patientRepository = ref.read(patientRepoProvider);
@@ -106,7 +106,7 @@ String getPatientInfo(Patient patient) {
 }
 
 final patientLookupProvider =
-    AsyncNotifierProvider<PatientLookupBloc, PatientListModel>(
-  () => PatientLookupBloc(),
+    AsyncNotifierProvider<PatientLookupNotifier, PatientListModel>(
+  () => PatientLookupNotifier(),
 );
 final patientProgressProvider = StateProvider.autoDispose<int>((ref) => 0);

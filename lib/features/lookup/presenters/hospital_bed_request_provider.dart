@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 import 'package:sbas/features/lookup/repos/patient_repo.dart';
 
-class HospitalBedRequest extends AsyncNotifier<EpidemiologicalReportModel> {
+class HospitalBedRequestNotifier extends AsyncNotifier<EpidemiologicalReportModel> {
   @override
   FutureOr<EpidemiologicalReportModel> build() async {
     if (attcId.isNotEmpty) {
@@ -26,7 +26,7 @@ class HospitalBedRequest extends AsyncNotifier<EpidemiologicalReportModel> {
   final PatientRepository _patientRepository = PatientRepository();
 }
 
-final requestBedProvider = AsyncNotifierProvider<HospitalBedRequest, EpidemiologicalReportModel>(
-  () => HospitalBedRequest(),
+final requestBedProvider = AsyncNotifierProvider<HospitalBedRequestNotifier, EpidemiologicalReportModel>(
+  () => HospitalBedRequestNotifier(),
 );
 final orderOfRequestProvider = StateProvider.autoDispose<int>((ref) => 0);

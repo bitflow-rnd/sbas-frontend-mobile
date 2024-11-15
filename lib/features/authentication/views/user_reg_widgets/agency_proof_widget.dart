@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
-import 'package:sbas/features/authentication/blocs/agency_proof_bloc.dart';
+import 'package:sbas/features/authentication/providers/agency_proof_bloc.dart';
 import 'package:sbas/constants/palette.dart';
 
 class AgencyProof extends ConsumerStatefulWidget {

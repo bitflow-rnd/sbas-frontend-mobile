@@ -6,8 +6,8 @@ import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/lookup/presenters/hospital_bed_request_bloc.dart';
-import 'package:sbas/features/lookup/presenters/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/presenters/hospital_bed_request_provider.dart';
+import 'package:sbas/features/lookup/presenters/patient_register_provider.dart';
 import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
 import 'package:sbas/features/lookup/models/patient_reg_info_model.dart';
 
