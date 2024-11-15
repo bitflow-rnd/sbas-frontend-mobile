@@ -7,7 +7,7 @@ import 'package:sbas/features/notice/models/notice_detail_model.dart';
 import 'package:sbas/features/notice/models/notice_list_model.dart';
 import 'package:sbas/features/notice/models/notice_list_request_model.dart';
 
-class NoticePresenter extends AsyncNotifier {
+class NoticeNotifier extends AsyncNotifier {
   late final NoticeRepository _repository;
 
   @override
@@ -33,9 +33,9 @@ class NoticePresenter extends AsyncNotifier {
 
 }
 
-final noticePresenter =
-AsyncNotifierProvider<NoticePresenter, void>(
-      () => NoticePresenter(),
+final noticeProvider =
+AsyncNotifierProvider<NoticeNotifier, void>(
+      () => NoticeNotifier(),
 );
 
 final noticeListProvider = StateProvider<NoticeListModel?>((ref) => null);

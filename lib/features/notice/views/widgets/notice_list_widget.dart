@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
-import 'package:sbas/features/notice/blocs/notice_presenter.dart';
+import 'package:sbas/features/notice/provider/notice_provider.dart';
 import 'package:sbas/features/notice/models/notice_list_request_model.dart';
 import 'package:sbas/features/notice/models/read_notice_request_model.dart';
 import 'package:sbas/common/bitflow_theme.dart';
@@ -38,7 +38,7 @@ class NoticeListWidget extends ConsumerWidget {
           searchPeriod: getPeriodCode(searchPeriod),
         );
 
-        ref.read(noticePresenter.notifier).getNoticeList(request);
+        ref.read(noticeProvider.notifier).getNoticeList(request);
 
         final noticeList = ref.watch(noticeListProvider);
 
@@ -90,9 +90,9 @@ class NoticeListWidget extends ConsumerWidget {
           final userId = ref.read(userDetailProvider.notifier).userId;
           final request =
               ReadNoticeRequestModel(userId: userId, noticeId: notice.noticeId);
-          ref.read(noticePresenter.notifier).readNotice(request);
+          ref.read(noticeProvider.notifier).readNotice(request);
 
-          ref.read(noticePresenter.notifier).getNoticeList(listRequest);
+          ref.read(noticeProvider.notifier).getNoticeList(listRequest);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
