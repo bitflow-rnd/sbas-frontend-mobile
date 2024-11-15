@@ -16,7 +16,7 @@ import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/agency_detail_bloc.dart';
 import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
-import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
+import 'package:sbas/features/lookup/presenters/infectious_disease_bloc.dart';
 import 'package:sbas/features/lookup/models/epidemiological_report_model.dart';
 
 class InfectiousDiseaseV2 extends ConsumerStatefulWidget {

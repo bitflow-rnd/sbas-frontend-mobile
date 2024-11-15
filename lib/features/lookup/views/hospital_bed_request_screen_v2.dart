@@ -15,9 +15,9 @@ import 'package:sbas/features/assign/views/widgets/request/assign_infectious_dis
 import 'package:sbas/features/assign/views/widgets/request/assign_origin_informationV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_severely_diseaseV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/patient_reg_info_widget_v2.dart';
-import 'package:sbas/features/lookup/blocs/hospital_bed_request_bloc.dart';
-import 'package:sbas/features/lookup/blocs/infectious_disease_bloc.dart';
-import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/presenters/hospital_bed_request_bloc.dart';
+import 'package:sbas/features/lookup/presenters/infectious_disease_bloc.dart';
+import 'package:sbas/features/lookup/presenters/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
 import 'package:sbas/features/lookup/presenters/origin_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/severely_disease_presenter.dart';

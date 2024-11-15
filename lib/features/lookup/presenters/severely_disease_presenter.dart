@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/models/base_code_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
-import 'package:sbas/features/lookup/blocs/bio_info_presenter.dart';
+import 'package:sbas/features/lookup/presenters/bio_info_presenter.dart';
 import 'package:sbas/features/lookup/models/severely_disease_model.dart';
 
 class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {

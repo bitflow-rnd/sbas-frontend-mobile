@@ -6,7 +6,7 @@ import 'package:sbas/features/authentication/blocs/agency_region_bloc.dart';
 import 'package:sbas/features/authentication/blocs/user_reg_bloc.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
-import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
+import 'package:sbas/features/lookup/presenters/patient_register_bloc.dart';
 
 class AgencyDetailBloc extends AsyncNotifier<List<InfoInstModel>> {
   @override

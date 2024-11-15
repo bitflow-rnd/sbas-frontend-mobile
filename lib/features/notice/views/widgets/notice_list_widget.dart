@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
-import 'package:sbas/features/notice/provider/notice_provider.dart';
+import 'package:sbas/features/notice/providers/notice_provider.dart';
 import 'package:sbas/features/notice/models/notice_list_request_model.dart';
 import 'package:sbas/features/notice/models/read_notice_request_model.dart';
 import 'package:sbas/common/bitflow_theme.dart';

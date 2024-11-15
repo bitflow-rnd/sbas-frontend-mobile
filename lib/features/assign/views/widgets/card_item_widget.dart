@@ -8,7 +8,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/assign/model/assign_item_model.dart';
 import 'package:sbas/features/assign/views/assign_bed_detail_screen.dart';
-import 'package:sbas/features/lookup/blocs/patient_info_presenter.dart';
+import 'package:sbas/features/lookup/presenters/patient_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/patient_disease_info_presenter.dart';
 import 'package:sbas/features/lookup/presenters/patient_transfer_info_presenter.dart';
 import 'package:sbas/util.dart';
