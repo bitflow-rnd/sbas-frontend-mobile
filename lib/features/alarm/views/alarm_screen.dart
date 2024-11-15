@@ -6,7 +6,7 @@ import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/alarm/model/alarm_item_model.dart';
-import 'package:sbas/features/alarm/provider/alarm_provider.dart';
+import 'package:sbas/features/alarm/providers/alarm_provider.dart';
 import 'package:sbas/features/alarm/views/widgets/alarm_item_card_widget.dart';
 
 class AlarmScreen extends ConsumerStatefulWidget {

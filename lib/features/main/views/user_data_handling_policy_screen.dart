@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
 
-import 'package:sbas/features/main/blocs/terms_presenter.dart';
+import 'package:sbas/features/main/providers/terms_presenter.dart';
 
 class UserDataHandlingPolicyPage extends ConsumerStatefulWidget {
   const UserDataHandlingPolicyPage({super.key});
