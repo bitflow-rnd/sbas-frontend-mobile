@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/messages/models/contact_condition_model.dart';
 import 'package:sbas/features/messages/models/contact_list_map.dart';
 import 'package:sbas/features/messages/models/user_contact_list_model.dart';
-import 'package:sbas/features/messages/presenters/contact_condition_presenter.dart';
+import 'package:sbas/features/messages/providers/contact_condition_provider.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 
-class ContactListPresenter extends AsyncNotifier<ContactListMap> {
+class ContactListNotifier extends AsyncNotifier<ContactListMap> {
   ContactListMap contactListMap = ContactListMap(contactListMap: {});
 
   late final ContactConditionModel contactConditionModel;
@@ -16,7 +16,7 @@ class ContactListPresenter extends AsyncNotifier<ContactListMap> {
 
   @override
   FutureOr<ContactListMap> build() async {
-    contactConditionModel = ref.watch(contactConditionPresenter);
+    contactConditionModel = ref.watch(contactConditionProvider);
     _contactRepository = ref.read(contactRepoProvider);
 
     await _loadContacts();
@@ -47,6 +47,6 @@ class ContactListPresenter extends AsyncNotifier<ContactListMap> {
 }
 
 final contactListProvider =
-    AsyncNotifierProvider<ContactListPresenter, ContactListMap>(
-  () => ContactListPresenter(),
+    AsyncNotifierProvider<ContactListNotifier, ContactListMap>(
+  () => ContactListNotifier(),
 );

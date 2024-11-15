@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/common/providers/loading_notifier.dart';
+import 'package:sbas/common/providers/loading_provider.dart';
 import 'package:sbas/features/assign/model/asgn_bed_hosp_req_model.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';

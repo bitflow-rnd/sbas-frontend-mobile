@@ -12,7 +12,7 @@ import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/messages/models/chat_request_model.dart';
 import 'package:sbas/features/messages/models/favorite_request_model.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
-import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
+import 'package:sbas/features/messages/providers/contact_list_provider.dart';
 import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 import 'package:sbas/features/messages/views/chatting_screen.dart';

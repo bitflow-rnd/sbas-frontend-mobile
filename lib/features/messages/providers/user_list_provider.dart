@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/common/providers/loading_notifier.dart';
-import 'package:sbas/features/messages/models/UserListModel.dart';
+import 'package:sbas/common/providers/loading_provider.dart';
+import 'package:sbas/features/messages/models/user_list_model.dart';
 import 'package:sbas/features/messages/providers/talk_rooms_provider.dart';
 import 'package:sbas/features/messages/repos/contact_repo.dart';
 import 'package:sbas/util.dart';

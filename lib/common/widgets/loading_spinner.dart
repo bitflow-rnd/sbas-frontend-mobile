@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbas/common/providers/loading_notifier.dart';
+import 'package:sbas/common/providers/loading_provider.dart';
 import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 
 class LoadingSpinner extends ConsumerWidget {

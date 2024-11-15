@@ -8,8 +8,8 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/authentication/blocs/user_detail_presenter.dart';
 import 'package:sbas/features/messages/models/user_contact_model.dart';
-import 'package:sbas/features/messages/presenters/contact_condition_presenter.dart';
-import 'package:sbas/features/messages/presenters/contact_list_presenter.dart';
+import 'package:sbas/features/messages/providers/contact_condition_provider.dart';
+import 'package:sbas/features/messages/providers/contact_list_provider.dart';
 import 'package:sbas/features/messages/views/contact_detail_screen.dart';
 import 'package:sbas/features/messages/views/widgets/contact_item_widget.dart';
 import 'package:sbas/features/messages/models/contact_list_map.dart';
@@ -26,16 +26,16 @@ class ContactListScreen extends ConsumerWidget {
     final userDstr1Cd = userDstr2Cd.toString().substring(0, 2);
     bool isMyLocation = ref.watch(isMyLocationProvider);
     List<bool> instTypeCdList = ref.watch(instTypeCdListProvider);
-    var contactPresenter = ref.watch(contactConditionPresenter);
+    var contactPresenter = ref.watch(contactConditionProvider);
     contactPresenter.setCondition(myInstTypeCd: userInstTypeCd);
     bool showInstTypeCdList = ref.watch(showInstTypeCdListProvider);
 
     if (isMyLocation) {
-      ref.read(contactConditionPresenter).dstr1Cd = userDstr1Cd;
-      ref.read(contactConditionPresenter).dstr2Cd = userDstr2Cd;
+      ref.read(contactConditionProvider).dstr1Cd = userDstr1Cd;
+      ref.read(contactConditionProvider).dstr2Cd = userDstr2Cd;
     } else {
-      ref.read(contactConditionPresenter).dstr1Cd = null;
-      ref.read(contactConditionPresenter).dstr2Cd = null;
+      ref.read(contactConditionProvider).dstr1Cd = null;
+      ref.read(contactConditionProvider).dstr2Cd = null;
     }
 
     var presenter = ref.watch(contactListProvider);

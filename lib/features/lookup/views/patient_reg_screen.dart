@@ -14,7 +14,7 @@ import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.da
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
 
-import '../../../common/providers/loading_notifier.dart';
+import '../../../common/providers/loading_provider.dart';
 import 'patient_duplicate_check_modal.dart';
 
 class PatientRegScreen extends ConsumerStatefulWidget {

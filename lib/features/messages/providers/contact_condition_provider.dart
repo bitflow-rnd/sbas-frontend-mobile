@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/messages/models/contact_condition_model.dart';
 
-class ContactConditionPresenter extends StateNotifier<ContactConditionModel> {
-  ContactConditionPresenter() : super(ContactConditionModel());
-
+class ContactConditionNotifier extends StateNotifier<ContactConditionModel> {
+  ContactConditionNotifier() : super(ContactConditionModel());
 
   void setCondition({
     String? search,
@@ -23,6 +22,6 @@ class ContactConditionPresenter extends StateNotifier<ContactConditionModel> {
   }
 }
 
-final contactConditionPresenter = StateNotifierProvider<ContactConditionPresenter, ContactConditionModel>(
-        (ref) => ContactConditionPresenter(),
+final contactConditionProvider = StateNotifierProvider<ContactConditionNotifier, ContactConditionModel>(
+        (ref) => ContactConditionNotifier(),
 );

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/messages/api/contact_provider.dart';
-import 'package:sbas/features/messages/models/UserListModel.dart';
+import 'package:sbas/features/messages/models/user_list_model.dart';
 import 'package:sbas/features/messages/models/activity_history_list_model.dart';
 import 'package:sbas/features/messages/models/chat_request_model.dart';
 import 'package:sbas/features/messages/models/favorite_request_model.dart';
