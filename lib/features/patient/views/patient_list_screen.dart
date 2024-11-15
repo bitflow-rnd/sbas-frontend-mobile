@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/patient/providers/paitent_provider.dart';
+import 'package:sbas/features/patient/providers/patient_provider.dart';
 import 'package:sbas/features/patient/views/widgets/patient_list_widget.dart';
 
 class PatientListScreen extends ConsumerWidget {

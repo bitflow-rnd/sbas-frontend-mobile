@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/features/messages/views/widgets/user_list_widget.dart';
-import 'package:sbas/features/patient/providers/paitent_provider.dart';
+import 'package:sbas/features/patient/providers/patient_provider.dart';
 
 class TalkRoomRegScreen extends ConsumerWidget {
   const TalkRoomRegScreen({super.key});

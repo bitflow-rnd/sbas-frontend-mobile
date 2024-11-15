@@ -9,9 +9,8 @@ import 'package:sbas/common/widgets/progress_indicator_widget.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/extensions.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
+import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/assign/repos/assign_repo.dart';
-import 'package:sbas/features/assign/views/assign_bed_screen.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_infectious_diseaseV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_origin_informationV2.dart';
 import 'package:sbas/features/assign/views/widgets/request/assign_severely_diseaseV2.dart';
@@ -28,7 +27,7 @@ import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_reg_report_widget.dart';
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
-import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
+import 'package:sbas/features/patient/providers/patient_provider.dart';
 
 class HospitalBedRequestScreenV2 extends ConsumerWidget {
   HospitalBedRequestScreenV2({

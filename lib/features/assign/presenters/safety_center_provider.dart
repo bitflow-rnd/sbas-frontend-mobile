@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
 import 'package:sbas/features/authentication/repos/user_reg_req_repo.dart';
 
-class SaftyCenterBloc extends AutoDisposeAsyncNotifier<List<InfoInstModel>> {
+class SaftyCenterNotifier extends AutoDisposeAsyncNotifier<List<InfoInstModel>> {
   @override
   FutureOr<List<InfoInstModel>> build() async {
     _infoInstRepository = ref.read(userRegReqProvider);
@@ -36,6 +36,6 @@ class SaftyCenterBloc extends AutoDisposeAsyncNotifier<List<InfoInstModel>> {
   late final UserRegRequestRepository _infoInstRepository;
 }
 
-final saftyCenterPresenter = AsyncNotifierProvider.autoDispose<SaftyCenterBloc, List<InfoInstModel>>(
-  () => SaftyCenterBloc(),
+final saftyCenterProvider = AsyncNotifierProvider.autoDispose<SaftyCenterNotifier, List<InfoInstModel>>(
+  () => SaftyCenterNotifier(),
 );

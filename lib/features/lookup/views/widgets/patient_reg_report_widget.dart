@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sbas/common/bitflow_theme.dart';
 import 'package:sbas/constants/common.dart';
 import 'package:sbas/constants/palette.dart';
-import 'package:sbas/features/assign/bloc/assign_bed_bloc.dart';
+import 'package:sbas/features/patient/providers/patient_provider.dart';
 
 class PatientRegReport extends ConsumerWidget {
   const PatientRegReport({

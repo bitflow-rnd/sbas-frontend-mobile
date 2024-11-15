@@ -13,7 +13,7 @@ import 'package:sbas/features/lookup/blocs/patient_register_bloc.dart';
 import 'package:sbas/features/lookup/views/patient_reg_screen.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_list_card_item.dart';
 import 'package:sbas/features/patient/views/patient_detail_screen.dart';
-import 'package:sbas/features/patient/providers/paitent_provider.dart';
+import 'package:sbas/features/patient/providers/patient_provider.dart';
 
 Widget patientListWidget(
     BuildContext context, WidgetRef ref, bool isMyGroup, Function changeGroup) {

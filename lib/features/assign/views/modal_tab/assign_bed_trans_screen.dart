@@ -15,7 +15,7 @@ import 'package:sbas/constants/gaps.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/Institution/models/info_crew_model.dart';
 import 'package:sbas/features/Institution/providers/info_crew_provider.dart';
-import 'package:sbas/features/assign/bloc/safety_center_bloc.dart';
+import 'package:sbas/features/assign/presenters/safety_center_provider.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_move_aprv_presenter.dart';
 import 'package:sbas/features/assign/presenters/assign_bed_presenter.dart';
 import 'package:sbas/features/authentication/models/info_inst_model.dart';
@@ -161,7 +161,7 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
                                   ],
                                 ),
                                 Container(
-                                  child: ref.watch(saftyCenterPresenter).when(
+                                  child: ref.watch(saftyCenterProvider).when(
                                     loading: () => const SBASProgressIndicator(),
                                     error: (error, stackTrace) => Center(
                                       child: Text(
@@ -361,7 +361,7 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
                 var baseCodeModel = region.firstWhere((e) => e.cdId == value);
                 cdGrpId = '${baseCodeModel.cdGrpId}${baseCodeModel.cdId}';
                 sidoCd = baseCodeModel.cdId ?? '27';
-                ref.read(saftyCenterPresenter.notifier).getFireStatnList(
+                ref.read(saftyCenterProvider.notifier).getFireStatnList(
                   baseCodeModel.cdId ?? '',
                   null,
                 );
@@ -427,13 +427,13 @@ class _AssignBedTransScreenState extends ConsumerState<AssignBedTransScreen> {
               isExpanded: true,
               onChanged: (value) {
                 if (value == 'all') {
-                  ref.read(saftyCenterPresenter.notifier).getFireStatnList(
+                  ref.read(saftyCenterProvider.notifier).getFireStatnList(
                     sidoCd,
                     null,
                   );
                 } else {
                   var baseCodeModel = county.firstWhere((e) => e.cdId == value);
-                  ref.read(saftyCenterPresenter.notifier).getFireStatnList(
+                  ref.read(saftyCenterProvider.notifier).getFireStatnList(
                     baseCodeModel.cdGrpId?.substring(4) ?? '27',
                     baseCodeModel.cdId,
                   );
