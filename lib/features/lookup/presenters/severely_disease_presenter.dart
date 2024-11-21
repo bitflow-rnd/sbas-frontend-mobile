@@ -82,27 +82,6 @@ class SeverelyDiseasePresenter extends AsyncNotifier<SeverelyDiseaseModel> {
     return false;
   }
 
-  bool isValid() {
-    final entries = ref.read(checkedSeverelyDiseaseProvider).entries;
-    if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'DNRA', orElse: () => const MapEntry("null", false)).key == "null") {
-      return false;
-    }
-    // if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'UDDS', orElse: () => const MapEntry("null", false)).key == "null") {
-    //   return false;
-    // }
-    // if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'PTTP', orElse: () => const MapEntry("null", false)).key == "null") {
-    //   return false;
-    // }
-    if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVIP', orElse: () => const MapEntry("null", false)).key == "null") {
-      return false;
-    }
-
-    if (entries.firstWhere((e) => e.value && e.key.substring(0, 4) == 'SVTP', orElse: () => const MapEntry("null", false)).key == "null") {
-      return false;
-    }
-    return true;
-  }
-
   late final List<BaseCodeModel> list;
   // late final PatientRepository _patientRepository;
   late final UserRegRequestRepository _userRegRequestRepository;

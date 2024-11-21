@@ -57,15 +57,6 @@ class LoginBloc extends AsyncNotifier<void> {
       }
     }
   }
-
-  String getFindId() {
-    const id = 'lemon';
-
-    if (kDebugMode) {
-      print(id);
-    }
-    return id;
-  }
 }
 
 final loginProvider = AsyncNotifierProvider<LoginBloc, void>(

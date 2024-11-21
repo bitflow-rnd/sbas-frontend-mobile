@@ -39,12 +39,17 @@ class AssignBedDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _AssignBedDetailState extends ConsumerState<AssignBedDetailScreen> {
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(patientTimeLineProvider.notifier).refresh(widget.assignItem.ptId, widget.assignItem.bdasSeq);
     });
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.white,
       appBar: SBASAppBar(
