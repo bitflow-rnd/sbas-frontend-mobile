@@ -5,7 +5,7 @@ import 'package:sbas/features/lookup/models/patient_history_model.dart';
 import 'package:sbas/features/lookup/views/widgets/bed_assign_history_card.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
 
-Widget buildHistoryList(PatientHistoryList history, Patient patient) {
+Widget bdasHistoryList(PatientHistoryList history, Patient patient) {
   if (history.count != 0) {
     return SingleChildScrollView(
       child: Column(

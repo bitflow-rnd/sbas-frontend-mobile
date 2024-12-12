@@ -18,7 +18,7 @@ import 'package:sbas/features/lookup/views/widgets/patient_reg_top_nav_widget.da
 import 'package:sbas/features/lookup/views/widgets/patient_top_info_widget.dart';
 import 'package:sbas/features/patient/models/patient_model.dart';
 import 'package:sbas/features/patient/providers/patient_provider.dart';
-import 'package:sbas/features/patient/views/widgets/build_history_list_widget.dart';
+import 'package:sbas/features/patient/views/widgets/bdas_history_list_widget.dart';
 
 class PatientDetailScreen extends ConsumerWidget {
   final Patient patient;
@@ -205,7 +205,7 @@ class PatientDetailScreen extends ConsumerWidget {
                                     ),
                                   ),
                                 ),
-                                data: (history) => buildHistoryList(history, patient),
+                                data: (history) => bdasHistoryList(history, patient),
                               ),
                     ),
                   ),

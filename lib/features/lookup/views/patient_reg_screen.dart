@@ -5,7 +5,7 @@ import 'package:sbas/common/widgets/app_bar_widget.dart';
 import 'package:sbas/common/widgets/bottom_submit_btn_widget.dart';
 import 'package:sbas/constants/palette.dart';
 import 'package:sbas/features/patient/providers/patient_provider.dart';
-import 'package:sbas/features/assign/views/widgets/request/patient_reg_info_widget_v2.dart';
+import 'package:sbas/features/lookup/views/widgets/patient_reg_info_widget_v2.dart';
 import 'package:sbas/features/lookup/presenters/patient_register_provider.dart';
 import 'package:sbas/features/lookup/models/patient_duplicate_check_model.dart';
 import 'package:sbas/features/lookup/views/widgets/paitent_reg_info_modal.dart';
